@@ -1,0 +1,38 @@
+{
+ "Kauai": {
+  "tracts": 18,
+  "with_cmist": 18,
+  "with_nri": 18,
+  "with_power_estimate": 18,
+  "population": 73511,
+  "tsunami_exposed_pop_est": 6903,
+  "coverage_pct": 100.0
+ },
+ "Honolulu": {
+  "tracts": 329,
+  "with_cmist": 329,
+  "with_nri": 328,
+  "with_power_estimate": 329,
+  "population": 1010100,
+  "tsunami_exposed_pop_est": 177475,
+  "coverage_pct": 100.0
+ },
+ "Maui": {
+  "tracts": 46,
+  "with_cmist": 46,
+  "with_nri": 46,
+  "with_power_estimate": 46,
+  "population": 164815,
+  "tsunami_exposed_pop_est": 24391,
+  "coverage_pct": 100.0
+ },
+ "Hawaii": {
+  "tracts": 43,
+  "with_cmist": 43,
+  "with_nri": 43,
+  "with_power_estimate": 43,
+  "population": 202163,
+  "tsunami_exposed_pop_est": 14008,
+  "coverage_pct": 100.0
+ }
+}
