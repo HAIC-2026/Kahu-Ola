@@ -334,7 +334,7 @@ def sources_html(inp: dict) -> str:
     data += [
         ["Hawaii Statewide GIS – State DFIRM (FEMA flood hazard areas, 6/15/26)",
          escape(flood_dates[-1] if flood_dates else ""), escape(FLOOD_URL)],
-        ["County shelter activations 2026 (county releases and news)", "see table",
+        ["County shelter activations 2026 (official county releases)", "see table",
          "data/sources/county_shelter_activations.csv"],
         ["ACS PUMS 2019-2023 5-year (detailed languages)", "2026-10-27",
          "https://www2.census.gov/programs-surveys/acs/data/pums/2023/5-Year/csv_phi.zip"],

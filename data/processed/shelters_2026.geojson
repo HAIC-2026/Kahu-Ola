@@ -19,9 +19,9 @@
     "events": "2026-09-25 Tropical Storm Nolo",
     "last_opened": "2026-09-25",
     "pets": "unknown",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+     "https://www.hawaiicounty.gov/Home/Components/News/News/4701/720"
     ],
     "location_method": "census_onelineaddress",
     "needs_geocode": false,
@@ -54,9 +54,9 @@
     "events": "2026-09-25 Tropical Storm Nolo",
     "last_opened": "2026-09-25",
     "pets": "unknown",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+     "https://www.hawaiicounty.gov/Home/Components/News/News/4701/720"
     ],
     "location_method": "census_onelineaddress",
     "needs_geocode": false,
@@ -89,9 +89,9 @@
     "events": "2026-09-25 Tropical Storm Nolo",
     "last_opened": "2026-09-25",
     "pets": "unknown",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+     "https://www.hawaiicounty.gov/Home/Components/News/News/4701/720"
     ],
     "location_method": "manual",
     "needs_geocode": false,
@@ -121,12 +121,12 @@
     "address": "16-512 Volcano Road, Keaʻau",
     "site_type": "county_shelter",
     "times_opened_2026": 1,
-    "events": "2026-09-25 Tropical Storm Nolo",
-    "last_opened": "2026-09-25",
+    "events": "2026-09-23 Tropical Storm Nolo",
+    "last_opened": "2026-09-23",
     "pets": "unknown",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+     "https://www.hawaiicounty.gov/Home/Components/News/News/4695/720"
     ],
     "location_method": "census_onelineaddress",
     "needs_geocode": false,
@@ -156,12 +156,12 @@
     "address": "95-5545 Mamalahoa Highway, Nāʻālehu",
     "site_type": "county_shelter",
     "times_opened_2026": 1,
-    "events": "2026-09-25 Tropical Storm Nolo",
-    "last_opened": "2026-09-25",
+    "events": "2026-09-23 Tropical Storm Nolo",
+    "last_opened": "2026-09-23",
     "pets": "unknown",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+     "https://www.hawaiicounty.gov/Home/Components/News/News/4695/720"
     ],
     "location_method": "doe_school_match",
     "needs_geocode": false,
@@ -194,9 +194,9 @@
     "events": "2026-09-25 Tropical Storm Nolo",
     "last_opened": "2026-09-25",
     "pets": "unknown",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+     "https://www.hawaiicounty.gov/Home/Components/News/News/4701/720"
     ],
     "location_method": "manual",
     "needs_geocode": false,
@@ -229,9 +229,9 @@
     "events": "2026-09-25 Tropical Storm Nolo",
     "last_opened": "2026-09-25",
     "pets": "unknown",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+     "https://www.hawaiicounty.gov/Home/Components/News/News/4701/720"
     ],
     "location_method": "census_onelineaddress",
     "needs_geocode": false,
@@ -264,9 +264,9 @@
     "events": "2026-09-25 Tropical Storm Nolo",
     "last_opened": "2026-09-25",
     "pets": "unknown",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+     "https://www.hawaiicounty.gov/Home/Components/News/News/4701/720"
     ],
     "location_method": "manual",
     "needs_geocode": false,
@@ -296,12 +296,12 @@
     "address": "96-1219 Kamani St., Pāhala",
     "site_type": "county_shelter",
     "times_opened_2026": 1,
-    "events": "2026-09-25 Tropical Storm Nolo",
-    "last_opened": "2026-09-25",
+    "events": "2026-09-23 Tropical Storm Nolo",
+    "last_opened": "2026-09-23",
     "pets": "unknown",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+     "https://www.hawaiicounty.gov/Home/Components/News/News/4695/720"
     ],
     "location_method": "manual",
     "needs_geocode": false,
@@ -331,12 +331,12 @@
     "address": "82-6156 Māmalahoa Highway, Captain Cook",
     "site_type": "county_shelter",
     "times_opened_2026": 1,
-    "events": "2026-09-25 Tropical Storm Nolo",
-    "last_opened": "2026-09-25",
+    "events": "2026-09-23 Tropical Storm Nolo",
+    "last_opened": "2026-09-23",
     "pets": "unknown",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+     "https://www.hawaiicounty.gov/Home/Components/News/News/4695/720"
     ],
     "location_method": "census_onelineaddress",
     "needs_geocode": false,
@@ -509,9 +509,9 @@
     "events": "2026-09-07 Hurricane Lowell",
     "last_opened": "2026-09-07",
     "pets": "leashed or carrier",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
+     "https://www.honolulu.gov/mayor/city-activates-hurricane-refuge-area-as-tropical-storm-lowell-comes-closer-to-o%ca%bbahu/"
     ],
     "location_method": "doe_school_match",
     "needs_geocode": false,
@@ -611,12 +611,12 @@
     "address": "4480 Papalina Road, Kalāheo",
     "site_type": "refuge_area",
     "times_opened_2026": 1,
-    "events": "2026-09-07 Hurricane Lowell",
-    "last_opened": "2026-09-07",
+    "events": "2026-09-06 Hurricane Lowell",
+    "last_opened": "2026-09-06",
     "pets": "allowed",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
+     "https://www.kauai.gov/County-Press-Releases/County-to-close-parks-and-campgrounds-open-refuge-areas-at-5-p.m"
     ],
     "location_method": "census_onelineaddress",
     "needs_geocode": false,
@@ -646,12 +646,12 @@
     "address": "4867 Olohena Road, Kapaʻa",
     "site_type": "refuge_area",
     "times_opened_2026": 1,
-    "events": "2026-09-07 Hurricane Lowell",
-    "last_opened": "2026-09-07",
+    "events": "2026-09-06 Hurricane Lowell",
+    "last_opened": "2026-09-06",
     "pets": "allowed",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
+     "https://www.kauai.gov/County-Press-Releases/County-to-close-parks-and-campgrounds-open-refuge-areas-at-5-p.m"
     ],
     "location_method": "doe_school_match",
     "needs_geocode": false,
@@ -681,12 +681,12 @@
     "address": "3577 Lala Road, Līhuʻe",
     "site_type": "refuge_area",
     "times_opened_2026": 1,
-    "events": "2026-09-07 Hurricane Lowell",
-    "last_opened": "2026-09-07",
+    "events": "2026-09-06 Hurricane Lowell",
+    "last_opened": "2026-09-06",
     "pets": "allowed",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
+     "https://www.kauai.gov/County-Press-Releases/County-to-close-parks-and-campgrounds-open-refuge-areas-at-5-p.m"
     ],
     "location_method": "doe_school_match",
     "needs_geocode": false,
@@ -716,12 +716,12 @@
     "address": "2460 Keneke Street, Kīlauea",
     "site_type": "refuge_area",
     "times_opened_2026": 1,
-    "events": "2026-09-07 Hurricane Lowell",
-    "last_opened": "2026-09-07",
+    "events": "2026-09-06 Hurricane Lowell",
+    "last_opened": "2026-09-06",
     "pets": "allowed",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
+     "https://www.kauai.gov/County-Press-Releases/County-to-close-parks-and-campgrounds-open-refuge-areas-at-5-p.m"
     ],
     "location_method": "census_onelineaddress",
     "needs_geocode": false,
@@ -751,12 +751,12 @@
     "address": "9555 Huakai Road, Waimea",
     "site_type": "refuge_area",
     "times_opened_2026": 1,
-    "events": "2026-09-07 Hurricane Lowell",
-    "last_opened": "2026-09-07",
+    "events": "2026-09-06 Hurricane Lowell",
+    "last_opened": "2026-09-06",
     "pets": "allowed",
-    "official_source": false,
+    "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
+     "https://www.kauai.gov/County-Press-Releases/County-to-close-parks-and-campgrounds-open-refuge-areas-at-5-p.m"
     ],
     "location_method": "doe_school_match",
     "needs_geocode": false,
@@ -786,13 +786,13 @@
     "address": "1840 Honoapiʻilani Highway, Lahaina",
     "site_type": "county_shelter/temporary_evacuation_point",
     "times_opened_2026": 2,
-    "events": "2026-08-15 Hurricane Lala; 2026-09-25 Tropical Storm Nolo / Olowalu brush fire",
-    "last_opened": "2026-09-25",
+    "events": "2026-08-15 Hurricane Lala; 2026-09-26 Tropical Storm Nolo / Olowalu brush fire",
+    "last_opened": "2026-09-26",
     "pets": "crated only",
     "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/",
-     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
+     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289",
+     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19526"
     ],
     "location_method": "census_onelineaddress",
     "needs_geocode": false,
@@ -822,13 +822,13 @@
     "address": "1501 Liloa Drive, Kīhei",
     "site_type": "county_shelter/temporary_evacuation_point",
     "times_opened_2026": 2,
-    "events": "2026-08-15 Hurricane Lala; 2026-09-25 Tropical Storm Nolo / Olowalu brush fire",
-    "last_opened": "2026-09-25",
+    "events": "2026-08-15 Hurricane Lala; 2026-09-26 Tropical Storm Nolo / Olowalu brush fire",
+    "last_opened": "2026-09-26",
     "pets": "crated only",
     "official_source": true,
     "sources": [
-     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/",
-     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
+     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289",
+     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19526"
     ],
     "location_method": "census_onelineaddress",
     "needs_geocode": false,
@@ -1045,7 +1045,7 @@
  ],
  "metadata": {
   "title": "Hawaiʻi shelters and refuge areas opened in 2026 events",
-  "built_at": "2026-10-27T19:29:41+00:00",
+  "built_at": "2026-10-27T20:39:45+00:00",
   "source_table": "data/sources/county_shelter_activations.csv",
   "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
   "note": "Site types are kept as each county names them; counties define sheltering differently (DHS challenge pain point)."
