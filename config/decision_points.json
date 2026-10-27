@@ -1,0 +1,295 @@
+{
+ "_about": "Decision points for the MATCH step. Triggers are official NWS / PTWC / CPHC products with their published definitions; actions and owners are proposals. proposed – supports, does not replace, county plans.",
+ "status": "proposed – supports, does not replace, county plans",
+ "triggers": {
+  "pre_season_hurricane": {
+   "issuer": "NOAA Central Pacific Hurricane Center",
+   "product": "Central Pacific hurricane season start (June 1)",
+   "definition": "'The season officially begins on June 1 and ends on November 30.'",
+   "url": "https://www.nhc.noaa.gov/cphcmission.php"
+  },
+  "hurricane_watch": {
+   "issuer": "NOAA NWS / Central Pacific Hurricane Center",
+   "product": "Hurricane Watch",
+   "definition": "'sustained winds of 64 knots (74 mph or 119 km/hr) or higher are possible within the specified area' ... 'issued 48 hours in advance of the anticipated onset of tropical storm force winds.'",
+   "url": "https://www.nhc.noaa.gov/aboutgloss.shtml"
+  },
+  "hurricane_warning": {
+   "issuer": "NOAA NWS / Central Pacific Hurricane Center",
+   "product": "Hurricane Warning",
+   "definition": "'sustained winds of 64 knots (74 mph or 119 km/hr) or higher are expected' ... 'issued 36 hours in advance of the anticipated onset of tropical-storm-force winds.'",
+   "url": "https://www.nhc.noaa.gov/aboutgloss.shtml"
+  },
+  "tsunami_warning": {
+   "issuer": "NOAA Pacific Tsunami Warning Center (PTWC)",
+   "product": "Tsunami Warning",
+   "definition": "'A tsunami warning is issued when a tsunami with the potential to generate widespread inundation is imminent' (or expected/occurring). Hawaii should refer only to PTWC messages for its region.",
+   "url": "https://www.tsunami.gov/?page=message_definitions"
+  },
+  "flash_flood_warning": {
+   "issuer": "NOAA NWS Honolulu",
+   "product": "Flash Flood Warning",
+   "definition": "'A Flash Flood Warning is issued when a flash flood is imminent or occurring.'",
+   "url": "https://www.weather.gov/safety/flood-watch-warning"
+  },
+  "red_flag_warning": {
+   "issuer": "NOAA NWS Honolulu",
+   "product": "Red Flag Warning",
+   "definition": "'NWS issues a Red Flag Warning when fire conditions are ongoing or expected to occur shortly.'",
+   "url": "https://www.weather.gov/safety/wildfire-ww"
+  },
+  "coastal_flood_warning": {
+   "issuer": "NOAA NWS Honolulu",
+   "product": "Coastal Flood Warning",
+   "definition": "'Issued when tidal flooding or storm induced flooding is occurring, imminent or highly likely along coastal areas within approximately the next 12 hours.'",
+   "url": "https://www.weather.gov/okx/marinedef",
+   "note": "Added for the coastal_flood scenario; not in the original trigger list."
+  },
+  "pre_season_no_notice": {
+   "issuer": "County (sets the date)",
+   "product": "Annual pre-positioning review (no official product)",
+   "definition": "No-notice hazard: plan as if there is no warning lead time (team_assumption). County sets the review date.",
+   "url": ""
+  },
+  "county_evacuation_order": {
+   "issuer": "County emergency management",
+   "product": "County evacuation order",
+   "definition": "Official county order; not an NWS product.",
+   "url": ""
+  },
+  "after_all_clear": {
+   "issuer": "County / NWS / PTWC",
+   "product": "Warning cancelled or all clear",
+   "definition": "Hazard has passed; recovery sheltering begins.",
+   "url": ""
+  }
+ },
+ "decision_points": {
+  "hurricane": [
+   {
+    "trigger": "pre_season_hurricane",
+    "timing": "before",
+    "action": "Confirm partner capacity pledges (cots, meals, generators, accessible vehicles, interpreters) and the list of sites usable for wind; refresh priority-outreach tracts.",
+    "owner": "county_em",
+    "support": [
+     "dhs",
+     "hiema",
+     "red_cross"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "hurricane_watch",
+    "timing": "before",
+    "action": "Contact priority tracts (power-dependent, no-vehicle, limited English); confirm which shelters will open, generator power for medical devices, and accessible transport.",
+    "owner": "county_em",
+    "support": [
+     "doh",
+     "utilities",
+     "dot",
+     "dhs"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "hurricane_warning",
+    "timing": "before",
+    "action": "Open shelters including AFN-capable sites; start accessible transport for residents without vehicles; send pre-approved multilingual messages.",
+    "owner": "county_em",
+    "support": [
+     "red_cross",
+     "dhs",
+     "doe",
+     "dot"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "after_all_clear",
+    "timing": "after",
+    "action": "Feeding, re-power for medical devices, recovery sheltering for displaced households; coordinate donations and volunteers.",
+    "owner": "red_cross",
+    "support": [
+     "hawaii_voad",
+     "salvation_army",
+     "faith_based",
+     "utilities"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   }
+  ],
+  "wildfire": [
+   {
+    "trigger": "pre_season_no_notice",
+    "timing": "before",
+    "action": "PRE-POSITION: identify shelters outside the highest-risk wildfire tracts, pre-arrange accessible transport and pet space, approve multilingual evacuation templates, confirm generator power for AFN shelters.",
+    "owner": "county_em",
+    "support": [
+     "dhs",
+     "doh",
+     "red_cross",
+     "hawaii_voad"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "red_flag_warning",
+    "timing": "before",
+    "action": "Alert priority tracts; stage accessible transport; confirm shelter staffing and pet space.",
+    "owner": "county_em",
+    "support": [
+     "dot",
+     "dhs",
+     "doh"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "county_evacuation_order",
+    "timing": "during",
+    "action": "Open shelters/refuge outside the fire area; run accessible transport; issue multilingual messages through all channels.",
+    "owner": "county_em",
+    "support": [
+     "red_cross",
+     "dhs",
+     "faith_based",
+     "oha"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "after_all_clear",
+    "timing": "after",
+    "action": "Recovery sheltering, feeding, mental health support, donations and volunteer management.",
+    "owner": "red_cross",
+    "support": [
+     "hawaii_voad",
+     "salvation_army",
+     "doh",
+     "faith_based"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   }
+  ],
+  "tsunami": [
+   {
+    "trigger": "pre_season_no_notice",
+    "timing": "before",
+    "action": "PRE-POSITION: confirm shelters/refuge outside the tsunami evacuation zone (and extreme zone), transport plan for no-vehicle residents inside the zone, pre-approved multilingual evacuation messages.",
+    "owner": "county_em",
+    "support": [
+     "hiema",
+     "dhs",
+     "dot"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "tsunami_warning",
+    "timing": "during",
+    "action": "Evacuate the zone; open refuge outside the zone; prioritize residents who cannot evacuate on their own.",
+    "owner": "county_em",
+    "support": [
+     "hiema",
+     "dot",
+     "red_cross"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "after_all_clear",
+    "timing": "after",
+    "action": "Shelter displaced households, feeding, power for medical devices, donations and volunteers.",
+    "owner": "red_cross",
+    "support": [
+     "hawaii_voad",
+     "doh",
+     "utilities",
+     "salvation_army"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   }
+  ],
+  "inland_flood": [
+   {
+    "trigger": "pre_season_no_notice",
+    "timing": "before",
+    "action": "Mark shelters inside a FEMA Special Flood Hazard Area or zone D for site check; choose alternates.",
+    "owner": "county_em",
+    "support": [
+     "doe",
+     "dhs"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "flash_flood_warning",
+    "timing": "during",
+    "action": "Open only shelters outside the SFHA; accessible transport where roads allow; multilingual messages.",
+    "owner": "county_em",
+    "support": [
+     "dot",
+     "red_cross",
+     "dhs"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "after_all_clear",
+    "timing": "after",
+    "action": "Recovery sheltering and feeding for displaced households.",
+    "owner": "red_cross",
+    "support": [
+     "hawaii_voad",
+     "salvation_army",
+     "faith_based"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   }
+  ],
+  "coastal_flood": [
+   {
+    "trigger": "pre_season_no_notice",
+    "timing": "before",
+    "action": "Mark coastal shelters in V/A zones for site check; choose inland alternates.",
+    "owner": "county_em",
+    "support": [
+     "doe",
+     "dhs"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "coastal_flood_warning",
+    "timing": "before",
+    "action": "Alert priority coastal tracts; confirm inland shelters and transport.",
+    "owner": "county_em",
+    "support": [
+     "dot",
+     "dhs"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "after_all_clear",
+    "timing": "after",
+    "action": "Recovery sheltering and feeding for displaced households.",
+    "owner": "red_cross",
+    "support": [
+     "hawaii_voad",
+     "salvation_army"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   }
+  ]
+ },
+ "no_notice_hazards": [
+  "wildfire",
+  "tsunami"
+ ],
+ "timing_order": [
+  "before",
+  "during",
+  "after"
+ ]
+}

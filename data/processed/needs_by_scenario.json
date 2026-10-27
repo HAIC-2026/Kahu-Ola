@@ -1,5 +1,5 @@
 {
- "built_at": "2026-10-27T17:36:39+00:00",
+ "built_at": "2026-10-27T17:58:14+00:00",
  "data_as_of": "2026-10-27T17:23:54+00:00",
  "runtime_seconds": 0.01,
  "privacy": "Aggregate tract estimates only. No individual records.",
@@ -163,7 +163,9 @@
    "known_sites_usable": 5,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 20,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -205,7 +207,9 @@
    "known_sites_usable": 7,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 182,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -247,7 +251,9 @@
    "known_sites_usable": 7,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 34,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -289,7 +295,9 @@
    "known_sites_usable": 10,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 56,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -331,7 +339,9 @@
    "known_sites_usable": 5,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 20,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -373,7 +383,9 @@
    "known_sites_usable": 7,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 182,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -415,7 +427,9 @@
    "known_sites_usable": 7,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 34,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -457,7 +471,9 @@
    "known_sites_usable": 10,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 56,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -500,7 +516,9 @@
    "known_sites_usable": 5,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 15,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -543,7 +561,9 @@
    "known_sites_usable": 6,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 135,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "Waiʻanae District Park",
    "known_sites_flood_check": ""
   },
@@ -586,7 +606,9 @@
    "known_sites_usable": 5,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 31,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "Lahaina Civic Center Gym; Kilohana Recreation Center",
    "known_sites_flood_check": ""
   },
@@ -629,7 +651,9 @@
    "known_sites_usable": 10,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 49,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -671,7 +695,9 @@
    "known_sites_usable": 5,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 16,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -713,7 +739,9 @@
    "known_sites_usable": 7,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
-   "candidate_schools_usable": 168,
+   "known_sites_flood_undetermined": 0,
+   "candidate_schools_usable": 146,
+   "candidate_schools_flood_undetermined": 22,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -755,7 +783,9 @@
    "known_sites_usable": 6,
    "known_sites_check_flood": 1,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 32,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": "Kilohana Recreation Center [check]"
   },
@@ -797,7 +827,9 @@
    "known_sites_usable": 10,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 54,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -839,7 +871,9 @@
    "known_sites_usable": 5,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 16,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -881,7 +915,9 @@
    "known_sites_usable": 7,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
-   "candidate_schools_usable": 168,
+   "known_sites_flood_undetermined": 0,
+   "candidate_schools_usable": 146,
+   "candidate_schools_flood_undetermined": 22,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   },
@@ -923,7 +959,9 @@
    "known_sites_usable": 6,
    "known_sites_check_flood": 1,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 32,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": "Kilohana Recreation Center [check]"
   },
@@ -965,7 +1003,9 @@
    "known_sites_usable": 10,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
+   "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 54,
+   "candidate_schools_flood_undetermined": 0,
    "known_sites_excluded": "",
    "known_sites_flood_check": ""
   }

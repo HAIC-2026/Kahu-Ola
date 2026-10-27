@@ -196,6 +196,24 @@ class FinalFixes(unittest.TestCase):
         self.assertEqual(mn.usable_sites([], schools, "Maui", "tsunami", fp)
                          ["candidate_schools_usable"], 3)
 
+    def test_zone_d_is_undetermined_not_usable(self):
+        shelters = [site("Zone D hall", "Honolulu", fld_zone="D", in_sfha=False),
+                    site("Zone X hall", "Honolulu", fld_zone="X", in_sfha=False),
+                    site("Zone AE hall", "Honolulu", fld_zone="AE", in_sfha=True)]
+        schools = [site("D school", "Honolulu", fld_zone="D", in_sfha=False),
+                   site("X school", "Honolulu", fld_zone="X", in_sfha=False)]
+        for hz in ("inland_flood", "coastal_flood"):
+            u = mn.usable_sites(shelters, schools, "Honolulu", hz, {})
+            self.assertEqual(u["known_sites_usable"], 1)
+            self.assertEqual(u["known_sites_flood_undetermined"], 1)
+            self.assertEqual(u["known_sites_check_flood"], 1)
+            self.assertEqual(u["candidate_schools_usable"], 1)
+            self.assertEqual(u["candidate_schools_flood_undetermined"], 1)
+        # zone D does not matter for non-flood hazards
+        u = mn.usable_sites(shelters, schools, "Honolulu", "hurricane", {})
+        self.assertEqual(u["known_sites_usable"], 3)
+        self.assertEqual(u["candidate_schools_flood_undetermined"], 0)
+
     def test_avma_verified_second_url(self):
         for k in ("dog_owning_household_share", "cat_owning_household_share"):
             self.assertIn("avma.org", CFG["pets"][k]["url2"])

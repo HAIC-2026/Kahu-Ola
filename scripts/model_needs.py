@@ -159,10 +159,13 @@ def usable_sites(shelters: list, schools: list, county: str, hazard: str,
                  footprint: dict | None = None) -> dict:
     """tsunami: sites inside the evacuation zone are excluded.
     flood: sites inside a FEMA Special Flood Hazard Area (in_sfha) are flagged 'check';
+    FEMA zone D (flood risk undetermined, not studied) is counted separately, never as usable;
     sites with no flood-zone data fall back to the tract footprint, 'check (tract-level)'."""
     footprint = footprint or {}
 
     def flood(p):
+        if (p.get("fld_zone") or "").strip().upper() == "D":
+            return "undetermined"
         if p.get("in_sfha") is not None:
             return "check" if p["in_sfha"] else "ok"
         return "check (tract-level)" if p.get("tract_fips") in footprint else "ok"
@@ -184,15 +187,18 @@ def usable_sites(shelters: list, schools: list, county: str, hazard: str,
     c = [f["properties"] for f in schools if f["properties"]["county"] == county]
     s_status = [(p["name"], ok(p)) for p in s]
     c_ok = sum(1 for p in c if candidate_ok(p))
+    c_und = sum(1 for p in c if hazard in FLOOD and flood(p) == "undetermined")
     return {
         "known_sites_usable": sum(1 for _, st in s_status if st == "ok"),
         "known_sites_check_flood": sum(1 for _, st in s_status if st.startswith("check")),
         "known_sites_check_tract_level": sum(1 for _, st in s_status
                                              if st == "check (tract-level)"),
+        "known_sites_flood_undetermined": sum(1 for _, st in s_status if st == "undetermined"),
         "known_sites_excluded": [n for n, st in s_status if st == "exclude"],
         "known_sites_flood_check": [f"{n} [{st}]" for n, st in s_status
                                     if st.startswith("check")],
         "candidate_schools_usable": c_ok,
+        "candidate_schools_flood_undetermined": c_und,
     }
 
 

@@ -1,0 +1,1040 @@
+{
+ "_about": "Partner roster TEMPLATE for the MATCH step. Roles are proposals, not commitments: every role is 'proposed – to be confirmed with partner'. Capacity, confirmation and contact fields are intentionally empty and are filled only by the partner. Supports, does not replace, county and State plans.",
+ "source": {
+  "document": "HAIC_AI Challenge_Submission_DHS_Disaster_2026.pdf (2026 HAIC AI Challenge Submission, Hawaii DHS: 'Enhancing ESF-6 Planning Through AI-Supported Insights')",
+  "note": "Partner types are those named in the DHS challenge statement. The statement also names philanthropy, other state and county agencies, and the business community (p.3); they are not in this template yet."
+ },
+ "role_status": "proposed – to be confirmed with partner",
+ "functions": {
+  "shelter_operations": {
+   "label": "Shelter operations",
+   "capacity_fields": [
+    "sites",
+    "cots",
+    "floor_sqft",
+    "toilets",
+    "staff_per_shift"
+   ]
+  },
+  "feeding": {
+   "label": "Feeding",
+   "capacity_fields": [
+    "meals_per_day",
+    "water_gal_per_day"
+   ]
+  },
+  "afn_support_medical": {
+   "label": "AFN support / medical",
+   "capacity_fields": [
+    "medical_staff_per_shift",
+    "durable_medical_equipment_units",
+    "childrens_area_staff_per_shift"
+   ]
+  },
+  "power_medical_devices": {
+   "label": "Power for medical devices",
+   "capacity_fields": [
+    "generators",
+    "power_outlets"
+   ]
+  },
+  "transportation": {
+   "label": "Transportation (accessible)",
+   "capacity_fields": [
+    "accessible_vehicles",
+    "seats_per_trip",
+    "trips_per_day"
+   ]
+  },
+  "language_access": {
+   "label": "Language access",
+   "capacity_fields": [
+    "interpreters_by_language",
+    "translation_turnaround_hours"
+   ]
+  },
+  "pets": {
+   "label": "Pets",
+   "capacity_fields": [
+    "pet_spaces",
+    "crates"
+   ]
+  },
+  "donations_volunteers": {
+   "label": "Donations / volunteers",
+   "capacity_fields": [
+    "volunteers_per_shift",
+    "donation_intake_sites"
+   ]
+  }
+ },
+ "partners": [
+  {
+   "id": "dhs",
+   "name": "Hawaiʻi Department of Human Services (DHS)",
+   "partner_type": "dhs",
+   "scope": "state",
+   "listed_in_challenge": "p.2: 'Each County Emergency Management Agency leads mass care operations, while the State ESF-6, co-facilitated by HIEMA and DHS, supports County efforts.' / p.3, 'Who is involved': 'DHS divisions, county emergency management agencies, HI-EMA, Department of Education, including the Hawaii State Library System, Department of Health (multiple programs), Department of Transportation, the Office of Hawaiian Affairs, partner nonprofits and community groups, the American Red Cross, the Salvation Army, VOAD, philanthropy, health care organizations...'",
+   "functions": [
+    {
+     "function": "shelter_operations",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "State ESF-6 co-facilitator supports County efforts (p.2)"
+    },
+    {
+     "function": "feeding",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "afn_support_medical",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "transportation",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "language_access",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "donations_volunteers",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "p.3: 'The State does not have visibility into donations and supports provided by community volunteers.'"
+    }
+   ],
+   "capacity": {
+    "shelter_operations": {
+     "sites": null,
+     "cots": null,
+     "floor_sqft": null,
+     "toilets": null,
+     "staff_per_shift": null
+    },
+    "feeding": {
+     "meals_per_day": null,
+     "water_gal_per_day": null
+    },
+    "afn_support_medical": {
+     "medical_staff_per_shift": null,
+     "durable_medical_equipment_units": null,
+     "childrens_area_staff_per_shift": null
+    },
+    "transportation": {
+     "accessible_vehicles": null,
+     "seats_per_trip": null,
+     "trips_per_day": null
+    },
+    "language_access": {
+     "interpreters_by_language": null,
+     "translation_turnaround_hours": null
+    },
+    "donations_volunteers": {
+     "volunteers_per_shift": null,
+     "donation_intake_sites": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "county_em_kauai",
+   "name": "County Emergency Management – Kauai (agency name to be confirmed)",
+   "partner_type": "county_em",
+   "scope": "county",
+   "county": "Kauai",
+   "listed_in_challenge": "p.2: 'Each County Emergency Management Agency leads mass care operations, while the State ESF-6, co-facilitated by HIEMA and DHS, supports County efforts.'",
+   "functions": [
+    {
+     "function": "shelter_operations",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "p.2: County Emergency Management Agency leads mass care operations"
+    },
+    {
+     "function": "transportation",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "pets",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "feeding",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "afn_support_medical",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "power_medical_devices",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "language_access",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "donations_volunteers",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "shelter_operations": {
+     "sites": null,
+     "cots": null,
+     "floor_sqft": null,
+     "toilets": null,
+     "staff_per_shift": null
+    },
+    "transportation": {
+     "accessible_vehicles": null,
+     "seats_per_trip": null,
+     "trips_per_day": null
+    },
+    "pets": {
+     "pet_spaces": null,
+     "crates": null
+    },
+    "feeding": {
+     "meals_per_day": null,
+     "water_gal_per_day": null
+    },
+    "afn_support_medical": {
+     "medical_staff_per_shift": null,
+     "durable_medical_equipment_units": null,
+     "childrens_area_staff_per_shift": null
+    },
+    "power_medical_devices": {
+     "generators": null,
+     "power_outlets": null
+    },
+    "language_access": {
+     "interpreters_by_language": null,
+     "translation_turnaround_hours": null
+    },
+    "donations_volunteers": {
+     "volunteers_per_shift": null,
+     "donation_intake_sites": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "county_em_honolulu",
+   "name": "County Emergency Management – Honolulu (agency name to be confirmed)",
+   "partner_type": "county_em",
+   "scope": "county",
+   "county": "Honolulu",
+   "listed_in_challenge": "p.2: 'Each County Emergency Management Agency leads mass care operations, while the State ESF-6, co-facilitated by HIEMA and DHS, supports County efforts.'",
+   "functions": [
+    {
+     "function": "shelter_operations",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "p.2: County Emergency Management Agency leads mass care operations"
+    },
+    {
+     "function": "transportation",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "pets",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "feeding",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "afn_support_medical",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "power_medical_devices",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "language_access",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "donations_volunteers",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "shelter_operations": {
+     "sites": null,
+     "cots": null,
+     "floor_sqft": null,
+     "toilets": null,
+     "staff_per_shift": null
+    },
+    "transportation": {
+     "accessible_vehicles": null,
+     "seats_per_trip": null,
+     "trips_per_day": null
+    },
+    "pets": {
+     "pet_spaces": null,
+     "crates": null
+    },
+    "feeding": {
+     "meals_per_day": null,
+     "water_gal_per_day": null
+    },
+    "afn_support_medical": {
+     "medical_staff_per_shift": null,
+     "durable_medical_equipment_units": null,
+     "childrens_area_staff_per_shift": null
+    },
+    "power_medical_devices": {
+     "generators": null,
+     "power_outlets": null
+    },
+    "language_access": {
+     "interpreters_by_language": null,
+     "translation_turnaround_hours": null
+    },
+    "donations_volunteers": {
+     "volunteers_per_shift": null,
+     "donation_intake_sites": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "county_em_maui",
+   "name": "County Emergency Management – Maui (agency name to be confirmed)",
+   "partner_type": "county_em",
+   "scope": "county",
+   "county": "Maui",
+   "listed_in_challenge": "p.2: 'Each County Emergency Management Agency leads mass care operations, while the State ESF-6, co-facilitated by HIEMA and DHS, supports County efforts.'",
+   "functions": [
+    {
+     "function": "shelter_operations",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "p.2: County Emergency Management Agency leads mass care operations"
+    },
+    {
+     "function": "transportation",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "pets",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "feeding",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "afn_support_medical",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "power_medical_devices",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "language_access",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "donations_volunteers",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "shelter_operations": {
+     "sites": null,
+     "cots": null,
+     "floor_sqft": null,
+     "toilets": null,
+     "staff_per_shift": null
+    },
+    "transportation": {
+     "accessible_vehicles": null,
+     "seats_per_trip": null,
+     "trips_per_day": null
+    },
+    "pets": {
+     "pet_spaces": null,
+     "crates": null
+    },
+    "feeding": {
+     "meals_per_day": null,
+     "water_gal_per_day": null
+    },
+    "afn_support_medical": {
+     "medical_staff_per_shift": null,
+     "durable_medical_equipment_units": null,
+     "childrens_area_staff_per_shift": null
+    },
+    "power_medical_devices": {
+     "generators": null,
+     "power_outlets": null
+    },
+    "language_access": {
+     "interpreters_by_language": null,
+     "translation_turnaround_hours": null
+    },
+    "donations_volunteers": {
+     "volunteers_per_shift": null,
+     "donation_intake_sites": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "county_em_hawaii",
+   "name": "County Emergency Management – Hawaii (agency name to be confirmed)",
+   "partner_type": "county_em",
+   "scope": "county",
+   "county": "Hawaii",
+   "listed_in_challenge": "p.2: 'Each County Emergency Management Agency leads mass care operations, while the State ESF-6, co-facilitated by HIEMA and DHS, supports County efforts.'",
+   "functions": [
+    {
+     "function": "shelter_operations",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "p.2: County Emergency Management Agency leads mass care operations"
+    },
+    {
+     "function": "transportation",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "pets",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "feeding",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "afn_support_medical",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "power_medical_devices",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "language_access",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "donations_volunteers",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "shelter_operations": {
+     "sites": null,
+     "cots": null,
+     "floor_sqft": null,
+     "toilets": null,
+     "staff_per_shift": null
+    },
+    "transportation": {
+     "accessible_vehicles": null,
+     "seats_per_trip": null,
+     "trips_per_day": null
+    },
+    "pets": {
+     "pet_spaces": null,
+     "crates": null
+    },
+    "feeding": {
+     "meals_per_day": null,
+     "water_gal_per_day": null
+    },
+    "afn_support_medical": {
+     "medical_staff_per_shift": null,
+     "durable_medical_equipment_units": null,
+     "childrens_area_staff_per_shift": null
+    },
+    "power_medical_devices": {
+     "generators": null,
+     "power_outlets": null
+    },
+    "language_access": {
+     "interpreters_by_language": null,
+     "translation_turnaround_hours": null
+    },
+    "donations_volunteers": {
+     "volunteers_per_shift": null,
+     "donation_intake_sites": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "hiema",
+   "name": "Hawaiʻi Emergency Management Agency (HI-EMA)",
+   "partner_type": "hiema",
+   "scope": "state",
+   "listed_in_challenge": "p.2: 'Each County Emergency Management Agency leads mass care operations, while the State ESF-6, co-facilitated by HIEMA and DHS, supports County efforts.' / p.3, 'Who is involved': 'DHS divisions, county emergency management agencies, HI-EMA, Department of Education, including the Hawaii State Library System, Department of Health (multiple programs), Department of Transportation, the Office of Hawaiian Affairs, partner nonprofits and community groups, the American Red Cross, the Salvation Army, VOAD, philanthropy, health care organizations...'",
+   "functions": [
+    {
+     "function": "shelter_operations",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "State ESF-6 co-facilitator supports County efforts (p.2)"
+    },
+    {
+     "function": "transportation",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "language_access",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "donations_volunteers",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "shelter_operations": {
+     "sites": null,
+     "cots": null,
+     "floor_sqft": null,
+     "toilets": null,
+     "staff_per_shift": null
+    },
+    "transportation": {
+     "accessible_vehicles": null,
+     "seats_per_trip": null,
+     "trips_per_day": null
+    },
+    "language_access": {
+     "interpreters_by_language": null,
+     "translation_turnaround_hours": null
+    },
+    "donations_volunteers": {
+     "volunteers_per_shift": null,
+     "donation_intake_sites": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "doe",
+   "name": "Hawaiʻi Department of Education (DOE) – schools",
+   "partner_type": "doe",
+   "scope": "state",
+   "listed_in_challenge": "p.3, 'Who is involved': 'DHS divisions, county emergency management agencies, HI-EMA, Department of Education, including the Hawaii State Library System, Department of Health (multiple programs), Department of Transportation, the Office of Hawaiian Affairs, partner nonprofits and community groups, the American Red Cross, the Salvation Army, VOAD, philanthropy, health care organizations...'",
+   "functions": [
+    {
+     "function": "shelter_operations",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "feeding",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "shelter_operations": {
+     "sites": null,
+     "cots": null,
+     "floor_sqft": null,
+     "toilets": null,
+     "staff_per_shift": null
+    },
+    "feeding": {
+     "meals_per_day": null,
+     "water_gal_per_day": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "hspls",
+   "name": "Hawaiʻi State Public Library System",
+   "partner_type": "hspls",
+   "scope": "state",
+   "listed_in_challenge": "p.3, 'Who is involved': 'DHS divisions, county emergency management agencies, HI-EMA, Department of Education, including the Hawaii State Library System, Department of Health (multiple programs), Department of Transportation, the Office of Hawaiian Affairs, partner nonprofits and community groups, the American Red Cross, the Salvation Army, VOAD, philanthropy, health care organizations...'",
+   "functions": [
+    {
+     "function": "shelter_operations",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "language_access",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "shelter_operations": {
+     "sites": null,
+     "cots": null,
+     "floor_sqft": null,
+     "toilets": null,
+     "staff_per_shift": null
+    },
+    "language_access": {
+     "interpreters_by_language": null,
+     "translation_turnaround_hours": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "doh",
+   "name": "Hawaiʻi Department of Health (DOH)",
+   "partner_type": "doh",
+   "scope": "state",
+   "listed_in_challenge": "p.3, 'Who is involved': 'DHS divisions, county emergency management agencies, HI-EMA, Department of Education, including the Hawaii State Library System, Department of Health (multiple programs), Department of Transportation, the Office of Hawaiian Affairs, partner nonprofits and community groups, the American Red Cross, the Salvation Army, VOAD, philanthropy, health care organizations...'",
+   "functions": [
+    {
+     "function": "afn_support_medical",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "power_medical_devices",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "language_access",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "afn_support_medical": {
+     "medical_staff_per_shift": null,
+     "durable_medical_equipment_units": null,
+     "childrens_area_staff_per_shift": null
+    },
+    "power_medical_devices": {
+     "generators": null,
+     "power_outlets": null
+    },
+    "language_access": {
+     "interpreters_by_language": null,
+     "translation_turnaround_hours": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "dot",
+   "name": "Hawaiʻi Department of Transportation (DOT)",
+   "partner_type": "dot",
+   "scope": "state",
+   "listed_in_challenge": "p.3, 'Who is involved': 'DHS divisions, county emergency management agencies, HI-EMA, Department of Education, including the Hawaii State Library System, Department of Health (multiple programs), Department of Transportation, the Office of Hawaiian Affairs, partner nonprofits and community groups, the American Red Cross, the Salvation Army, VOAD, philanthropy, health care organizations...'",
+   "functions": [
+    {
+     "function": "transportation",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "transportation": {
+     "accessible_vehicles": null,
+     "seats_per_trip": null,
+     "trips_per_day": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "oha",
+   "name": "Office of Hawaiian Affairs (OHA)",
+   "partner_type": "oha",
+   "scope": "state",
+   "listed_in_challenge": "p.3, 'Who is involved': 'DHS divisions, county emergency management agencies, HI-EMA, Department of Education, including the Hawaii State Library System, Department of Health (multiple programs), Department of Transportation, the Office of Hawaiian Affairs, partner nonprofits and community groups, the American Red Cross, the Salvation Army, VOAD, philanthropy, health care organizations...'",
+   "functions": [
+    {
+     "function": "language_access",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "donations_volunteers",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "language_access": {
+     "interpreters_by_language": null,
+     "translation_turnaround_hours": null
+    },
+    "donations_volunteers": {
+     "volunteers_per_shift": null,
+     "donation_intake_sites": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "red_cross",
+   "name": "American Red Cross",
+   "partner_type": "red_cross",
+   "scope": "state",
+   "listed_in_challenge": "p.3, 'Who is involved': 'DHS divisions, county emergency management agencies, HI-EMA, Department of Education, including the Hawaii State Library System, Department of Health (multiple programs), Department of Transportation, the Office of Hawaiian Affairs, partner nonprofits and community groups, the American Red Cross, the Salvation Army, VOAD, philanthropy, health care organizations...'",
+   "functions": [
+    {
+     "function": "feeding",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "shelter_operations",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "afn_support_medical",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "donations_volunteers",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "feeding": {
+     "meals_per_day": null,
+     "water_gal_per_day": null
+    },
+    "shelter_operations": {
+     "sites": null,
+     "cots": null,
+     "floor_sqft": null,
+     "toilets": null,
+     "staff_per_shift": null
+    },
+    "afn_support_medical": {
+     "medical_staff_per_shift": null,
+     "durable_medical_equipment_units": null,
+     "childrens_area_staff_per_shift": null
+    },
+    "donations_volunteers": {
+     "volunteers_per_shift": null,
+     "donation_intake_sites": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "salvation_army",
+   "name": "The Salvation Army",
+   "partner_type": "salvation_army",
+   "scope": "state",
+   "listed_in_challenge": "p.3, 'Who is involved': 'DHS divisions, county emergency management agencies, HI-EMA, Department of Education, including the Hawaii State Library System, Department of Health (multiple programs), Department of Transportation, the Office of Hawaiian Affairs, partner nonprofits and community groups, the American Red Cross, the Salvation Army, VOAD, philanthropy, health care organizations...'",
+   "functions": [
+    {
+     "function": "feeding",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "donations_volunteers",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "feeding": {
+     "meals_per_day": null,
+     "water_gal_per_day": null
+    },
+    "donations_volunteers": {
+     "volunteers_per_shift": null,
+     "donation_intake_sites": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "hawaii_voad",
+   "name": "Hawaiʻi VOAD (Voluntary Organizations Active in Disaster)",
+   "partner_type": "hawaii_voad",
+   "scope": "state",
+   "listed_in_challenge": "p.3, 'Who is involved': 'DHS divisions, county emergency management agencies, HI-EMA, Department of Education, including the Hawaii State Library System, Department of Health (multiple programs), Department of Transportation, the Office of Hawaiian Affairs, partner nonprofits and community groups, the American Red Cross, the Salvation Army, VOAD, philanthropy, health care organizations...'",
+   "functions": [
+    {
+     "function": "donations_volunteers",
+     "role": "lead",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "feeding",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "pets",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "donations_volunteers": {
+     "volunteers_per_shift": null,
+     "donation_intake_sites": null
+    },
+    "feeding": {
+     "meals_per_day": null,
+     "water_gal_per_day": null
+    },
+    "pets": {
+     "pet_spaces": null,
+     "crates": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "faith_based",
+   "name": "Faith-based organizations",
+   "partner_type": "faith_based",
+   "scope": "statewide (many local organizations)",
+   "listed_in_challenge": "p.2: '...contracted partner nonprofit client lists, faith-based community organizations...'",
+   "functions": [
+    {
+     "function": "shelter_operations",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "feeding",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "language_access",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "donations_volunteers",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "shelter_operations": {
+     "sites": null,
+     "cots": null,
+     "floor_sqft": null,
+     "toilets": null,
+     "staff_per_shift": null
+    },
+    "feeding": {
+     "meals_per_day": null,
+     "water_gal_per_day": null
+    },
+    "language_access": {
+     "interpreters_by_language": null,
+     "translation_turnaround_hours": null
+    },
+    "donations_volunteers": {
+     "volunteers_per_shift": null,
+     "donation_intake_sites": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "health_care",
+   "name": "Health care organizations (incl. managed health care)",
+   "partner_type": "health_care",
+   "scope": "statewide (many organizations)",
+   "listed_in_challenge": "p.1-2: '...community-based organizations such as utility or managed health care organizations.' / p.3, 'Who is involved': 'DHS divisions, county emergency management agencies, HI-EMA, Department of Education, including the Hawaii State Library System, Department of Health (multiple programs), Department of Transportation, the Office of Hawaiian Affairs, partner nonprofits and community groups, the American Red Cross, the Salvation Army, VOAD, philanthropy, health care organizations...'",
+   "functions": [
+    {
+     "function": "afn_support_medical",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    },
+    {
+     "function": "power_medical_devices",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "afn_support_medical": {
+     "medical_staff_per_shift": null,
+     "durable_medical_equipment_units": null,
+     "childrens_area_staff_per_shift": null
+    },
+    "power_medical_devices": {
+     "generators": null,
+     "power_outlets": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  },
+  {
+   "id": "utilities",
+   "name": "Utilities",
+   "partner_type": "utilities",
+   "scope": "statewide (several utilities)",
+   "listed_in_challenge": "p.1-2: '...community-based organizations such as utility or managed health care organizations.'",
+   "functions": [
+    {
+     "function": "power_medical_devices",
+     "role": "support",
+     "status": "proposed – to be confirmed with partner",
+     "basis": "team proposal"
+    }
+   ],
+   "capacity": {
+    "power_medical_devices": {
+     "generators": null,
+     "power_outlets": null
+    }
+   },
+   "capacity_confirmed_by": null,
+   "capacity_confirmed_on": null,
+   "contact": null
+  }
+ ]
+}

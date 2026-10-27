@@ -1,0 +1,16 @@
+{
+ "_about": "Communication pathways for the MATCH step. Channels and owners are proposals – supports, does not replace, county and State public-information plans. Languages come from data/sources/languages_by_county.csv (ACS C16001).",
+ "status": "proposed – supports, does not replace, county plans",
+ "top_languages_per_county": 5,
+ "channels": [
+  {"channel": "official_alerts", "description": "Official alerts: Wireless Emergency Alerts / Emergency Alert System and county alert sign-ups", "owner": "county_em", "support": ["hiema"]},
+  {"channel": "radio", "description": "Broadcast radio, including in-language programs where available", "owner": "county_em", "support": ["hiema"]},
+  {"channel": "trusted_messengers", "description": "Trusted community messengers: faith-based groups, Native Hawaiian organizations, health care providers, community nonprofits", "owner": "dhs", "support": ["faith_based", "oha", "health_care", "hawaii_voad"]},
+  {"channel": "printed_notices", "description": "Printed notices at shelters, libraries and schools, in the county's top languages", "owner": "county_em", "support": ["hspls", "doe"]}
+ ],
+ "message_library": {
+  "dir": "data/sources/messages",
+  "columns": ["message_id", "hazard", "trigger", "timing", "channel", "language", "text", "translated_by", "reviewed_by", "review_date", "approved"],
+  "rule": "Pre-approved templates only. No machine translation is committed without human review (reviewed_by, review_date, approved = yes)."
+ }
+}
