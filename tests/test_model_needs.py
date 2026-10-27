@@ -33,15 +33,14 @@ class Model(unittest.TestCase):
     def setUp(self):
         self.tracts = [
             tract("15009000100", "Maui", tsunami_zone_share=0.5,
-                  nri_wildfire_rating="Very High"),
-            tract("15009000200", "Maui"),
-            tract("15001000100", "Hawaii", nri_inland_flood_rating="Relatively High"),
+                  tsunami_extreme_exposed_pop_est=800, nri_wildfire_score=90.0),
+            tract("15009000200", "Maui", nri_coastal_flood_score=0.0),
+            tract("15001000100", "Hawaii", nri_inland_flood_score=95.0),
         ]
         self.shelters = [
             site("Lahaina Civic Center Gym", "Maui", in_tsunami_zone=True),
             site("Baldwin High School", "Maui", in_tsunami_zone=False),
-            site("Flood Gym", "Hawaii", in_tsunami_zone=False,
-                 nri_inland_flood_rating="Very High"),
+            site("Flood Gym", "Hawaii", in_tsunami_zone=False, tract_fips="15001000100"),
         ]
         self.sc, self.tr = mn.run(self.tracts, self.shelters, [], CFG)
         self.by = {(s["county"], s["hazard"]): s for s in self.sc}
@@ -74,7 +73,9 @@ class Model(unittest.TestCase):
         self.assertEqual(s["floor_sqft_72h"], 500)
         self.assertEqual(s["water_gal_per_day"], 25)
         self.assertEqual(s["meals_per_day"], 50)
-        self.assertEqual(s["toilets"], 2)
+        self.assertEqual(s["toilets_72h"], 1)
+        self.assertEqual(s["toilets_2wk"], 2)
+        self.assertEqual(s["at_risk_pop_extreme_zone"], 800)
         self.assertEqual(s["power_outlets"], 1)
         self.assertGreaterEqual(s["staff_per_shift"], 7)       # min 1 per role
 
@@ -84,10 +85,13 @@ class Model(unittest.TestCase):
         self.assertEqual(s["known_sites_check_flood"], 1)
         self.assertEqual(s["known_sites_usable"], 0)
 
-    def test_fallback_when_no_high_rating(self):
-        shares, rule = mn.footprint_shares(self.tracts, "coastal_flood", CFG)
-        self.assertTrue(rule.startswith("fallback"))
-        self.assertEqual(len(shares), 1)                       # top 25% of 3 -> 1
+    def test_top_share_is_hawaii_relative(self):
+        shares, rule = mn.footprint_shares(self.tracts, "wildfire", CFG)
+        self.assertTrue(rule.startswith("top 25%"))
+        self.assertEqual(list(shares), ["15009000100"])        # highest score only
+        # zero scores never enter a footprint
+        shares, _ = mn.footprint_shares(self.tracts, "coastal_flood", CFG)
+        self.assertNotIn("15009000200", shares)
 
     def test_no_demand_no_staff(self):
         s = self.by[("Kauai", "hurricane")]
@@ -112,8 +116,8 @@ class Model(unittest.TestCase):
                          "X,2023-08-11,Maui,wildfire,10000,s,1100,s,Calibration event\n",
                          encoding="utf-8")
             b = mn.backtest(CFG, p)[0]
-            self.assertEqual(b["model_central"], 1100)
-            self.assertEqual(b["error_central_pct"], 0.0)
+            self.assertEqual(b["model_high"], 1100)
+            self.assertEqual(b["error_high_pct"], 0.0)
             self.assertTrue(b["observed_within_band"])
             self.assertTrue(b["calibration_event"])
 

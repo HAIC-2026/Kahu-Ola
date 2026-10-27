@@ -5,7 +5,8 @@
   "with_nri": 18,
   "with_power_estimate": 18,
   "population": 73511,
-  "tsunami_exposed_pop_est": 6903,
+  "tsunami_exposed_pop_est": 6158,
+  "tsunami_extreme_exposed_pop_est": 6903,
   "coverage_pct": 100.0
  },
  "Honolulu": {
@@ -14,7 +15,8 @@
   "with_nri": 328,
   "with_power_estimate": 329,
   "population": 1010100,
-  "tsunami_exposed_pop_est": 177475,
+  "tsunami_exposed_pop_est": 82201,
+  "tsunami_extreme_exposed_pop_est": 177475,
   "coverage_pct": 100.0
  },
  "Maui": {
@@ -23,7 +25,8 @@
   "with_nri": 46,
   "with_power_estimate": 46,
   "population": 164815,
-  "tsunami_exposed_pop_est": 24391,
+  "tsunami_exposed_pop_est": 18237,
+  "tsunami_extreme_exposed_pop_est": 24391,
   "coverage_pct": 100.0
  },
  "Hawaii": {
@@ -32,7 +35,8 @@
   "with_nri": 43,
   "with_power_estimate": 43,
   "population": 202163,
-  "tsunami_exposed_pop_est": 14008,
+  "tsunami_exposed_pop_est": 12463,
+  "tsunami_extreme_exposed_pop_est": 14008,
   "coverage_pct": 100.0
  }
 }

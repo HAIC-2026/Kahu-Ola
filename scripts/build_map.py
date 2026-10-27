@@ -156,8 +156,11 @@ def build(svi, nri: dict | None, tsunami, extreme, empower, samples: int = 100) 
 
         r["tsunami_zone_share"] = round(t_index.share_inside(g, samples), 3)
         r["tsunami_extreme_share"] = round(x_index.share_inside(g, samples), 3)
-        r["tsunami_exposed_pop_est"] = round(pop * max(r["tsunami_zone_share"],
-                                                      r["tsunami_extreme_share"]))
+        # Standard evacuation zone = planning number (used in warnings).
+        # Extreme zone reported separately as the worst case.
+        r["tsunami_exposed_pop_est"] = round(pop * r["tsunami_zone_share"])
+        r["tsunami_extreme_exposed_pop_est"] = round(
+            pop * max(r["tsunami_zone_share"], r["tsunami_extreme_share"]))
         rows.append((r, g))
 
     # emPOWER county totals -> tracts, proportional to 65+ population (Medicare proxy)
@@ -203,7 +206,9 @@ def build(svi, nri: dict | None, tsunami, extreme, empower, samples: int = 100) 
                                "of county 65+ population (Medicare proxy). Estimate.",
             "empower_field_used": power_field,
             "tsunami_share": f"share of {samples} grid points inside the zone; "
-                             "exposed pop assumes even spread within the tract",
+                             "exposed pop assumes even spread within the tract. "
+                             "tsunami_exposed_pop_est = standard evacuation zone; "
+                             "tsunami_extreme_exposed_pop_est = extreme zone (worst case)",
             "nri_join": "NRI v1.20 per-hazard layers joined on tract FIPS (2020 tracts); spatial fallback",
             "afn_index": "mean statewide percentile of C, M, I, S, T per-capita rates",
         },
@@ -232,6 +237,8 @@ def coverage(fc: dict) -> dict:
                                        if p["M_power_dependent_est"] is not None),
             "population": int(sum(p["population"] for p in feats)),
             "tsunami_exposed_pop_est": int(sum(p["tsunami_exposed_pop_est"] for p in feats)),
+            "tsunami_extreme_exposed_pop_est": int(sum(p["tsunami_extreme_exposed_pop_est"]
+                                                       for p in feats)),
         }
         out[c]["coverage_pct"] = round(100 * out[c]["with_cmist"] / n, 1) if n else 0.0
     return out
@@ -259,11 +266,12 @@ def main() -> int:
 
     print(f"Wrote {len(props)} tracts -> data/processed/afn_tracts.geojson / .csv\n")
     print(f"{'County':<10}{'Tracts':>7}{'CMIST%':>8}{'NRI':>6}{'Power':>7}"
-          f"{'Population':>12}{'Tsunami pop':>13}")
+          f"{'Population':>12}{'Tsunami pop':>13}{'Extreme':>10}")
     for c, v in cov.items():
         print(f"{c:<10}{v['tracts']:>7}{v['coverage_pct']:>8}{v['with_nri']:>6}"
               f"{v['with_power_estimate']:>7}{v['population']:>12,}"
-              f"{v['tsunami_exposed_pop_est']:>13,}")
+              f"{v['tsunami_exposed_pop_est']:>13,}"
+              f"{v['tsunami_extreme_exposed_pop_est']:>10,}")
     used = fc["metadata"]["method"]["empower_field_used"]
     print(f"\nemPOWER count field: {used or 'NOT FOUND – check data/raw/empower_county.geojson'}")
     return 0

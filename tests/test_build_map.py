@@ -77,6 +77,8 @@ class BuildMap(unittest.TestCase):
         self.assertEqual(coastal["nri_inland_flood_rating"], "")
         self.assertAlmostEqual(coastal["tsunami_zone_share"], 0.5, delta=0.06)
         self.assertAlmostEqual(coastal["tsunami_exposed_pop_est"], 500, delta=60)
+        self.assertGreaterEqual(coastal["tsunami_extreme_exposed_pop_est"],
+                                coastal["tsunami_exposed_pop_est"])
 
         # emPOWER 500 split by 65+ share: 300 / (300 + 200)
         self.assertEqual(out["metadata"]["method"]["empower_field_used"],

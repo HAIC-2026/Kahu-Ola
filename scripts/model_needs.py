@@ -61,17 +61,16 @@ def footprint_shares(tracts: list, hazard: str, cfg: dict) -> tuple[dict, str]:
     if rule["rule"] == "tsunami_zone_share":
         return ({t["tract_fips"]: nz(t.get("tsunami_zone_share")) for t in tracts
                  if nz(t.get("tsunami_zone_share")) > 0}, "share inside tsunami zone")
+    if rule["rule"] == "nri_top_share":
+        # NRI ratings are national: rank Hawaiʻi tracts against each other instead.
+        scored = sorted((nz(t.get(f"nri_{hazard}_score")), t["tract_fips"]) for t in tracts
+                        if nz(t.get(f"nri_{hazard}_score")) > 0)
+        k = math.ceil(len(tracts) * rule["share"])
+        top = {fips: 1.0 for _, fips in scored[-k:]} if k else {}
+        return top, f"top {int(rule['share'] * 100)}% of Hawaii tracts by NRI score"
     ratings = set(rule.get("ratings", HIGH))
-    hit = {t["tract_fips"]: 1.0 for t in tracts
-           if t.get(f"nri_{hazard}_rating") in ratings}
-    if hit:
-        return hit, f"NRI rating in {sorted(ratings)}"
-    # Fallback: top share of tracts by NRI score statewide
-    scored = sorted((nz(t.get(f"nri_{hazard}_score")), t["tract_fips"]) for t in tracts
-                    if isinstance(t.get(f"nri_{hazard}_score"), (int, float)))
-    k = math.ceil(len(scored) * cfg["footprint"]["fallback_top_share"])
-    top = {fips: 1.0 for _, fips in scored[-k:]} if k else {}
-    return top, f"fallback: top {int(cfg['footprint']['fallback_top_share'] * 100)}% by NRI score"
+    return ({t["tract_fips"]: 1.0 for t in tracts
+             if t.get(f"nri_{hazard}_rating") in ratings}, f"NRI rating in {sorted(ratings)}")
 
 
 # ---------------------------------------------------------------- per tract
@@ -124,7 +123,8 @@ def resources(demand: float, children: float, power_dep: float, households: floa
         "floor_sqft_2wk": math.ceil(demand * val(pp["floor_sqft_2wk"])),
         "water_gal_per_day": math.ceil(demand * val(pp["water_gal_per_day"])),
         "meals_per_day": math.ceil(demand * val(pp["meals_per_day"])),
-        "toilets": math.ceil(demand / val(pp["persons_per_toilet_short_term"])),
+        "toilets_72h": math.ceil(demand / val(pp["persons_per_toilet_72h"])),
+        "toilets_2wk": math.ceil(demand / val(pp["persons_per_toilet_short_term"])),
         "power_outlets": math.ceil(power_dep * val(pp["power_outlets_per_power_dependent_person"])),
         "dog_households": math.ceil(households * val(cfg["pets"]["dog_owning_household_share"])),
         "cat_households": math.ceil(households * val(cfg["pets"]["cat_owning_household_share"])),
@@ -144,12 +144,16 @@ def resources(demand: float, children: float, power_dep: float, households: floa
 
 # ---------------------------------------------------------------- sites
 
-def usable_sites(shelters: list, schools: list, county: str, hazard: str) -> dict:
+def usable_sites(shelters: list, schools: list, county: str, hazard: str,
+                 footprint: dict | None = None) -> dict:
+    """tsunami: sites inside the evacuation zone are excluded.
+    flood: sites inside a flood-footprint tract are flagged 'check' (verify on site)."""
+    footprint = footprint or {}
+
     def ok(p):
         if hazard == "tsunami" and p.get("in_tsunami_zone"):
             return "exclude"
-        if hazard in ("inland_flood", "coastal_flood") and \
-                p.get(f"nri_{hazard}_rating") in HIGH:
+        if hazard in ("inland_flood", "coastal_flood") and p.get("tract_fips") in footprint:
             return "check"
         return "ok"
 
@@ -185,6 +189,8 @@ def run(tracts: list, shelters: list, schools: list, cfg: dict):
                 "I_disability_in_shelter", "S_children_in_shelter", "households_in_shelter")}
             sc = {
                 "county": county, "hazard": hz, "footprint_rule": rule,
+                "scope": "upper bound: all at-risk tracts hit at once"
+                         if hz != "hurricane" else "whole county",
                 "tracts_at_risk": len(rows),
                 "at_risk_pop": round(at_risk),
                 "shelter_demand_low": round(at_risk * rates["low"]),
@@ -194,10 +200,14 @@ def run(tracts: list, shelters: list, schools: list, cfg: dict):
                 "rate_high": rates["high"],
             }
             sc.update({k: round(v) for k, v in agg.items() if k != "shelter_demand"})
+            if hz == "tsunami":
+                sc["at_risk_pop_extreme_zone"] = sum(
+                    round(nz(t.get("tsunami_extreme_exposed_pop_est"))) for t in tracts
+                    if t["county"] == county)
             sc.update(resources(agg["shelter_demand"], agg["S_children_in_shelter"],
                                 agg["M_power_dependent_in_shelter"],
                                 agg["households_in_shelter"], cfg))
-            sites = usable_sites(shelters, schools, county, hz)
+            sites = usable_sites(shelters, schools, county, hz, shares)
             sc.update({k: v for k, v in sites.items() if k != "known_sites_excluded"})
             sc["known_sites_excluded"] = "; ".join(sites["known_sites_excluded"])
             scenarios.append(sc)
