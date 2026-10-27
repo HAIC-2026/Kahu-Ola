@@ -47,9 +47,21 @@ def census_lookup(query: str, fetch=None) -> dict:
     url = ENDPOINT + "?" + urllib.parse.urlencode(
         {"address": query, "benchmark": "Public_AR_Current", "format": "json"})
     if fetch is None:
-        req = urllib.request.Request(url, headers={"User-Agent": "HAIC2026-KahuOla-ESF6"})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            data = json.loads(r.read().decode("utf-8"))
+        # The Census server sometimes answers a burst of requests with an HTML
+        # error page (JSONDecodeError). Retry with backoff before giving up.
+        last = None
+        for attempt in range(4):
+            try:
+                req = urllib.request.Request(
+                    url, headers={"User-Agent": "HAIC2026-KahuOla-ESF6"})
+                with urllib.request.urlopen(req, timeout=30) as r:
+                    data = json.loads(r.read().decode("utf-8"))
+                break
+            except (json.JSONDecodeError, OSError) as e:
+                last = e
+                time.sleep(3 * (attempt + 1))
+        else:
+            raise last
     else:
         data = fetch(url)
     matches = (data.get("result") or {}).get("addressMatches") or []
@@ -81,7 +93,7 @@ def save_cache(cache: dict, path: Path = CACHE) -> None:
             w.writerow({k: cache[addr].get(k, "") for k in FIELDS})
 
 
-def run(rows: list, cache: dict, retry: bool = False, fetch=None, pause: float = 0.5):
+def run(rows: list, cache: dict, retry: bool = False, fetch=None, pause: float = 1.5):
     done = 0
     for addr in sorted({r["address"].strip() for r in rows if r.get("address", "").strip()}):
         old = cache.get(addr)

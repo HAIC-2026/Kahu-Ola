@@ -3,22 +3,22 @@ address,query,status,lon,lat,matched_address,method
 "1139-A Kilani Avenue, Wahiawā 96786","1139-A Kilani Avenue, Wahiawa 96786, HI",match,-158.023045,21.500593,"1139 KILANI AVE, WAHIAWA, HI, 96786",census_onelineaddress
 "145 Wainaku St., Hilo","145 Wainaku St., Hilo, HI",match,-155.093359,19.733473,"145 WAINAKU ST, HILO, HI, 96720",census_onelineaddress
 "1501 Liloa Drive, Kīhei","1501 Liloa Drive, Kihei, HI",match,-156.449352,20.748162,"1501 LILOA DR, KIHEI, HI, 96753",census_onelineaddress
-"16-512 Volcano Road, Keaʻau","16-512 Volcano Road, Keaau, HI",error: JSONDecodeError,,,,census_onelineaddress
-"1650 Kaahumanu Ave., Wailuku","1650 Kaahumanu Ave., Wailuku, HI",error: JSONDecodeError,,,,census_onelineaddress
-"1840 Honoapiʻilani Highway, Lahaina","1840 Honoapiilani Highway, Lahaina, HI",error: JSONDecodeError,,,,census_onelineaddress
+"16-512 Volcano Road, Keaʻau","16-512 Volcano Road, Keaau, HI",match,-155.038699,19.623416,"16-512 OLD VOLCANO RD, KEAAU, HI, 96749",census_onelineaddress
+"1650 Kaahumanu Ave., Wailuku","1650 Kaahumanu Ave., Wailuku, HI",no_match,,,,census_onelineaddress
+"1840 Honoapiʻilani Highway, Lahaina","1840 Honoapiilani Highway, Lahaina, HI",match,-156.682052,20.884315,"1840 HONOAPIILANI HWY, LAHAINA, HI, 96761",census_onelineaddress
 "2460 Keneke Street, Kīlauea","2460 Keneke Street, Kilauea, HI",match,-159.406536,22.211696,"2460 KENEKE ST, KILAUEA, HI, 96754",census_onelineaddress
-"2721 Kaʻaipū Avenue, Honolulu 96822","2721 Kaaipu Avenue, Honolulu 96822, HI",error: JSONDecodeError,,,,census_onelineaddress
+"2721 Kaʻaipū Avenue, Honolulu 96822","2721 Kaaipu Avenue, Honolulu 96822, HI",match,-157.810362,21.31346,"2721 KAAIPU AVE, HONOLULU, HI, 96822",census_onelineaddress
 "344 Kamehameha V Highway, Kaunakakai","344 Kamehameha V Highway, Kaunakakai, HI",match,-157.014599,21.085865,"344 KAMEHAMEHA V HWY, KAUNAKAKAI, HI, 96748",census_onelineaddress
 "35-1994 Government Main Road, Pāpaʻaloa","35-1994 Government Main Road, Papaaloa, HI",no_match,,,,census_onelineaddress
 "3577 Lala Road, Līhuʻe","3577 Lala Road, Lihue, HI",match,-159.358308,21.959822,"3577 LALA RD, LIHUE, HI, 96766",census_onelineaddress
 "4111 Hāna Highway, Hāna","4111 Hana Highway, Hana, HI",match,-156.001525,20.776889,"4111 HANA HWY, HANA, HI, 96713",census_onelineaddress
-"4480 Papalina Road, Kalāheo","4480 Papalina Road, Kalaheo, HI",error: JSONDecodeError,,,,census_onelineaddress
-"45-541 Lehua St., Honokaʻa","45-541 Lehua St., Honokaa, HI",error: JSONDecodeError,,,,census_onelineaddress
-"45-660 Keaʻahala Road, Kāneʻohe 96744","45-660 Keaahala Road, Kaneohe 96744, HI",error: JSONDecodeError,,,,census_onelineaddress
+"4480 Papalina Road, Kalāheo","4480 Papalina Road, Kalaheo, HI",match,-159.527464,21.92408,"4480 PAPALINA RD, KALAHEO, HI, 96741",census_onelineaddress
+"45-541 Lehua St., Honokaʻa","45-541 Lehua St., Honokaa, HI",match,-155.469412,20.077889,"45-541 LEHUA ST, HONOKAA, HI, 96727",census_onelineaddress
+"45-660 Keaʻahala Road, Kāneʻohe 96744","45-660 Keaahala Road, Kaneohe 96744, HI",match,-157.80817,21.410602,"45-660 KEAAHALA RD, KANEOHE, HI, 96744",census_onelineaddress
 "4867 Olohena Road, Kapaʻa","4867 Olohena Road, Kapaa, HI",match,-159.32991,22.080608,"4867 OLOHENA RD, KAPAA, HI, 96746",census_onelineaddress
-"495 Puupeelua Ave., Hoolehua","495 Puupeelua Ave., Hoolehua, HI",error: JSONDecodeError,,,,census_onelineaddress
+"495 Puupeelua Ave., Hoolehua","495 Puupeelua Ave., Hoolehua, HI",no_match,,,,census_onelineaddress
 "54-382 Kamehameha Park Road, Kapaʻau","54-382 Kamehameha Park Road, Kapaau, HI",match,-155.800406,20.232618,"54-382 KAMEHAMEHA PARK RD, KAPAAU, HI, 96755",census_onelineaddress
-"67-1182 Lindsey Road, Waimea","67-1182 Lindsey Road, Waimea, HI",error: JSONDecodeError,,,,census_onelineaddress
+"67-1182 Lindsey Road, Waimea","67-1182 Lindsey Road, Waimea, HI",no_match,,,,census_onelineaddress
 "82-6156 Māmalahoa Highway, Captain Cook","82-6156 Mamalahoa Highway, Captain Cook, HI",match,-155.912121,19.490102,"82-6156 MAMALAHOA HWY, CAPTAIN COOK, HI, 96704",census_onelineaddress
 "85-601 Farrington Highway, Waiʻanae 96792","85-601 Farrington Highway, Waianae 96792, HI",match,-158.192575,21.450896,"85-601 FARRINGTON HWY, WAIANAE, HI, 96792",census_onelineaddress
 "89-778 Haleakala Avenue, Waiʻanae","89-778 Haleakala Avenue, Waianae, HI",match,-158.136085,21.388269,"89-778 HALEAKALA AVE, WAIANAE, HI, 96792",census_onelineaddress
@@ -26,4 +26,4 @@ address,query,status,lon,lat,matched_address,method
 "92-8924 Leilani Circle, Ocean View","92-8924 Leilani Circle, Ocean View, HI",no_match,,,,census_onelineaddress
 "95-5545 Mamalahoa Highway, Nāʻālehu","95-5545 Mamalahoa Highway, Naalehu, HI",match,-155.58102,19.061735,"95-5545 MAMALAHOA HWY, NAALEHU, HI, 96772",census_onelineaddress
 "9555 Huakai Road, Waimea","9555 Huakai Road, Waimea, HI",match,-159.671562,21.959708,"9555 HUAKAI RD, WAIMEA, HI, 96796",census_onelineaddress
-"96-1219 Kamani St., Pāhala","96-1219 Kamani St., Pahala, HI",error: JSONDecodeError,,,,census_onelineaddress
+"96-1219 Kamani St., Pāhala","96-1219 Kamani St., Pahala, HI",no_match,,,,census_onelineaddress
