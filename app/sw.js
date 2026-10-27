@@ -5,7 +5,7 @@
 "use strict";
 
 // BEGIN GENERATED
-const VERSION = "2ef73cbf474f";
+const VERSION = "7d451e4f5835";
 const PRECACHE = [
   "./",
   "index.html",
@@ -13,6 +13,9 @@ const PRECACHE = [
   "styles.css",
   "manifest.webmanifest",
   "icon.svg",
+  "icon-180.png",
+  "icon-192.png",
+  "icon-512.png",
   "data/bundle.json",
   "data/version.json",
   "playbooks/hawaii_coastal_flood.pdf",

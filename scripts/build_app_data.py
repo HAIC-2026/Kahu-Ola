@@ -11,10 +11,15 @@ app/index.html (static PDF links shown if the data cannot load).
 Aggregate data only: tract counts, public facility names and addresses. No individual
 records. Offline: reads local files only.
 
+app/playbooks/ is a build artifact (gitignored): the PDFs are committed once, in playbooks/.
+
 Usage:  python3 scripts/build_app_data.py    (after build_playbooks.py)
+        python3 scripts/build_app_data.py --copy-only
+            (deploy step, e.g. Cloudflare Pages: only copy playbooks/*.pdf into app/playbooks/)
 """
 from __future__ import annotations
 
+import argparse
 import csv
 import hashlib
 import json
@@ -38,7 +43,8 @@ APP = ROOT / "app"
 DATA = APP / "data"
 PLAYBOOKS = ROOT / "playbooks"
 TOL = 0.0008                  # degrees (~80 m) for outline simplification
-SHELL = ["./", "index.html", "app.js", "styles.css", "manifest.webmanifest", "icon.svg"]
+SHELL = ["./", "index.html", "app.js", "styles.css", "manifest.webmanifest", "icon.svg",
+         "icon-180.png", "icon-192.png", "icon-512.png"]
 SCENARIO_FIELDS = ("at_risk_pop", "shelter_demand_low", "shelter_demand_central",
                    "shelter_demand_high", "rate_low", "rate_central", "rate_high",
                    "C_lep_at_risk", "M_power_dependent_at_risk", "I_disability_at_risk",
@@ -150,7 +156,25 @@ def cache_version(precache: list) -> str:
     return h.hexdigest()[:12]
 
 
-def main() -> int:
+def copy_playbooks(src: Path = PLAYBOOKS, app: Path = APP) -> list:
+    """Copy the committed PDF playbooks into the app (build artifact, not committed)."""
+    (app / "playbooks").mkdir(parents=True, exist_ok=True)
+    for old in (app / "playbooks").glob("*.pdf"):
+        old.unlink()
+    pdfs = sorted(src.glob("*.pdf"))
+    for p in pdfs:
+        shutil.copy2(p, app / "playbooks" / p.name)
+    return pdfs
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(description="Build the offline app data bundle")
+    ap.add_argument("--copy-only", action="store_true",
+                    help="only copy playbooks/*.pdf into app/playbooks (deploy step)")
+    args = ap.parse_args(argv)
+    if args.copy_only:
+        print(f"Copied {len(copy_playbooks())} PDF playbooks -> app/playbooks/")
+        return 0
     inp = load_inputs()
     bundle = build(inp)
     DATA.mkdir(parents=True, exist_ok=True)
@@ -159,12 +183,7 @@ def main() -> int:
     version = {"version": bundle["meta"]["version"], "data_as_of": inp["data_as_of"]}
     (DATA / "version.json").write_text(json.dumps(version), encoding="utf-8")
 
-    (APP / "playbooks").mkdir(exist_ok=True)
-    for old in (APP / "playbooks").glob("*.pdf"):
-        old.unlink()
-    pdfs = sorted(PLAYBOOKS.glob("*.pdf"))
-    for p in pdfs:
-        shutil.copy2(p, APP / "playbooks" / p.name)
+    pdfs = copy_playbooks()
 
     links = "\n".join(
         f'<li>{escape(COUNTY_LABEL[c])}: ' + " · ".join(

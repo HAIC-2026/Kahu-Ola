@@ -117,7 +117,7 @@ class Bundle(unittest.TestCase):
         self.assertEqual(st["Lahaina Civic Center Gym"], "exclude")
         self.assertEqual(st["Kilohana Recreation Center"], "exclude")
         for key, sc in b["scenarios"].items():
-            self.assertTrue((APP / sc["playbook"]).exists(), key)
+            self.assertTrue((ROOT / sc["playbook"]).exists(), key)       # copied in at build
 
 
 class ServiceWorker(unittest.TestCase):
@@ -132,13 +132,23 @@ class ServiceWorker(unittest.TestCase):
         for f in (APP / "data").iterdir():
             self.assertIn(f"data/{f.name}", pre)
         pdfs = sorted(p.name for p in PLAY.glob("*.pdf"))
-        self.assertEqual(sorted(p.name for p in (APP / "playbooks").glob("*.pdf")), pdfs)
         for name in pdfs:
             self.assertIn(f"playbooks/{name}", pre)
-        for shell in ("index.html", "app.js", "styles.css", "manifest.webmanifest"):
+        for shell in ("index.html", "app.js", "styles.css", "manifest.webmanifest",
+                      "icon-180.png", "icon-192.png", "icon-512.png"):
             self.assertIn(shell, pre)
-        for rel in pre:
-            self.assertTrue((APP / ("index.html" if rel == "./" else rel)).exists(), rel)
+        for rel in pre:                      # PDFs live in playbooks/ until the build copies them
+            src = ROOT / rel if rel.startswith("playbooks/") else APP / ("index.html" if rel == "./" else rel)
+            self.assertTrue(src.exists(), rel)
+
+    def test_pdfs_committed_once_and_copied_at_build(self):
+        import tempfile
+        import build_app_data as bad
+        self.assertIn("app/playbooks/", (ROOT / ".gitignore").read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as d:
+            out = bad.copy_playbooks(PLAY, Path(d))
+            self.assertEqual(len(out), 20)
+            self.assertEqual(len(list((Path(d) / "playbooks").glob("*.pdf"))), 20)
 
     def test_same_origin_only(self):
         sw = (APP / "sw.js").read_text(encoding="utf-8")
@@ -172,10 +182,19 @@ class AppCode(unittest.TestCase):
         self.assertIn("geolocation=()", headers)
         self.assertIn("connect-src 'self'", headers)
 
-    def test_manifest(self):
+    def test_manifest_and_png_icons(self):
         m = json.loads((APP / "manifest.webmanifest").read_text(encoding="utf-8"))
         self.assertEqual(m["display"], "standalone")
-        self.assertTrue((APP / m["icons"][0]["src"]).exists())
+        sizes = {i["sizes"] for i in m["icons"]}
+        self.assertTrue({"192x192", "512x512"} <= sizes)
+        for i in m["icons"]:
+            self.assertTrue((APP / i["src"]).exists(), i["src"])
+        for n in (180, 192, 512):
+            png = (APP / f"icon-{n}.png").read_bytes()
+            self.assertEqual(png[:8], b"\x89PNG\r\n\x1a\n")
+            self.assertEqual(int.from_bytes(png[16:20], "big"), n)        # IHDR width
+        self.assertIn('<link rel="apple-touch-icon" href="icon-180.png">',
+                      (APP / "index.html").read_text(encoding="utf-8"))
 
 
 def _lum(hexc):

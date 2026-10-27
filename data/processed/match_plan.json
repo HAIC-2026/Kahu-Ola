@@ -2,7 +2,7 @@
  "title": "Hawaiʻi ESF-6 MATCH plan: needs x partner roles, decision points, communication pathways",
  "status": "proposed – supports, does not replace, county plans. Roles are proposed – to be confirmed with partner.",
  "privacy": "Aggregate tract and county estimates only. No individual records.",
- "inputs_built_at": "2026-10-27T18:15:46+00:00",
+ "inputs_built_at": "2026-10-27T19:29:41+00:00",
  "sources": {
   "partners": {
    "document": "HAIC_AI Challenge_Submission_DHS_Disaster_2026.pdf (2026 HAIC AI Challenge Submission, Hawaii DHS: 'Enhancing ESF-6 Planning Through AI-Supported Insights')",
@@ -8946,73 +8946,73 @@
   {
    "language": "English",
    "file": "data/sources/messages/english.csv",
-   "templates": 0,
+   "templates": 15,
    "approved_templates": 0
   },
   {
    "language": "Chinese",
    "file": "data/sources/messages/chinese.csv",
-   "templates": 0,
+   "templates": 15,
    "approved_templates": 0
   },
   {
    "language": "Chuukese",
    "file": "data/sources/messages/chuukese.csv",
-   "templates": 0,
+   "templates": 15,
    "approved_templates": 0
   },
   {
    "language": "Hawaiian",
    "file": "data/sources/messages/hawaiian.csv",
-   "templates": 0,
+   "templates": 15,
    "approved_templates": 0
   },
   {
    "language": "Ilocano",
    "file": "data/sources/messages/ilocano.csv",
-   "templates": 0,
+   "templates": 15,
    "approved_templates": 0
   },
   {
    "language": "Japanese",
    "file": "data/sources/messages/japanese.csv",
-   "templates": 0,
+   "templates": 15,
    "approved_templates": 0
   },
   {
    "language": "Korean",
    "file": "data/sources/messages/korean.csv",
-   "templates": 0,
+   "templates": 15,
    "approved_templates": 0
   },
   {
    "language": "Marshallese",
    "file": "data/sources/messages/marshallese.csv",
-   "templates": 0,
+   "templates": 15,
    "approved_templates": 0
   },
   {
    "language": "Other English-based Creole languages",
    "file": "data/sources/messages/other_english_based_creole_languages.csv",
-   "templates": 0,
+   "templates": 15,
    "approved_templates": 0
   },
   {
    "language": "Spanish",
    "file": "data/sources/messages/spanish.csv",
-   "templates": 0,
+   "templates": 15,
    "approved_templates": 0
   },
   {
    "language": "Tagalog, Filipino",
    "file": "data/sources/messages/tagalog_filipino.csv",
-   "templates": 0,
+   "templates": 15,
    "approved_templates": 0
   },
   {
    "language": "Vietnamese",
    "file": "data/sources/messages/vietnamese.csv",
-   "templates": 0,
+   "templates": 15,
    "approved_templates": 0
   }
  ]

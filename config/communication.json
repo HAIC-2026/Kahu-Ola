@@ -2,16 +2,73 @@
  "_about": "Communication pathways for the MATCH step. Channels and owners are proposals – supports, does not replace, county and State public-information plans. Languages come from data/sources/languages_by_county.csv (ACS PUMS 2019-2023, detailed languages; Kauai and Maui share one PUMA and one language list). ACS C16001 (languages_by_county_c16001.csv) is kept as a secondary source.",
  "status": "proposed – supports, does not replace, county plans",
  "top_languages_per_county": 6,
- "always_include_if_not_suppressed": ["Hawaiian", "Chuukese", "Marshallese"],
+ "always_include_if_not_suppressed": [
+  "Hawaiian",
+  "Chuukese",
+  "Marshallese"
+ ],
  "channels": [
-  {"channel": "official_alerts", "description": "Official alerts: Wireless Emergency Alerts / Emergency Alert System and county alert sign-ups", "owner": "county_em", "support": ["hiema"]},
-  {"channel": "radio", "description": "Broadcast radio, including in-language programs where available", "owner": "county_em", "support": ["hiema"]},
-  {"channel": "trusted_messengers", "description": "Trusted community messengers: faith-based groups, Native Hawaiian organizations, health care providers, community nonprofits", "owner": "dhs", "support": ["faith_based", "oha", "health_care", "hawaii_voad"]},
-  {"channel": "printed_notices", "description": "Printed notices at shelters, libraries and schools, in the county's top languages", "owner": "county_em", "support": ["hspls", "doe"]}
+  {
+   "channel": "official_alerts",
+   "description": "Official alerts: Wireless Emergency Alerts / Emergency Alert System and county alert sign-ups",
+   "owner": "county_em",
+   "support": [
+    "hiema"
+   ]
+  },
+  {
+   "channel": "radio",
+   "description": "Broadcast radio, including in-language programs where available",
+   "owner": "county_em",
+   "support": [
+    "hiema"
+   ]
+  },
+  {
+   "channel": "trusted_messengers",
+   "description": "Trusted community messengers: faith-based groups, Native Hawaiian organizations, health care providers, community nonprofits",
+   "owner": "dhs",
+   "support": [
+    "faith_based",
+    "oha",
+    "health_care",
+    "hawaii_voad"
+   ]
+  },
+  {
+   "channel": "printed_notices",
+   "description": "Printed notices at shelters, libraries and schools, in the county's top languages",
+   "owner": "county_em",
+   "support": [
+    "hspls",
+    "doe"
+   ]
+  }
  ],
  "message_library": {
   "dir": "data/sources/messages",
-  "columns": ["message_id", "hazard", "trigger", "timing", "channel", "language", "text", "translated_by", "reviewed_by", "review_date", "approved"],
-  "rule": "Pre-approved templates only. No machine translation is committed without human review (reviewed_by, review_date, approved = yes)."
+  "columns": [
+   "message_id",
+   "hazard",
+   "trigger",
+   "timing",
+   "channel",
+   "language",
+   "text",
+   "status",
+   "translated_by",
+   "review_assignee",
+   "reviewed_by",
+   "review_date",
+   "approved",
+   "notes"
+  ],
+  "rule": "AI drafts may be committed only as status 'DRAFT – …' with approved = no and reviewed_by empty. A message may be used only after a named human reviewer (reviewed_by, review_date) approves it (approved = yes): a county public information officer for English, a native speaker for every translation. Messages make no promises the counties have not made.",
+  "draft_status_translation": "DRAFT – AI translation, needs native-speaker review",
+  "draft_status_english": "DRAFT – AI-drafted English source, needs county review",
+  "no_ai_draft_status": "NEEDS HUMAN TRANSLATION – no reliable AI draft for this language",
+  "review_assignees": {
+   "Vietnamese": "Kim Quynh Do"
+  }
  }
 }

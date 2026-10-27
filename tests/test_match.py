@@ -186,11 +186,47 @@ class Communication(unittest.TestCase):
             self.assertEqual(sp["templates"], 1)
             self.assertEqual(sp["approved_templates"], 0)       # not reviewed -> not approved
 
-    def test_committed_library_has_no_unreviewed_text(self):
-        for p in (ROOT / "data/sources/messages").glob("*.csv"):
+    def library(self):
+        out = {}
+        for p in sorted((ROOT / "data/sources/messages").glob("*.csv")):
             with open(p, newline="", encoding="utf-8") as fh:
-                for r in csv.DictReader(fh):
-                    self.assertTrue(r["reviewed_by"] and r["approved"].lower() == "yes", p)
+                out[p.name] = list(csv.DictReader(fh))
+        return out
+
+    def test_no_approved_row_without_a_reviewer(self):
+        lib = COMM["message_library"]
+        for name, rows in self.library().items():
+            for r in rows:
+                if r["approved"].lower() == "yes":
+                    self.assertTrue(r["reviewed_by"] and r["review_date"], (name, r["message_id"]))
+                else:
+                    self.assertEqual(r["approved"], "no", (name, r["message_id"]))
+                if not r["reviewed_by"]:                       # unreviewed -> must say so
+                    self.assertEqual(r["approved"], "no")
+                    self.assertTrue(r["status"].startswith(("DRAFT", "NEEDS HUMAN")), r["status"])
+                if r["language"] != "English" and r["text"] and not r["reviewed_by"]:
+                    self.assertEqual(r["status"], lib["draft_status_translation"], name)
+
+    def test_drafts_cover_every_hazard_and_message(self):
+        ids = {f"{h}-{k}" for h in ("hurricane", "wildfire", "tsunami", "inland_flood",
+                                    "coastal_flood") for k in ("pre", "evac", "shelter")}
+        for name, rows in self.library().items():
+            self.assertEqual(list(rows[0]), COMM["message_library"]["columns"], name)
+            self.assertEqual({r["message_id"] for r in rows}, ids, name)
+
+    def test_vietnamese_assigned_to_kim(self):
+        rows = self.library()["vietnamese.csv"]
+        self.assertTrue(all(r["review_assignee"] == "Kim Quynh Do" for r in rows))
+        self.assertTrue(all(r["text"] and not r["reviewed_by"] for r in rows))
+
+    def test_english_makes_no_promises_counties_have_not_made(self):
+        for r in self.library()["english.csv"]:
+            t = r["text"].lower()
+            for banned in ("police", "law enforcement", "immigration", "guarantee", "safe from",
+                           "will be safe", "we will", "pets are allowed", "pets allowed"):
+                self.assertNotIn(banned, t, r["message_id"])
+            if r["message_id"].endswith("shelter") or r["message_id"].endswith("evac"):
+                self.assertRegex(t, r"county announcements|officials|call 911")
 
     def test_county_pathways(self):
         lib = [{"language": "Spanish", "approved_templates": 0}]

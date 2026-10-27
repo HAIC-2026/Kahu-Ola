@@ -1,0 +1,15 @@
+Security approach: a static, offline-first site with no server-side attack surface.
+
+Hosting: static files on Cloudflare Pages. No server code, database, API or accounts. There is no login, cookies, analytics or location access; the Permissions-Policy header disables geolocation, camera and microphone.
+
+Data: only aggregate census-tract and county estimates (CDC SVI, FEMA NRI, HHS emPOWER county totals, ACS) plus names and addresses of public facilities. No PII, no client records, no registries. Census microdata used for language counts stays in a gitignored folder; published cells under 100 weighted people or 10 sample persons are suppressed. Tests block person-level fields in the app bundle.
+
+Client network: the app makes no upstream calls (no NWS or other APIs). Its only request is the same-origin data bundle; the user selects the hazard. The Content-Security-Policy (default-src 'self', connect-src 'self', no inline script, frame-ancestors 'none') is set in _headers and in the page itself.
+
+Service worker: handles same-origin GET requests only and pre-caches the app shell, data bundle and 20 printable PDFs. Its cache name is a hash of every cached file, so any update replaces the old cache.
+
+Supply chain: no third-party JavaScript, CSS, fonts or CDNs; the data pipeline uses the Python standard library only.
+
+Integrity: the data bundle is versioned by content hash and stamped "data as of"; the stamp appears in the app and on every printed page. The page is built with textContent (no innerHTML).
+
+Content safety: AI-drafted multilingual messages are stored as DRAFT, unapproved, with an empty reviewer field. A test fails if any message is marked approved without a named human reviewer and review date.

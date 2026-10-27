@@ -219,3 +219,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 data/raw/
+
+# Build artifact: PDFs are committed once in playbooks/ and copied at build time
+app/playbooks/
