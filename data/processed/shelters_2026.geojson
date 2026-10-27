@@ -69,7 +69,13 @@
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.667031,
+     20.018626
+    ]
+   },
    "properties": {
     "name": "Kahilu Town Hall",
     "county": "Hawaii",
@@ -83,10 +89,15 @@
     "sources": [
      "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "manual",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15001021706",
+    "nri_inland_flood_rating": "Very High",
+    "nri_coastal_flood_rating": "No Rating",
+    "nri_hurricane_rating": "Very Low"
    }
   },
   {
@@ -157,7 +168,13 @@
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.787626,
+     19.097085
+    ]
+   },
    "properties": {
     "name": "Ocean View Community Center",
     "county": "Hawaii",
@@ -171,10 +188,15 @@
     "sources": [
      "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "manual",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15001021203",
+    "nri_inland_flood_rating": "Very High",
+    "nri_coastal_flood_rating": "Very Low",
+    "nri_hurricane_rating": "Relatively Low"
    }
   },
   {
@@ -212,7 +234,13 @@
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.217147,
+     19.975782
+    ]
+   },
    "properties": {
     "name": "Pāpaʻaloa Park Annex",
     "county": "Hawaii",
@@ -226,15 +254,26 @@
     "sources": [
      "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "manual",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15001022102",
+    "nri_inland_flood_rating": "Relatively High",
+    "nri_coastal_flood_rating": "Very Low",
+    "nri_hurricane_rating": "Very Low"
    }
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.47817,
+     19.20208
+    ]
+   },
    "properties": {
     "name": "Robert N. Herkes Gym",
     "county": "Hawaii",
@@ -248,10 +287,15 @@
     "sources": [
      "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "manual",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15001021203",
+    "nri_inland_flood_rating": "Very High",
+    "nri_coastal_flood_rating": "Very Low",
+    "nri_hurricane_rating": "Relatively Low"
    }
   },
   {
@@ -907,7 +951,13 @@
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -157.070438,
+     21.163725
+    ]
+   },
    "properties": {
     "name": "Molokaʻi Baptist Church",
     "county": "Maui",
@@ -921,16 +971,21 @@
     "sources": [
      "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "manual",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15009031801",
+    "nri_inland_flood_rating": "Relatively High",
+    "nri_coastal_flood_rating": "Relatively Low",
+    "nri_hurricane_rating": "Very Low"
    }
   }
  ],
  "metadata": {
   "title": "Hawaiʻi shelters and refuge areas opened in 2026 events",
-  "built_at": "2026-10-27T10:56:14+00:00",
+  "built_at": "2026-10-27T11:03:53+00:00",
   "source_table": "data/sources/county_shelter_activations.csv",
   "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
   "note": "Site types are kept as each county names them; counties define sheltering differently (DHS challenge pain point)."

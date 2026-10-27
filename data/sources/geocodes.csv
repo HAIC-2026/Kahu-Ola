@@ -27,3 +27,8 @@ address,query,status,lon,lat,matched_address,method
 "95-5545 Mamalahoa Highway, Nāʻālehu","95-5545 Mamalahoa Highway, Naalehu, HI",match,-155.58102,19.061735,"95-5545 MAMALAHOA HWY, NAALEHU, HI, 96772",census_onelineaddress
 "9555 Huakai Road, Waimea","9555 Huakai Road, Waimea, HI",match,-159.671562,21.959708,"9555 HUAKAI RD, WAIMEA, HI, 96796",census_onelineaddress
 "96-1219 Kamani St., Pāhala","96-1219 Kamani St., Pahala, HI",no_match,,,,census_onelineaddress
+"495 Puupeelua Ave., Hoolehua",https://services3.arcgis.com/fsrDo0QMPlK9CkZD/arcgis/rest/services/Site_Address_Point/FeatureServer/0/query?where=OBJECTID%3D70488&outFields=*&outSR=4326&f=json,manual,-157.070438,21.163725,"495 PUUPEELUA AVE, HOOLEHUA",manual
+"35-1994 Government Main Road, Pāpaʻaloa",https://services1.arcgis.com/C2LPusZs5OXNGFDn/arcgis/rest/services/Address_Points/FeatureServer/2/query?where=OBJECTID%3D23334&outFields=*&outSR=4326&f=json,manual,-155.217147,19.975782,35-1994 OLD MAMALAHOA HWY 96780,manual
+"67-1182 Lindsey Road, Waimea",https://services1.arcgis.com/C2LPusZs5OXNGFDn/arcgis/rest/services/Address_Points/FeatureServer/2/query?where=OBJECTID%3D48841&outFields=*&outSR=4326&f=json,manual,-155.667031,20.018626,67-1182 LINDSEY RD 96743,manual
+"92-8924 Leilani Circle, Ocean View",https://services1.arcgis.com/C2LPusZs5OXNGFDn/arcgis/rest/services/Address_Points/FeatureServer/2/query?where=OBJECTID%3D3917&outFields=*&outSR=4326&f=json,manual,-155.787626,19.097085,92-8924 LEILANI CIRCLE MAKAI 96737,manual
+"96-1219 Kamani St., Pāhala",https://services1.arcgis.com/C2LPusZs5OXNGFDn/arcgis/rest/services/Address_Points/FeatureServer/2/query?where=OBJECTID%3D91597&outFields=*&outSR=4326&f=json,manual,-155.478170,19.202080,96-1219 KAMANI ST 96777,manual
