@@ -27,6 +27,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from geo import ZoneIndex  # noqa: E402
+from fetch_flood_zones import load_cache, lookup  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
@@ -211,7 +212,9 @@ def prop(p: dict, *names, default=""):
     return default
 
 
-def build_candidates(layers: dict, tracts: ZoneIndex | None = None) -> dict:
+def build_candidates(layers: dict, tracts: ZoneIndex | None = None,
+                     flood: dict | None = None) -> dict:
+    """flood: cached FEMA flood zones (fetch_flood_zones.load_cache); never fetched here."""
     tsunami = ZoneIndex(layers.get("tsunami_zone"))
     extreme = ZoneIndex(layers.get("tsunami_extreme"))
     out = []
@@ -243,6 +246,7 @@ def build_candidates(layers: dict, tracts: ZoneIndex | None = None) -> dict:
                 "in_tsunami_zone": in_t,
                 "in_extreme_tsunami_zone": in_x,
                 "hazard_excluded": in_t or in_x,
+                **lookup(flood or {}, lon, lat),
                 "needs_review": bool(flags),
                 "review_flags": flags,
                 "source": meta.get("source", ""),
@@ -315,7 +319,7 @@ def main(argv=None) -> int:
 
     OUT.mkdir(parents=True, exist_ok=True)
     tracts = ZoneIndex(layers.get("svi"))
-    fc = build_candidates(layers, tracts or None)
+    fc = build_candidates(layers, tracts or None, load_cache())
     out = OUT / "candidates.geojson"
     out.write_text(json.dumps(fc, indent=1), encoding="utf-8")
     print(f"\nWrote {len(fc['features'])} shelter candidates -> {out.relative_to(ROOT)}\n")

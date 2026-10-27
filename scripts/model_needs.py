@@ -37,6 +37,7 @@ PROC = ROOT / "data" / "processed"
 EVENTS = ROOT / "data" / "sources" / "past_events.csv"
 HAZARDS = ("hurricane", "wildfire", "tsunami", "inland_flood", "coastal_flood")
 HIGH = {"Very High", "Relatively High"}
+FLOOD = ("inland_flood", "coastal_flood")
 
 
 def load_json(p: Path):
@@ -68,6 +69,16 @@ def footprint_shares(tracts: list, hazard: str, cfg: dict) -> tuple[dict, str]:
         k = math.ceil(len(tracts) * rule["share"])
         top = {fips: 1.0 for _, fips in scored[-k:]} if k else {}
         return top, f"top {int(rule['share'] * 100)}% of Hawaii tracts by NRI score"
+    if rule["rule"] == "nri_top_share_by_county":
+        # Counties lead mass care: each county plans for its own highest-risk tracts.
+        top = {}
+        for county in COUNTIES:
+            mine = [t for t in tracts if t.get("county") == county]
+            scored = sorted((nz(t.get(f"nri_{hazard}_score")), t["tract_fips"]) for t in mine
+                            if nz(t.get(f"nri_{hazard}_score")) > 0)
+            k = math.ceil(len(mine) * rule["share"])
+            top.update({fips: 1.0 for _, fips in scored[-k:]} if k else {})
+        return top, f"top {int(rule['share'] * 100)}% of each county's tracts by NRI score"
     ratings = set(rule.get("ratings", HIGH))
     return ({t["tract_fips"]: 1.0 for t in tracts
              if t.get(f"nri_{hazard}_rating") in ratings}, f"NRI rating in {sorted(ratings)}")
@@ -147,25 +158,40 @@ def resources(demand: float, children: float, power_dep: float, households: floa
 def usable_sites(shelters: list, schools: list, county: str, hazard: str,
                  footprint: dict | None = None) -> dict:
     """tsunami: sites inside the evacuation zone are excluded.
-    flood: sites inside a flood-footprint tract are flagged 'check' (verify on site)."""
+    flood: sites inside a FEMA Special Flood Hazard Area (in_sfha) are flagged 'check';
+    sites with no flood-zone data fall back to the tract footprint, 'check (tract-level)'."""
     footprint = footprint or {}
+
+    def flood(p):
+        if p.get("in_sfha") is not None:
+            return "check" if p["in_sfha"] else "ok"
+        return "check (tract-level)" if p.get("tract_fips") in footprint else "ok"
 
     def ok(p):
         if hazard == "tsunami" and p.get("in_tsunami_zone"):
             return "exclude"
-        if hazard in ("inland_flood", "coastal_flood") and p.get("tract_fips") in footprint:
-            return "check"
+        if hazard in FLOOD:
+            return flood(p)
         return "ok"
+
+    def candidate_ok(p):
+        if hazard == "tsunami":
+            return not p.get("hazard_excluded")
+        return flood(p) == "ok" if hazard in FLOOD else True
 
     s = [f["properties"] for f in shelters
          if f["properties"]["county"] == county and f.get("geometry")]
     c = [f["properties"] for f in schools if f["properties"]["county"] == county]
     s_status = [(p["name"], ok(p)) for p in s]
-    c_ok = sum(1 for p in c if not (hazard == "tsunami" and p.get("hazard_excluded")))
+    c_ok = sum(1 for p in c if candidate_ok(p))
     return {
         "known_sites_usable": sum(1 for _, st in s_status if st == "ok"),
-        "known_sites_check_flood": sum(1 for _, st in s_status if st == "check"),
+        "known_sites_check_flood": sum(1 for _, st in s_status if st.startswith("check")),
+        "known_sites_check_tract_level": sum(1 for _, st in s_status
+                                             if st == "check (tract-level)"),
         "known_sites_excluded": [n for n, st in s_status if st == "exclude"],
+        "known_sites_flood_check": [f"{n} [{st}]" for n, st in s_status
+                                    if st.startswith("check")],
         "candidate_schools_usable": c_ok,
     }
 
@@ -208,8 +234,9 @@ def run(tracts: list, shelters: list, schools: list, cfg: dict):
                                 agg["M_power_dependent_in_shelter"],
                                 agg["households_in_shelter"], cfg))
             sites = usable_sites(shelters, schools, county, hz, shares)
-            sc.update({k: v for k, v in sites.items() if k != "known_sites_excluded"})
-            sc["known_sites_excluded"] = "; ".join(sites["known_sites_excluded"])
+            lists = ("known_sites_excluded", "known_sites_flood_check")
+            sc.update({k: v for k, v in sites.items() if k not in lists})
+            sc.update({k: "; ".join(sites[k]) for k in lists})
             scenarios.append(sc)
     return scenarios, tract_out
 

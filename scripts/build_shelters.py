@@ -12,6 +12,8 @@ one row per site per event, each with its source URL) into one statewide layer:
     U.S. Census geocode of its address (scripts/geocode_shelters.py);
     anything still unlocated is flagged needs_geocode
   * hazard context from the MAP layer (tract, NRI flood ratings, tsunami zone)
+  * FEMA flood zone at the site (fld_zone, in_sfha) from the cache written by
+    scripts/fetch_flood_zones.py; no network calls here
 
 Usage:  python3 scripts/build_shelters.py   (after fetch_data.py and build_map.py)
 """
@@ -29,6 +31,7 @@ from urllib.parse import urlparse
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from geo import ZoneIndex  # noqa: E402
 from fetch_data import COUNTIES, county_of  # noqa: E402
+from fetch_flood_zones import load_cache, lookup  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "data" / "sources" / "county_shelter_activations.csv"
@@ -115,7 +118,7 @@ def load_geocodes(path: Path = GEOCODES) -> dict:
 
 
 def build(rows: list, schools: list, tracts=None, tsunami=None,
-          geocodes: dict | None = None) -> dict:
+          geocodes: dict | None = None, flood: dict | None = None) -> dict:
     t_index = ZoneIndex(tsunami)
     tract_index = ZoneIndex(tracts)
     feats = []
@@ -141,6 +144,8 @@ def build(rows: list, schools: list, tracts=None, tsunami=None,
             "needs_geocode": geom is None,
             "capacity": None,          # not published; to be filled from county plans
             "disclaimer": DISCLAIMER,
+            "fld_zone": None,
+            "in_sfha": None,
         }
         if geom:
             lon, lat = geom["coordinates"][:2]
@@ -151,6 +156,7 @@ def build(rows: list, schools: list, tracts=None, tsunami=None,
             props["nri_inland_flood_rating"] = tp.get("nri_inland_flood_rating", "")
             props["nri_coastal_flood_rating"] = tp.get("nri_coastal_flood_rating", "")
             props["nri_hurricane_rating"] = tp.get("nri_hurricane_rating", "")
+            props.update(lookup(flood or {}, lon, lat))
         feats.append({"type": "Feature", "geometry": geom, "properties": props})
     feats.sort(key=lambda f: (f["properties"]["county"], -f["properties"]["times_opened_2026"],
                               f["properties"]["name"]))
@@ -172,7 +178,8 @@ def summary(fc: dict) -> dict:
                   "located": sum(1 for p in ps if not p["needs_geocode"]),
                   "needs_geocode": sum(1 for p in ps if p["needs_geocode"]),
                   "media_only": sum(1 for p in ps if not p["official_source"]),
-                  "in_tsunami_zone": sum(1 for p in ps if p.get("in_tsunami_zone"))}
+                  "in_tsunami_zone": sum(1 for p in ps if p.get("in_tsunami_zone")),
+                  "in_sfha": sum(1 for p in ps if p.get("in_sfha"))}
     return out
 
 
@@ -186,7 +193,7 @@ def main() -> int:
         return 1
     schools = (_load(RAW / "schools.geojson") or {}).get("features", [])
     fc = build(load_activations(), schools, _load(OUT / "afn_tracts.geojson"),
-               _load(RAW / "tsunami_zone.geojson"), load_geocodes())
+               _load(RAW / "tsunami_zone.geojson"), load_geocodes(), load_cache())
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "shelters_2026.geojson").write_text(json.dumps(fc, indent=1, ensure_ascii=False),
                                                encoding="utf-8")
@@ -202,10 +209,10 @@ def main() -> int:
             w.writerows(rows)
     print(f"Wrote {len(rows)} sites -> data/processed/shelters_2026.geojson / .csv\n")
     print(f"{'County':<10}{'Sites':>6}{'Located':>9}{'Geocode':>9}{'Media only':>12}"
-          f"{'Tsunami':>9}")
+          f"{'Tsunami':>9}{'SFHA':>6}")
     for c, v in summary(fc).items():
         print(f"{c:<10}{v['sites']:>6}{v['located']:>9}{v['needs_geocode']:>9}"
-              f"{v['media_only']:>12}{v['in_tsunami_zone']:>9}")
+              f"{v['media_only']:>12}{v['in_tsunami_zone']:>9}{v['in_sfha']:>6}")
     return 0
 
 

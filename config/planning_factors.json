@@ -12,8 +12,8 @@
     "wildfire": {
       "low": 0.02,
       "central": 0.05,
-      "high": 0.11,
-      "source": "high = observed Maui 2023: 1,418 people in shelters on Aug 11, 2023 (Maui Now) / Lahaina CDP population 12,702 (2020 Census). low and central are team_assumption.",
+      "high": 0.112,
+      "source": "high = observed Maui 2023: 1,418 people in shelters on Aug 11, 2023 (Maui Now) / Lahaina CDP population 12,702 (2020 Census) = 0.1116, rounded to 3 decimals = 0.112 (so the calibration event falls inside the band). low and central are team_assumption.",
       "url": "https://mauinow.com/2023/08/12/shelters-provide-needed-supplies-and-safety-for-over-1000-people-impacted-by-the-lahaina-wildfire/"
     },
     "tsunami": {
@@ -46,18 +46,19 @@
       "note": "Population share inside the State standard tsunami evacuation zone. Extreme zone is reported separately."
     },
     "wildfire": {
-      "rule": "nri_top_share",
+      "rule": "nri_top_share_by_county",
       "share": 0.25
     },
     "inland_flood": {
-      "rule": "nri_top_share",
+      "rule": "nri_top_share_by_county",
       "share": 0.25
     },
     "coastal_flood": {
-      "rule": "nri_top_share",
+      "rule": "nri_top_share_by_county",
       "share": 0.25
     },
-    "nri_top_share_note": "NRI ratings are national, so few or very many Hawaiʻi tracts rate High. Footprint = top 25% of Hawaiʻi tracts by NRI risk score, scores above 0 only (team_assumption)."
+    "nri_top_share_note": "NRI ratings are national, so few or very many Hawaiʻi tracts rate High. Rules available: nri_rating (national rating), nri_top_share (top share of all Hawaiʻi tracts by NRI score), nri_top_share_by_county (top share of each county's tracts, ceil, NRI score above 0 only).",
+    "nri_top_share_by_county_note": "Counties lead mass care, so each county plans for its own highest-risk tracts (team_assumption)."
   },
   "per_person": {
     "floor_sqft_72h": {
@@ -106,12 +107,14 @@
   "pets": {
     "dog_owning_household_share": {
       "value": 0.446,
-      "source": "AVMA U.S. pet ownership statistics (2020 data)",
-      "url": "https://atwork.avma.org/resources/reports-statistics/us-pet-ownership-statistics"
+      "source": "AVMA U.S. pet ownership statistics (2020 data). Verified in 2022 AVMA Pet Ownership and Demographics Sourcebook, p. 3: 'Dog ownership increased by 6% from 38.4% (2016) to 44.6% (2020)'. The first url did not resolve when checked 2026-10-27.",
+      "url": "https://atwork.avma.org/resources/reports-statistics/us-pet-ownership-statistics",
+      "url2": "https://ebusiness.avma.org/files/ProductDownloads/eco-pet-demographic-report-22-low-res.pdf"
     },
     "cat_owning_household_share": {
       "value": 0.26,
-      "source": "AVMA (2020 data)"
+      "source": "AVMA (2020 data). Verified in 2022 AVMA Pet Ownership and Demographics Sourcebook, p. 3: 'Cat ownership increased slightly from 25% in 2016 to 26% in 2020'.",
+      "url2": "https://ebusiness.avma.org/files/ProductDownloads/eco-pet-demographic-report-22-low-res.pdf"
     }
   },
   "afn_composition_note": "Shelter residents are assumed to mirror their tract's CMIST rates. Research and DHS both indicate people with AFN are more likely to need public shelter, so AFN counts in shelter are a floor, not a ceiling."

@@ -1,2 +1,2 @@
 event,date,hazard,observed,model_low,error_low_pct,model_central,error_central_pct,model_high,error_high_pct,observed_within_band,calibration_event
-Lahaina wildfire,2023-08-11,wildfire,1418,254,-82.1,635,-55.2,1397,-1.5,False,True
+Lahaina wildfire,2023-08-11,wildfire,1418,254,-82.1,635,-55.2,1423,0.3,True,True

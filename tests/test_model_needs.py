@@ -1,4 +1,5 @@
 """Offline tests for the MODEL step."""
+import copy
 import json
 import sys
 import tempfile
@@ -86,11 +87,14 @@ class Model(unittest.TestCase):
         self.assertEqual(s["known_sites_usable"], 0)
 
     def test_top_share_is_hawaii_relative(self):
-        shares, rule = mn.footprint_shares(self.tracts, "wildfire", CFG)
+        cfg = copy.deepcopy(CFG)                               # old statewide rule stays available
+        for hz in ("wildfire", "coastal_flood"):
+            cfg["footprint"][hz] = {"rule": "nri_top_share", "share": 0.25}
+        shares, rule = mn.footprint_shares(self.tracts, "wildfire", cfg)
         self.assertTrue(rule.startswith("top 25%"))
         self.assertEqual(list(shares), ["15009000100"])        # highest score only
         # zero scores never enter a footprint
-        shares, _ = mn.footprint_shares(self.tracts, "coastal_flood", CFG)
+        shares, _ = mn.footprint_shares(self.tracts, "coastal_flood", cfg)
         self.assertNotIn("15009000200", shares)
 
     def test_no_demand_no_staff(self):
@@ -109,14 +113,15 @@ class Model(unittest.TestCase):
             self.assertTrue(v["source"])
 
     def test_backtest(self):
+        obs = round(10000 * CFG["shelter_seeking_rate"]["wildfire"]["high"])
         with tempfile.TemporaryDirectory() as d:
             p = Path(d) / "e.csv"
             p.write_text("event,date,county,hazard,affected_population,affected_population_source,"
                          "observed_sheltered,observed_source,notes\n"
-                         "X,2023-08-11,Maui,wildfire,10000,s,1100,s,Calibration event\n",
+                         f"X,2023-08-11,Maui,wildfire,10000,s,{obs},s,Calibration event\n",
                          encoding="utf-8")
             b = mn.backtest(CFG, p)[0]
-            self.assertEqual(b["model_high"], 1100)
+            self.assertEqual(b["model_high"], obs)
             self.assertEqual(b["error_high_pct"], 0.0)
             self.assertTrue(b["observed_within_band"])
             self.assertTrue(b["calibration_event"])
@@ -125,6 +130,75 @@ class Model(unittest.TestCase):
         for r in self.tr:
             for banned in ("name", "address", "phone", "dob"):
                 self.assertNotIn(banned, r)
+
+
+class FinalFixes(unittest.TestCase):
+    def test_wildfire_high_is_exact_lahaina_rate(self):
+        self.assertEqual(CFG["shelter_seeking_rate"]["wildfire"]["high"], round(1418 / 12702, 3))
+
+    def test_real_backtest_inside_band(self):
+        b = mn.backtest(CFG)[0]
+        self.assertEqual(b["observed"], 1418)
+        self.assertTrue(b["observed_within_band"])
+        self.assertEqual(b["model_high"], 1423)                # 12,702 * 0.112
+
+    def test_by_county_rule_used_for_nri_hazards(self):
+        for hz in ("wildfire", "inland_flood", "coastal_flood"):
+            self.assertEqual(CFG["footprint"][hz]["rule"], "nri_top_share_by_county")
+
+    def test_by_county_ranks_within_each_county(self):
+        # Maui scores all beat Hawaii's; statewide top 25% would skip Hawaii entirely.
+        ts = [tract(f"150090001{i:02d}", "Maui", nri_wildfire_score=90.0 + i) for i in range(4)]
+        ts += [tract(f"150010001{i:02d}", "Hawaii", nri_wildfire_score=1.0 + i) for i in range(4)]
+        ts.append(tract("15001000199", "Hawaii", nri_wildfire_score=0.0))
+        shares, rule = mn.footprint_shares(ts, "wildfire", CFG)
+        self.assertIn("each county", rule)
+        # Maui 4 tracts -> ceil(1.0) = 1; Hawaii 5 tracts -> ceil(1.25) = 2
+        self.assertEqual(sorted(shares), ["15001000102", "15001000103", "15009000103"])
+        # the zero-score tract never enters
+        self.assertNotIn("15001000199", shares)
+
+    def test_statewide_rule_still_available(self):
+        ts = [tract(f"150090001{i:02d}", "Maui", nri_wildfire_score=90.0 + i) for i in range(4)]
+        ts += [tract(f"150010001{i:02d}", "Hawaii", nri_wildfire_score=1.0 + i) for i in range(4)]
+        cfg = copy.deepcopy(CFG)
+        cfg["footprint"]["wildfire"] = {"rule": "nri_top_share", "share": 0.25}
+        shares, _ = mn.footprint_shares(ts, "wildfire", cfg)
+        self.assertEqual(sorted(shares), ["15009000102", "15009000103"])
+
+    def test_site_level_flood_check(self):
+        fp = {"15001000100": 1.0}
+        shelters = [
+            site("In SFHA, tract out", "Hawaii", tract_fips="15001000999", in_sfha=True,
+                 fld_zone="AE"),
+            site("Zone X, tract in", "Hawaii", tract_fips="15001000100", in_sfha=False,
+                 fld_zone="X"),
+            site("No data, tract in", "Hawaii", tract_fips="15001000100"),
+            site("No data, tract out", "Hawaii", tract_fips="15001000999", in_sfha=None),
+        ]
+        u = mn.usable_sites(shelters, [], "Hawaii", "inland_flood", fp)
+        self.assertEqual(u["known_sites_usable"], 2)
+        self.assertEqual(u["known_sites_check_flood"], 2)
+        self.assertEqual(u["known_sites_check_tract_level"], 1)
+        self.assertEqual(u["known_sites_flood_check"],
+                         ["In SFHA, tract out [check]", "No data, tract in [check (tract-level)]"])
+        # SFHA does not matter for non-flood hazards
+        self.assertEqual(mn.usable_sites(shelters, [], "Hawaii", "hurricane", fp)
+                         ["known_sites_usable"], 4)
+
+    def test_candidate_schools_use_sfha(self):
+        schools = [site("A", "Maui", in_sfha=True), site("B", "Maui", in_sfha=False),
+                   site("C", "Maui", tract_fips="15009000100"),
+                   site("D", "Maui", hazard_excluded=True, in_sfha=False)]
+        fp = {"15009000100": 1.0}
+        self.assertEqual(mn.usable_sites([], schools, "Maui", "coastal_flood", fp)
+                         ["candidate_schools_usable"], 2)
+        self.assertEqual(mn.usable_sites([], schools, "Maui", "tsunami", fp)
+                         ["candidate_schools_usable"], 3)
+
+    def test_avma_verified_second_url(self):
+        for k in ("dog_owning_household_share", "cat_owning_household_share"):
+            self.assertIn("avma.org", CFG["pets"][k]["url2"])
 
 
 if __name__ == "__main__":
