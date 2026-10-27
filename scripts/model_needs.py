@@ -155,39 +155,45 @@ def resources(demand: float, children: float, power_dep: float, households: floa
 
 # ---------------------------------------------------------------- sites
 
-def usable_sites(shelters: list, schools: list, county: str, hazard: str,
-                 footprint: dict | None = None) -> dict:
-    """tsunami: sites inside the evacuation zone are excluded.
+def site_status(p: dict, hazard: str, footprint: dict | None = None) -> tuple[str, str]:
+    """(status, reason) of one site for one hazard. status is one of
+    ok | exclude | check | check (tract-level) | undetermined.
+    tsunami: sites inside the evacuation zone are excluded.
     flood: sites inside a FEMA Special Flood Hazard Area (in_sfha) are flagged 'check';
     FEMA zone D (flood risk undetermined, not studied) is counted separately, never as usable;
     sites with no flood-zone data fall back to the tract footprint, 'check (tract-level)'."""
-    footprint = footprint or {}
-
-    def flood(p):
-        if (p.get("fld_zone") or "").strip().upper() == "D":
-            return "undetermined"
+    if hazard == "tsunami":
+        if p.get("in_tsunami_zone"):
+            return "exclude", "inside tsunami evacuation zone"
+        return "ok", "outside tsunami evacuation zone"
+    if hazard in FLOOD:
+        zone = (p.get("fld_zone") or "").strip().upper()
+        if zone == "D":
+            return "undetermined", "FEMA zone D: flood risk undetermined"
         if p.get("in_sfha") is not None:
-            return "check" if p["in_sfha"] else "ok"
-        return "check (tract-level)" if p.get("tract_fips") in footprint else "ok"
+            return (("check", f"FEMA Special Flood Hazard Area (zone {zone})") if p["in_sfha"]
+                    else ("ok", f"FEMA zone {zone}: outside Special Flood Hazard Area"))
+        if p.get("tract_fips") in (footprint or {}):
+            return "check (tract-level)", "no site flood data; tract is in flood footprint"
+        return "ok", "no site flood data; tract outside flood footprint"
+    return "ok", "no site-level screen for this hazard"
 
-    def ok(p):
-        if hazard == "tsunami" and p.get("in_tsunami_zone"):
-            return "exclude"
-        if hazard in FLOOD:
-            return flood(p)
-        return "ok"
 
+def usable_sites(shelters: list, schools: list, county: str, hazard: str,
+                 footprint: dict | None = None) -> dict:
+    """County counts of site statuses (see site_status)."""
     def candidate_ok(p):
         if hazard == "tsunami":
             return not p.get("hazard_excluded")
-        return flood(p) == "ok" if hazard in FLOOD else True
+        return site_status(p, hazard, footprint)[0] == "ok"
 
     s = [f["properties"] for f in shelters
          if f["properties"]["county"] == county and f.get("geometry")]
     c = [f["properties"] for f in schools if f["properties"]["county"] == county]
-    s_status = [(p["name"], ok(p)) for p in s]
+    s_status = [(p["name"], site_status(p, hazard, footprint)[0]) for p in s]
     c_ok = sum(1 for p in c if candidate_ok(p))
-    c_und = sum(1 for p in c if hazard in FLOOD and flood(p) == "undetermined")
+    c_und = sum(1 for p in c if hazard in FLOOD
+                and site_status(p, hazard, footprint)[0] == "undetermined")
     return {
         "known_sites_usable": sum(1 for _, st in s_status if st == "ok"),
         "known_sites_check_flood": sum(1 for _, st in s_status if st.startswith("check")),

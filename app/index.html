@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0b3d6b">
+<title>Hawaiʻi ESF-6 Planning</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <h1>Hawaiʻi ESF-6 Planning</h1>
+  <p class="disclaimer">Planning aid. Supports, does not replace, county emergency plans. Not an official shelter list.</p>
+</header>
+<div id="offline" class="banner" role="status" aria-live="polite" hidden></div>
+
+<form id="controls" class="controls" aria-label="Choose county and hazard" hidden>
+  <label for="county">County</label>
+  <select id="county" name="county"></select>
+  <label for="hazard">Hazard</label>
+  <select id="hazard" name="hazard"></select>
+  <p class="hint">You choose the hazard. This app does not read live alerts or call any outside service.</p>
+</form>
+
+<main id="main" tabindex="-1">
+  <section id="fallback" class="fallback">
+    <h2>Loading planning data…</h2>
+    <p>If this message stays, the data could not be loaded. The printable playbooks below work on their own.</p>
+<!-- BEGIN GENERATED PDF LINKS -->
+<ul>
+<li>Kauaʻi: <a href="playbooks/kauai_hurricane.pdf">Hurricane</a> · <a href="playbooks/kauai_wildfire.pdf">Wildfire</a> · <a href="playbooks/kauai_tsunami.pdf">Tsunami</a> · <a href="playbooks/kauai_inland_flood.pdf">Inland flooding</a> · <a href="playbooks/kauai_coastal_flood.pdf">Coastal flooding</a></li>
+<li>Honolulu: <a href="playbooks/honolulu_hurricane.pdf">Hurricane</a> · <a href="playbooks/honolulu_wildfire.pdf">Wildfire</a> · <a href="playbooks/honolulu_tsunami.pdf">Tsunami</a> · <a href="playbooks/honolulu_inland_flood.pdf">Inland flooding</a> · <a href="playbooks/honolulu_coastal_flood.pdf">Coastal flooding</a></li>
+<li>Maui: <a href="playbooks/maui_hurricane.pdf">Hurricane</a> · <a href="playbooks/maui_wildfire.pdf">Wildfire</a> · <a href="playbooks/maui_tsunami.pdf">Tsunami</a> · <a href="playbooks/maui_inland_flood.pdf">Inland flooding</a> · <a href="playbooks/maui_coastal_flood.pdf">Coastal flooding</a></li>
+<li>Hawaiʻi: <a href="playbooks/hawaii_hurricane.pdf">Hurricane</a> · <a href="playbooks/hawaii_wildfire.pdf">Wildfire</a> · <a href="playbooks/hawaii_tsunami.pdf">Tsunami</a> · <a href="playbooks/hawaii_inland_flood.pdf">Inland flooding</a> · <a href="playbooks/hawaii_coastal_flood.pdf">Coastal flooding</a></li>
+</ul>
+<!-- END GENERATED PDF LINKS -->
+  </section>
+  <noscript><p class="fallback">This app needs JavaScript for the interactive view. Use the printable playbooks listed above.</p></noscript>
+  <div id="app" hidden></div>
+</main>
+
+<footer class="site-footer">
+  <p>Aggregate census-tract data and public facility names only. No individual records. No login, no tracking, no location access.</p>
+  <p id="version"></p>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

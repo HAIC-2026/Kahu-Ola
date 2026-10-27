@@ -1,0 +1,11 @@
+{
+  "name": "Hawaiʻi ESF-6 Planning",
+  "short_name": "ESF-6 Plan",
+  "description": "Offline planning aid for ESF-6 mass care in Hawaiʻi. Supports, does not replace, county emergency plans.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0b3d6b",
+  "icons": [{"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}]
+}
