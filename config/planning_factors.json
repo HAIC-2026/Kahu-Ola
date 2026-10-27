@@ -1,0 +1,60 @@
+{
+  "_about": "Planning factors for the MODEL step. Every value has a source or is marked team_assumption. Edit here, not in code. Counties and DHS are expected to replace assumptions with their own figures.",
+
+  "shelter_seeking_rate": {
+    "_about": "Share of the at-risk population expected to use a public shelter. low / central / high.",
+    "hurricane": {"low": 0.02, "central": 0.03, "high": 0.05,
+      "source": "South Carolina EMD, 2026 Hurricane Response Annex G (planning factors 2%, 3%, 5%)",
+      "url": "https://www.scemd.org/media/2195/2026-annex-g-hurricane-response-shelter-management.pdf"},
+    "wildfire": {"low": 0.05, "central": 0.11, "high": 0.20,
+      "source": "central = observed Maui 2023: 1,418 people in shelters on Aug 11, 2023 (Maui Now) / Lahaina CDP population 12,702 (2020 Census). low and high are team_assumption bounds.",
+      "url": "https://mauinow.com/2023/08/12/shelters-provide-needed-supplies-and-safety-for-over-1000-people-impacted-by-the-lahaina-wildfire/"},
+    "tsunami": {"low": 0.02, "central": 0.05, "high": 0.11,
+      "source": "team_assumption: range from the hurricane planning factor (SCEMD) to the observed Maui 2023 no-notice rate"},
+    "inland_flood": {"low": 0.02, "central": 0.05, "high": 0.11,
+      "source": "team_assumption: same range as tsunami"},
+    "coastal_flood": {"low": 0.02, "central": 0.05, "high": 0.11,
+      "source": "team_assumption: same range as tsunami"}
+  },
+
+  "footprint": {
+    "_about": "Which tracts are at risk in each planning scenario.",
+    "hurricane": {"rule": "all", "note": "Hurricanes affect whole islands (Lala, Lowell 2026)."},
+    "tsunami": {"rule": "tsunami_zone_share", "note": "Population share inside the State tsunami evacuation zone."},
+    "wildfire": {"rule": "nri_rating", "ratings": ["Very High", "Relatively High"]},
+    "inland_flood": {"rule": "nri_rating", "ratings": ["Very High", "Relatively High"]},
+    "coastal_flood": {"rule": "nri_rating", "ratings": ["Very High", "Relatively High"]},
+    "fallback_top_share": 0.25,
+    "fallback_note": "If no tract statewide meets the rating rule, use the top 25% of tracts by NRI score (team_assumption)."
+  },
+
+  "per_person": {
+    "floor_sqft_72h": {"value": 20, "source": "Florida DEM Sheltering Guidance Aid (2010): emergency evacuation shelter, <=72 h",
+      "url": "https://www.floridadisaster.org/contentassets/54c8e48ffbc848e68d63c4554ddacf3b/sheltering_guidance_aid_october_2010.pdf"},
+    "floor_sqft_2wk": {"value": 40, "source": "Florida DEM (2010): short-term shelter, <=2 weeks"},
+    "water_gal_per_day": {"value": 1, "source": "Florida DEM (2010)"},
+    "meals_per_day": {"value": 2, "source": "Florida DEM (2010): two hot meals a day plus snacks"},
+    "persons_per_toilet_short_term": {"value": 20, "source": "Florida DEM (2010)"},
+    "power_outlets_per_power_dependent_person": {"value": 1, "source": "team_assumption"}
+  },
+
+  "staff_per_shift": {
+    "_about": "One staff member per N shelter residents, minimum 1 when the shelter is open. Florida DEM (2010) staffing metrics; the source marks them as recommendations.",
+    "client_registration": 165,
+    "dormitory_management": 100,
+    "meal_service": 110,
+    "mental_health": 250,
+    "public_health_medical": 200,
+    "security": 100,
+    "sanitation": 200,
+    "children_area": {"per_children": 12}
+  },
+
+  "pets": {
+    "dog_owning_household_share": {"value": 0.446, "source": "AVMA U.S. pet ownership statistics (2020 data)",
+      "url": "https://atwork.avma.org/resources/reports-statistics/us-pet-ownership-statistics"},
+    "cat_owning_household_share": {"value": 0.26, "source": "AVMA (2020 data)"}
+  },
+
+  "afn_composition_note": "Shelter residents are assumed to mirror their tract's CMIST rates. Research and DHS both indicate people with AFN are more likely to need public shelter, so AFN counts in shelter are a floor, not a ceiling."
+}

@@ -1,0 +1,2 @@
+event,date,county,hazard,affected_population,affected_population_source,observed_sheltered,observed_source,notes
+Lahaina wildfire,2023-08-11,Maui,wildfire,12702,"2020 Census, Lahaina CDP (https://en.wikipedia.org/wiki/Lahaina,_Hawaii)",1418,https://mauinow.com/2023/08/12/shelters-provide-needed-supplies-and-safety-for-over-1000-people-impacted-by-the-lahaina-wildfire/,"Calibration event for the wildfire central rate. Observed count includes visitors and evacuees from the Kula and Pulehu fires, so it overstates Lahaina residents in shelter."
