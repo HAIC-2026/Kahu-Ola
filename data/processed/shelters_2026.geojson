@@ -1,0 +1,773 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Honokaʻa Gym",
+    "county": "Hawaii",
+    "address": "45-541 Lehua St., Honokaʻa",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-09-25 Tropical Storm Nolo",
+    "last_opened": "2026-09-25",
+    "pets": "unknown",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Ikuo Hisaoka Gym",
+    "county": "Hawaii",
+    "address": "54-382 Kamehameha Park Road, Kapaʻau",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-09-25 Tropical Storm Nolo",
+    "last_opened": "2026-09-25",
+    "pets": "unknown",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Kahilu Town Hall",
+    "county": "Hawaii",
+    "address": "67-1182 Lindsey Road, Waimea",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-09-25 Tropical Storm Nolo",
+    "last_opened": "2026-09-25",
+    "pets": "unknown",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Keaʻau Armory",
+    "county": "Hawaii",
+    "address": "16-512 Volcano Road, Keaʻau",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-09-25 Tropical Storm Nolo",
+    "last_opened": "2026-09-25",
+    "pets": "unknown",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.57992161411622,
+     19.062116975205903
+    ]
+   },
+   "properties": {
+    "name": "Nāʻālehu Elementary School Gym",
+    "county": "Hawaii",
+    "address": "95-5545 Mamalahoa Highway, Nāʻālehu",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-09-25 Tropical Storm Nolo",
+    "last_opened": "2026-09-25",
+    "pets": "unknown",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+    ],
+    "location_method": "doe_school_match",
+    "needs_geocode": false,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15001021204",
+    "nri_inland_flood_rating": "Very High",
+    "nri_coastal_flood_rating": "Very Low",
+    "nri_hurricane_rating": "Very Low"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Ocean View Community Center",
+    "county": "Hawaii",
+    "address": "92-8924 Leilani Circle, Ocean View",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-09-25 Tropical Storm Nolo",
+    "last_opened": "2026-09-25",
+    "pets": "unknown",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Puʻuʻeo Community Center",
+    "county": "Hawaii",
+    "address": "145 Wainaku St., Hilo",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-09-25 Tropical Storm Nolo",
+    "last_opened": "2026-09-25",
+    "pets": "unknown",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Pāpaʻaloa Park Annex",
+    "county": "Hawaii",
+    "address": "35-1994 Government Main Road, Pāpaʻaloa",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-09-25 Tropical Storm Nolo",
+    "last_opened": "2026-09-25",
+    "pets": "unknown",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Robert N. Herkes Gym",
+    "county": "Hawaii",
+    "address": "96-1219 Kamani St., Pāhala",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-09-25 Tropical Storm Nolo",
+    "last_opened": "2026-09-25",
+    "pets": "unknown",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Yano Hall",
+    "county": "Hawaii",
+    "address": "82-6156 Māmalahoa Highway, Captain Cook",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-09-25 Tropical Storm Nolo",
+    "last_opened": "2026-09-25",
+    "pets": "unknown",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "George Fred Wright Wahiawā District Park",
+    "county": "Honolulu",
+    "address": "",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-04-09 April 2026 severe weather",
+    "last_opened": "2026-04-09",
+    "pets": "leashed or carrier",
+    "official_source": true,
+    "sources": [
+     "https://www.honolulu.gov/mayor/city-expands-emergency-shelter-capacity-ahead-of-severe-weather"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -157.95173993385012,
+     21.674807790706225
+    ]
+   },
+   "properties": {
+    "name": "Kahuku Elementary School",
+    "county": "Honolulu",
+    "address": "",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-04-09 April 2026 severe weather",
+    "last_opened": "2026-04-09",
+    "pets": "leashed or carrier",
+    "official_source": true,
+    "sources": [
+     "https://www.honolulu.gov/mayor/city-expands-emergency-shelter-capacity-ahead-of-severe-weather"
+    ],
+    "location_method": "doe_school_match",
+    "needs_geocode": false,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15003010103",
+    "nri_inland_flood_rating": "Relatively Moderate",
+    "nri_coastal_flood_rating": "Relatively Low",
+    "nri_hurricane_rating": "Very Low"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Kāneʻohe District Park",
+    "county": "Honolulu",
+    "address": "",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-04-09 April 2026 severe weather",
+    "last_opened": "2026-04-09",
+    "pets": "leashed or carrier",
+    "official_source": true,
+    "sources": [
+     "https://www.honolulu.gov/mayor/city-expands-emergency-shelter-capacity-ahead-of-severe-weather"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Mānoa Valley District Park",
+    "county": "Honolulu",
+    "address": "",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-04-09 April 2026 severe weather",
+    "last_opened": "2026-04-09",
+    "pets": "leashed or carrier",
+    "official_source": true,
+    "sources": [
+     "https://www.honolulu.gov/mayor/city-expands-emergency-shelter-capacity-ahead-of-severe-weather"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -158.13661979350175,
+     21.387287888743213
+    ]
+   },
+   "properties": {
+    "name": "Nānākuli Elementary School",
+    "county": "Honolulu",
+    "address": "89-778 Haleakala Avenue, Waiʻanae",
+    "site_type": "refuge_area",
+    "times_opened_2026": 1,
+    "events": "2026-09-07 Hurricane Lowell",
+    "last_opened": "2026-09-07",
+    "pets": "leashed or carrier",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
+    ],
+    "location_method": "doe_school_match",
+    "needs_geocode": false,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15003940005",
+    "nri_inland_flood_rating": "Relatively Moderate",
+    "nri_coastal_flood_rating": "Very Low",
+    "nri_hurricane_rating": "Very Low"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -158.13102109278793,
+     21.38652238856495
+    ]
+   },
+   "properties": {
+    "name": "Nānākuli High and Intermediate School",
+    "county": "Honolulu",
+    "address": "",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-04-09 April 2026 severe weather",
+    "last_opened": "2026-04-09",
+    "pets": "leashed or carrier",
+    "official_source": true,
+    "sources": [
+     "https://www.honolulu.gov/mayor/city-expands-emergency-shelter-capacity-ahead-of-severe-weather"
+    ],
+    "location_method": "doe_school_match",
+    "needs_geocode": false,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15003940005",
+    "nri_inland_flood_rating": "Relatively Moderate",
+    "nri_coastal_flood_rating": "Very Low",
+    "nri_hurricane_rating": "Very Low"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Waiʻanae District Park",
+    "county": "Honolulu",
+    "address": "",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-04-09 April 2026 severe weather",
+    "last_opened": "2026-04-09",
+    "pets": "leashed or carrier",
+    "official_source": true,
+    "sources": [
+     "https://www.honolulu.gov/mayor/city-expands-emergency-shelter-capacity-ahead-of-severe-weather"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Kalāheo Neighborhood Center",
+    "county": "Kauai",
+    "address": "4480 Papalina Road, Kalāheo",
+    "site_type": "refuge_area",
+    "times_opened_2026": 1,
+    "events": "2026-09-07 Hurricane Lowell",
+    "last_opened": "2026-09-07",
+    "pets": "allowed",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -159.32773143260556,
+     22.07933903661917
+    ]
+   },
+   "properties": {
+    "name": "Kapaʻa Middle School",
+    "county": "Kauai",
+    "address": "4867 Olohena Road, Kapaʻa",
+    "site_type": "refuge_area",
+    "times_opened_2026": 1,
+    "events": "2026-09-07 Hurricane Lowell",
+    "last_opened": "2026-09-07",
+    "pets": "allowed",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
+    ],
+    "location_method": "doe_school_match",
+    "needs_geocode": false,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15007040205",
+    "nri_inland_flood_rating": "Very High",
+    "nri_coastal_flood_rating": "Relatively Low",
+    "nri_hurricane_rating": "Relatively Low"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -159.3585531631053,
+     21.959661989464035
+    ]
+   },
+   "properties": {
+    "name": "Kauaʻi High School Gym",
+    "county": "Kauai",
+    "address": "3577 Lala Road, Līhuʻe",
+    "site_type": "refuge_area",
+    "times_opened_2026": 1,
+    "events": "2026-09-07 Hurricane Lowell",
+    "last_opened": "2026-09-07",
+    "pets": "allowed",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
+    ],
+    "location_method": "doe_school_match",
+    "needs_geocode": false,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15007040500",
+    "nri_inland_flood_rating": "Very High",
+    "nri_coastal_flood_rating": "Relatively Low",
+    "nri_hurricane_rating": "Relatively Low"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Kīlauea Neighborhood Center",
+    "county": "Kauai",
+    "address": "2460 Keneke Street, Kīlauea",
+    "site_type": "refuge_area",
+    "times_opened_2026": 1,
+    "events": "2026-09-07 Hurricane Lowell",
+    "last_opened": "2026-09-07",
+    "pets": "allowed",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -159.67249436336266,
+     21.960129362755353
+    ]
+   },
+   "properties": {
+    "name": "Waimea Canyon Middle School",
+    "county": "Kauai",
+    "address": "9555 Huakai Road, Waimea",
+    "site_type": "refuge_area",
+    "times_opened_2026": 1,
+    "events": "2026-09-07 Hurricane Lowell",
+    "last_opened": "2026-09-07",
+    "pets": "allowed",
+    "official_source": false,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
+    ],
+    "location_method": "doe_school_match",
+    "needs_geocode": false,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15007040900",
+    "nri_inland_flood_rating": "Very High",
+    "nri_coastal_flood_rating": "Relatively Moderate",
+    "nri_hurricane_rating": "Relatively Low"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Lahaina Civic Center Gym",
+    "county": "Maui",
+    "address": "1840 Honoapiʻilani Highway, Lahaina",
+    "site_type": "county_shelter/temporary_evacuation_point",
+    "times_opened_2026": 2,
+    "events": "2026-08-15 Hurricane Lala; 2026-09-25 Tropical Storm Nolo / Olowalu brush fire",
+    "last_opened": "2026-09-25",
+    "pets": "crated only",
+    "official_source": true,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/",
+     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "South Maui Community Park Gym",
+    "county": "Maui",
+    "address": "1501 Liloa Drive, Kīhei",
+    "site_type": "county_shelter/temporary_evacuation_point",
+    "times_opened_2026": 2,
+    "events": "2026-08-15 Hurricane Lala; 2026-09-25 Tropical Storm Nolo / Olowalu brush fire",
+    "last_opened": "2026-09-25",
+    "pets": "crated only",
+    "official_source": true,
+    "sources": [
+     "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/",
+     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -156.49126071407017,
+     20.888911735770392
+    ]
+   },
+   "properties": {
+    "name": "Baldwin High School",
+    "county": "Maui",
+    "address": "1650 Kaahumanu Ave., Wailuku",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-08-15 Hurricane Lala",
+    "last_opened": "2026-08-15",
+    "pets": "crated only",
+    "official_source": true,
+    "sources": [
+     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
+    ],
+    "location_method": "doe_school_match",
+    "needs_geocode": false,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15009031002",
+    "nri_inland_flood_rating": "Very High",
+    "nri_coastal_flood_rating": "Very Low",
+    "nri_hurricane_rating": "Relatively Low"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -156.00049988907244,
+     20.77561370245706
+    ]
+   },
+   "properties": {
+    "name": "Hāna High & Elementary School Cafeteria",
+    "county": "Maui",
+    "address": "4111 Hāna Highway, Hāna",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-08-15 Hurricane Lala",
+    "last_opened": "2026-08-15",
+    "pets": "crated only",
+    "official_source": true,
+    "sources": [
+     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
+    ],
+    "location_method": "doe_school_match",
+    "needs_geocode": false,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15009030100",
+    "nri_inland_flood_rating": "Relatively Moderate",
+    "nri_coastal_flood_rating": "Relatively Low",
+    "nri_hurricane_rating": "Relatively Low"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Kilohana Recreation Center",
+    "county": "Maui",
+    "address": "344 Kamehameha V Highway, Kaunakakai",
+    "site_type": "temporary_evacuation_point",
+    "times_opened_2026": 1,
+    "events": "2026-08-15 Hurricane Lala",
+    "last_opened": "2026-08-15",
+    "pets": "unknown",
+    "official_source": true,
+    "sources": [
+     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Lānaʻi Youth Center",
+    "county": "Maui",
+    "address": "101-165 Fifth St., Lānaʻi City",
+    "site_type": "temporary_evacuation_point",
+    "times_opened_2026": 1,
+    "events": "2026-08-15 Hurricane Lala",
+    "last_opened": "2026-08-15",
+    "pets": "unknown",
+    "official_source": true,
+    "sources": [
+     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Mayor Hannibal Tavares Community Center (Social Hall)",
+    "county": "Maui",
+    "address": "91 Pukalani St., Pukalani",
+    "site_type": "county_shelter",
+    "times_opened_2026": 1,
+    "events": "2026-08-15 Hurricane Lala",
+    "last_opened": "2026-08-15",
+    "pets": "crated only",
+    "official_source": true,
+    "sources": [
+     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": null,
+   "properties": {
+    "name": "Molokaʻi Baptist Church",
+    "county": "Maui",
+    "address": "495 Puupeelua Ave., Hoolehua",
+    "site_type": "temporary_evacuation_point",
+    "times_opened_2026": 1,
+    "events": "2026-08-15 Hurricane Lala",
+    "last_opened": "2026-08-15",
+    "pets": "unknown",
+    "official_source": true,
+    "sources": [
+     "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
+    ],
+    "location_method": "",
+    "needs_geocode": true,
+    "capacity": null,
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+   }
+  }
+ ],
+ "metadata": {
+  "title": "Hawaiʻi shelters and refuge areas opened in 2026 events",
+  "built_at": "2026-10-27T10:48:17+00:00",
+  "source_table": "data/sources/county_shelter_activations.csv",
+  "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+  "note": "Site types are kept as each county names them; counties define sheltering differently (DHS challenge pain point)."
+ }
+}
