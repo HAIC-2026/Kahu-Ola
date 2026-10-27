@@ -25,7 +25,13 @@
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.800406,
+     20.232618
+    ]
+   },
    "properties": {
     "name": "Ikuo Hisaoka Gym",
     "county": "Hawaii",
@@ -39,10 +45,15 @@
     "sources": [
      "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "census_onelineaddress",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15001021800",
+    "nri_inland_flood_rating": "Very High",
+    "nri_coastal_flood_rating": "Very Low",
+    "nri_hurricane_rating": "Very Low"
    }
   },
   {
@@ -146,7 +157,13 @@
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.093359,
+     19.733473
+    ]
+   },
    "properties": {
     "name": "Puʻuʻeo Community Center",
     "county": "Hawaii",
@@ -160,10 +177,15 @@
     "sources": [
      "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "census_onelineaddress",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15001020202",
+    "nri_inland_flood_rating": "Relatively High",
+    "nri_coastal_flood_rating": "Very Low",
+    "nri_hurricane_rating": "Very Low"
    }
   },
   {
@@ -212,7 +234,13 @@
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.912121,
+     19.490102
+    ]
+   },
    "properties": {
     "name": "Yano Hall",
     "county": "Hawaii",
@@ -226,19 +254,30 @@
     "sources": [
      "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "census_onelineaddress",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15001021402",
+    "nri_inland_flood_rating": "Relatively High",
+    "nri_coastal_flood_rating": "Very Low",
+    "nri_hurricane_rating": "Relatively Low"
    }
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -158.023045,
+     21.500593
+    ]
+   },
    "properties": {
     "name": "George Fred Wright Wahiawā District Park",
     "county": "Honolulu",
-    "address": "",
+    "address": "1139-A Kilani Avenue, Wahiawā 96786",
     "site_type": "county_shelter",
     "times_opened_2026": 1,
     "events": "2026-04-09 April 2026 severe weather",
@@ -248,10 +287,15 @@
     "sources": [
      "https://www.honolulu.gov/mayor/city-expands-emergency-shelter-capacity-ahead-of-severe-weather"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "census_onelineaddress",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15003009302",
+    "nri_inland_flood_rating": "Relatively Moderate",
+    "nri_coastal_flood_rating": "No Rating",
+    "nri_hurricane_rating": "Very Low"
    }
   },
   {
@@ -293,7 +337,7 @@
    "properties": {
     "name": "Kāneʻohe District Park",
     "county": "Honolulu",
-    "address": "",
+    "address": "45-660 Keaʻahala Road, Kāneʻohe 96744",
     "site_type": "county_shelter",
     "times_opened_2026": 1,
     "events": "2026-04-09 April 2026 severe weather",
@@ -315,7 +359,7 @@
    "properties": {
     "name": "Mānoa Valley District Park",
     "county": "Honolulu",
-    "address": "",
+    "address": "2721 Kaʻaipū Avenue, Honolulu 96822",
     "site_type": "county_shelter",
     "times_opened_2026": 1,
     "events": "2026-04-09 April 2026 severe weather",
@@ -399,11 +443,17 @@
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -158.192575,
+     21.450896
+    ]
+   },
    "properties": {
     "name": "Waiʻanae District Park",
     "county": "Honolulu",
-    "address": "",
+    "address": "85-601 Farrington Highway, Waiʻanae 96792",
     "site_type": "county_shelter",
     "times_opened_2026": 1,
     "events": "2026-04-09 April 2026 severe weather",
@@ -413,10 +463,15 @@
     "sources": [
      "https://www.honolulu.gov/mayor/city-expands-emergency-shelter-capacity-ahead-of-severe-weather"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "census_onelineaddress",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": true,
+    "tract_fips": "15003009707",
+    "nri_inland_flood_rating": "Relatively High",
+    "nri_coastal_flood_rating": "Relatively Low",
+    "nri_hurricane_rating": "Very Low"
    }
   },
   {
@@ -509,7 +564,13 @@
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -159.406536,
+     22.211696
+    ]
+   },
    "properties": {
     "name": "Kīlauea Neighborhood Center",
     "county": "Kauai",
@@ -523,10 +584,15 @@
     "sources": [
      "https://www.hawaiinewsnow.com/2026/09/07/hurricane-refuge-areas-where-find-emergency-shelter-oahu-kauai/"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "census_onelineaddress",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15007040105",
+    "nri_inland_flood_rating": "Very High",
+    "nri_coastal_flood_rating": "Relatively Low",
+    "nri_hurricane_rating": "Relatively Low"
    }
   },
   {
@@ -587,7 +653,13 @@
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -156.449352,
+     20.748162
+    ]
+   },
    "properties": {
     "name": "South Maui Community Park Gym",
     "county": "Maui",
@@ -602,10 +674,15 @@
      "https://www.hawaiinewsnow.com/2026/09/25/storm-refuge-areas-where-find-emergency-shelter-across-state/",
      "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "census_onelineaddress",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15009030708",
+    "nri_inland_flood_rating": "Very High",
+    "nri_coastal_flood_rating": "Relatively Low",
+    "nri_hurricane_rating": "Relatively Low"
    }
   },
   {
@@ -676,7 +753,13 @@
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -157.014599,
+     21.085865
+    ]
+   },
    "properties": {
     "name": "Kilohana Recreation Center",
     "county": "Maui",
@@ -690,15 +773,26 @@
     "sources": [
      "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "census_onelineaddress",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": true,
+    "tract_fips": "15009031700",
+    "nri_inland_flood_rating": "Very High",
+    "nri_coastal_flood_rating": "Relatively Moderate",
+    "nri_hurricane_rating": "Relatively Low"
    }
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -156.92535,
+     20.826287
+    ]
+   },
    "properties": {
     "name": "Lānaʻi Youth Center",
     "county": "Maui",
@@ -712,10 +806,15 @@
     "sources": [
      "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "census_onelineaddress",
+    "needs_geocode": false,
     "capacity": null,
-    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements."
+    "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
+    "in_tsunami_zone": false,
+    "tract_fips": "15009031601",
+    "nri_inland_flood_rating": "Relatively High",
+    "nri_coastal_flood_rating": "Very Low",
+    "nri_hurricane_rating": "Relatively Low"
    }
   },
   {
@@ -765,7 +864,7 @@
  ],
  "metadata": {
   "title": "Hawaiʻi shelters and refuge areas opened in 2026 events",
-  "built_at": "2026-10-27T10:48:17+00:00",
+  "built_at": "2026-10-27T10:53:20+00:00",
   "source_table": "data/sources/county_shelter_activations.csv",
   "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
   "note": "Site types are kept as each county names them; counties define sheltering differently (DHS challenge pain point)."

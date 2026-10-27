@@ -8,8 +8,9 @@ one row per site per event, each with its source URL) into one statewide layer:
 
   * one record per site, with how many 2026 events it was opened for
   * each county's own site type kept as-is (shelter / refuge area / evacuation point)
-  * located by matching to the DOE public-schools layer where possible;
-    the rest are flagged needs_geocode
+  * located by matching to the DOE public-schools layer, else by the cached
+    U.S. Census geocode of its address (scripts/geocode_shelters.py);
+    anything still unlocated is flagged needs_geocode
   * hazard context from the MAP layer (tract, NRI flood ratings, tsunami zone)
 
 Usage:  python3 scripts/build_shelters.py   (after fetch_data.py and build_map.py)
@@ -31,6 +32,7 @@ from fetch_data import COUNTIES, county_of  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "data" / "sources" / "county_shelter_activations.csv"
+GEOCODES = ROOT / "data" / "sources" / "geocodes.csv"
 RAW = ROOT / "data" / "raw"
 OUT = ROOT / "data" / "processed"
 
@@ -96,13 +98,34 @@ def match_school(site: dict, schools: list):
     return best
 
 
-def build(rows: list, schools: list, tracts=None, tsunami=None) -> dict:
+def load_geocodes(path: Path = GEOCODES) -> dict:
+    """address -> (lon, lat, method) for usable rows (Census match or manual entry)."""
+    if not path.exists():
+        return {}
+    out = {}
+    with open(path, newline="", encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            try:
+                lon, lat = float(r["lon"]), float(r["lat"])
+            except (TypeError, ValueError, KeyError):
+                continue
+            if r.get("status") == "match" or r.get("method") == "manual":
+                out[r["address"].strip()] = (lon, lat, r.get("method") or "census")
+    return out
+
+
+def build(rows: list, schools: list, tracts=None, tsunami=None,
+          geocodes: dict | None = None) -> dict:
     t_index = ZoneIndex(tsunami)
     tract_index = ZoneIndex(tracts)
     feats = []
     for s in group_sites(rows):
         hit = match_school(s, schools)
-        geom = hit["geometry"] if hit else None
+        geom, method = (hit["geometry"], "doe_school_match") if hit else (None, "")
+        gc = (geocodes or {}).get(s["address"].strip()) if not hit else None
+        if gc:
+            geom = {"type": "Point", "coordinates": [gc[0], gc[1]]}
+            method = gc[2]
         props = {
             "name": s["name"],
             "county": s["county"],
@@ -114,8 +137,8 @@ def build(rows: list, schools: list, tracts=None, tsunami=None) -> dict:
             "pets": "/".join(sorted(s["pets"])) or "unknown",
             "official_source": any(is_official(u) for u in s["sources"]),
             "sources": sorted(s["sources"]),
-            "location_method": "doe_school_match" if hit else "",
-            "needs_geocode": hit is None,
+            "location_method": method,
+            "needs_geocode": geom is None,
             "capacity": None,          # not published; to be filled from county plans
             "disclaimer": DISCLAIMER,
         }
@@ -163,7 +186,7 @@ def main() -> int:
         return 1
     schools = (_load(RAW / "schools.geojson") or {}).get("features", [])
     fc = build(load_activations(), schools, _load(OUT / "afn_tracts.geojson"),
-               _load(RAW / "tsunami_zone.geojson"))
+               _load(RAW / "tsunami_zone.geojson"), load_geocodes())
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "shelters_2026.geojson").write_text(json.dumps(fc, indent=1, ensure_ascii=False),
                                                encoding="utf-8")
