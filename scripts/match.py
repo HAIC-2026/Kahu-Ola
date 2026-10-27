@@ -131,27 +131,44 @@ def gap_text(quantity: float, pledge) -> str:
 # ---------------------------------------------------------------- languages
 
 def load_languages(path: Path = SOURCES / "languages_by_county.csv") -> dict:
+    """county -> unsuppressed languages ranked by limited-English speakers (ACS PUMS).
+    An area may cover several counties (Kauai + Maui share PUMA 00100): each county
+    gets the area's list, labelled with the area."""
     out = {c: [] for c in COUNTIES}
     if not path.exists():
         return out
     with open(path, newline="", encoding="utf-8") as fh:
         for r in csv.DictReader(fh):
-            if r["county"] in out:
-                out[r["county"]].append({
-                    "language": r["language"],
-                    "speak_english_less_than_very_well": int(r["speak_english_less_than_very_well"]),
-                    "moe_90": int(r["moe_90"]),
-                    "share_of_county_lep": float(r["share_of_county_lep"]),
-                    "rank": int(r["rank"]),
-                })
+            if r["suppressed"] == "True":
+                continue
+            for c in r["counties"].split(";"):
+                if c in out:
+                    out[c].append({
+                        "language": r["language"], "area": r["area"],
+                        "speak_english_less_than_very_well": int(r["speak_english_less_than_very_well"]),
+                        "moe_90": int(r["moe_90"]),
+                        "share_of_area_lep": float(r["share_of_area_lep"]),
+                        "rank": int(r["rank"]),
+                    })
     for c in out:
         out[c].sort(key=lambda x: x["rank"])
     return out
 
 
+def select_languages(langs: list, comm: dict) -> list:
+    """Top N by limited-English speakers, plus the always-include languages
+    (Hawaiian, Chuukese, Marshallese) wherever they are above the suppression threshold."""
+    top = langs[:comm["top_languages_per_county"]]
+    names = {l["language"] for l in top}
+    extra = [l for l in langs if l["language"] in comm.get("always_include_if_not_suppressed", [])
+             and l["language"] not in names]
+    return top + extra
+
+
 # ---------------------------------------------------------------- needs
 
-def need_lines(sc: dict, partners: list, languages: list, top_n: int) -> list:
+def need_lines(sc: dict, partners: list, languages: list) -> list:
+    """languages: the county's selected languages (select_languages)."""
     county, hazard = sc["county"], sc["hazard"]
     rows = []
 
@@ -177,10 +194,10 @@ def need_lines(sc: dict, partners: list, languages: list, top_n: int) -> list:
     for need, functions, field, unit, basis, cap in NEEDS:
         add(need, functions, float(sc.get(field) or 0), unit, basis, cap)
     lep = float(sc.get("C_lep_in_shelter") or 0)
-    for lang in languages[:top_n]:
+    for lang in languages:
         add(f"Interpreters – {lang['language']}", ["language_access"],
-            lep * lang["share_of_county_lep"], "people with limited English in shelter",
-            "CDC SVI limited-English share x ACS C16001 county language mix; "
+            lep * lang["share_of_area_lep"], "people with limited English in shelter",
+            f"CDC SVI limited-English share x ACS PUMS 2019-2023 language mix ({lang['area']}); "
             "interpreter ratio not sourced – partner to set", None, lang["language"])
     return rows
 
@@ -209,11 +226,19 @@ def decision_table(dp_cfg: dict, hazard: str, partners: list) -> list:
 # ---------------------------------------------------------------- communication
 
 def ensure_message_library(languages: dict, comm: dict, root: Path = ROOT) -> list:
-    """Header-only template files per language; existing files are never overwritten."""
+    """Header-only template files per selected language; existing files are never
+    overwritten. Files for languages no longer selected are removed only while they are
+    header-only: a file holding any template rows is always kept."""
     lib = root / comm["message_library"]["dir"]
     lib.mkdir(parents=True, exist_ok=True)
     langs = ["English"] + sorted({l["language"] for ls in languages.values()
-                                  for l in ls[:comm["top_languages_per_county"]]})
+                                  for l in select_languages(ls, comm)})
+    keep = {f"{slug(l)}.csv" for l in langs}
+    for p in sorted(lib.glob("*.csv")):
+        if p.name not in keep:
+            with open(p, newline="", encoding="utf-8") as fh:
+                if not list(csv.DictReader(fh)):
+                    p.unlink()
     out = []
     for lang in langs:
         p = lib / f"{slug(lang)}.csv"
@@ -233,8 +258,9 @@ def communication(languages: dict, comm: dict, library: list) -> dict:
     by_lang = {l["language"]: l for l in library}
     out = {}
     for c in COUNTIES:
-        top = languages.get(c, [])[:comm["top_languages_per_county"]]
+        top = select_languages(languages.get(c, []), comm)
         out[c] = {
+            "language_area": top[0]["area"] if top else "",
             "top_languages_lep": [dict(l, approved_templates=by_lang.get(
                 l["language"], {}).get("approved_templates", 0)) for l in top],
             "channels": comm["channels"],
@@ -272,7 +298,7 @@ def run(needs: dict, tract_rows: list, partners_cfg: dict, dp_cfg: dict, comm: d
     scenarios, lines = [], []
     for sc in needs["scenarios"]:
         c, hz = sc["county"], sc["hazard"]
-        nl = need_lines(sc, partners, languages.get(c, []), comm["top_languages_per_county"])
+        nl = need_lines(sc, partners, select_languages(languages.get(c, []), comm))
         lines += nl
         scenarios.append({
             "county": c, "hazard": hz, "scope": sc.get("scope", ""),

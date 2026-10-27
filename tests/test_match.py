@@ -17,14 +17,16 @@ PARTNERS = json.loads((ROOT / "config" / "partners.json").read_text(encoding="ut
 DP = json.loads((ROOT / "config" / "decision_points.json").read_text(encoding="utf-8"))
 COMM = json.loads((ROOT / "config" / "communication.json").read_text(encoding="utf-8"))
 REQUIRED_TYPES = {"dhs", "county_em", "hiema", "doe", "hspls", "doh", "dot", "oha", "red_cross",
-                  "salvation_army", "hawaii_voad", "faith_based", "health_care", "utilities"}
+                  "salvation_army", "hawaii_voad", "faith_based", "health_care", "utilities",
+                  "philanthropy", "business_community", "other_agencies"}
 REQUIRED_FUNCS = {"shelter_operations", "feeding", "afn_support_medical", "power_medical_devices",
                   "transportation", "language_access", "pets", "donations_volunteers"}
-LANGS = {"Maui": [{"language": "Other Asian and Pacific Island languages",
+LANGS = {"Maui": [{"language": "Ilocano", "area": "Kauai + Maui",
                    "speak_english_less_than_very_well": 800, "moe_90": 90,
-                   "share_of_county_lep": 0.8, "rank": 1},
-                  {"language": "Spanish", "speak_english_less_than_very_well": 200,
-                   "moe_90": 40, "share_of_county_lep": 0.2, "rank": 2}],
+                   "share_of_area_lep": 0.8, "rank": 1},
+                  {"language": "Spanish", "area": "Kauai + Maui",
+                   "speak_english_less_than_very_well": 200,
+                   "moe_90": 40, "share_of_area_lep": 0.2, "rank": 2}],
          "Kauai": [], "Honolulu": [], "Hawaii": []}
 
 
@@ -104,7 +106,7 @@ class Pledges(unittest.TestCase):
 
 class Needs(unittest.TestCase):
     def setUp(self):
-        self.lines = mt.need_lines(scenario(), PARTNERS["partners"], LANGS["Maui"], 5)
+        self.lines = mt.need_lines(scenario(), PARTNERS["partners"], LANGS["Maui"])
         self.by = {l["need"]: l for l in self.lines}
 
     def test_every_need_line_present(self):
@@ -115,7 +117,8 @@ class Needs(unittest.TestCase):
         self.assertEqual(self.by["Power outlets for power-dependent residents"]["lead_partner_types"], "doh")
 
     def test_interpreters_by_language(self):
-        self.assertEqual(self.by["Interpreters – Other Asian and Pacific Island languages"]["quantity"], 8)
+        self.assertEqual(self.by["Interpreters – Ilocano"]["quantity"], 8)
+        self.assertIn("ACS PUMS 2019-2023", self.by["Interpreters – Ilocano"]["basis"])
         self.assertEqual(self.by["Interpreters – Spanish"]["quantity"], 2)
         self.assertEqual(self.by["Interpreters – Spanish"]["language"], "Spanish")
 
@@ -171,7 +174,7 @@ class Communication(unittest.TestCase):
             root = Path(d)
             lib = mt.ensure_message_library(LANGS, COMM, root)
             self.assertEqual([l["language"] for l in lib],
-                             ["English", "Other Asian and Pacific Island languages", "Spanish"])
+                             ["English", "Ilocano", "Spanish"])
             p = root / "data/sources/messages/spanish.csv"
             self.assertEqual(p.read_text(encoding="utf-8").strip(),
                              ",".join(COMM["message_library"]["columns"]))
@@ -192,8 +195,8 @@ class Communication(unittest.TestCase):
     def test_county_pathways(self):
         lib = [{"language": "Spanish", "approved_templates": 0}]
         c = mt.communication(LANGS, COMM, lib)
-        self.assertEqual(c["Maui"]["top_languages_lep"][0]["language"],
-                         "Other Asian and Pacific Island languages")
+        self.assertEqual(c["Maui"]["top_languages_lep"][0]["language"], "Ilocano")
+        self.assertEqual(c["Maui"]["language_area"], "Kauai + Maui")
         self.assertEqual({ch["channel"] for ch in c["Maui"]["channels"]},
                          {"official_alerts", "radio", "trusted_messengers", "printed_notices"})
         self.assertEqual(c["Maui"]["message_library_status"], "no approved templates yet")
@@ -268,12 +271,12 @@ class Languages(unittest.TestCase):
         self.assertEqual({r["county"] for r in rows}, {"Maui", "Kauai"})   # Kalawao folded in
         self.assertNotIn("NAME", rows[0])
 
-    def test_committed_table_is_county_level(self):
-        with open(ROOT / "data/sources/languages_by_county.csv", newline="", encoding="utf-8") as fh:
+    def test_c16001_kept_as_secondary_source(self):
+        self.assertTrue(str(fl.OUT).endswith("languages_by_county_c16001.csv"))
+        with open(fl.OUT, newline="", encoding="utf-8") as fh:
             rows = list(csv.DictReader(fh))
         self.assertEqual({r["county"] for r in rows}, {"Kauai", "Honolulu", "Maui", "Hawaii"})
         self.assertTrue(all(r["table"] == "C16001" and r["source_url"] for r in rows))
-        self.assertEqual(mt.load_languages()["Maui"][0]["rank"], 1)
 
 
 if __name__ == "__main__":

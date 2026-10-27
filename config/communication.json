@@ -1,7 +1,8 @@
 {
- "_about": "Communication pathways for the MATCH step. Channels and owners are proposals – supports, does not replace, county and State public-information plans. Languages come from data/sources/languages_by_county.csv (ACS C16001).",
+ "_about": "Communication pathways for the MATCH step. Channels and owners are proposals – supports, does not replace, county and State public-information plans. Languages come from data/sources/languages_by_county.csv (ACS PUMS 2019-2023, detailed languages; Kauai and Maui share one PUMA and one language list). ACS C16001 (languages_by_county_c16001.csv) is kept as a secondary source.",
  "status": "proposed – supports, does not replace, county plans",
- "top_languages_per_county": 5,
+ "top_languages_per_county": 6,
+ "always_include_if_not_suppressed": ["Hawaiian", "Chuukese", "Marshallese"],
  "channels": [
   {"channel": "official_alerts", "description": "Official alerts: Wireless Emergency Alerts / Emergency Alert System and county alert sign-ups", "owner": "county_em", "support": ["hiema"]},
   {"channel": "radio", "description": "Broadcast radio, including in-language programs where available", "owner": "county_em", "support": ["hiema"]},

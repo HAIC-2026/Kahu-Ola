@@ -14,7 +14,10 @@ Usage:  python3 scripts/fetch_languages.py            (download, cache, tidy)
         python3 scripts/fetch_languages.py --offline  (re-tidy from data/raw)
 Outputs:
   data/raw/acs_c16001_county.json, data/raw/acs_c16001_labels.json   (raw responses)
-  data/sources/languages_by_county.csv                                (tidy, committed)
+  data/sources/languages_by_county_c16001.csv                        (tidy, committed)
+
+Secondary source: C16001 lumps most Hawaii languages into "Other Asian and Pacific
+Island languages". The primary table is built from ACS PUMS by build_languages_pums.py.
 """
 from __future__ import annotations
 
@@ -31,7 +34,7 @@ from fetch_data import COUNTIES, COUNTY_FIPS, fetch_json  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
-OUT = ROOT / "data" / "sources" / "languages_by_county.csv"
+OUT = ROOT / "data" / "sources" / "languages_by_county_c16001.csv"   # secondary source
 
 YEAR = 2024                       # ACS 2020-2024 5-year, latest with C16001 (checked 2026-10-27)
 TABLE = "C16001"
