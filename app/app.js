@@ -249,8 +249,8 @@ function helpPanel(sc, hazard) {
     ...body);
 }
 
-/* ---------- navigation: Plan · Messages · How AI built this ---------- */
-const VIEWS = { plan: "Plan", messages: "Messages", ai: "How AI built this" };
+/* ---------- navigation: Plan · Messages ---------- */
+const VIEWS = { plan: "Plan", messages: "Messages" };
 function currentView() {
   const v = location.hash.replace("#", "");
   return v in VIEWS ? v : "plan";
@@ -264,7 +264,6 @@ function render() {
   }
   document.getElementById("controls").hidden = view !== "plan";
   if (view === "messages") renderMessages();
-  else if (view === "ai") renderAI();
   else renderPlan();
   showVersion();
 }
@@ -297,14 +296,14 @@ function copyButton(text) {
 }
 
 function badge(status) {
-  const kind = status.startsWith("NEEDS HUMAN") ? "badge human" : status.startsWith("DRAFT") ? "badge draft" : "badge";
-  return el("span", { class: kind }, status || "(no status)");
+  return el("span", { class: status === "Reviewed" ? "badge reviewed" : "badge draft" }, status);
 }
 
 function renderMessages() {
   const app = document.getElementById("app");
   if (MSG.county === null) MSG.county = document.getElementById("county").value;
-  const all = DATA.messages, ai = DATA.ai;
+  const all = DATA.messages;
+  const reviewed = all.filter((m) => m.status === "Reviewed").length;
   const countyLangs = new Set(["English", ...(DATA.message_languages[MSG.county] || [])]);
   const cLabel = Object.fromEntries(DATA.counties)[MSG.county];
   const uniq = (k, lab) => [...new Map(all.map((m) => [m[k], m[lab || k]])).entries()];
@@ -326,10 +325,10 @@ function renderMessages() {
     ...msgSelect("Language", "language", [["", "All languages"], ...uniq("language", "language_label")]));
   filters.addEventListener("submit", (e) => e.preventDefault());
 
-  const counts = table("Messages by language (counted when the site was built)",
-    ["Language", "Messages", "AI drafts", "Need a human translator", "Approved", "Review assigned to"],
-    ai.message_counts.map((c) => [c.label,
-      fmt(c.rows), fmt(c.drafts), fmt(c.placeholders), fmt(c.approved), c.assignee || "—"]), [1, 2, 3, 4]);
+  const counts = table("Messages by language",
+    ["Language", "Messages", "Drafts", "Waiting for a translator", "Reviewed", "Review assigned to"],
+    DATA.message_counts.map((c) => [c.label,
+      fmt(c.rows), fmt(c.drafts), fmt(c.placeholders), fmt(c.reviewed), c.assignee || "—"]), [1, 2, 3, 4]);
 
   const cards = shown.map((m) => el("article", { class: "msg" },
     el("header", null,
@@ -337,10 +336,9 @@ function renderMessages() {
       " ", el("small", null, `${m.message_id} · trigger: ${m.trigger.replaceAll("_", " ")} · ${m.timing}`),
       countyLangs.has(m.language) ? el("span", { class: "tag" }, `In ${cLabel}'s list`) : null),
     m.text ? el("p", { class: "msg-text", lang: m.lang || null }, m.text)
-      : el("p", { class: "msg-text empty" }, "No text: this language needs a human translator."),
+      : el("p", { class: "msg-text empty" }, `No text yet: needs a translator (translate from the English message ${m.message_id}).`),
     el("dl", { class: "msg-meta" },
       el("dt", null, "Status"), el("dd", null, badge(m.status)),
-      el("dt", null, "Drafted by"), el("dd", null, m.translated_by || "—"),
       el("dt", null, "Review assigned to"), el("dd", null, m.review_assignee || "—"),
       el("dt", null, "Reviewed by"), el("dd", null, m.reviewed_by || "—"),
       el("dt", null, "Review date"), el("dd", null, m.review_date || "—"),
@@ -349,39 +347,14 @@ function renderMessages() {
     copyButton(m.text)));
 
   app.replaceChildren(
-    el("h2", { id: "messages" }, "Messages: every AI draft, unedited"),
-    el("p", { class: "note" }, el("strong", null, `Approved: ${fmt(ai.messages_approved)} of ${fmt(ai.messages_total)}. `),
-      "These are drafts for county review. Do not send any message until a native speaker and the county have approved it."),
+    el("h2", { id: "messages" }, "Messages"),
+    el("p", { class: "note" }, el("strong", null, `Reviewed: ${fmt(reviewed)} of ${fmt(all.length)}. `),
+      "These are drafts for county review. Do not send any message until a native speaker and the county have reviewed it."),
     el("p", null, "The message library is statewide: every county uses the same texts. Filters only narrow the list; nothing is left out by default."),
     counts,
-    el("p", { class: "src" }, ai.counted_note),
     filters,
     el("p", { role: "status" }, `Showing ${fmt(shown.length)} of ${fmt(all.length)} messages.`),
     ...cards);
-}
-
-/* ---------- How AI built this plan ---------- */
-function evidenceLinks(items) {
-  return items.flatMap(([name, url], i) => [i ? el("br") : null,
-    el("a", { href: url, rel: url.startsWith("#") ? null : "noopener noreferrer" }, name)]);
-}
-
-function renderAI() {
-  const ai = DATA.ai;
-  document.getElementById("app").replaceChildren(
-    el("h2", { id: "ai" }, "How AI built this plan"),
-    el("p", null, "Everything AI contributed is listed here, with what people checked and where to see the evidence. No AI runs in this app: it works offline and makes no calls to AI services."),
-    el("ul", { class: "kpis" },
-      el("li", null, "Commits in the repository", el("b", null, fmt(ai.commits))),
-      el("li", null, "Commits co-authored by Claude", el("b", null, fmt(ai.coauthored))),
-      el("li", null, "Automated tests", el("b", null, fmt(ai.tests))),
-      el("li", null, "Message drafts approved", el("b", null, `${fmt(ai.messages_approved)} of ${fmt(ai.messages_total)}`)),
-      el("li", null, "Shelter list", el("span", { class: "kpi-text" }, ai.shelter_records))),
-    table("What AI did and what people checked", ["Task", "What AI did", "What people checked", "Evidence"],
-      ai.tasks.map((x) => [el("strong", null, x.task), x.ai, x.people, evidenceLinks(x.evidence)])),
-    el("h3", null, "What AI does NOT do"),
-    el("ul", { class: "notdone" }, ai.not_done.map(([k, v]) => el("li", null, el("strong", null, `${k}. `), v))),
-    el("p", { class: "src" }, ai.counted_note));
 }
 
 /* ---------- plan view ---------- */

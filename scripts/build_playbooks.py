@@ -32,7 +32,6 @@ import svgmap  # noqa: E402
 from fetch_data import COUNTIES  # noqa: E402
 from fetch_flood_zones import CACHE as FLOOD_CACHE, LAYER_URL as FLOOD_URL  # noqa: E402
 from match import load_languages, select_languages  # noqa: E402
-import ai_work  # noqa: E402
 from build_tract_labels import load_labels  # noqa: E402
 from hawaii_time import hst_date  # noqa: E402
 from model_needs import HAZARDS, site_status  # noqa: E402
@@ -143,8 +142,7 @@ def partner_text(ids: str, names: dict) -> str:
 
 
 PROV_NUMBERS = "Calculated by open code from public data · see Sources"
-PROV_SHELTERS = "Compiled with AI from official county releases · verified by team"
-APP_URL = "https://shelters.kahuola.org"
+PROV_SHELTERS = "Compiled from official county releases · verified by team"
 
 
 def prov(text: str, where: str = "") -> str:
@@ -193,7 +191,6 @@ def load_inputs() -> dict:
         "partners": load_json(CONFIG / "partners.json"),
         "languages": load_languages(),
         "labels": load_labels(),
-        "ai": ai_work.summary(),
         "data_as_of": hst_date(needs.get("built_at")),
     }
 
@@ -290,7 +287,6 @@ ol.sitekey li { margin: 0 0 3pt; }
 .guide p, .guide li { font-size: 11pt; }
 .example td { background: #f2f2f2; }
 .prov { font-size: 9.5pt; font-weight: bold; margin: 2pt 0 6pt; }
-ul.notdone li { margin-bottom: 4pt; }
 tr { break-inside: avoid; }
 .page { break-before: page; }
 .map { border: 1px solid #000; }
@@ -508,28 +504,6 @@ def outreach_html(ms: dict, langs: list, county: str) -> str:
               'human review.</p>')
 
 
-def ai_html(ai: dict) -> str:
-    """Section 9: what AI did, what people checked, evidence; computed at build time."""
-    def evidence(items):
-        return "<br>".join(f"{escape(name)}: {escape(APP_URL + '/' + url if url.startswith('#') else url)}"
-                           for name, url in items)
-    rows = [[f'<b>{escape(x["task"])}</b>', escape(x["ai"]), escape(x["people"]),
-             f'<small>{evidence(x["evidence"])}</small>'] for x in ai["tasks"]]
-    counts = [[escape(ai_work.LANG_LABEL.get(c["language"], c["language"])), n(c["rows"]),
-               n(c["drafts"]), n(c["placeholders"]), n(c["approved"])]
-              for c in ai["message_counts"]]
-    nd = "".join(f"<li><b>{escape(k)}.</b> {escape(v)}</li>" for k, v in ai["not_done"])
-    return ('<h2 class="page">9. How AI built this plan</h2>'
-            + table(["Task", "What AI did", "What people checked", "Evidence"], rows)
-            + '<h3>What AI does NOT do</h3>'
-            + f'<ul class="notdone">{nd}</ul>'
-            + '<h3>Message drafts by language</h3>'
-            + table(["Language", "Messages", "AI drafts", "Need a human translator", "Approved"],
-                    counts, num_cols=(1, 2, 3, 4))
-            + f'<p class="src">{escape(ai["counted_note"])} Every message, with its status, '
-              f'is in the Messages tab of the web app ({escape(APP_URL)}/#messages).</p>')
-
-
 def sources_html(inp: dict) -> str:
     pf = inp["needs"]["planning_factors"]
     rows = []
@@ -613,7 +587,6 @@ def playbook_html(inp: dict, county: str, hazard: str) -> str:
 {decisions_html(inp["match"], hazard)}
 {outreach_html(ms, langs, county)}
 {sources_html(inp)}
-{ai_html(inp["ai"])}
 </main>
 <footer class="footer">Data as of {escape(inp["data_as_of"])} · {escape(DISCLAIMER)}</footer>
 </body></html>
