@@ -244,7 +244,7 @@ AI is **not** used at run time: the model, the matching, the playbooks and the a
 
 ## 11. Team
 
-- **Tiffanie** – team captain, UI
+- **Tiffanie Nguyen** – Team Captain, UI
 - **Long Nguyen** – data and AI pipeline
 - **Kim Quynh Do** – UI; Vietnamese review
 
