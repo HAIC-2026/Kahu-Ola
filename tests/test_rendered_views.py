@@ -127,12 +127,33 @@ class DecisionRows(unittest.TestCase):
             self.assertIn("calibration event, not validation", text, pdf.name)
 
 
+class SameRebuildTime(unittest.TestCase):
+    @unittest.skipUnless(shutil.which("pdftotext"), "pdftotext not installed")
+    def test_app_and_every_pdf_show_the_same_rebuild_time(self):
+        import json
+        bundle = json.loads((APP / "data" / "bundle.json").read_text(encoding="utf-8"))
+        timing = json.loads((ROOT / "data" / "processed" / "rebuild_timing.json")
+                            .read_text(encoding="utf-8"))
+        r = bundle["results"]["rebuild"]
+        self.assertEqual((r["seconds"], r["measured_at"]), (timing["seconds"], timing["measured_at"]))
+        want = f"took {r['seconds']} seconds on {r['machine']} ({r['measured_at'][:10]})"
+        pdfs = sorted((ROOT / "playbooks").glob("*.pdf"))
+        self.assertEqual(len(pdfs), 20)
+        for pdf in pdfs:
+            text = " ".join(subprocess.run(["pdftotext", str(pdf), "-"], capture_output=True,
+                                           text=True, check=True).stdout.split())
+            self.assertIn(want, text, pdf.name)
+        self.assertIn("took ${t.seconds} seconds on ${t.machine} (${t.measured_at.slice(0, 10)})",
+                      (APP / "app.js").read_text(encoding="utf-8"))
+
+
 class CssMobile(unittest.TestCase):
     def test_targets_and_sizes(self):
         css = (APP / "styles.css").read_text(encoding="utf-8")
         self.assertIn(".site-footer li a { display: inline-flex; align-items: center; min-height: 44px;", css)
         self.assertIn(".results small { font-size: var(--font-size-small); }", css)
         self.assertIn(".dataver { min-height:", css)
+        self.assertIn("li a { display: inline-flex; align-items: center; min-height: 44px; }", css)
         index = (APP / "index.html").read_text(encoding="utf-8")
         self.assertIn('<div class="skeleton" aria-hidden="true">', index)
 

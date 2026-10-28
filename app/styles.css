@@ -163,3 +163,6 @@ details.areas ul { columns: 2; font-size: var(--font-size-small); }
 .skeleton .kpis li { height: 6.5rem; background: var(--color-surface); border-color: var(--color-surface); }
 .site-footer li a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-1); }
 .results small { font-size: var(--font-size-small); }
+
+/* every link inside a list item is a 44 px tap target (e.g. "see Sources" in a list) */
+li a { display: inline-flex; align-items: center; min-height: 44px; }
