@@ -108,3 +108,17 @@ td.num { text-align: right; white-space: nowrap; }
 @media print {
   .controls, .skip, .banner, .button { display: none !important; }
 }
+
+/* plain-language layout */
+.dataver { margin: var(--space-1) 0 0; font-size: var(--font-size-small); }
+.banner.update { background: var(--color-accent); color: var(--color-accent-text); }
+.banner.update .button { margin-left: var(--space-1); }
+td small, .src, .legend small { font-size: var(--font-size-small); color: var(--color-muted); }
+.src { margin: 0 0 var(--space-3); }
+.mapwrap { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--space-3); align-items: start; }
+@media (max-width: 720px) { .mapwrap { grid-template-columns: 1fr; } }
+.sitekey { list-style: none; padding: 0; margin: 0; font-size: var(--font-size-small); }
+.sitekey li { margin: 0 0 var(--space-1); }
+details.help { border: 2px solid var(--color-text); border-radius: var(--radius); padding: var(--space-2) var(--space-3); margin: var(--space-2) 0; }
+details.help summary { cursor: pointer; font-weight: 700; }
+.help-icon { display: inline-block; width: 1.5em; height: 1.5em; line-height: 1.5em; text-align: center; border-radius: 50%; border: 2px solid currentColor; }

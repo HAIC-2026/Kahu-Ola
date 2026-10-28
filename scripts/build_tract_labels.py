@@ -27,7 +27,10 @@ same county, except three places with no CDP at all: Niʻihau (Kauaʻi County, w
 160°W), Kahoʻolawe (Maui County, tract 9800) and the Northwestern Hawaiian Islands
 (Honolulu County, west of 160.6°W).
 
-Tract number = last 6 digits of the tract code: 030800 -> 308, 030903 -> 309.03.
+Readers see the community first and the Census ID second: "Waikapū / Waiheʻe-Waiehu"
+with "Census area 308" (tract number = last 6 digits of the code: 030800 -> 308,
+030903 -> 309.03). Place names use Hawaiian spellings from build_place_names.py
+(USGS GNIS); IDs stay ASCII.
 
 Usage:  python3 scripts/build_tract_labels.py            (download, build)
         python3 scripts/build_tract_labels.py --offline  (use data/raw cache)
@@ -51,6 +54,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from geo import bbox_of, point_in_geometry, representative_point, sample_points  # noqa: E402
 from fetch_data import USER_AGENT, fetch_json, query_url  # noqa: E402
+from build_place_names import load_display_names  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw" / "tiger_cdp_2020.geojson"
@@ -81,6 +85,7 @@ NIIHAU_WEST_OF = -160.0
 NWHI_WEST_OF = -160.6                              # same cut as svgmap.MAIN_ISLANDS_WEST
 KAHOOLAWE_BBOX = (-156.70, 20.49, -156.52, 20.61)  # lon0, lat0, lon1, lat1
 FIELDS = ["tract_fips", "county", "tract_number", "community", "island", "tract_label",
+          "label_main", "label_sub",
           "method", "pop_2020", "pop_share_top", "pop_share_second", "pop_outside_cdp",
           "pop_shares", "cdp_geoid", "cdp_name", "area_label", "area_shares", "distance_km",
           "point_lon", "point_lat", "source", "source_url"]
@@ -95,8 +100,14 @@ def tract_number(fips: str) -> str:
     return str(base) if suffix == "00" else f"{base}.{suffix}"
 
 
+def census_area(fips: str) -> str:
+    """Second line shown to readers: 'Census area 308'."""
+    return f"Census area {tract_number(fips)}"
+
+
 def tract_label(fips: str, community: str) -> str:
-    return f"Tract {tract_number(fips)} · {community}"
+    """One-line label, community first: 'Waikapū / Waiheʻe-Waiehu · Census area 308'."""
+    return f"{community} · {census_area(fips)}"
 
 
 def download_cdps() -> dict:
@@ -173,12 +184,14 @@ def overlap_shares(geom: dict, places: list, n: int = GRID_POINTS) -> list:
                   key=lambda s: (-s[0], s[2]))
 
 
-def build(afn: dict, cdps: dict, islands: dict) -> list:
+def build(afn: dict, cdps: dict, islands: dict, display: dict | None = None) -> list:
+    """display: CDP GEOID -> Hawaiian display spelling (build_place_names.py)."""
+    display = display or {}
     places = []
     for f in cdps["features"]:
         p, g = f["properties"], f["geometry"]
         if g:
-            places.append((p["GEOID"], p["BASENAME"], g, bbox_of(g)))
+            places.append((p["GEOID"], display.get(p["GEOID"], p["BASENAME"]), g, bbox_of(g)))
     rows = []
     for f in afn["features"]:
         fips, county = f["properties"]["tract_fips"], f["properties"]["county"]
@@ -310,25 +323,27 @@ def population_label(pops: dict, names: dict) -> tuple:
     return ranked[0][1], "pop", top, second, outside
 
 
-def apply_population(rows: list, tract_pops: dict, names: dict, islands: dict) -> list:
+def apply_population(rows: list, tract_pops: dict, names: dict, islands: dict,
+                     display: dict | None = None) -> list:
     """Replace area labels by population-weighted labels where the tract has people.
     Islands are looked up by CDP code (names repeat: Kailua, Waimea)."""
     out = []
     for r in rows:
         pops = tract_pops.get(r["tract_fips"], {})
         total = sum(pops.values())
-        community, method, top, second, outside = population_label(pops, names)
+        shown = {fp: (display or {}).get("15" + fp, n) for fp, n in names.items()}
+        community, method, top, second, outside = population_label(pops, shown)
         ranked = sorted(pops.items(), key=lambda kv: (-kv[1], kv[0]))
         r = {**r, "area_label": r["tract_label"], "pop_2020": total,
              "pop_share_top": round(top, 4), "pop_share_second": round(second, 4),
              "pop_outside_cdp": round(outside, 4) if total else "",
-             "pop_shares": "; ".join(f"{names.get(k, k)} {v / total:.2f}"
+             "pop_shares": "; ".join(f"{shown.get(k, k)} {v / total:.2f}"
                                      for k, v in ranked[:4]) if total else ""}
         if community is not None:                       # else: area fallback, 0 people
             lead = next((k for k, v in ranked if k != OUTSIDE and v > 0), "")
             if not lead and r["method"] != "area_rural" and r["cdp_geoid"]:
                 lead = r["cdp_geoid"][-5:]               # nearest CDP by geography
-                community, method = f"near {names[lead]}", "pop_near"
+                community, method = f"near {shown[lead]}", "pop_near"
             island = islands.get("15" + lead, (r["island"],))[0] if lead else r["island"]
             if community == "rural":
                 community = f"rural {island}"
@@ -381,7 +396,11 @@ def main(argv=None) -> int:
     islands = cdp_islands()
     blocks = read_blocks()
     tract_pops = tract_cdp_population(blocks)
-    rows = apply_population(build(afn, cdps, islands), tract_pops, blocks["names"], islands)
+    display = load_display_names()
+    rows = apply_population(build(afn, cdps, islands, display), tract_pops, blocks["names"],
+                            islands, display)
+    for r in rows:
+        r["label_main"], r["label_sub"] = r["community"], census_area(r["tract_fips"])
     for path, fields, data in ((OUT, FIELDS, rows),
                                (OUT_POP, POP_FIELDS, population_rows(tract_pops, blocks["names"]))):
         with open(path, "w", newline="", encoding="utf-8") as fh:

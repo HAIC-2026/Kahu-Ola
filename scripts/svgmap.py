@@ -17,12 +17,20 @@ NOT_AT_RISK = "#ffffff"
 
 # Site status -> (marker shape, label). Shape + label, never color alone.
 MARKERS = {
-    "ok": ("circle", "Usable"),
-    "check": ("triangle", "Check: flood (SFHA)"),
-    "check (tract-level)": ("triangle", "Check: flood (tract-level)"),
-    "undetermined": ("diamond", "Flood risk undetermined (zone D)"),
-    "exclude": ("square", "Excluded: tsunami zone"),
+    "ok": ("circle", "Usable site"),
+    "check": ("triangle", "Check flood risk"),
+    "check (tract-level)": ("triangle", "Check flood risk"),
+    "undetermined": ("diamond", "Flood risk not mapped (FEMA zone D)"),
+    "exclude": ("square", "Not for this hazard"),
 }
+
+
+def need_names(k: int) -> list:
+    """Plain names for k color classes: 'Lowest need' ... 'Highest need'."""
+    if k <= 1:
+        return ["People with needs"]
+    middle = {3: ["Middle"], 4: ["Lower", "Higher"], 5: ["Lower", "Middle", "Higher"]}
+    return ["Lowest need"] + middle.get(k, ["Middle"] * (k - 2)) + ["Highest need"]
 
 
 def rings(geom: dict) -> list:
@@ -169,17 +177,17 @@ def render(tracts: list, values: dict, at_risk: set, sites: list, title: str,
 def legend(bounds: list) -> str:
     """HTML legend: color swatches with numeric labels, marker shapes with text labels."""
     items, lo = [], 0
-    for i, b in enumerate(bounds):
+    for i, (b, name) in enumerate(zip(bounds, need_names(len(bounds)))):
         items.append(f'<li><svg width="28" height="16" aria-hidden="true"><rect width="28" '
-                     f'height="16" fill="{RAMP[i]}" stroke="#000"/></svg> AFN need '
-                     f'{lo:,.0f}–{b:,.0f} people (class {i + 1} of {len(bounds)})</li>')
+                     f'height="16" fill="{RAMP[i]}" stroke="#000"/></svg> {name} '
+                     f'<span class="range">({lo:,.0f}–{b:,.0f} people)</span></li>')
         lo = b
     items.append('<li><svg width="28" height="16" aria-hidden="true"><rect width="28" height="16" '
-                 'fill="#fff" stroke="#000" stroke-width="2"/></svg> Solid outline: tract in '
-                 'hazard footprint (at risk)</li>')
+                 'fill="#fff" stroke="#000" stroke-width="2"/></svg> Solid outline: Census area '
+                 'in the risk area</li>')
     items.append('<li><svg width="28" height="16" aria-hidden="true"><rect width="28" height="16" '
                  'fill="#fff" stroke="#9a9a9a" stroke-dasharray="2,2"/></svg> Dashed outline: '
-                 'not in footprint</li>')
+                 'outside the risk area</li>')
     seen = set()
     for status, (shape, label) in MARKERS.items():
         if label in seen:

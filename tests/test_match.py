@@ -249,7 +249,7 @@ class PriorityTracts(unittest.TestCase):
         self.assertEqual(top[0]["afn_need_sum"], 56.0)
         self.assertEqual([t["rank"] for t in top], list(range(1, 11)))
         for t in top:
-            self.assertEqual(set(t), {"rank", "tract_fips", "tract_label", "at_risk_pop",
+            self.assertEqual(set(t), {"rank", "tract_fips", "tract_label", "label_main", "label_sub", "at_risk_pop",
                                       "power_dependent",
                                       "disability", "limited_english", "no_vehicle",
                                       "afn_need_sum"})

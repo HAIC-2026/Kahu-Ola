@@ -27,12 +27,16 @@ class Format(unittest.TestCase):
         self.assertEqual(tl.tract_number("15003981200"), "9812")
 
     def test_label(self):
-        self.assertEqual(tl.tract_label("15009030800", "Kihei"), "Tract 308 · Kihei")
-        self.assertEqual(tl.tract_label("15009030903", "near Wailuku"), "Tract 309.03 · near Wailuku")
+        self.assertEqual(tl.tract_label("15009030800", "Kīhei"), "Kīhei · Census area 308")
+        self.assertEqual(tl.tract_label("15009030903", "near Wailuku"),
+                         "near Wailuku · Census area 309.03")
+        self.assertEqual(tl.census_area("15009030903"), "Census area 309.03")
 
     def test_committed_labels_match_format(self):
         for fips, r in LABELS.items():
-            self.assertEqual(r["tract_label"], f"Tract {tl.tract_number(fips)} · {r['community']}")
+            self.assertEqual(r["tract_label"], f"{r['community']} · Census area {tl.tract_number(fips)}")
+            self.assertEqual((r["label_main"], r["label_sub"]),
+                             (r["community"], f"Census area {tl.tract_number(fips)}"))
 
 
 class Join(unittest.TestCase):
@@ -55,7 +59,7 @@ class Join(unittest.TestCase):
         self.assertEqual(rows["15009000100"]["method"], "area")
         self.assertEqual(rows["15009000200"]["community"], "near Alpha")
         self.assertEqual(rows["15009000300"]["community"], "rural Maui")
-        self.assertEqual(rows["15009000300"]["tract_label"], "Tract 3 · rural Maui")
+        self.assertEqual(rows["15009000300"]["tract_label"], "rural Maui · Census area 3")
 
     def tract_box(self, fips, x0, x1):
         return {"properties": {"tract_fips": fips, "county": "Maui"},
@@ -167,12 +171,12 @@ class Committed(unittest.TestCase):
 
     def test_populated_tract_without_cdp_blocks_is_near_nearest_cdp(self):
         r = LABELS["15003007400"]
-        self.assertEqual(r["tract_label"], "Tract 74 · near Halawa")
+        self.assertEqual(r["tract_label"], "near Hālawa · Census area 74")
         self.assertEqual(r["method"], "pop_near")
         self.assertEqual(float(r["pop_outside_cdp"]), 1.0)
         for x in LABELS.values():
             if x["method"] == "pop_rural" and not x["community"].startswith("rural near "):
-                self.assertEqual(x["area_label"].split(" · ")[1][:6], "rural ", x["tract_label"])
+                self.assertTrue(x["area_label"].startswith("rural "), x["tract_label"])
 
     def test_no_guessed_reasons(self):
         for path in (tl.OUT, ROOT / "PLAN.md", ROOT / "README.md"):
@@ -180,9 +184,9 @@ class Committed(unittest.TestCase):
 
     def test_pinned_maui_tracts(self):
         # 2020 block population by CDP (Block Assignment File + PL 94-171), reported 2026-10-27.
-        self.assertEqual(LABELS["15009030800"]["tract_label"], "Tract 308 · Waikapu / Waihee-Waiehu")
-        self.assertEqual(LABELS["15009030903"]["tract_label"], "Tract 309.03 · Waihee-Waiehu")
-        self.assertEqual(LABELS["15009031001"]["tract_label"], "Tract 310.01 · Wailuku")
+        self.assertEqual(LABELS["15009030800"]["tract_label"], "Waikapū / Waiheʻe-Waiehu · Census area 308")
+        self.assertEqual(LABELS["15009030903"]["tract_label"], "Waiheʻe-Waiehu · Census area 309.03")
+        self.assertEqual(LABELS["15009031001"]["tract_label"], "Wailuku · Census area 310.01")
         self.assertEqual(LABELS["15009030800"]["pop_2020"], "7413")
         self.assertEqual(LABELS["15009030800"]["pop_share_top"], "0.4636")
         self.assertEqual(LABELS["15009980000"]["island"], "Kahoʻolawe")
@@ -203,16 +207,18 @@ class Used(unittest.TestCase):
             if path.name == "index.html":
                 continue
             html = path.read_text(encoding="utf-8")
-            self.assertIn("Tract ", html)
-            self.assertIn("<title>Tract ", html)               # map tooltips
+            self.assertIn("<small>Census area ", html)         # community first, ID second
+            self.assertRegex(html, r"<title>[^<]+ · Census area [\d.]+</title>")   # map tooltips
+            self.assertNotIn(">Tract ", html)
             self.assertEqual(note in html, path.stem.endswith("_hurricane"), path.name)
 
     def test_app_bundle_has_labels(self):
         b = json.loads((ROOT / "app" / "data" / "bundle.json").read_text(encoding="utf-8"))
-        self.assertTrue(all(t["l"].startswith("Tract ") for t in b["tracts"]))
+        self.assertTrue(all(" · Census area " in t["l"] for t in b["tracts"]))
         sc = next(iter(b["scenarios"].values()))
-        self.assertTrue(sc["largest"][0]["tract_label"].startswith("Tract "))
-        self.assertTrue(sc["priority_tracts"][0]["tract_label"].startswith("Tract "))
+        for row in (sc["largest"][0], sc["priority_tracts"][0]):
+            self.assertTrue(row["label_sub"].startswith("Census area "))
+            self.assertNotIn("Census area", row["label_main"])
         self.assertIn("Hurricanes affect the whole county", b["meta"]["hurricane_scope_note"])
 
 

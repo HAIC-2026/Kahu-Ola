@@ -44,12 +44,13 @@ class Playbooks(unittest.TestCase):
 
     def test_sections_in_order(self):
         t = (PLAY / "maui_tsunami.html").read_text(encoding="utf-8")
-        heads = ["1. Summary", "2. Scope", "Largest single community", "3. Map", "4. Known sites",
+        heads = ["1. Summary", "2. Scope", "Largest single community", "How to read this playbook",
+                 "3. Map", "4. Known sites",
                  "5. Needs and proposed partners", "6. Decision points",
                  "7. Priority outreach and languages", "8. Sources and assumptions"]
         pos = [t.index(h) for h in heads]
         self.assertEqual(pos, sorted(pos))
-        self.assertIn("At risk, extreme tsunami zone", t)
+        self.assertIn("People in the extreme tsunami zone", t)
         self.assertIn("Kauaʻi and Maui share one language list", t)
         self.assertIn("<svg", t)
         self.assertIn('role="img"', t)
@@ -63,7 +64,7 @@ class Playbooks(unittest.TestCase):
         t = (PLAY / "maui_tsunami.html").read_text(encoding="utf-8")
         for name in ("Lahaina Civic Center Gym", "Kilohana Recreation Center"):
             row = re.search(r"<tr>(?:(?!</tr>).)*" + re.escape(name) + r"(?:(?!</tr>).)*</tr>", t, re.S)
-            self.assertIn("✕ Excluded", row.group(0))
+            self.assertIn("✕ Not for this hazard", row.group(0))
 
     def test_no_network_resources_in_playbooks(self):
         for f in list(PLAY.glob("*.html")):
@@ -161,7 +162,9 @@ class AppCode(unittest.TestCase):
         js = (APP / "app.js").read_text(encoding="utf-8")
         urls = set(re.findall(r"https?://[^\s\"'`)]+", js))
         self.assertEqual(urls, {"http://www.w3.org/2000/svg"})           # SVG namespace only
-        self.assertEqual(re.findall(r"fetch\(([^)]*)\)", js), ["BUNDLE_URL"])
+        self.assertEqual(re.findall(r"fetch\(([^)]*)\)", js),
+                         ["VERSION_URL, { cache: \"no-store\" }", "BUNDLE_URL"])
+        self.assertIn('const VERSION_URL = "data/version.json"', js)
         self.assertIn('const BUNDLE_URL = "data/bundle.json"', js)
         code = re.sub(r"/\*.*?\*/|//[^\n]*", "", js, flags=re.S)          # ignore comments
         for banned in ("XMLHttpRequest", "WebSocket", "sendBeacon", "geolocation",

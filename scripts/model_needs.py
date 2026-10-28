@@ -30,7 +30,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from hawaii_time import now_hst  # noqa: E402
 from fetch_data import COUNTIES  # noqa: E402
-from build_tract_labels import load_labels, tract_number  # noqa: E402
+from build_tract_labels import census_area, load_labels  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "planning_factors.json"
@@ -104,7 +104,9 @@ def tract_rows(tracts: list, hazard: str, shares: dict, rate: float) -> list:
         pph = pop / hh if hh else 0.0
         rows.append({
             "tract_fips": t["tract_fips"],
-            "tract_label": t.get("tract_label") or f"Tract {tract_number(t['tract_fips'])}",
+            "tract_label": t.get("tract_label") or census_area(t["tract_fips"]),
+            "label_main": t.get("label_main") or census_area(t["tract_fips"]),
+            "label_sub": t.get("label_sub") or "",
             "community": t.get("community", ""), "island": t.get("island", ""),
             "county": t["county"], "hazard": hazard,
             "share_at_risk": round(share, 3),
@@ -299,7 +301,7 @@ def main() -> int:
     labels = load_labels()          # data/sources/tract_communities.csv (build_tract_labels.py)
     tracts = [{**f["properties"],
                **{k: labels.get(f["properties"]["tract_fips"], {}).get(k, "")
-                  for k in ("tract_label", "community", "island")}}
+                  for k in ("tract_label", "label_main", "label_sub", "community", "island")}}
               for f in afn["features"]]
     shelters = (load_json(PROC / "shelters_2026.geojson") or {}).get("features", [])
     schools = (load_json(PROC / "candidates.geojson") or {}).get("features", [])

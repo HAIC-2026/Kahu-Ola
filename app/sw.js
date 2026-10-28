@@ -5,7 +5,7 @@
 "use strict";
 
 // BEGIN GENERATED
-const VERSION = "77cb7d333134";
+const VERSION = "8b02ed214f20";
 const PRECACHE = [
   "./",
   "index.html",
@@ -56,7 +56,13 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   const req = event.request;
-  if (req.method !== "GET" || new URL(req.url).origin !== self.location.origin) return;
+  const url = new URL(req.url);
+  if (req.method !== "GET" || url.origin !== self.location.origin) return;
+  if (url.pathname.endsWith("/data/version.json")) {
+    // network first: the page compares it with the cached bundle to spot new data
+    event.respondWith(fetch(req).catch(() => caches.match(req, { ignoreSearch: true })));
+    return;
+  }
   event.respondWith(
     caches.match(req, { ignoreSearch: true }).then((hit) => hit || fetch(req).catch(() =>
       req.mode === "navigate" ? caches.match("index.html")

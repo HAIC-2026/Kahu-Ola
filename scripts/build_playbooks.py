@@ -19,6 +19,7 @@ import csv
 import glob
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -45,14 +46,109 @@ DISCLAIMER = ("Planning aid. Supports, does not replace, county emergency plans.
 COUNTY_LABEL = {"Kauai": "Kauaʻi", "Honolulu": "Honolulu", "Maui": "Maui", "Hawaii": "Hawaiʻi"}
 HAZARD_LABEL = {"hurricane": "Hurricane", "wildfire": "Wildfire", "tsunami": "Tsunami",
                 "inland_flood": "Inland flooding", "coastal_flood": "Coastal flooding"}
-STATUS_LABEL = {"ok": "✓ Usable", "check": "⚠ Check – flood",
-                "check (tract-level)": "⚠ Check – flood (tract-level)",
-                "undetermined": "? Undetermined – flood", "exclude": "✕ Excluded"}
+STATUS_LABEL = {"ok": "✓ Usable", "check": "⚠ Check flood zone",
+                "check (tract-level)": "⚠ Check flood risk (no site flood data)",
+                "undetermined": "? Flood risk not mapped", "exclude": "✕ Not for this hazard"}
+SITE_KEY_STATUS = {"ok": "usable", "check": "check flood zone",
+                   "check (tract-level)": "check flood risk", "undetermined": "flood risk not mapped",
+                   "exclude": "not for this hazard", "unlocated": "not on map"}
+
+# Plain-language wording shared by the playbooks and the app (build_app_data.py).
+COL = {
+    "area": "Community (Census area)",
+    "at_risk": "People in the risk area",
+    "shelter": "May need a public shelter (low – likely – high)",
+    "lep": "Speak English less than well",
+    "power": "Use power-dependent medical equipment (estimate)",
+    "disability": "People with a disability",
+    "age65": "Age 65 and older",
+    "no_car": "People in households without a car",
+    "needs_total": "Needs total (a person can be in more than one column)",
+}
+FOOTPRINT_TEXT = {
+    "all tracts": "every Census area in the county",
+    "share inside tsunami zone": "the people living inside the tsunami evacuation zone",
+    "top 25% of each county's tracts by NRI score":
+        "the 25% of Census areas in the county with the highest FEMA risk score for this hazard",
+}
+RATE_NOTE = {
+    "hurricane": "South Carolina Emergency Management Division hurricane shelter planning "
+                 "factors (2%, 3%, 5%).",
+    "wildfire": "High = the share of Lahaina residents in shelters the day after the 2023 fire "
+                "(1,418 of 12,702 people). Low and likely are team assumptions.",
+    "tsunami": "Team assumptions: likely 5%; low 2% (the hurricane planning factor); high 11% "
+               "(the Lahaina 2023 rate).",
+}
+RATE_NOTE["inland_flood"] = RATE_NOTE["coastal_flood"] = RATE_NOTE["tsunami"]
+SOURCE = {
+    "people": "Source: people and needs – CDC/ATSDR Social Vulnerability Index 2022 (ACS "
+              "2018–2022 estimates), HHS emPOWER and FEMA National Risk Index v1.20; community "
+              "names – 2020 Census blocks and places, spellings from USGS GNIS.",
+    "summary": "Source: CDC/ATSDR Social Vulnerability Index 2022 (ACS 2018–2022 estimates), "
+               "HHS emPOWER, FEMA National Risk Index v1.20; shelter rates in section 8.",
+    "sites": "Source: county announcements of sites opened in 2026; FEMA flood zones (Hawaiʻi "
+             "Statewide GIS, State DFIRM); tsunami evacuation zones (Hawaiʻi Statewide GIS).",
+    "needs": "Source: likely estimate × planning factors in section 8 (Florida Division of "
+             "Emergency Management 2010; AVMA 2022 for pets).",
+    "decisions": "Source: National Weather Service, Central Pacific Hurricane Center and "
+                 "Pacific Tsunami Warning Center product definitions (links in section 8).",
+    "languages": "Source: ACS PUMS 2019–2023 5-year (validated against DBEDT Data Book 2024, "
+                 "Table 1.44).",
+}
+CMIST = [("C – Communication", "people who speak English less than well; they may need "
+          "interpreters and translated messages."),
+         ("M – Medical", "people who use power-dependent medical equipment (an estimate from "
+          "HHS emPOWER)."),
+         ("I – Independence", "people with a disability and people age 65 and older."),
+         ("S – Safety and support", "children and people living in group quarters (in the "
+          "needs table)."),
+         ("T – Transportation", "people in households without a car.")]
+
+
+REASON_PLAIN = [
+    (r"^FEMA zone D: flood risk undetermined$", "FEMA has not mapped flood risk here (zone D)"),
+    (r"^FEMA Special Flood Hazard Area \(zone (\w+)\)$", r"In a FEMA high-risk flood zone (zone \1)"),
+    (r"^FEMA zone (\w+): outside Special Flood Hazard Area$",
+     r"Outside FEMA high-risk flood zones (zone \1)"),
+    (r"^no site flood data; tract is in flood footprint$",
+     "No flood map data for the site; its Census area is in the flood risk area"),
+    (r"^no site flood data; tract outside flood footprint$",
+     "No flood map data for the site; its Census area is outside the flood risk area"),
+    (r"^no site-level screen for this hazard$", "No site check for this hazard"),
+    (r"^not located – not on map$", "Address not located; not on the map"),
+    (r"^inside tsunami evacuation zone$", "Inside the tsunami evacuation zone"),
+    (r"^outside tsunami evacuation zone$", "Outside the tsunami evacuation zone"),
+]
+
+
+def plain_reason(reason: str) -> str:
+    for pat, repl in REASON_PLAIN:
+        if re.match(pat, reason):
+            return re.sub(pat, repl, reason)
+    return reason
+
+
+def partner_names(partners_cfg: dict) -> dict:
+    """partner_type -> readable name from config/partners.json (county agencies merged)."""
+    out = {}
+    for p in partners_cfg.get("partners", []):
+        name = re.sub(r" – \w+ \(agency name to be confirmed\)$", "", p["name"])
+        out.setdefault(p["partner_type"], name)
+    return out
+
+
+def partner_text(ids: str, names: dict) -> str:
+    return ", ".join(names.get(i.strip(), i.strip()) for i in ids.split(";") if i.strip())
+
+
+def community_cell(main: str, sub: str) -> str:
+    """Community name first, Census area ID as a smaller second line."""
+    return f'{escape(main)}<br><small>{escape(sub)}</small>' 
 STATUS_ORDER = ["ok", "check", "check (tract-level)", "undetermined", "exclude"]
 AFN_PARTS = ("M_power_dependent_at_risk", "I_disability_at_risk", "C_lep_at_risk",
              "T_no_vehicle_persons_at_risk")
-KAUAI_MAUI_NOTE = ("Kauaʻi and Maui share one language list: ACS PUMS reports both counties "
-                   "(and Kalawao) as a single area, PUMA 00100, so they cannot be separated.")
+KAUAI_MAUI_NOTE = ("Kauaʻi and Maui share one language list: the Census survey reports both "
+                   "counties (and Kalawao) as one area, so they cannot be separated.")
 
 
 def slug(county: str, hazard: str) -> str:
@@ -84,6 +180,7 @@ def load_inputs() -> dict:
         "candidates": load_json(PROC / "candidates.geojson"),
         "match": load_json(PROC / "match_plan.json"),
         "comm": load_json(CONFIG / "communication.json"),
+        "partners": load_json(CONFIG / "partners.json"),
         "languages": load_languages(),
         "labels": load_labels(),
         "data_as_of": hst_date(needs.get("built_at")),
@@ -136,7 +233,9 @@ def largest_communities(rows: list, rates: dict, k: int = 3) -> list:
     for r in rows:
         ar = float(r["at_risk_pop"])
         out.append({"tract_fips": r["tract_fips"],
-                    "tract_label": r.get("tract_label") or r["tract_fips"], "at_risk_pop": ar,
+                    "tract_label": r.get("tract_label") or r["tract_fips"],
+                    "label_main": r.get("label_main") or r.get("tract_label") or r["tract_fips"],
+                    "label_sub": r.get("label_sub", ""), "at_risk_pop": ar,
                     "low": ar * rates["low"], "central": float(r["shelter_demand"]),
                     "high": ar * rates["high"],
                     **{k: float(r[k]) for k in AFN_PARTS + ("I_age65_at_risk",)}})
@@ -167,7 +266,18 @@ p, li { margin: 3pt 0; }
 table { width: 100%; border-collapse: collapse; margin: 6pt 0; font-size: 10.5pt; }
 th, td { border: 1px solid #000; padding: 3pt 5pt; text-align: left; vertical-align: top; }
 th { background: #e6e6e6; }
-td.num, th.num { text-align: right; white-space: nowrap; }
+td.num, th.num { text-align: right; }
+td.num { white-space: nowrap; }
+th { font-size: 9.5pt; line-height: 1.2; }
+td:first-child { min-width: 1.3in; }
+td small, .src, .range { font-size: 9pt; color: #333; }
+.src { margin: 0 0 8pt; }
+.mapwrap { display: grid; grid-template-columns: 2fr 1fr; gap: 10pt; align-items: start; }
+ol.sitekey { margin: 0; padding-left: 0; list-style: none; font-size: 10pt; }
+ol.sitekey li { margin: 0 0 3pt; }
+.guide h3 { margin-top: 8pt; }
+.guide p, .guide li { font-size: 11pt; }
+.example td { background: #f2f2f2; }
 tr { break-inside: avoid; }
 .page { break-before: page; }
 .map { border: 1px solid #000; }
@@ -198,24 +308,26 @@ def table(headers: list, rows: list, num_cols: tuple = (), caption: str = "") ->
 
 
 def summary_html(sc: dict, hazard: str) -> str:
-    kpis = [("People at risk", n(sc["at_risk_pop"])),
-            ("Shelter demand (central)", n(sc["shelter_demand_central"])),
-            ("Shelter demand low – high",
+    kpis = [(COL["at_risk"], n(sc["at_risk_pop"])),
+            ("May need a public shelter (likely)", n(sc["shelter_demand_central"])),
+            ("May need a public shelter (low – high)",
              f'{n(sc["shelter_demand_low"])} – {n(sc["shelter_demand_high"])}'),
-            ("Limited English (C)", n(sc["C_lep_at_risk"])),
-            ("Power-dependent (M)", n(sc["M_power_dependent_at_risk"])),
-            ("Disability (I)", n(sc["I_disability_at_risk"])),
-            ("Age 65+ (I)", n(sc["I_age65_at_risk"])),
-            ("People without a vehicle (T)", n(sc["T_no_vehicle_persons_at_risk"])),
-            ("Known 2026 sites usable", n(sc.get("known_sites_usable")))]
+            (COL["lep"] + " (C)", n(sc["C_lep_at_risk"])),
+            (COL["power"] + " (M)", n(sc["M_power_dependent_at_risk"])),
+            (COL["disability"] + " (I)", n(sc["I_disability_at_risk"])),
+            (COL["age65"] + " (I)", n(sc["I_age65_at_risk"])),
+            (COL["no_car"] + " (T)", n(sc["T_no_vehicle_persons_at_risk"])),
+            ("Known 2026 shelter sites usable for this hazard", n(sc.get("known_sites_usable")))]
     if hazard == "tsunami":
-        kpis.append(("At risk, extreme tsunami zone (worst case)",
+        kpis.append(("People in the extreme tsunami zone (worst case)",
                      n(sc.get("at_risk_pop_extreme_zone"))))
     cells = "".join(f'<div class="kpi">{escape(k)}<b>{v}</b></div>' for k, v in kpis)
     return (f'<h2>1. Summary</h2><div class="kpis">{cells}</div>'
-            f'<p>Shelter-seeking rates: low {sc["rate_low"]:.0%}, central {sc["rate_central"]:.0%}, '
-            f'high {sc["rate_high"]:.1%}. CMIST counts are people at risk, from census-tract '
-            f'estimates; one person can appear in more than one count.</p>')
+            f'<p class="src">{escape(SOURCE["summary"])}</p>'
+            f'<p>Share of people in the risk area who may need a public shelter: low '
+            f'{sc["rate_low"]:.0%}, likely {sc["rate_central"]:.0%}, high {sc["rate_high"]:.1%}. '
+            f'One person can be counted in more than one need. Page 2 explains how to read '
+            f'these numbers.</p>')
 
 
 HURRICANE_SCOPE_NOTE = ("Hurricanes affect the whole county, so these are simply the most "
@@ -223,21 +335,73 @@ HURRICANE_SCOPE_NOTE = ("Hurricanes affect the whole county, so these are simply
 
 
 def scope_html(sc: dict, comms: list, hazard: str = "") -> str:
-    rows = [[escape(c["tract_label"]), n(c["at_risk_pop"]),
-             f'{n(c["low"])} / <b>{n(c["central"])}</b> / {n(c["high"])}',
+    rows = [[community_cell(c["label_main"], c["label_sub"]), n(c["at_risk_pop"]),
+             f'{n(c["low"])} – <b>{n(c["central"])}</b> – {n(c["high"])}',
              n(c["C_lep_at_risk"]), n(c["M_power_dependent_at_risk"]),
              n(c["I_disability_at_risk"]), n(c["I_age65_at_risk"]),
              n(c["T_no_vehicle_persons_at_risk"])] for c in comms]
+    area = FOOTPRINT_TEXT.get(sc.get("footprint_rule", ""), sc.get("footprint_rule", ""))
     return ('<h2>2. Scope: county total vs. one community</h2>'
-            '<div class="note"><b>County total = upper bound.</b> It assumes every at-risk '
-            f'tract is hit at once ({escape(sc.get("footprint_rule", ""))}). Real events '
-            'usually hit fewer communities.</div>'
-            '<h3>Largest single community (highest-demand census tracts)</h3>'
+            '<div class="note"><b>The county total is an upper bound.</b> It counts '
+            f'{escape(area)} as hit at the same time. Real events usually hit fewer '
+            'communities.</div>'
+            '<h3>Largest single community (the Census areas with the most people who may '
+            'need a shelter)</h3>'
             + (f'<p>{escape(HURRICANE_SCOPE_NOTE)}</p>' if hazard == "hurricane" else "")
-            + table(["Tract", "At risk", "Shelter low / central / high", "Limited English",
-                     "Power-dep.", "Disability", "65+", "No vehicle"], rows,
+            + table([COL["area"], COL["at_risk"], COL["shelter"], COL["lep"], COL["power"],
+                     COL["disability"], COL["age65"], COL["no_car"]], rows,
                     num_cols=(1, 2, 3, 4, 5, 6, 7))
-            + '<p>Plan a realistic one-community event with the first row.</p>')
+            + f'<p class="src">{escape(SOURCE["people"])}</p>'
+            + '<p>To plan for one community, use the first row.</p>')
+
+
+def guide_html(sc: dict, comms: list, hazard: str) -> str:
+    """Page 2: how to read this playbook, with one example row."""
+    ex = comms[0] if comms else None
+    example = ""
+    if ex:
+        example = ('<h3>Example row</h3>'
+                   + table([COL["area"], COL["at_risk"], COL["shelter"]],
+                           [[community_cell(ex["label_main"], ex["label_sub"]),
+                             n(ex["at_risk_pop"]),
+                             f'{n(ex["low"])} – <b>{n(ex["central"])}</b> – {n(ex["high"])}']],
+                           num_cols=(1, 2)).replace("<tr><td", '<tr class="example"><td', 1)
+                   + f'<p>Read it as: about {n(ex["at_risk_pop"])} people live in the risk area '
+                     f'of {escape(ex["label_main"])}. If this hazard hits, between '
+                     f'{n(ex["low"])} and {n(ex["high"])} of them may need a public shelter; '
+                     f'{n(ex["central"])} is the likely number.</p>')
+    area = FOOTPRINT_TEXT.get(sc.get("footprint_rule", ""), sc.get("footprint_rule", ""))
+    cmist = "".join(f"<li><b>{escape(k)}:</b> {escape(v)}</li>" for k, v in CMIST)
+    return (f'<section class="guide page"><h2>How to read this playbook</h2>'
+            f'{example}'
+            '<h3>Census area</h3>'
+            '<p>A neighborhood-sized area the U.S. Census uses, usually 1,200–8,000 people. '
+            'The number (for example "Census area 308") is its Census ID. Each area is named '
+            'after the Census place where most of its people live. "near" means no one in the '
+            'area lives inside a named place; "rural near" means most people live outside '
+            'named places.</p>'
+            '<h3>Low – likely – high</h3>'
+            f'<p>The share of people in the risk area who may go to a public shelter: low '
+            f'{sc["rate_low"]:.0%}, likely {sc["rate_central"]:.0%}, high '
+            f'{sc["rate_high"]:.1%}. Where the rates come from: '
+            f'{escape(RATE_NOTE.get(hazard, ""))}</p>'
+            f'<h3>Who has access and functional needs (CMIST)</h3><ul>{cmist}</ul>'
+            '<h3>County total vs. one community</h3>'
+            f'<p>The county total counts {escape(area)} as hit at the same time, so it is an '
+            'upper bound. Use the "Largest single community" table to plan for an event that '
+            'hits one community.</p>'
+            '<h3>Map</h3>'
+            '<p>Darker blue means more people with needs, from "Lowest need" to "Highest '
+            'need". A solid outline marks a Census area in the risk area; a dashed outline is '
+            'outside it. Symbols: ○ usable site, △ check flood risk, ◇ flood risk not mapped, '
+            '☒ not for this hazard. Numbers on the map match the site key.</p>'
+            '<h3>Why population numbers can differ</h3>'
+            '<p>People in the risk area come from ACS 2018–2022 estimates (through the CDC '
+            'Social Vulnerability Index 2022). Community names use 2020 Census counts. County '
+            'totals in the plan use Census estimates for 2025. Each table names its source '
+            'underneath.</p>'
+            '<div class="note"><b>Every number is a planning estimate. In an event, follow '
+            'county announcements.</b></div></section>')
 
 
 def map_html(inp: dict, county: str, hazard: str, sites: list) -> str:
@@ -248,40 +412,50 @@ def map_html(inp: dict, county: str, hazard: str, sites: list) -> str:
     svg, bounds = svgmap.render(
         tracts, values, set(values),
         [s for s in sites if s["lon"] is not None],
-        f"{COUNTY_LABEL[county]} {HAZARD_LABEL[hazard]}: AFN need by census tract and "
-        f"known shelter sites", labels=labels)
-    return (f'<h2 class="page">3. Map: AFN need and known sites</h2>'
-            f'<div class="map">{svg}</div>{svgmap.legend(bounds)}'
-            '<p>AFN need = power-dependent + disability + limited English + no-vehicle people '
-            'at risk (people may be counted more than once). Numbers on markers match the '
-            'sites table. No basemap: tract outlines only.</p>')
+        f"{COUNTY_LABEL[county]} {HAZARD_LABEL[hazard]}: people with needs by Census area "
+        f"and known shelter sites", labels=labels)
+    key = "".join(f'<li><b>{s["n"]}</b> = {escape(s["name"])} '
+                  f'({escape(SITE_KEY_STATUS.get(s["status"], s["status"]))})</li>'
+                  for s in sites)
+    return (f'<h2 class="page">3. Map: people with needs and known sites</h2>'
+            f'<div class="mapwrap"><div class="map">{svg}</div>'
+            f'<div><h3>Site key</h3><ol class="sitekey">{key}</ol></div></div>'
+            f'{svgmap.legend(bounds)}'
+            '<p>Color = people in the risk area who speak English less than well, use '
+            'power-dependent medical equipment, have a disability, or live without a car '
+            '(a person can be counted more than once). No street map: Census area outlines '
+            'only.</p>'
+            f'<p class="src">{escape(SOURCE["people"])}</p>')
 
 
 def sites_html(sites: list, sc: dict) -> str:
     rows = [[str(s["n"]), f'<span class="status">{escape(STATUS_LABEL.get(s["status"], "Not located"))}</span>',
-             escape(s["name"]), escape(s["address"]), escape(s["reason"]),
+             escape(s["name"]), escape(s["address"]), escape(plain_reason(s["reason"])),
              str(s["times_opened_2026"])] for s in sites]
     return ('<h2 class="page">4. Known sites (opened in 2026 events)</h2>'
-            + table(["#", "Status", "Site", "Address", "Reason", "Times opened 2026"], rows,
-                    num_cols=(0, 5))
+            + table(["#", "Status for this hazard", "Site", "Address", "Why",
+                     "Times opened in 2026"], rows, num_cols=(0, 5))
+            + f'<p class="src">{escape(SOURCE["sites"])}</p>'
             + f'<p>Candidate public schools in this county usable for this hazard: '
               f'<b>{n(sc.get("candidate_schools_usable"))}</b>'
-            + (f'; flood risk undetermined (zone D): {n(sc.get("candidate_schools_flood_undetermined"))}'
+            + (f'; flood risk not mapped (FEMA zone D): {n(sc.get("candidate_schools_flood_undetermined"))}'
                if sc.get("candidate_schools_flood_undetermined") else "")
             + '. Sites are places a county has opened before; not every site opens in every '
               'event. Always follow current county announcements.</p>')
 
 
-def needs_html(ms: dict) -> str:
+def needs_html(ms: dict, partners: dict) -> str:
     rows = [[escape(l["need"]), n(l["quantity"]), escape(l["unit"]),
-             escape(l["lead_partner_types"]), escape(l["support_partner_types"]),
+             escape(partner_text(l["lead_partner_types"], partners)),
+             escape(partner_text(l["support_partner_types"], partners)),
              escape(str(l["pledged_capacity"]) or "—"), "confirm with partner"
              if l["gap"].startswith("unknown") else escape(l["gap"])] for l in ms["needs"]]
     return ('<h2 class="page">5. Needs and proposed partners</h2>'
-            '<p>Central estimate. Roles are <b>proposed – to be confirmed with partner</b>. '
-            'Pledged capacity stays blank until a partner confirms it.</p>'
-            + table(["Need", "Quantity", "Unit", "Proposed lead", "Proposed support",
-                     "Pledged", "Gap"], rows, num_cols=(1,)))
+            '<p>Likely estimate. Roles are <b>proposed – to be confirmed with partner</b>. '
+            'The pledged column stays blank until a partner confirms it.</p>'
+            + table(["Need", "How many", "Unit", "Proposed lead", "Proposed support",
+                     "Pledged by partner", "Still needed"], rows, num_cols=(1,))
+            + f'<p class="src">{escape(SOURCE["needs"])}</p>')
 
 
 def decisions_html(match: dict, hazard: str) -> str:
@@ -291,27 +465,33 @@ def decisions_html(match: dict, hazard: str) -> str:
              escape(d["support"].replace("; ", ", "))] for d in match["decision_points"][hazard]]
     return ('<h2 class="page">6. Decision points</h2>'
             '<div class="note">Proposed – supports, does not replace, county plans.</div>'
-            + table(["When", "Trigger", "Action", "Owner (proposed)", "Support"], rows))
+            + table(["When", "Trigger", "Action", "Owner (proposed)", "Support"], rows)
+            + f'<p class="src">{escape(SOURCE["decisions"])}</p>')
 
 
 def outreach_html(ms: dict, langs: list, county: str) -> str:
-    rows = [[str(t["rank"]), escape(t.get("tract_label") or t["tract_fips"]), n(t["at_risk_pop"]),
-             n(t["power_dependent"]), n(t["disability"]), n(t["limited_english"]),
-             n(t["no_vehicle"]), n(t["afn_need_sum"])] for t in ms["priority_tracts"]]
+    rows = [[str(t["rank"]), community_cell(t.get("label_main") or t.get("tract_label", ""),
+                                            t.get("label_sub", "")),
+             n(t["at_risk_pop"]), n(t["power_dependent"]), n(t["disability"]),
+             n(t["limited_english"]), n(t["no_vehicle"]), n(t["afn_need_sum"])]
+            for t in ms["priority_tracts"]]
     lrows = [[escape(l["language"]), n(l["speak_english_less_than_very_well"]),
               "±" + n(l["moe_90"])] for l in langs]
     area = langs[0]["area"] if langs else ""
     note = f"<p>{escape(KAUAI_MAUI_NOTE)}</p>" if county in ("Kauai", "Maui") else ""
     return ('<h2 class="page">7. Priority outreach and languages</h2>'
-            '<h3>Top 10 census tracts by AFN need (tract-level counts only)</h3>'
-            + table(["#", "Tract", "At risk", "Power-dep.", "Disability", "Limited English",
-                     "No vehicle", "AFN need"], rows, num_cols=(0, 2, 3, 4, 5, 6, 7))
-            + f'<h3>Languages: people who speak English less than "very well" ({escape(area)})</h3>'
+            '<h3>Top 10 Census areas by number of people with needs</h3>'
+            + table(["#", COL["area"], COL["at_risk"], COL["power"], COL["disability"],
+                     COL["lep"], COL["no_car"], COL["needs_total"]], rows,
+                    num_cols=(0, 2, 3, 4, 5, 6, 7))
+            + f'<p class="src">{escape(SOURCE["people"])}</p>'
+            + f'<h3>Languages: people age 5 and older who speak English less than "very well" '
+              f'({escape(area)})</h3>'
             + note
-            + table(["Language", "People 5+", "90% MOE"], lrows, num_cols=(1, 2))
-            + '<p>Source: ACS PUMS 2019-2023 5-year (validated against DBEDT Data Book 2024, '
-              'Table 1.44). Pre-approved message templates: none yet; no machine translation '
-              'without human review.</p>')
+            + table(["Language", "People", "Margin of error (90%)"], lrows, num_cols=(1, 2))
+            + f'<p class="src">{escape(SOURCE["languages"])}</p>'
+            + '<p>Pre-approved message templates: none yet; no machine translation without '
+              'human review.</p>')
 
 
 def sources_html(inp: dict) -> str:
@@ -390,9 +570,10 @@ def playbook_html(inp: dict, county: str, hazard: str) -> str:
 <main>
 {summary_html(sc, hazard)}
 {scope_html(sc, comms, hazard)}
+{guide_html(sc, comms, hazard)}
 {map_html(inp, county, hazard, sites)}
 {sites_html(sites, sc)}
-{needs_html(ms)}
+{needs_html(ms, partner_names(inp["partners"]))}
 {decisions_html(inp["match"], hazard)}
 {outreach_html(ms, langs, county)}
 {sources_html(inp)}

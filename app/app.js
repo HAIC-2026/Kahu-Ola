@@ -1,18 +1,20 @@
 /* Hawaiʻi ESF-6 Planning – offline app.
    Kahu Ola Invariant I: the user chooses the hazard. This app makes NO calls to NWS or any
-   upstream API; the only request is the local, pre-cached data bundle (data/bundle.json).
+   upstream API; the only requests are the local, pre-cached data bundle (data/bundle.json)
+   and, when online, the small same-origin data/version.json to spot newer planning data.
    No login, no analytics, no tracking, no location access. */
 "use strict";
 
 const BUNDLE_URL = "data/bundle.json";
+const VERSION_URL = "data/version.json";
 const SVG_NS = "http://www.w3.org/2000/svg";
 const RAMP = ["--ramp-1", "--ramp-2", "--ramp-3", "--ramp-4", "--ramp-5"];
 const MARKERS = {
-  "ok": ["circle", "Usable"],
-  "check": ["triangle", "Check: flood (SFHA)"],
-  "check (tract-level)": ["triangle", "Check: flood (tract-level)"],
-  "undetermined": ["diamond", "Flood risk undetermined (zone D)"],
-  "exclude": ["square", "Excluded: tsunami zone"],
+  "ok": ["circle", "Usable site"],
+  "check": ["triangle", "Check flood risk"],
+  "check (tract-level)": ["triangle", "Check flood risk"],
+  "undetermined": ["diamond", "Flood risk not mapped (FEMA zone D)"],
+  "exclude": ["square", "Not for this hazard"],
 };
 const STATUS_ORDER = ["ok", "check", "check (tract-level)", "undetermined", "exclude", "unlocated"];
 const MAIN_ISLANDS_WEST = -160.6;
@@ -57,6 +59,52 @@ function updateBanner() {
   const asOf = DATA ? DATA.meta.data_as_of : "last download";
   b.textContent = `Offline – data as of ${asOf}`;
   b.hidden = navigator.onLine;
+}
+
+/* ---------- data version and update notice ---------- */
+function showVersion() {
+  const text = `Data version ${DATA.meta.version} · Data as of ${DATA.meta.data_as_of}`;
+  document.getElementById("dataver").textContent = text;
+  document.getElementById("version").textContent = text;
+}
+
+/* When online, compare the server's version.json (never from a cache) with the bundle
+   this page is showing; offer a reload when newer planning data is published. */
+async function checkForUpdate() {
+  if (!DATA || !navigator.onLine) return;
+  try {
+    const res = await fetch(VERSION_URL, { cache: "no-store" });
+    if (!res.ok) return;
+    const latest = await res.json();
+    if (latest.version && latest.version !== DATA.meta.version) showUpdate(latest);
+  } catch (err) { /* offline or blocked: keep showing the cached data */ }
+}
+
+function showUpdate(latest) {
+  const b = document.getElementById("update");
+  const btn = el("button", { type: "button", class: "button" }, "Reload");
+  btn.addEventListener("click", reloadWithNewData);
+  b.replaceChildren(`New planning data available (data as of ${latest.data_as_of}) – `, btn);
+  b.hidden = false;
+}
+
+/* Fetch the new service worker (its cache name is a hash of every file), wait for it to
+   take over, then reload so the page reads the new bundle from the new cache. */
+async function reloadWithNewData() {
+  try {
+    const reg = "serviceWorker" in navigator ? await navigator.serviceWorker.getRegistration() : null;
+    if (reg) {
+      await reg.update();
+      const w = reg.installing || reg.waiting;
+      if (w && w.state !== "activated") {
+        await new Promise((done) => {
+          w.addEventListener("statechange", () => { if (w.state === "activated") done(); });
+          setTimeout(done, 15000);
+        });
+      }
+    }
+  } catch (err) { /* reload anyway */ }
+  location.reload();
 }
 
 /* ---------- map ---------- */
@@ -129,11 +177,12 @@ function renderMap(county, sc, sites, title) {
   }
 
   const legend = el("ul", { class: "legend", "aria-label": "Map legend" });
+  const names = needNames(bounds.length);
   let lo = 0;
   bounds.forEach((b, i) => {
     const sw = svg("svg", { width: 28, height: 16, "aria-hidden": "true" });
     sw.append(svg("rect", { width: 28, height: 16, fill: css(RAMP[i]), stroke: "#000" }));
-    legend.append(el("li", null, sw, `AFN need ${fmt(lo)}–${fmt(b)} people (class ${i + 1} of ${bounds.length})`));
+    legend.append(el("li", null, sw, names[i], " ", el("small", null, `(${fmt(lo)}–${fmt(b)} people)`)));
     lo = b;
   });
   const outline = (dashed, text) => {
@@ -142,8 +191,8 @@ function renderMap(county, sc, sites, title) {
       : { width: 28, height: 16, fill: "#fff", stroke: "#000", "stroke-width": "2" }));
     return el("li", null, sw, text);
   };
-  legend.append(outline(false, "Solid outline: tract in hazard footprint (at risk)"));
-  legend.append(outline(true, "Dashed outline: not in footprint"));
+  legend.append(outline(false, "Solid outline: Census area in the risk area"));
+  legend.append(outline(true, "Dashed outline: outside the risk area"));
   const seen = new Set();
   for (const [shape, label] of Object.values(MARKERS)) {
     if (seen.has(label)) continue; seen.add(label);
@@ -151,7 +200,53 @@ function renderMap(county, sc, sites, title) {
     sw.append(markerShape(shape, 14, 11, 6));
     legend.append(el("li", null, sw, label));
   }
-  return [el("div", { class: "map" }, root), legend];
+  const key = el("ol", { class: "sitekey", "aria-label": "Site key" },
+    sites.map((x) => el("li", null, el("b", null, String(x.n)),
+      ` = ${x.name} (${DATA.meta.site_key_status[x.st] || x.st})`)));
+  return [el("div", { class: "mapwrap" }, el("div", { class: "map" }, root),
+    el("div", null, el("h3", null, "Site key"), key)), legend];
+}
+
+function needNames(k) {
+  if (k <= 1) return ["People with needs"];
+  if (k === DATA.meta.need_names.length) return DATA.meta.need_names;
+  return ["Lowest need", ...Array(k - 2).fill("Middle"), "Highest need"];
+}
+
+/* community name first, Census area ID as a smaller second line */
+function community(main, sub) {
+  return [el("span", null, main), el("br"), el("small", null, sub || "")];
+}
+const source = (key) => el("p", { class: "src" }, DATA.meta.sources[key]);
+
+/* ---------- help panel ("?") ---------- */
+function helpPanel(sc, hazard) {
+  const s = sc.summary, C = DATA.meta.cols, ex = sc.largest[0];
+  const area = DATA.meta.footprint_text[s.footprint_rule] || s.footprint_rule;
+  const body = [];
+  if (ex) {
+    body.push(el("h3", null, "Example row"),
+      table("One row from the “Largest single community” table", [C.area, C.at_risk, C.shelter],
+        [[community(ex.label_main, ex.label_sub), fmt(ex.at_risk_pop), `${fmt(ex.low)} – ${fmt(ex.central)} – ${fmt(ex.high)}`]], [1, 2]),
+      el("p", null, `Read it as: about ${fmt(ex.at_risk_pop)} people live in the risk area of ${ex.label_main}. If this hazard hits, between ${fmt(ex.low)} and ${fmt(ex.high)} of them may need a public shelter; ${fmt(ex.central)} is the likely number.`));
+  }
+  body.push(
+    el("h3", null, "Census area"),
+    el("p", null, "A neighborhood-sized area the U.S. Census uses, usually 1,200–8,000 people. The number (for example “Census area 308”) is its Census ID. Each area is named after the Census place where most of its people live; “near” means no one in the area lives inside a named place, and “rural near” means most people live outside named places."),
+    el("h3", null, "Low – likely – high"),
+    el("p", null, `The share of people in the risk area who may go to a public shelter: low ${pct(s.rate_low)}, likely ${pct(s.rate_central)}, high ${pct(s.rate_high, 1)}. Where the rates come from: ${DATA.meta.rate_note[hazard]}`),
+    el("h3", null, "Who has access and functional needs (CMIST)"),
+    el("ul", null, DATA.meta.cmist.map(([k, v]) => el("li", null, el("strong", null, `${k}: `), v))),
+    el("h3", null, "County total vs. one community"),
+    el("p", null, `The county total counts ${area} as hit at the same time, so it is an upper bound. Use the “Largest single community” table to plan for an event that hits one community.`),
+    el("h3", null, "Map"),
+    el("p", null, "Darker blue means more people with needs, from “Lowest need” to “Highest need”. A solid outline marks a Census area in the risk area; a dashed outline is outside it. Symbols: ○ usable site, △ check flood risk, ◇ flood risk not mapped, ☒ not for this hazard. Numbers on the map match the site key."),
+    el("h3", null, "Why population numbers can differ"),
+    el("p", null, "People in the risk area come from ACS 2018–2022 estimates (through the CDC Social Vulnerability Index 2022). Community names use 2020 Census counts. County totals in the plan use Census estimates for 2025. Each table names its source underneath."),
+    el("p", { class: "note" }, el("strong", null, "Every number is a planning estimate. In an event, follow county announcements.")));
+  return el("details", { class: "help", id: "help" },
+    el("summary", null, el("span", { class: "help-icon", "aria-hidden": "true" }, "?"), " How to read this page"),
+    ...body);
 }
 
 /* ---------- views ---------- */
@@ -161,80 +256,91 @@ function render() {
   const sc = DATA.scenarios[`${county}|${hazard}`];
   const cLabel = Object.fromEntries(DATA.counties)[county];
   const hLabel = Object.fromEntries(DATA.hazards)[hazard];
-  const s = sc.summary;
+  const s = sc.summary, C = DATA.meta.cols;
   const app = document.getElementById("app");
   app.replaceChildren();
 
   // sites for this county/hazard, numbered like the playbook
   const sites = DATA.sites.filter((x) => x.county === county).map((x) => ({
     ...x, st: x.status[hazard] ? x.status[hazard][0] : "unlocated",
-    why: x.status[hazard] ? x.status[hazard][1] : "not located – not on map",
+    why: x.status[hazard] ? x.status[hazard][1] : "Address not located; not on the map",
   })).sort((a, b) => STATUS_ORDER.indexOf(a.st) - STATUS_ORDER.indexOf(b.st) || a.name.localeCompare(b.name));
   sites.forEach((x, i) => { x.n = i + 1; });
 
   const kpis = [
-    ["People at risk", fmt(s.at_risk_pop)],
-    ["Shelter demand (central)", fmt(s.shelter_demand_central)],
-    ["Shelter demand low – high", `${fmt(s.shelter_demand_low)} – ${fmt(s.shelter_demand_high)}`],
-    ["Limited English (C)", fmt(s.C_lep_at_risk)],
-    ["Power-dependent (M)", fmt(s.M_power_dependent_at_risk)],
-    ["Disability (I)", fmt(s.I_disability_at_risk)],
-    ["Age 65+ (I)", fmt(s.I_age65_at_risk)],
-    ["People without a vehicle (T)", fmt(s.T_no_vehicle_persons_at_risk)],
-    ["Known 2026 sites usable", fmt(s.known_sites_usable)],
+    [C.at_risk, fmt(s.at_risk_pop)],
+    ["May need a public shelter (likely)", fmt(s.shelter_demand_central)],
+    ["May need a public shelter (low – high)", `${fmt(s.shelter_demand_low)} – ${fmt(s.shelter_demand_high)}`],
+    [`${C.lep} (C)`, fmt(s.C_lep_at_risk)],
+    [`${C.power} (M)`, fmt(s.M_power_dependent_at_risk)],
+    [`${C.disability} (I)`, fmt(s.I_disability_at_risk)],
+    [`${C.age65} (I)`, fmt(s.I_age65_at_risk)],
+    [`${C.no_car} (T)`, fmt(s.T_no_vehicle_persons_at_risk)],
+    ["Known 2026 shelter sites usable for this hazard", fmt(s.known_sites_usable)],
   ];
-  if (hazard === "tsunami") kpis.push(["At risk, extreme tsunami zone (worst case)", fmt(s.at_risk_pop_extreme_zone)]);
+  if (hazard === "tsunami") kpis.push(["People in the extreme tsunami zone (worst case)", fmt(s.at_risk_pop_extreme_zone)]);
+  const area = DATA.meta.footprint_text[s.footprint_rule] || s.footprint_rule;
+  const largestTitle = "Largest single community (the Census areas with the most people who may need a shelter)";
 
   const L = DATA.languages[county];
   app.append(
     el("h2", { id: "summary" }, `${cLabel} – ${hLabel}`),
     el("p", null, el("strong", null, `Data as of ${DATA.meta.data_as_of}. `), DATA.meta.disclaimer),
+    helpPanel(sc, hazard),
     el("p", null, el("a", { class: "button", href: sc.playbook }, `⬇ Printable playbook (PDF): ${cLabel} – ${hLabel}`)),
     el("ul", { class: "kpis" }, kpis.map(([k, v]) => el("li", null, k, el("b", null, v)))),
-    el("p", null, `Shelter-seeking rates: low ${pct(s.rate_low)}, central ${pct(s.rate_central)}, high ${pct(s.rate_high, 1)}. One person can appear in more than one CMIST count.`),
+    source("summary"),
+    el("p", null, `Share of people in the risk area who may need a public shelter: low ${pct(s.rate_low)}, likely ${pct(s.rate_central)}, high ${pct(s.rate_high, 1)}. One person can be counted in more than one need. Open “How to read this page” for an explanation.`),
 
     el("h2", null, "Scope: county total vs. one community"),
-    el("p", { class: "note" }, el("strong", null, "County total = upper bound. "),
-      `It assumes every at-risk tract is hit at once (${s.footprint_rule}). Real events usually hit fewer communities.`),
+    el("p", { class: "note" }, el("strong", null, "The county total is an upper bound. "),
+      `It counts ${area} as hit at the same time. Real events usually hit fewer communities.`),
     table(hazard === "hurricane"
-      ? ["Largest single community (highest-demand census tracts)", el("br"),
-         el("span", { class: "caption-note" }, DATA.meta.hurricane_scope_note)]
-      : "Largest single community (highest-demand census tracts)",
-      ["Tract", "At risk", "Shelter low / central / high", "Limited English", "Power-dep.", "Disability", "65+", "No vehicle"],
-      sc.largest.map((c) => [c.tract_label || c.tract_fips, fmt(c.at_risk_pop), `${fmt(c.low)} / ${fmt(c.central)} / ${fmt(c.high)}`,
+      ? [largestTitle, el("br"), el("span", { class: "caption-note" }, DATA.meta.hurricane_scope_note)]
+      : largestTitle,
+      [C.area, C.at_risk, C.shelter, C.lep, C.power, C.disability, C.age65, C.no_car],
+      sc.largest.map((c) => [community(c.label_main || c.tract_label, c.label_sub), fmt(c.at_risk_pop),
+        `${fmt(c.low)} – ${fmt(c.central)} – ${fmt(c.high)}`,
         fmt(c.C_lep_at_risk), fmt(c.M_power_dependent_at_risk), fmt(c.I_disability_at_risk), fmt(c.I_age65_at_risk),
         fmt(c.T_no_vehicle_persons_at_risk)]), [1, 2, 3, 4, 5, 6, 7]),
+    source("people"),
 
-    el("h2", null, "Map: AFN need and known sites"),
-    ...renderMap(county, sc, sites, `${cLabel} ${hLabel}: AFN need by census tract and known shelter sites`),
-    el("p", null, "AFN need = power-dependent + disability + limited English + no-vehicle people at risk. Marker numbers match the sites table. Tract outlines only, no basemap."),
+    el("h2", null, "Map: people with needs and known sites"),
+    ...renderMap(county, sc, sites, `${cLabel} ${hLabel}: people with needs by Census area and known shelter sites`),
+    el("p", null, "Color = people in the risk area who speak English less than well, use power-dependent medical equipment, have a disability, or live without a car (a person can be counted more than once). No street map: Census area outlines only. Hover over an area to see its name."),
+    source("people"),
 
     el("h2", null, "Known sites (opened in 2026 events)"),
-    table("Sites with status for this hazard", ["#", "Status", "Site", "Address", "Reason", "Times opened 2026"],
+    table("Sites with status for this hazard", ["#", "Status for this hazard", "Site", "Address", "Why", "Times opened in 2026"],
       sites.map((x) => [x.n, el("span", { class: "status" }, DATA.status_labels[x.st] || "Not located"), x.name, x.address, x.why, x.times_opened_2026]), [0, 5]),
+    source("sites"),
     el("p", null, `Candidate public schools usable for this hazard: ${fmt(s.candidate_schools_usable)}. Not every site opens in every event; follow current county announcements.`),
 
     el("h2", null, "Needs and proposed partners"),
-    el("p", null, DATA.meta.role_status, " Pledged capacity stays blank until a partner confirms it."),
-    table("Needs (central estimate)", ["Need", "Quantity", "Unit", "Proposed lead", "Proposed support", "Pledged", "Gap"],
-      sc.needs.map((n) => [n[0], fmt(n[1]), n[2], n[3], n[4].replaceAll("; ", ", "), n[5] === "" ? "—" : fmt(n[5]), n[6]]), [1]),
+    el("p", null, DATA.meta.role_status, " The pledged column stays blank until a partner confirms it."),
+    table("Needs (likely estimate)", ["Need", "How many", "Unit", "Proposed lead", "Proposed support", "Pledged by partner", "Still needed"],
+      sc.needs.map((n) => [n[0], fmt(n[1]), n[2], n[3], n[4], n[5] === "" ? "—" : fmt(n[5]), n[6]]), [1]),
+    source("needs"),
 
     el("h2", null, "Decision points"),
     el("p", { class: "note" }, DATA.meta.decision_status),
     table("Before, during and after", ["When", "Trigger", "Action", "Owner (proposed)", "Support"],
       DATA.decision_points[hazard].map((d) => [el("strong", null, d[0].toUpperCase()), `${d[1]} (${d[2]})`, d[3], d[4], d[5].replaceAll("; ", ", ")])),
+    source("decisions"),
 
     el("h2", null, "Priority outreach and languages"),
-    table("Top 10 census tracts by AFN need (tract-level counts only)",
-      ["#", "Tract", "At risk", "Power-dep.", "Disability", "Limited English", "No vehicle", "AFN need"],
-      sc.priority_tracts.map((t) => [t.rank, t.tract_label || t.tract_fips, fmt(t.at_risk_pop), fmt(t.power_dependent), fmt(t.disability),
+    table("Top 10 Census areas by number of people with needs",
+      ["#", C.area, C.at_risk, C.power, C.disability, C.lep, C.no_car, C.needs_total],
+      sc.priority_tracts.map((t) => [t.rank, community(t.label_main || t.tract_label, t.label_sub), fmt(t.at_risk_pop), fmt(t.power_dependent), fmt(t.disability),
         fmt(t.limited_english), fmt(t.no_vehicle), fmt(t.afn_need_sum)]), [0, 2, 3, 4, 5, 6, 7]),
+    source("people"),
     L.note ? el("p", null, L.note) : null,
-    table(`People who speak English less than "very well" (${L.area}; ACS PUMS 2019-2023)`, ["Language", "People 5+", "90% MOE"],
+    table(`Languages: people age 5 and older who speak English less than “very well” (${L.area})`, ["Language", "People", "Margin of error (90%)"],
       L.rows.map((r) => [r[0], fmt(r[1]), `±${fmt(r[2])}`]), [1, 2]),
+    source("languages"),
     el("p", null, DATA.meta.privacy),
   );
-  document.getElementById("version").textContent = `Data version ${DATA.meta.version} · data as of ${DATA.meta.data_as_of}`;
+  showVersion();
 }
 
 function fillSelect(id, pairs) {
@@ -244,6 +350,7 @@ function fillSelect(id, pairs) {
 
 async function init() {
   window.addEventListener("online", updateBanner);
+  window.addEventListener("online", checkForUpdate);
   window.addEventListener("offline", updateBanner);
   updateBanner();
   if ("serviceWorker" in navigator) {
@@ -270,6 +377,7 @@ async function init() {
   document.getElementById("app").hidden = false;
   updateBanner();
   render();
+  checkForUpdate();
 }
 
 init();

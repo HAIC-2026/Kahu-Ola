@@ -31,8 +31,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import svgmap  # noqa: E402
-from build_playbooks import (AFN_PARTS, COUNTY_LABEL, DISCLAIMER, HAZARD_LABEL,  # noqa: E402
-                             HURRICANE_SCOPE_NOTE, KAUAI_MAUI_NOTE, STATUS_LABEL, largest_communities, load_inputs,
+from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, DISCLAIMER,  # noqa: E402
+                             FOOTPRINT_TEXT, HAZARD_LABEL, HURRICANE_SCOPE_NOTE, RATE_NOTE,
+                             SITE_KEY_STATUS, SOURCE, partner_names, partner_text, plain_reason,
+                             KAUAI_MAUI_NOTE, STATUS_LABEL, largest_communities, load_inputs,
                              scenario, sites_for, slug, tract_rows)
 from fetch_data import COUNTIES  # noqa: E402
 from match import select_languages  # noqa: E402
@@ -79,6 +81,7 @@ def tract_geometry(afn: dict, labels: dict | None = None) -> list:
 
 def build(inp: dict) -> dict:
     match = {(s["county"], s["hazard"]): s for s in inp["match"]["scenarios"]}
+    partners = partner_names(inp["partners"])
     sites, scenarios = {}, {}
     for c in COUNTIES:
         for h in HAZARDS:
@@ -94,7 +97,7 @@ def build(inp: dict) -> dict:
                     "times_opened_2026": s["times_opened_2026"],
                     "lon": s["lon"] and r4(s["lon"]), "lat": s["lat"] and r4(s["lat"]),
                     "status": {}})
-                site["status"][h] = [s["status"], s["reason"]]
+                site["status"][h] = [s["status"], plain_reason(s["reason"])]
             scenarios[key] = {
                 "summary": {k: sc.get(k) for k in SCENARIO_FIELDS if k in sc},
                 "tracts": {r["tract_fips"]: [round(float(r["at_risk_pop"])),
@@ -103,8 +106,10 @@ def build(inp: dict) -> dict:
                            for r in rows},
                 "largest": [{k: (round(v) if isinstance(v, float) else v) for k, v in x.items()}
                             for x in largest_communities(rows, rates)],
-                "needs": [[l["need"], l["quantity"], l["unit"], l["lead_partner_types"],
-                           l["support_partner_types"], l["pledged_capacity"],
+                "needs": [[l["need"], l["quantity"], l["unit"],
+                           partner_text(l["lead_partner_types"], partners),
+                           partner_text(l["support_partner_types"], partners),
+                           l["pledged_capacity"],
                            "confirm with partner" if l["gap"].startswith("unknown") else l["gap"]]
                           for l in ms["needs"]],
                 "priority_tracts": ms["priority_tracts"],
@@ -125,7 +130,10 @@ def build(inp: dict) -> dict:
                  "decision_status": "Proposed – supports, does not replace, county plans.",
                  "role_status": "Proposed – to be confirmed with partner.",
                  "hurricane_scope_note": HURRICANE_SCOPE_NOTE,
-                 "privacy": "Aggregate census-tract data and public facility names only. "
+                 "cols": COL, "cmist": CMIST, "rate_note": RATE_NOTE,
+                 "footprint_text": FOOTPRINT_TEXT, "sources": SOURCE,
+                 "site_key_status": SITE_KEY_STATUS, "need_names": svgmap.need_names(5),
+                 "privacy": "Counts for whole Census areas and public facility names only. "
                             "No individual records."},
         "counties": [[c, COUNTY_LABEL[c]] for c in COUNTIES],
         "hazards": [[h, HAZARD_LABEL[h]] for h in HAZARDS],

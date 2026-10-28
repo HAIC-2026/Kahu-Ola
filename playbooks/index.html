@@ -23,7 +23,18 @@ p, li { margin: 3pt 0; }
 table { width: 100%; border-collapse: collapse; margin: 6pt 0; font-size: 10.5pt; }
 th, td { border: 1px solid #000; padding: 3pt 5pt; text-align: left; vertical-align: top; }
 th { background: #e6e6e6; }
-td.num, th.num { text-align: right; white-space: nowrap; }
+td.num, th.num { text-align: right; }
+td.num { white-space: nowrap; }
+th { font-size: 9.5pt; line-height: 1.2; }
+td:first-child { min-width: 1.3in; }
+td small, .src, .range { font-size: 9pt; color: #333; }
+.src { margin: 0 0 8pt; }
+.mapwrap { display: grid; grid-template-columns: 2fr 1fr; gap: 10pt; align-items: start; }
+ol.sitekey { margin: 0; padding-left: 0; list-style: none; font-size: 10pt; }
+ol.sitekey li { margin: 0 0 3pt; }
+.guide h3 { margin-top: 8pt; }
+.guide p, .guide li { font-size: 11pt; }
+.example td { background: #f2f2f2; }
 tr { break-inside: avoid; }
 .page { break-before: page; }
 .map { border: 1px solid #000; }

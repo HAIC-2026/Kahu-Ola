@@ -282,6 +282,8 @@ def priority_tracts(tract_rows: list, county: str, hazard: str, n: int = TOP_TRA
         scored.append((round(sum(parts.values()), 1), r["tract_fips"], r, parts))
     scored.sort(key=lambda x: (-x[0], x[1]))
     return [{"rank": i, "tract_fips": fips, "tract_label": r.get("tract_label") or fips,
+             "label_main": r.get("label_main") or r.get("tract_label") or fips,
+             "label_sub": r.get("label_sub", ""),
              "at_risk_pop": round(float(r["at_risk_pop"])),
              "power_dependent": round(p["M_power_dependent_at_risk"]),
              "disability": round(p["I_disability_at_risk"]),
