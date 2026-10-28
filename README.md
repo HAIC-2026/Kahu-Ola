@@ -8,6 +8,8 @@ The full plan is in **[PLAN.md](PLAN.md)**.
 
 ## Access
 
+- **Official repository:** https://github.com/HAIC-2026/Kahu-Ola
+- **Mirror:** https://github.com/nguyenhuulong2222/haic2026-esf6-shelters (personal mirror of the same history)
 - **Demo:** https://shelters.kahuola.org (placeholder: not deployed yet)
 - **No login.** No accounts, no tracking, no location access.
 - **Offline:** after one visit the web app works in airplane mode, and it pre-caches all 20 printable playbooks.

@@ -1,7 +1,7 @@
 # Hawaiʻi ESF-6 AFN Planning Framework – AI-Developed Plan
 
 **HAIC 2026 · DHS challenge "Enhancing ESF-6 Planning Through AI-Supported Insights"**
-**Team Kahu Ola** · Data as of 2026-10-27 · Repository: this repo (all numbers below are read from files in it)
+**Team Kahu Ola** · Data as of 2026-10-27 · Official repository: https://github.com/HAIC-2026/Kahu-Ola (mirror: https://github.com/nguyenhuulong2222/haic2026-esf6-shelters). All numbers below are read from files in it.
 
 > Planning aid. Supports, does not replace, county emergency plans. Not an official shelter list.
 > Every role, decision point and message in this plan is **proposed – supports, does not replace, county plans**.
@@ -247,5 +247,7 @@ AI is **not** used at run time: the model, the matching, the playbooks and the a
 - **Tiffanie** – team captain, UI
 - **Long Nguyen** – data and AI pipeline
 - **Kim Quynh Do** – UI; Vietnamese review
+
+Official repository: https://github.com/HAIC-2026/Kahu-Ola · Mirror: https://github.com/nguyenhuulong2222/haic2026-esf6-shelters
 
 License: MIT (`LICENSE`).
