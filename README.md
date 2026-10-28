@@ -22,6 +22,7 @@ Requirements: Python 3.10+ (standard library only). PDF output also needs a loca
 python3 scripts/fetch_data.py               # SVI, NRI, tsunami zones, emPOWER, schools
 python3 scripts/fetch_flood_zones.py        # FEMA flood zone per site (cached)
 python3 scripts/fetch_languages.py          # ACS C16001 (secondary)
+python3 scripts/build_demographics.py       # Vintage 2025, ACS 2020-2024, 2020 Census: communities, race/ethnicity
 #    ACS PUMS: download the files listed in scripts/build_languages_pums.py into data/raw/pums/
 
 # 2. Rebuild everything from local data (offline, about 1 minute)
@@ -30,6 +31,7 @@ python3 scripts/build_map.py
 python3 scripts/build_shelters.py
 python3 scripts/model_needs.py
 python3 scripts/build_languages_pums.py
+python3 scripts/build_demographics.py --offline
 python3 scripts/match.py
 python3 scripts/build_playbooks.py          # add --html-only to skip PDFs
 python3 scripts/build_app_data.py           # app bundle and service worker; copies PDFs into app/

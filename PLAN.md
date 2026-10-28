@@ -52,6 +52,10 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 | DBEDT State of Hawaii Data Book 2024, Table 1.44 | Validation of the language counts | cited in `tests/test_languages_pums.py` |
 | ACS table C16001 (2020-2024 5-year) | Secondary language source | `data/sources/languages_by_county_c16001.csv` |
 | NWS / NHC / CPHC / PTWC product definitions | Decision-point triggers | URLs in `config/decision_points.json` |
+| Census Bureau Population Estimates, Vintage 2025 (`co-est2025-alldata`, `cc-est2025-alldata-15`) | County totals July 1, 2025; broad race groups | released 2026-06-25; `data/sources/county_population_2020_2025.csv` |
+| ACS 2020-2024 5-year: B01003 (places, counties), B02001, B02008–B02012, B03002, B02015, B02016, B02018, B02019 | Communities by island; detailed race/ethnicity by county | `data/sources/communities_by_island.csv`, `race_ethnicity_by_county.csv` |
+| 2020 Census PL 94-171 (P1) and DHC-A (T01001 by POPGROUP) | 2020 baseline and cross-check | same files, one table ID and URL per row |
+| DBEDT State Data Book 2025, Table 01.12 (island and CDP) | Assigns every CDP to an island; island totals | `data/sources/communities_by_island.csv` |
 
 ## 4. Privacy model
 
@@ -112,6 +116,43 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 | Hawaiʻi | Coastal flooding | 1,079 / **2,698** / 5,937 | 15001021300: 369 |
 
 Shelter-seeking rates (`config/planning_factors.json`): hurricane 2 / 3 / 5% (South Carolina EMD Annex G). Wildfire high 11.2%, the observed Lahaina 2023 rate (central and low are team assumptions). Tsunami and flood 2 / 5 / 11% (team assumption). Each scenario also has CMIST counts, resources (cots, floor space, water, meals, toilets, staff, power outlets, pet households) and an extreme-zone number for tsunami. These are in the playbooks.
+
+### 5.6 Who lives where
+
+Census publishes detailed race only down to county. **Honolulu County is Oʻahu and Hawaiʻi County is Hawaiʻi Island**, so those are island figures; **Maui County** (Maui, Molokaʻi, Lānaʻi, Kahoʻolawe) and **Kauaʻi County** (Kauaʻi, Niʻihau) are multi-island. Sources: `data/sources/county_population_2020_2025.csv`, `communities_by_island.csv`, `race_ethnicity_by_county.csv` (built by `scripts/build_demographics.py`; every row carries its table ID, URL and vintage).
+
+**County population, 2020 Census → July 1, 2025 (Vintage 2025):** Honolulu 1,016,508 → 988,703 (−2.7%); Hawaiʻi 200,629 → 210,043 (+4.7%); Maui 164,754 → 160,592 (−2.5%); Kauaʻi 73,298 → 73,400 (+0.1%); Kalawao 82 → 82.
+
+**Largest communities (Census Designated Places), ACS 2020-2024 5-year.** Island totals and the place-to-island assignment are from DBEDT Data Book 2025 Table 01.12.
+
+| Island (ACS total) | Largest communities (population ± 90% MOE) | Outside any CDP |
+|---|---|---|
+| Oʻahu (1,001,146) | Urban Honolulu 345,482 ±70; East Honolulu 51,360 ±2,103; Pearl City 44,547 ±1,921; Waipahu 40,482 ±2,530; Kailua 39,640 ±1,744 | 16,007 (1.6%) |
+| Hawaiʻi Island (205,769) | Hilo 50,404 ±2,228; Kailua (Kona) 21,818 ±2,034; Hawaiian Paradise Park 13,203 ±1,721; Kaiminani 11,465 ±1,347; Waimea 9,286 ±1,189 | 13,267 (6.4%) |
+| Maui (152,418) | Kahului 28,288 ±1,914; Kīhei 21,567 ±1,407; Wailuku 16,926 ±1,455; Waiheʻe-Waiehu 10,988 ±1,300; Lahaina 10,162 ±1,143 | Maui County, all islands: 4,225 (2.6%) |
+| Molokaʻi (8,728, includes Kalawao) | Kaunakakai 4,360 ±985; Kualapuʻu 2,535 ±421; ʻUalapuʻe 440 ±168; Maunaloa 293 ±133 | (in Maui County figure) |
+| Lānaʻi (3,443) | Lānaʻi City 3,393 ±431; Mānele 50 ±33 | (in Maui County figure) |
+| Kauaʻi (73,731) | Kapaʻa 11,094 ±1,301; Līhuʻe 7,901 ±872; Wailua Homesteads 5,431 ±920; Hanamāʻulu 4,972 ±832; Kalāheo 4,435 ±676 | Kauaʻi County, both islands: 2,722 (3.7%) |
+| Niʻihau | No Census Designated Places (DBEDT note) | (in Kauaʻi County figure) |
+
+**Largest detailed groups by county, ACS 2020-2024 5-year, alone or in any combination (% of county).** "Alone" counts are much smaller because about a quarter of residents report two or more races (27.0% statewide, B02001).
+
+| County | #1 | #2 | #3 | #4 |
+|---|---|---|---|---|
+| Honolulu (Oʻahu) | Filipino 252,603 (25.2%) | Japanese 241,669 (24.1%) | Native Hawaiian 196,688 (19.7%) | Chinese 173,593 (17.3%) |
+| Hawaiʻi (Hawaiʻi Island) | Native Hawaiian 63,390 (30.8%) | Filipino 45,200 (22.0%) | Japanese 38,478 (18.7%) | Chinese 26,464 (12.9%) |
+| Maui County (multi-island) | Filipino 49,560 (30.1%) | Native Hawaiian 41,614 (25.3%) | Japanese 23,883 (14.5%) | Chinese 18,146 (11.0%) |
+| Kauaʻi County (multi-island) | Filipino 24,637 (33.4%) | Native Hawaiian 18,341 (24.9%) | Japanese 13,705 (18.6%) | Chinese 7,500 (10.2%) |
+
+- **Native Hawaiian, statewide:** 320,047 ±5,615 alone or in any combination (22.1%) and 87,937 ±3,241 alone (ACS). The 2020 Census DHC-A count is 317,497 alone or in any combination and 94,025 alone.
+- **Pacific Islander groups with small counts and large margins:** Samoan 36,705 ±2,419, Tongan 9,504 ±1,335, Marshallese 9,232 ±1,460, Chamorro 7,246 ±1,260, Chuukese 5,153 ±1,589 and other Micronesian 17,765 ±2,554 statewide (alone or in any combination). Outside Honolulu several county estimates have margins as large as the estimate, and some differ widely from the 2020 count (e.g. Chuukese, Hawaiʻi County: ACS 114 ±95, 2020 Census 715). Use both columns, not one number.
+- **Suppressed in 2020 DHC-A:** "Other Micronesian" in every county (published statewide only: 11,481 alone), Chuukese in Kauaʻi County, and most groups in Kalawao. These cells are left blank, not estimated.
+
+**How this guides outreach.** Together with the language table (§5.4), these numbers tell each county which communities to reach through which trusted messengers:
+- Filipino residents are the largest group in Honolulu, Maui and Kauaʻi counties, and Ilocano and Tagalog/Filipino are the top two limited-English languages in Kauaʻi + Maui and in Honolulu. Messages in those languages can go through the trusted-messenger channel (faith-based groups and community nonprofits).
+- Native Hawaiian residents are about a quarter to a third of each neighbor-island county. OHA and Native Hawaiian organizations are listed trusted messengers (`config/communication.json`), and Hawaiian is always in each county's message languages.
+- Marshallese, Chuukese and other Micronesian residents are few in number, but limited-English speakers are counted: Chuukese 4,948 and Marshallese 1,021 in Honolulu, Marshallese 538 on Hawaiʻi Island and 633 in Kauaʻi + Maui (`languages_by_county.csv`). Those messages need human translators and Micronesian-led community partners (§10, item 9).
+- Roles stay "proposed – to be confirmed with partner". The numbers say where people live; they say nothing about individual needs.
 
 ## 6. The three DHS metrics
 
@@ -198,6 +239,8 @@ AI is **not** used at run time: the model, the matching, the playbooks and the a
    - limited-English counts in shelter (CDC SVI, "less than well") and the language mix (PUMS, "less than very well") use different definitions.
 8. **Not yet modeled:** earthquake, sheltering in place (including high-rise power loss), and shelter-in-place support, all named in the challenge PDF (pp. 4, 8).
 9. **Messages:** all drafts need native-speaker and county review. **Chuukese and Marshallese need human translators.** Next: request translators through the Hawaiʻi State Office of Language Access (Department of Health; it keeps an interpreter roster and publishes materials in Chuukese and Marshallese: https://health.hawaii.gov/ola/), or through community partners such as We Are Oceania, a Micronesian-led organization whose helpline offers help in Chuukese and Marshallese (Civil Beat resource guide: https://www.civilbeat.org/covid-19-resources/). Confirm availability with each organization; the helpline listing dates from the COVID-19 response.
+10. **Population figures predate the Lahaina fire.** CDC SVI 2022 (ACS 2018-2022) and the 2020 Census mostly predate the **August 8, 2023 Lahaina fire**, so West Maui tract populations in the AFN layer may be overstated. ACS 2020-2024 shows Lahaina CDP at 10,162 ±1,143 against 12,702 in the 2020 Census, and part of that 5-year window is before the fire. Planners should use current County of Maui figures for Lahaina.
+11. **TODO – ACS 2025 1-year (released October 29, 2026):** refresh county figures for Honolulu, Hawaiʻi, Maui and Kauaʻi counties (`scripts/build_demographics.py`). Kalawao is too small for 1-year data and keeps the 5-year figures.
 
 ## 11. Team
 
