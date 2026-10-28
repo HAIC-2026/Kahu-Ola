@@ -7,10 +7,13 @@
 <meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#0b3d6b">
 <title>Hawaiʻi ESF-6 Planning</title>
+<meta name="description" content="Offline planning aid for Hawaiʻi ESF-6 mass care: where people with access and functional needs live, shelter needs by county and hazard, proposed partners, decision points and message drafts. Supports, does not replace, county emergency plans.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="stylesheet" href="styles.css">
+<link rel="preload" href="data/bundle.json" as="fetch" crossorigin>
+<script src="app.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -18,7 +21,7 @@
   <h1>Hawaiʻi ESF-6 Planning</h1>
   <p class="disclaimer">Planning aid. Supports, does not replace, county emergency plans. Not an official shelter list.</p>
   <p id="dataver" class="dataver">Loading data version…</p>
-  <nav id="menu" class="menu" aria-label="Main menu" hidden>
+  <nav id="menu" class="menu" aria-label="Main menu">
     <a id="nav-plan" href="#plan">Plan</a>
     <a id="nav-messages" href="#messages">Messages</a>
   </nav>
@@ -26,18 +29,21 @@
 <div id="update" class="banner update" role="status" aria-live="polite" hidden></div>
 <div id="offline" class="banner" role="status" aria-live="polite" hidden></div>
 
-<form id="controls" class="controls" aria-label="Choose county and hazard" hidden>
+<form id="controls" class="controls" aria-label="Choose county and hazard">
   <label for="county">County</label>
-  <select id="county" name="county"></select>
+  <select id="county" name="county" disabled></select>
   <label for="hazard">Hazard</label>
-  <select id="hazard" name="hazard"></select>
+  <select id="hazard" name="hazard" disabled></select>
   <p class="hint">You choose the hazard. This app does not read live alerts or call any outside service.</p>
 </form>
 
 <main id="main" tabindex="-1">
-  <section id="fallback" class="fallback">
+  <section id="fallback" class="fallback" role="status" hidden>
     <h2>Loading planning data…</h2>
-    <p>If this message stays, the data could not be loaded. The printable playbooks below work on their own.</p>
+    <p>The printable playbooks at the bottom of the page work on their own.</p>
+  </section>
+  <noscript>
+    <p class="fallback">This app needs JavaScript for the interactive view. Use the printable playbooks:</p>
 <!-- BEGIN GENERATED PDF LINKS -->
 <ul>
 <li>Kauaʻi: <a href="playbooks/kauai_hurricane.pdf">Hurricane</a> · <a href="playbooks/kauai_wildfire.pdf">Wildfire</a> · <a href="playbooks/kauai_tsunami.pdf">Tsunami</a> · <a href="playbooks/kauai_inland_flood.pdf">Inland flooding</a> · <a href="playbooks/kauai_coastal_flood.pdf">Coastal flooding</a></li>
@@ -46,15 +52,22 @@
 <li>Hawaiʻi: <a href="playbooks/hawaii_hurricane.pdf">Hurricane</a> · <a href="playbooks/hawaii_wildfire.pdf">Wildfire</a> · <a href="playbooks/hawaii_tsunami.pdf">Tsunami</a> · <a href="playbooks/hawaii_inland_flood.pdf">Inland flooding</a> · <a href="playbooks/hawaii_coastal_flood.pdf">Coastal flooding</a></li>
 </ul>
 <!-- END GENERATED PDF LINKS -->
-  </section>
-  <noscript><p class="fallback">This app needs JavaScript for the interactive view. Use the printable playbooks listed above.</p></noscript>
-  <div id="app" hidden></div>
+  </noscript>
+  <div id="app"></div>
 </main>
 
 <footer class="site-footer">
+  <h2 class="footer-title">Printable playbooks (PDF)</h2>
+<!-- BEGIN GENERATED FOOTER PDF LINKS -->
+<ul>
+<li>Kauaʻi: <a href="playbooks/kauai_hurricane.pdf">Hurricane</a> · <a href="playbooks/kauai_wildfire.pdf">Wildfire</a> · <a href="playbooks/kauai_tsunami.pdf">Tsunami</a> · <a href="playbooks/kauai_inland_flood.pdf">Inland flooding</a> · <a href="playbooks/kauai_coastal_flood.pdf">Coastal flooding</a></li>
+<li>Honolulu: <a href="playbooks/honolulu_hurricane.pdf">Hurricane</a> · <a href="playbooks/honolulu_wildfire.pdf">Wildfire</a> · <a href="playbooks/honolulu_tsunami.pdf">Tsunami</a> · <a href="playbooks/honolulu_inland_flood.pdf">Inland flooding</a> · <a href="playbooks/honolulu_coastal_flood.pdf">Coastal flooding</a></li>
+<li>Maui: <a href="playbooks/maui_hurricane.pdf">Hurricane</a> · <a href="playbooks/maui_wildfire.pdf">Wildfire</a> · <a href="playbooks/maui_tsunami.pdf">Tsunami</a> · <a href="playbooks/maui_inland_flood.pdf">Inland flooding</a> · <a href="playbooks/maui_coastal_flood.pdf">Coastal flooding</a></li>
+<li>Hawaiʻi: <a href="playbooks/hawaii_hurricane.pdf">Hurricane</a> · <a href="playbooks/hawaii_wildfire.pdf">Wildfire</a> · <a href="playbooks/hawaii_tsunami.pdf">Tsunami</a> · <a href="playbooks/hawaii_inland_flood.pdf">Inland flooding</a> · <a href="playbooks/hawaii_coastal_flood.pdf">Coastal flooding</a></li>
+</ul>
+<!-- END GENERATED FOOTER PDF LINKS -->
   <p>Counts for whole Census areas and public facility names only. No individual records. No login, no tracking, no location access.</p>
   <p id="version"></p>
 </footer>
-<script src="app.js"></script>
 </body>
 </html>

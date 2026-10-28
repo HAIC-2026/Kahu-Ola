@@ -35,7 +35,8 @@ import svgmap  # noqa: E402
 from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, DISCLAIMER,  # noqa: E402
                              FOOTPRINT_TEXT, HAZARD_LABEL, HURRICANE_SCOPE_NOTE, PROV_NUMBERS,
                              PROV_SHELTERS, RATE_NOTE,
-                             SITE_KEY_STATUS, SOURCE, partner_names, partner_text, plain_reason,
+                             SITE_KEY_STATUS, SOURCE, area_label, lang_label, partner_names,
+                             partner_text, plain_reason,
                              KAUAI_MAUI_NOTE, STATUS_LABEL, largest_communities, load_inputs,
                              scenario, sites_for, slug, tract_rows)
 from fetch_data import COUNTIES  # noqa: E402
@@ -108,7 +109,7 @@ def build(inp: dict) -> dict:
                            for r in rows},
                 "largest": [{k: (round(v) if isinstance(v, float) else v) for k, v in x.items()}
                             for x in largest_communities(rows, rates)],
-                "needs": [[l["need"], l["quantity"], l["unit"],
+                "needs": [[lang_label(l["need"]), l["quantity"], l["unit"],
                            partner_text(l["lead_partner_types"], partners),
                            partner_text(l["support_partner_types"], partners),
                            l["pledged_capacity"],
@@ -120,12 +121,12 @@ def build(inp: dict) -> dict:
     languages = {}
     for c in COUNTIES:
         sel = select_languages(inp["languages"].get(c, []), inp["comm"])
-        languages[c] = {"area": sel[0]["area"] if sel else "",
+        languages[c] = {"area": area_label(sel[0]["area"]) if sel else "",
                         "note": KAUAI_MAUI_NOTE if c in ("Kauai", "Maui") else "",
-                        "rows": [[l["language"], l["speak_english_less_than_very_well"],
+                        "rows": [[lang_label(l["language"]), l["speak_english_less_than_very_well"],
                                   l["moe_90"]] for l in sel]}
     decisions = {h: [[d["timing"], d["trigger"], d["issuer"], d["action"], d["owner_name"],
-                      d["support"]] for d in inp["match"]["decision_points"][h]]
+                      partner_text(d["support"], partners)] for d in inp["match"]["decision_points"][h]]
                  for h in HAZARDS}
     bundle = {
         "meta": {"data_as_of": inp["data_as_of"], "disclaimer": DISCLAIMER,
@@ -210,8 +211,9 @@ def main(argv=None) -> int:
             f'<a href="playbooks/{slug(c, h)}.pdf">{escape(HAZARD_LABEL[h])}</a>'
             for h in HAZARDS) + "</li>" for c in COUNTIES)
     idx = (APP / "index.html").read_text(encoding="utf-8")
-    idx = replace_block(idx, "<!-- BEGIN GENERATED PDF LINKS -->",
-                        "<!-- END GENERATED PDF LINKS -->", f"<ul>\n{links}\n</ul>")
+    for marker in ("PDF LINKS", "FOOTER PDF LINKS"):       # <noscript> list and footer list
+        idx = replace_block(idx, f"<!-- BEGIN GENERATED {marker} -->",
+                            f"<!-- END GENERATED {marker} -->", f"<ul>\n{links}\n</ul>")
     (APP / "index.html").write_text(idx, encoding="utf-8")
 
     data_files = sorted(f"data/{p.name}" for p in DATA.iterdir() if p.is_file())

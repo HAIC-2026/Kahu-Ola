@@ -140,3 +140,18 @@ details.help summary { cursor: pointer; font-weight: 700; }
 .badge.draft { background: var(--color-warn-bg); color: var(--color-warn-text); }
 .badge.reviewed { background: var(--color-surface); }
 .tag { margin-left: var(--space-1); font-size: var(--font-size-small); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 0 var(--space-1); }
+
+/* touch targets (at least 44 px), readable small text, no layout jump on load */
+#app { min-height: 100vh; }
+.menu a, .button, .skip:focus { min-height: 44px; display: inline-flex; align-items: center; }
+details > summary { min-height: 44px; padding: var(--space-2) 0; }
+.prov a, .src a { display: inline-flex; align-items: center; min-height: 44px; }
+.button, .msg small { font-size: 1rem; }
+.msg-filters input[type="checkbox"] { width: 24px; height: 24px; margin: 0; }
+.msg-filters .check { min-height: 44px; padding: var(--space-1) var(--space-2); }
+.footer-title { font-size: 1rem; margin: var(--space-3) 0 var(--space-1); }
+details.areas ul { columns: 2; font-size: var(--font-size-small); }
+@media (max-width: 480px) {
+  .map svg text { font-size: 26px; }   /* viewBox is 720 wide: about 13 px on a 390 px screen */
+  details.areas ul { columns: 1; }
+}

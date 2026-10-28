@@ -18,8 +18,8 @@ NOT_AT_RISK = "#ffffff"
 # Site status -> (marker shape, label). Shape + label, never color alone.
 MARKERS = {
     "ok": ("circle", "Usable site"),
-    "check": ("triangle", "Check flood risk"),
-    "check (tract-level)": ("triangle", "Check flood risk"),
+    "check": ("triangle", "Check flood zone"),
+    "check (tract-level)": ("triangle", "Check flood zone"),
     "undetermined": ("diamond", "Flood risk not mapped (FEMA zone D)"),
     "exclude": ("square", "Not for this hazard"),
 }

@@ -17,7 +17,7 @@ PLAY = ROOT / "playbooks"
 BUNDLE = json.loads((APP / "data" / "bundle.json").read_text(encoding="utf-8"))
 JS = (APP / "app.js").read_text(encoding="utf-8")
 ROWS = ml.load_messages()
-WORDS = re.compile(r"\bAI\b|Claude")
+WORDS = re.compile(r"(?<![A-Za-z])AI(?![A-Za-z])|Claude")    # also catches "HAIC_AI"
 TEXT = (".html", ".js", ".css", ".json", ".webmanifest", ".svg", "")
 
 
@@ -68,14 +68,19 @@ class ReviewStatus(unittest.TestCase):
             m = bundled[(r["file"], r["message_id"])]
             approved = (r["approved"].strip().lower() == "yes" and r["reviewed_by"].strip()
                         and r["review_date"].strip())
-            self.assertEqual(m["status"], "Reviewed" if approved else "Draft — not yet reviewed",
-                             (r["file"], r["message_id"]))
+            want = ("Reviewed" if approved else
+                    "Needs a translator" if not r["text"].strip() else "Draft — not yet reviewed")
+            self.assertEqual(m["status"], want, (r["file"], r["message_id"]))
             self.assertEqual(m["text"], r["text"])
 
     def test_only_two_statuses_and_rule_edges(self):
         self.assertEqual({m["status"] for m in BUNDLE["messages"]} - {"Reviewed"},
-                         {"Draft — not yet reviewed"})
-        base = {"approved": "yes", "reviewed_by": "A. Reviewer", "review_date": "2026-11-01"}
+                         {"Draft — not yet reviewed", "Needs a translator"})
+        for m in BUNDLE["messages"]:
+            if m["language"] in ("Chuukese", "Marshallese"):
+                self.assertEqual(m["status"], "Needs a translator")
+        base = {"approved": "yes", "reviewed_by": "A. Reviewer", "review_date": "2026-11-01",
+                "text": "x"}
         self.assertEqual(ml.review_status(base), "Reviewed")
         for missing in ("reviewed_by", "review_date"):
             self.assertEqual(ml.review_status({**base, missing: ""}), "Draft — not yet reviewed")
@@ -83,7 +88,15 @@ class ReviewStatus(unittest.TestCase):
 
     def test_badge_shows_bundle_status(self):
         self.assertIn("badge(m.status)", JS)
-        self.assertIn('status === "Reviewed" ? "badge reviewed" : "badge draft"', JS)
+        self.assertIn('status === "Reviewed" ? "badge reviewed" : status === "Needs a translator" ? "badge human" : "badge draft"', JS)
+
+    def test_badge_counts_agree(self):
+        # the counts table's "Waiting for a translator" equals the rows badged that way
+        badged = {}
+        for m in BUNDLE["messages"]:
+            badged[m["language"]] = badged.get(m["language"], 0) + (m["status"] == "Needs a translator")
+        for c in BUNDLE["message_counts"]:
+            self.assertEqual(c["placeholders"], badged[c["language"]], c["language"])
 
     def test_counts_match_files(self):
         got = {c["language"]: (c["rows"], c["reviewed"]) for c in BUNDLE["message_counts"]}

@@ -60,14 +60,18 @@ def message_counts(rows: list) -> list:
 
 REVIEWED = "Reviewed"
 DRAFT = "Draft — not yet reviewed"
+NEEDS_TRANSLATOR = "Needs a translator"
 NOTE_HIDDEN = re.compile(r"\bAI\b|Claude|model output", re.I)
 
 
 def review_status(r: dict) -> str:
-    """'Reviewed' only with approval, a named reviewer and a review date."""
+    """'Reviewed' only with approval, a named reviewer and a review date; a row with no
+    text yet is 'Needs a translator'; everything else is a draft."""
     ok = (r["approved"].strip().lower() == "yes" and r["reviewed_by"].strip()
           and r["review_date"].strip())
-    return REVIEWED if ok else DRAFT
+    if ok:
+        return REVIEWED
+    return NEEDS_TRANSLATOR if not r.get("text", "").strip() else DRAFT
 
 
 def bundle_messages(rows: list | None = None) -> list:

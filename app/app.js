@@ -11,8 +11,8 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 const RAMP = ["--ramp-1", "--ramp-2", "--ramp-3", "--ramp-4", "--ramp-5"];
 const MARKERS = {
   "ok": ["circle", "Usable site"],
-  "check": ["triangle", "Check flood risk"],
-  "check (tract-level)": ["triangle", "Check flood risk"],
+  "check": ["triangle", "Check flood zone"],
+  "check (tract-level)": ["triangle", "Check flood zone"],
   "undetermined": ["diamond", "Flood risk not mapped (FEMA zone D)"],
   "exclude": ["square", "Not for this hazard"],
 };
@@ -41,7 +41,11 @@ function svg(tag, attrs) {
 }
 const fmt = (v) => (v === null || v === undefined || v === "" ? "–" :
   typeof v === "number" ? Math.round(v).toLocaleString("en-US") : String(v));
-const pct = (v, d = 0) => `${(v * 100).toFixed(d)}%`;
+/* percent with a decimal only when needed: 0.112 -> "11.2%", 0.11 -> "11%" */
+const pct = (v) => {
+  const p = Math.round(v * 1000) / 10;
+  return Number.isInteger(p) ? `${p}%` : `${p.toFixed(1)}%`;
+};
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 function table(caption, headers, rows, numCols = []) {
@@ -49,7 +53,8 @@ function table(caption, headers, rows, numCols = []) {
     el("th", { scope: "col", class: numCols.includes(i) ? "num" : null }, h)));
   const body = rows.map((r) => el("tr", null, r.map((c, i) =>
     el("td", { class: numCols.includes(i) ? "num" : null }, c))));
-  return el("div", { class: "table-wrap" },
+  const name = Array.isArray(caption) ? caption[0] : caption;
+  return el("div", { class: "table-wrap", tabindex: "0", role: "region", "aria-label": name },
     el("table", null, el("caption", null, caption), el("thead", null, head), el("tbody", null, body)));
 }
 
@@ -203,8 +208,14 @@ function renderMap(county, sc, sites, title) {
   const key = el("ol", { class: "sitekey", "aria-label": "Site key" },
     sites.map((x) => el("li", null, el("b", null, String(x.n)),
       ` = ${x.name} (${DATA.meta.site_key_status[x.st] || x.st})`)));
+  // the same areas as a list, readable by keyboard and screen reader
+  const risk = tracts.filter((tr) => tr.f in sc.tracts)
+    .sort((a, b) => (afn[b.f] || 0) - (afn[a.f] || 0));
+  const areas = el("details", { class: "areas" },
+    el("summary", null, `Census areas on this map in the risk area (${risk.length})`),
+    el("ul", null, risk.map((tr) => el("li", null, `${tr.l || tr.f}: ${fmt(afn[tr.f])} people with needs`))));
   return [el("div", { class: "mapwrap" }, el("div", { class: "map" }, root),
-    el("div", null, el("h3", null, "Site key"), key)), legend];
+    el("div", null, el("h3", null, "Site key"), key)), legend, areas];
 }
 
 function needNames(k) {
@@ -217,7 +228,13 @@ function needNames(k) {
 function community(main, sub) {
   return [el("span", null, main), el("br"), el("small", null, sub || "")];
 }
-const source = (key) => el("p", { class: "src" }, DATA.meta.sources[key]);
+/* source line; "{SOURCES}" becomes a "see Sources" link (the PDFs say "section 8") */
+const source = (key) => {
+  const parts = DATA.meta.sources[key].split("{SOURCES}");
+  return el("p", { class: "src" }, parts.flatMap((part, i) => (i
+    ? [el("a", { href: DATA.provenance.sources_url, rel: "noopener noreferrer" }, "see Sources"), part]
+    : [part])));
+};
 
 /* ---------- help panel ("?") ---------- */
 function helpPanel(sc, hazard) {
@@ -234,13 +251,13 @@ function helpPanel(sc, hazard) {
     el("h3", null, "Census area"),
     el("p", null, "A neighborhood-sized area the U.S. Census uses, usually 1,200–8,000 people. The number (for example “Census area 308”) is its Census ID. Each area is named after the Census place where most of its people live; “near” means no one in the area lives inside a named place, and “rural near” means most people live outside named places."),
     el("h3", null, "Low – likely – high"),
-    el("p", null, `The share of people in the risk area who may go to a public shelter: low ${pct(s.rate_low)}, likely ${pct(s.rate_central)}, high ${pct(s.rate_high, 1)}. Where the rates come from: ${DATA.meta.rate_note[hazard]}`),
+    el("p", null, `The share of people in the risk area who may go to a public shelter: low ${pct(s.rate_low)}, likely ${pct(s.rate_central)}, high ${pct(s.rate_high)}. Where the rates come from: ${DATA.meta.rate_note[hazard]}`),
     el("h3", null, "Who has access and functional needs (CMIST)"),
     el("ul", null, DATA.meta.cmist.map(([k, v]) => el("li", null, el("strong", null, `${k}: `), v))),
     el("h3", null, "County total vs. one community"),
     el("p", null, `The county total counts ${area} as hit at the same time, so it is an upper bound. Use the “Largest single community” table to plan for an event that hits one community.`),
     el("h3", null, "Map"),
-    el("p", null, "Darker blue means more people with needs, from “Lowest need” to “Highest need”. A solid outline marks a Census area in the risk area; a dashed outline is outside it. Symbols: ○ usable site, △ check flood risk, ◇ flood risk not mapped, ☒ not for this hazard. Numbers on the map match the site key."),
+    el("p", null, "Darker blue means more people with needs, from “Lowest need” to “Highest need”. A solid outline marks a Census area in the risk area; a dashed outline is outside it. Symbols: ○ usable site, △ check flood zone, ◇ flood risk not mapped, ☒ not for this hazard. Numbers on the map match the site key."),
     el("h3", null, "Why population numbers can differ"),
     el("p", null, "People in the risk area come from ACS 2018–2022 estimates (through the CDC Social Vulnerability Index 2022). Community names use 2020 Census counts. County totals in the plan use Census estimates for 2025. Each table names its source underneath."),
     el("p", { class: "note" }, el("strong", null, "Every number is a planning estimate. In an event, follow county announcements.")));
@@ -296,7 +313,8 @@ function copyButton(text) {
 }
 
 function badge(status) {
-  return el("span", { class: status === "Reviewed" ? "badge reviewed" : "badge draft" }, status);
+  const kind = status === "Reviewed" ? "badge reviewed" : status === "Needs a translator" ? "badge human" : "badge draft";
+  return el("span", { class: kind }, status);
 }
 
 function renderMessages() {
@@ -393,13 +411,12 @@ function renderPlan() {
   const L = DATA.languages[county];
   app.append(
     el("h2", { id: "summary" }, `${cLabel} – ${hLabel}`),
-    el("p", null, el("strong", null, `Data as of ${DATA.meta.data_as_of}. `), DATA.meta.disclaimer),
     helpPanel(sc, hazard),
     provLabel(DATA.provenance.numbers, DATA.provenance.sources_url),
     el("p", null, el("a", { class: "button", href: sc.playbook }, `⬇ Printable playbook (PDF): ${cLabel} – ${hLabel}`)),
     el("ul", { class: "kpis" }, kpis.map(([k, v]) => el("li", null, k, el("b", null, v)))),
     source("summary"),
-    el("p", null, `Share of people in the risk area who may need a public shelter: low ${pct(s.rate_low)}, likely ${pct(s.rate_central)}, high ${pct(s.rate_high, 1)}. One person can be counted in more than one need. Open “How to read this page” for an explanation.`),
+    el("p", null, `Share of people in the risk area who may need a public shelter: low ${pct(s.rate_low)}, likely ${pct(s.rate_central)}, high ${pct(s.rate_high)}. One person can be counted in more than one need. Open “How to read this page” for an explanation.`),
 
     el("h2", null, "Scope: county total vs. one community"),
     el("p", { class: "note" }, el("strong", null, "The county total is an upper bound. "),
@@ -448,7 +465,6 @@ function renderPlan() {
     table(`Languages: people age 5 and older who speak English less than “very well” (${L.area})`, ["Language", "People", "Margin of error (90%)"],
       L.rows.map((r) => [r[0], fmt(r[1]), `±${fmt(r[2])}`]), [1, 2]),
     source("languages"),
-    el("p", null, DATA.meta.privacy),
   );
   showVersion();
 }
@@ -466,27 +482,29 @@ async function init() {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js").catch(() => { /* app still works online */ });
   }
+  // show "Loading…" only if the data takes more than 2 s (avoids a layout jump)
+  const fb = document.getElementById("fallback");
+  const slow = setTimeout(() => { if (!DATA) fb.hidden = false; }, 2000);
   try {
     const res = await fetch(BUNDLE_URL);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     DATA = await res.json();
   } catch (err) {
-    const fb = document.getElementById("fallback");
+    clearTimeout(slow);
     fb.querySelector("h2").textContent = "Planning data could not be loaded";
-    fb.querySelector("p").textContent = "The printable playbooks below work on their own.";
-    fb.prepend(el("p", { class: "note warn", role: "alert" },
-      "The interactive view is unavailable right now. The printable playbooks below still work."));
+    fb.querySelector("p").textContent = "The printable playbooks at the bottom of the page still work.";
+    fb.setAttribute("role", "alert");
+    fb.hidden = false;
     return;
   }
+  clearTimeout(slow);
+  fb.hidden = true;
   fillSelect("county", DATA.counties);
   fillSelect("hazard", DATA.hazards);
-  document.getElementById("controls").hidden = false;
+  for (const id of ["county", "hazard"]) document.getElementById(id).disabled = false;
   document.getElementById("controls").addEventListener("change", () => { MSG.county = null; render(); });
-  window.addEventListener("hashchange", render);
-  document.getElementById("menu").hidden = false;
   document.getElementById("controls").addEventListener("submit", (e) => e.preventDefault());
-  document.getElementById("fallback").hidden = true;
-  document.getElementById("app").hidden = false;
+  window.addEventListener("hashchange", render);
   updateBanner();
   render();
   checkForUpdate();
