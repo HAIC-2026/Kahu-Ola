@@ -113,3 +113,37 @@ class ZoneIndex:
                   if any(b[0] <= x <= b[2] and b[1] <= y <= b[3]
                          and point_in_geometry(x, y, g) for b, g, _, _ in near))
         return hit / len(pts)
+
+
+def area_centroid(geom: dict) -> tuple:
+    """Area-weighted centroid (lon, lat) of a Polygon/MultiPolygon (outer rings minus holes)."""
+    polys = [geom["coordinates"]] if geom["type"] == "Polygon" else geom["coordinates"]
+    a_sum = cx = cy = 0.0
+    for poly in polys:
+        for k, ring in enumerate(poly):
+            sign = 1.0 if k == 0 else -1.0
+            for (x0, y0, *_), (x1, y1, *_) in zip(ring, ring[1:]):
+                cross = x0 * y1 - x1 * y0
+                a_sum += sign * cross
+                cx += sign * (x0 + x1) * cross
+                cy += sign * (y0 + y1) * cross
+    if abs(a_sum) < 1e-15:
+        return representative_point(geom)
+    return cx / (3 * a_sum), cy / (3 * a_sum)
+
+
+def haversine_km(lon1: float, lat1: float, lon2: float, lat2: float) -> float:
+    """Straight-line (great-circle) distance in km."""
+    import math
+    r = 6371.0088
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dp, dl = p2 - p1, math.radians(lon2 - lon1)
+    h = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+    return 2 * r * math.asin(math.sqrt(h))
+
+
+def nearest(point: tuple, sites: list, k: int = 3) -> list:
+    """k nearest sites [(km, site)], sites = [{"lon", "lat", ...}], ties by name."""
+    lon, lat = point
+    scored = [(haversine_km(lon, lat, s["lon"], s["lat"]), s.get("name", ""), s) for s in sites]
+    return [(km, s) for km, _n, s in sorted(scored, key=lambda x: (x[0], x[1]))[:k]]

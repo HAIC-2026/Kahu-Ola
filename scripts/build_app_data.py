@@ -32,6 +32,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import message_library  # noqa: E402
 import svgmap  # noqa: E402
+from geo import area_centroid  # noqa: E402
 from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, COUNTY_LINE_LABEL,  # noqa: E402
                              DETAIL_KEYS, DISCLAIMER, KALAWAO_NOTE, SERVICE_ANIMALS, WHO_ELSE,
                              results_data,
@@ -68,6 +69,48 @@ def r4(v: float) -> float:
     return round(v, 4)
 
 
+# Census-area counts for the detail panel (whole area; the app multiplies by the share in
+# the risk area, people at risk / population, the same way model_needs.py does)
+AREA_FIELDS = [("lep", "C_limited_english"), ("power", "M_power_dependent_est"),
+               ("disability", "I_disability"), ("age65", "I_age_65_plus"),
+               ("no_car", "T_no_car_persons"), ("hearing", "C_hearing_difficulty"),
+               ("vision", "C_vision_difficulty"), ("cognitive", "I_cognitive_difficulty"),
+               ("age65_alone", "S_age65_living_alone")]
+OVERLAY_TOL = 0.0015          # degrees (~150 m) for the tsunami zone outline
+ISLAND_COUNTY = {"OAHU": "Honolulu", "HAWAII": "Hawaii", "MAUI": "Maui", "MOLOKAI": "Maui",
+                 "LANAI": "Maui", "KAUAI": "Kauai", "NIIHAU": "Kauai"}
+OFFICIAL_MAP = {"label": "Open official State map",
+                "url": "https://geoportal.hawaii.gov/",
+                "source": "Hawaiʻi Statewide GIS Geoportal"}
+
+
+def area_counts(p: dict) -> list:
+    """Whole-area counts in AREA_FIELDS order (people)."""
+    pop, hh = p.get("population") or 0, p.get("households") or 0
+    vals = {**p, "T_no_car_persons": (p.get("T_households_no_vehicle") or 0) * (pop / hh if hh else 0)}
+    return [pop] + [round(vals.get(src) or 0, 1) for _k, src in AREA_FIELDS]
+
+
+def tsunami_overlay(path: Path = ROOT / "data" / "raw" / "tsunami_zone.geojson") -> dict:
+    """State tsunami evacuation zone outline, simplified, by county (build time only)."""
+    if not path.exists():
+        return {}
+    out = {}
+    for f in json.loads(path.read_text(encoding="utf-8"))["features"]:
+        county = ISLAND_COUNTY.get(str(f["properties"].get("island", "")).upper())
+        if not county:
+            continue
+        for ring in svgmap.rings(f["geometry"]):
+            pts = svgmap.simplify(ring, OVERLAY_TOL)
+            if len(pts) < 4:
+                continue
+            flat = []
+            for x, y in pts:
+                flat += [r4(x), r4(y)]
+            out.setdefault(county, []).append(flat)
+    return out
+
+
 def tract_geometry(afn: dict, labels: dict | None = None) -> list:
     labels = labels or {}
     out = []
@@ -82,8 +125,10 @@ def tract_geometry(afn: dict, labels: dict | None = None) -> list:
             rings.append(flat)
         if rings:
             fips = f["properties"]["tract_fips"]
+            cx, cy = area_centroid(f["geometry"])
             out.append({"f": fips, "c": f["properties"]["county"],
-                        "l": labels.get(fips, {}).get("tract_label", fips), "g": rings})
+                        "l": labels.get(fips, {}).get("tract_label", fips), "g": rings,
+                        "p": [r4(cx), r4(cy)], "n": area_counts(f["properties"])})
     return out
 
 
@@ -162,6 +207,9 @@ def build(inp: dict) -> dict:
         "county_lines": [{**r, "label": COUNTY_LINE_LABEL.get(r["line"], r["line"]),
                           "value": int(r["value"])} for r in inp["county_lines"]],
         "results": results_data(),
+        "tsunami_zone": tsunami_overlay(),
+        "area_fields": [k for k, _s in AREA_FIELDS],
+        "official_map": OFFICIAL_MAP,
         "provenance": {"numbers": PROV_NUMBERS, "shelters": PROV_SHELTERS,
                        "sources_url": message_library.SOURCES_URL},
     }

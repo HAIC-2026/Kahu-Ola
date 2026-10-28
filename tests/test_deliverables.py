@@ -89,7 +89,7 @@ class Playbooks(unittest.TestCase):
 class Bundle(unittest.TestCase):
     def test_small(self):
         # ~130 KB of this is the full text of every message draft (Messages tab, offline)
-        self.assertLess((APP / "data" / "bundle.json").stat().st_size, 750_000)
+        self.assertLess((APP / "data" / "bundle.json").stat().st_size, 780_000)   # + tsunami outline
 
     def test_no_person_fields(self):
         b = bundle()

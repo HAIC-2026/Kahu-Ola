@@ -166,3 +166,21 @@ details.areas ul { columns: 2; font-size: var(--font-size-small); }
 
 /* every link inside a list item is a 44 px tap target (e.g. "see Sources" in a list) */
 li a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* map: selectable Census areas, detail panel, zoom, print one area */
+.map svg path.area { cursor: pointer; }
+.map svg path.area.selected { stroke: var(--color-focus); stroke-width: 4; }
+.area-panel { border: 2px solid var(--color-text); border-radius: var(--radius); padding: var(--space-2) var(--space-3); margin: var(--space-3) 0; }
+.area-panel h3:focus { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.area-facts { display: grid; grid-template-columns: max-content 1fr; gap: 2px var(--space-2); }
+.area-facts dt { font-weight: 700; }
+.area-facts dd { margin: 0; }
+.panel-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+button.linklike { min-height: 44px; padding: var(--space-1) 0; border: 0; background: none; color: var(--color-accent); text-decoration: underline; font: inherit; text-align: left; cursor: pointer; }
+@media print {
+  body.print-area * { visibility: hidden; }
+  body.print-area #area-panel, body.print-area #area-panel * { visibility: visible; }
+  body.print-area #area-panel { position: absolute; left: 0; top: 0; width: 100%; border: 0; }
+  body.print-area .panel-actions { display: none; }
+}
+.area-panel a, .map + p a, p > a.button { display: inline-flex; align-items: center; min-height: 44px; }

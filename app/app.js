@@ -146,7 +146,11 @@ function markerShape(shape, x, y, r = 7) {
   return g;
 }
 
-function renderMap(county, sc, sites, title) {
+/* ---------- map: Census areas, sites, tsunami zone; click or Enter opens an area ---------- */
+const MAP = {};                       // state of the map on screen (one at a time)
+const REDUCED = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function renderMap(county, sc, sites, title, hazard) {
   const W = 720, H = 520;
   const tracts = DATA.tracts.filter((t) => t.c === county);
   let minx = Infinity, miny = Infinity, maxx = -Infinity, maxy = -Infinity;
@@ -159,35 +163,57 @@ function renderMap(county, sc, sites, title) {
   const afn = Object.fromEntries(Object.entries(sc.tracts).map(([f, v]) => [f, v[2]]));
   const bounds = quantiles(Object.values(afn));
   const cls = (v) => bounds.findIndex((b) => v <= b);
+  const names = needNames(bounds.length);
+  const level = (f) => (f in sc.tracts && afn[f] > 0 ? names[cls(afn[f])] : "Outside the risk area");
+  const ringPath = (r) => {
+    const pts = [];
+    for (let i = 0; i < r.length; i += 2) pts.push(proj(r[i], r[i + 1]).join(","));
+    return "M" + pts.join(" L") + " Z";
+  };
 
   const root = svg("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-labelledby": "map-title" });
   const t = svg("title", { id: "map-title" }); t.textContent = title; root.append(t);
+  const defs = svg("defs");
+  const hatch = svg("pattern", { id: "tsunami-hatch", width: 8, height: 8, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
+  hatch.append(svg("line", { x1: 0, y1: 0, x2: 0, y2: 8, stroke: "#000000", "stroke-width": "1.5" }));
+  defs.append(hatch); root.append(defs);
   root.append(svg("rect", { width: W, height: H, fill: "#ffffff" }));
+  const paths = {};
   for (const tr of tracts) {
-    const d = tr.g.map((r) => {
-      const pts = [];
-      for (let i = 0; i < r.length; i += 2) pts.push(proj(r[i], r[i + 1]).join(","));
-      return "M" + pts.join(" L") + " Z";
-    }).join(" ");
+    const d = tr.g.map(ringPath).join(" ");
     const risk = tr.f in sc.tracts;
     const fill = risk && afn[tr.f] > 0 ? css(RAMP[cls(afn[tr.f])]) : "#ffffff";
     const path = svg("path", risk
-      ? { d, fill, stroke: "#000000", "stroke-width": "1.4" }
-      : { d, fill, stroke: "#9a9a9a", "stroke-width": "0.5", "stroke-dasharray": "2,2" });
-    const tip = svg("title"); tip.textContent = tr.l || tr.f; path.append(tip);   // hover tooltip
+      ? { d, fill, stroke: "#000000", "stroke-width": "1.4", "vector-effect": "non-scaling-stroke", class: "area" }
+      : { d, fill, stroke: "#9a9a9a", "stroke-width": "0.5", "stroke-dasharray": "2,2", "vector-effect": "non-scaling-stroke", class: "area" });
+    const tip = svg("title"); tip.textContent = `${tr.l || tr.f} – ${level(tr.f)}`; path.append(tip);
+    path.addEventListener("click", () => openArea(tr.f, null));
+    paths[tr.f] = path;
     root.append(path);
   }
+  // State tsunami evacuation zone (simplified outline, built in; shown for tsunami only)
+  const zone = hazard === "tsunami" ? (DATA.tsunami_zone[county] || []) : [];
+  if (zone.length) {
+    root.append(svg("path", { d: zone.map(ringPath).join(" "), fill: "url(#tsunami-hatch)", "fill-opacity": "0.45",
+      stroke: "#000000", "stroke-width": "1.2", "stroke-dasharray": "5,3", "vector-effect": "non-scaling-stroke",
+      "pointer-events": "none", class: "tsunami-zone" }));
+  }
+  const marks = [];
   for (const s of sites) {
     if (s.lon === null) continue;
     const [x, y] = proj(s.lon, s.lat);
-    root.append(markerShape((MARKERS[s.st] || MARKERS.ok)[0], x, y));
-    const lab = svg("text", { x: x + 10, y: y + 4, "font-size": "13", "font-weight": "bold",
+    const g = svg("g", { class: "site", transform: `translate(${x} ${y}) scale(1)` });
+    g.dataset.x = x; g.dataset.y = y;
+    g.append(markerShape((MARKERS[s.st] || MARKERS.ok)[0], 0, 0));
+    const lab = svg("text", { x: 10, y: 4, "font-size": "13", "font-weight": "bold",
       stroke: "#ffffff", "stroke-width": "3", "paint-order": "stroke" });
-    lab.textContent = s.n; root.append(lab);
+    lab.textContent = s.n; g.append(lab);
+    marks.push(g); root.append(g);
   }
+  Object.assign(MAP, { root, W, H, proj, paths, marks, tracts, county, sc, sites, hazard, level, hatch,
+    view: [0, 0, W, H] });
 
   const legend = el("ul", { class: "legend", "aria-label": "Map legend" });
-  const names = needNames(bounds.length);
   let lo = 0;
   bounds.forEach((b, i) => {
     const sw = svg("svg", { width: 28, height: 16, "aria-hidden": "true" });
@@ -195,14 +221,19 @@ function renderMap(county, sc, sites, title) {
     legend.append(el("li", null, sw, names[i], " ", el("small", null, `(${fmt(lo)}–${fmt(b)} people)`)));
     lo = b;
   });
-  const outline = (dashed, text) => {
+  const swatch = (attrs, text) => {
     const sw = svg("svg", { width: 28, height: 16, "aria-hidden": "true" });
-    sw.append(svg("rect", dashed ? { width: 28, height: 16, fill: "#fff", stroke: "#9a9a9a", "stroke-dasharray": "2,2" }
-      : { width: 28, height: 16, fill: "#fff", stroke: "#000", "stroke-width": "2" }));
+    sw.append(svg("rect", { width: 28, height: 16, ...attrs }));
     return el("li", null, sw, text);
   };
-  legend.append(outline(false, "Solid outline: Census area in the risk area"));
-  legend.append(outline(true, "Dashed outline: outside the risk area"));
+  legend.append(swatch({ fill: "#fff", stroke: "#000", "stroke-width": "2" }, "Solid outline: Census area in the risk area"));
+  legend.append(swatch({ fill: "#fff", stroke: "#9a9a9a", "stroke-dasharray": "2,2" }, "Dashed outline: outside the risk area"));
+  if (zone.length) {
+    const sw = svg("svg", { width: 28, height: 16, "aria-hidden": "true" });
+    const p2 = svg("defs"); const pat = hatch.cloneNode(true); pat.setAttribute("id", "tsunami-hatch-key"); p2.append(pat); sw.append(p2);
+    sw.append(svg("rect", { width: 28, height: 16, fill: "url(#tsunami-hatch-key)", stroke: "#000", "stroke-dasharray": "5,3" }));
+    legend.append(el("li", null, sw, "Hatched, dashed edge: State tsunami evacuation zone (simplified outline)"));
+  }
   const seen = new Set();
   for (const [shape, label] of Object.values(MARKERS)) {
     if (seen.has(label)) continue; seen.add(label);
@@ -213,15 +244,150 @@ function renderMap(county, sc, sites, title) {
   const key = el("ol", { class: "sitekey", "aria-label": "Site key" },
     sites.map((x) => el("li", null, el("b", null, String(x.n)),
       ` = ${x.name} (${DATA.meta.site_key_status[x.st] || x.st})`)));
-  // the same areas as a list, readable by keyboard and screen reader
-  const risk = tracts.filter((tr) => tr.f in sc.tracts)
-    .sort((a, b) => (afn[b.f] || 0) - (afn[a.f] || 0));
+
+  // the same areas as a list: buttons that open the area (keyboard Enter or Space)
+  const risk = tracts.filter((tr) => tr.f in sc.tracts).sort((a, b) => (afn[b.f] || 0) - (afn[a.f] || 0));
   const areas = el("details", { class: "areas" },
-    el("summary", null, `Census areas on this map in the risk area (${risk.length})`),
-    el("ul", null, risk.map((tr) => el("li", null, `${tr.l || tr.f}: ${fmt(afn[tr.f])} people with needs`))));
-  return [el("div", { class: "mapwrap" }, el("div", { class: "map" }, root),
-    el("div", null, el("h3", null, "Site key"), key)), legend, areas];
+    el("summary", null, `Census areas on this map in the risk area (${risk.length}) – open one for details`),
+    el("ul", null, risk.map((tr) => {
+      const b = el("button", { type: "button", class: "linklike" }, `${tr.l || tr.f}: ${fmt(afn[tr.f])} people with needs (${level(tr.f)})`);
+      b.addEventListener("click", () => openArea(tr.f, b));
+      return el("li", null, b);
+    })));
+  const official = el("a", { class: "button", href: DATA.official_map.url, target: "_blank", rel: "noopener noreferrer" },
+    `${DATA.official_map.label} (${DATA.official_map.source}, opens in a new tab)`);
+  const panel = el("section", { id: "area-panel", class: "area-panel", role: "region", "aria-labelledby": "area-title", hidden: "" });
+  return [el("p", null, official),
+    el("div", { class: "mapwrap" }, el("div", { class: "map" }, root),
+      el("div", null, el("h3", null, "Site key"), key)),
+    el("p", { class: "hint" }, "Select a Census area on the map, or open one from the list below the legend."),
+    panel, legend, areas];
 }
+
+/* ---------- zoom: animate the SVG viewBox; markers keep their size ---------- */
+function setView(v) {
+  MAP.view = v;
+  MAP.root.setAttribute("viewBox", v.map((x) => x.toFixed(1)).join(" "));
+  const k = v[2] / MAP.W;
+  for (const g of MAP.marks) g.setAttribute("transform", `translate(${g.dataset.x} ${g.dataset.y}) scale(${k.toFixed(3)})`);
+  // keep the tsunami hatch the same on screen at any zoom
+  const s = (8 * k).toFixed(2);
+  MAP.hatch.setAttribute("width", s); MAP.hatch.setAttribute("height", s);
+  const line = MAP.hatch.firstChild;
+  line.setAttribute("y2", s); line.setAttribute("stroke-width", (1.5 * k).toFixed(2));
+}
+
+function zoomTo(target) {
+  const from = MAP.view.slice();
+  if (REDUCED()) { setView(target); return; }
+  const t0 = performance.now(), ms = 350;
+  const step = (now) => {
+    const a = Math.min(1, (now - t0) / ms), e = a * (2 - a);
+    setView(from.map((x, i) => x + (target[i] - x) * e));
+    if (a < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+function areaBox(tr) {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const r of tr.g) for (let i = 0; i < r.length; i += 2) {
+    if (r[i] < MAIN_ISLANDS_WEST) continue;
+    const [x, y] = MAP.proj(r[i], r[i + 1]);
+    x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+  }
+  const pad = 0.25, w = Math.max(x1 - x0, 40), h = Math.max(y1 - y0, 30);
+  let bw = w * (1 + 2 * pad), bh = h * (1 + 2 * pad);
+  if (bw / bh > MAP.W / MAP.H) bh = bw * MAP.H / MAP.W; else bw = bh * MAP.W / MAP.H;
+  return [(x0 + x1) / 2 - bw / 2, (y0 + y1) / 2 - bh / 2, bw, bh];
+}
+
+/* straight-line distance (great circle), km */
+function haversineKm(lon1, lat1, lon2, lat2) {
+  const R = 6371.0088, rad = Math.PI / 180;
+  const dp = (lat2 - lat1) * rad, dl = (lon2 - lon1) * rad;
+  const h = Math.sin(dp / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dl / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+function nearestSites(point, sites, k = 3) {
+  return sites.filter((s) => s.st === "ok" && s.lon !== null)
+    .map((s) => ({ s, km: haversineKm(point[0], point[1], s.lon, s.lat) }))
+    .sort((a, b) => a.km - b.km || a.s.name.localeCompare(b.s.name)).slice(0, k);
+}
+
+/* ---------- detail panel for one Census area ---------- */
+let OPENER = null;
+
+function openArea(f, opener) {
+  const tr = MAP.tracts.find((t) => t.f === f);
+  const panel = document.getElementById("area-panel");
+  if (!tr || !panel) return;
+  OPENER = opener || MAP.paths[f] || null;
+  for (const p of Object.values(MAP.paths)) p.classList.remove("selected");
+  MAP.paths[f].classList.add("selected");
+  zoomTo(areaBox(tr));
+
+  const { sc, hazard, county } = MAP, C = DATA.meta.cols;
+  const v = sc.tracts[f], inRisk = Boolean(v);
+  const pop = tr.n[0], share = inRisk && pop ? v[0] / pop : 0;
+  const [main, sub] = (tr.l || f).split(" · ");
+  const hz = Object.fromEntries(DATA.hazards)[hazard];
+  const counts = DATA.area_fields.map((k, i) => [C[k], fmt(inRisk ? tr.n[i + 1] * share : tr.n[i + 1])]);
+  const near = nearestSites(tr.p, MAP.sites);
+  const lead = new Set(), support = new Set();
+  for (const n of sc.needs) { n[3].split(", ").forEach((x) => x && lead.add(x)); n[4].split(", ").forEach((x) => x && support.add(x)); }
+  const L = DATA.languages[county];
+  const msgLink = (label, language) => {
+    const a = el("a", { href: "#messages" }, label);
+    a.addEventListener("click", () => Object.assign(MSG, { county, hazard, language: language || "", phase: "", onlyCounty: false }));
+    return a;
+  };
+  const langs = L.rows.slice(0, 3);
+  const msgLangs = new Set(DATA.messages.map((m) => m.language_label));
+  const back = el("button", { type: "button", class: "button" }, "Back to county");
+  back.addEventListener("click", closeArea);
+  const print = el("button", { type: "button", class: "button" }, "Print this area");
+  print.addEventListener("click", () => { document.body.classList.add("print-area"); window.print(); });
+
+  panel.replaceChildren();
+  append(panel,
+    el("h3", { id: "area-title", tabindex: "-1" }, main, " ", el("small", null, sub || "")),
+    el("p", null, el("strong", null, inRisk ? `Inside the ${hz.toLowerCase()} risk area` : `Outside the ${hz.toLowerCase()} risk area`),
+      ` · Need level: ${MAP.level(f)}`),
+    el("dl", { class: "area-facts" },
+      el("dt", null, inRisk ? C.at_risk : "People living in the area"), el("dd", null, fmt(inRisk ? v[0] : pop)),
+      inRisk ? [el("dt", null, "May need a public shelter (likely)"), el("dd", null, fmt(v[1]))] : null),
+    table(inRisk ? "Access and functional needs (people in the risk area)" : "Access and functional needs (people living in the area)",
+      ["Need", "People"], counts, [1]),
+    table(`Nearest sites usable for ${hz.toLowerCase()} (straight-line distance from the area's center)`,
+      ["#", "Site", "Straight-line"],
+      near.length ? near.map(({ s, km }) => [s.n, s.name, `${km.toFixed(1)} km straight-line`]) : [["–", "No usable known site with a location", "–"]], [0, 2]),
+    el("p", null, el("strong", null, "Proposed partners: "), `lead – ${[...lead].join(", ") || "—"}; support – ${[...support].join(", ") || "—"}. `, DATA.meta.role_status),
+    el("p", null, el("strong", null, `Top languages (${L.area}): `), langs.map((r) => `${r[0]} ${fmt(r[1])}`).join("; ") || "—"),
+    el("p", null, el("strong", null, "Messages: "), msgLink(`all ${hz.toLowerCase()} messages`),
+      langs.filter((r) => msgLangs.has(r[0])).map((r) => [", ", msgLink(r[0], DATA.messages.find((m) => m.language_label === r[0]).language)])),
+    el("p", { class: "panel-actions" }, back, " ", print));
+  panel.hidden = false;
+  const q = new URLSearchParams(location.search);
+  q.set("county", county); q.set("hazard", hazard); q.set("area", f);
+  history.replaceState(null, "", `?${q.toString()}${location.hash}`);
+  document.getElementById("area-title").focus();
+}
+
+function closeArea() {
+  const panel = document.getElementById("area-panel");
+  if (panel) { panel.hidden = true; panel.replaceChildren(); }
+  for (const p of Object.values(MAP.paths || {})) p.classList.remove("selected");
+  if (MAP.root) zoomTo([0, 0, MAP.W, MAP.H]);
+  const q = new URLSearchParams(location.search); q.delete("area");
+  history.replaceState(null, "", `?${q.toString()}${location.hash}`);
+  const back = OPENER && document.contains(OPENER) ? OPENER : document.getElementById("map-title");
+  if (back && back.focus) back.focus();
+  OPENER = null;
+}
+
+window.addEventListener("afterprint", () => document.body.classList.remove("print-area"));
 
 function needNames(k) {
   if (k <= 1) return ["People with needs"];
@@ -443,8 +609,8 @@ function renderPlan() {
     source("detail"),
 
     el("h2", null, "Map: people with needs and known sites"),
-    ...renderMap(county, sc, sites, `${cLabel} ${hLabel}: people with needs by Census area and known shelter sites`),
-    el("p", null, "Color = people in the risk area who speak English less than well, use power-dependent medical equipment, have a disability, or live without a car (a person can be counted more than once). No street map: Census area outlines only. Hover over an area to see its name."),
+    ...renderMap(county, sc, sites, `${cLabel} ${hLabel}: people with needs by Census area and known shelter sites`, hazard),
+    el("p", null, "Color = people in the risk area who speak English less than well, use power-dependent medical equipment, have a disability, or live without a car (a person can be counted more than once). No street map: Census area outlines only. Select an area to see its details."),
     source("people"),
 
     el("h2", null, "Known sites (opened in 2026 events)"),
@@ -550,11 +716,22 @@ async function init() {
     if (v && [...s.options].some((o) => o.value === v)) s.value = v;
   }
   for (const id of ["county", "hazard"]) document.getElementById(id).disabled = false;
-  document.getElementById("controls").addEventListener("change", () => { MSG.county = null; render(); });
+  document.getElementById("controls").addEventListener("change", () => {
+    MSG.county = null;
+    const qs = new URLSearchParams(location.search);          // a new view: drop the old area
+    qs.set("county", document.getElementById("county").value);
+    qs.set("hazard", document.getElementById("hazard").value);
+    qs.delete("area");
+    history.replaceState(null, "", `?${qs.toString()}${location.hash}`);
+    render();
+  });
   document.getElementById("controls").addEventListener("submit", (e) => e.preventDefault());
   window.addEventListener("hashchange", render);
   updateBanner();
   render();
+  // deep link: ?county=&hazard=&area=<Census area code> opens the area panel
+  const area = q.get("area");
+  if (area && currentView() === "plan" && MAP.paths && MAP.paths[area]) openArea(area, null);
   checkForUpdate();
 }
 

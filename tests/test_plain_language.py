@@ -138,7 +138,7 @@ class AppUpdateNotice(unittest.TestCase):
         self.assertIn("latest.version !== DATA.meta.version", self.JS)
         self.assertIn("New planning data available", self.JS)
         self.assertIn('"Reload"', self.JS)
-        self.assertRegex(self.JS, r"render\(\);\s*checkForUpdate\(\);")      # on load
+        self.assertRegex(self.JS, r"render\(\);[^}]*?checkForUpdate\(\);\n\}")   # on load
         self.assertIn('addEventListener("online", checkForUpdate)', self.JS)
 
     def test_reload_refreshes_service_worker_cache(self):
