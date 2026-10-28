@@ -24,11 +24,11 @@ import json
 import re
 import sys
 import unicodedata
-from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from hawaii_time import now_hst  # noqa: E402
 from geo import ZoneIndex  # noqa: E402
 from fetch_data import COUNTIES, county_of  # noqa: E402
 from fetch_flood_zones import load_cache, lookup  # noqa: E402
@@ -162,7 +162,7 @@ def build(rows: list, schools: list, tracts=None, tsunami=None,
                               f["properties"]["name"]))
     return {"type": "FeatureCollection", "features": feats, "metadata": {
         "title": "Hawaiʻi shelters and refuge areas opened in 2026 events",
-        "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "built_at": now_hst(),
         "source_table": "data/sources/county_shelter_activations.csv",
         "disclaimer": DISCLAIMER,
         "note": "Site types are kept as each county names them; counties define "

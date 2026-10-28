@@ -22,10 +22,10 @@ from __future__ import annotations
 import csv
 import json
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from hawaii_time import now_hst  # noqa: E402
 from geo import ZoneIndex, representative_point  # noqa: E402
 from fetch_data import COUNTIES, NRI_HAZARD_LAYERS, county_from_fips  # noqa: E402
 
@@ -198,7 +198,7 @@ def build(svi, nri: dict | None, tsunami, extreme, empower, samples: int = 100) 
                 for r, g in rows]
     meta = {
         "title": "Hawaiʻi AFN × hazard tract layer (CMIST)",
-        "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "built_at": now_hst(),
         "privacy": "Aggregate census-tract data only. No individual records.",
         "method": {
             "cmist_proxies": CMIST_FIELDS,

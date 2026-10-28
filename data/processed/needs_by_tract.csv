@@ -1,6 +1,6 @@
 tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,shelter_demand,C_lep_at_risk,M_power_dependent_at_risk,I_disability_at_risk,I_age65_at_risk,T_no_vehicle_persons_at_risk,highrise_units_at_risk,C_lep_in_shelter,M_power_dependent_in_shelter,I_disability_in_shelter,S_children_in_shelter,households_in_shelter
-15001020100,Tract 201 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,hurricane,1.0,4499.0,134.97,204.0,28.7,754.0,890.0,243.56,6.0,6.12,0.86,22.62,25.2,49.32
-15001020202,Tract 202.02 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,hurricane,1.0,2302.0,69.06,26.0,12.1,245.0,375.0,117.67,0.0,0.78,0.36,7.35,14.91,18.78
+15001020100,Tract 201 · near Papaikou,near Papaikou,Hawaiʻi Island,Hawaii,hurricane,1.0,4499.0,134.97,204.0,28.7,754.0,890.0,243.56,6.0,6.12,0.86,22.62,25.2,49.32
+15001020202,Tract 202.02 · near Wainaku,near Wainaku,Hawaiʻi Island,Hawaii,hurricane,1.0,2302.0,69.06,26.0,12.1,245.0,375.0,117.67,0.0,0.78,0.36,7.35,14.91,18.78
 15001020300,Tract 203 · Hilo,Hilo,Hawaiʻi Island,Hawaii,hurricane,1.0,4167.0,125.01,31.0,32.5,670.0,1008.0,991.37,893.0,0.93,0.97,20.1,24.93,53.97
 15001020400,Tract 204 · Hilo,Hilo,Hawaiʻi Island,Hawaii,hurricane,1.0,3398.0,101.94,80.0,21.6,488.0,670.0,453.07,248.0,2.4,0.65,14.64,24.48,40.95
 15001020500,Tract 205 · Hilo,Hilo,Hawaiʻi Island,Hawaii,hurricane,1.0,5552.0,166.56,149.0,31.4,836.0,974.0,1202.62,739.0,4.47,0.94,25.08,37.95,61.77
@@ -11,37 +11,37 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15001020802,Tract 208.02 · Hilo,Hilo,Hawaiʻi Island,Hawaii,hurricane,1.0,7010.0,210.3,50.0,63.7,1087.0,1974.0,357.59,103.0,1.5,1.91,32.61,39.69,71.16
 15001020900,Tract 209 · Hilo,Hilo,Hawaiʻi Island,Hawaii,hurricane,1.0,5280.0,158.4,102.0,29.6,531.0,918.0,58.77,13.0,3.06,0.89,15.93,36.84,51.21
 15001021003,Tract 210.03 · Orchidlands Estates,Orchidlands Estates,Hawaiʻi Island,Hawaii,hurricane,1.0,7009.0,210.27,101.0,35.4,1593.0,1095.0,259.4,0.0,3.03,1.06,47.79,49.44,81.87
-15001021011,Tract 210.11 · near Mountain View,near Mountain View,Hawaiʻi Island,Hawaii,hurricane,1.0,4540.0,136.2,63.0,29.6,1027.0,916.0,73.18,0.0,1.89,0.89,30.81,33.09,46.53
-15001021013,Tract 210.13 · Keaau,Keaau,Hawaiʻi Island,Hawaii,hurricane,1.0,5059.0,151.77,207.0,40.7,955.0,1260.0,285.85,14.0,6.21,1.22,28.65,31.05,50.97
+15001021011,Tract 210.11 · Mountain View / Volcano,Mountain View / Volcano,Hawaiʻi Island,Hawaii,hurricane,1.0,4540.0,136.2,63.0,29.6,1027.0,916.0,73.18,0.0,1.89,0.89,30.81,33.09,46.53
+15001021013,Tract 210.13 · near Kurtistown,near Kurtistown,Hawaiʻi Island,Hawaii,hurricane,1.0,5059.0,151.77,207.0,40.7,955.0,1260.0,285.85,14.0,6.21,1.22,28.65,31.05,50.97
 15001021014,Tract 210.14 · Hawaiian Paradise Park,Hawaiian Paradise Park,Hawaiʻi Island,Hawaii,hurricane,1.0,8135.0,244.05,260.0,48.6,834.0,1504.0,0.0,75.0,7.8,1.46,25.02,55.95,77.76
 15001021015,Tract 210.15 · Hawaiian Paradise Park,Hawaiian Paradise Park,Hawaiʻi Island,Hawaii,hurricane,1.0,4598.0,137.94,59.0,29.7,1151.0,920.0,0.0,0.0,1.77,0.89,34.53,28.62,54.51
-15001021016,Tract 210.16 · Hawaiian Acres,Hawaiian Acres,Hawaiʻi Island,Hawaii,hurricane,1.0,5088.0,152.64,50.0,40.2,974.0,1245.0,64.34,19.0,1.5,1.21,29.22,26.37,56.94
+15001021016,Tract 210.16 · Hawaiian Acres / Fern Acres,Hawaiian Acres / Fern Acres,Hawaiʻi Island,Hawaii,hurricane,1.0,5088.0,152.64,50.0,40.2,974.0,1245.0,64.34,19.0,1.5,1.21,29.22,26.37,56.94
 15001021017,Tract 210.17 · Fern Forest,Fern Forest,Hawaiʻi Island,Hawaii,hurricane,1.0,3566.0,106.98,34.0,30.9,833.0,957.0,265.6,10.0,1.02,0.93,24.99,16.56,51.96
-15001021101,Tract 211.01 · Kamaili,Kamaili,Hawaiʻi Island,Hawaii,hurricane,1.0,2996.0,89.88,26.0,26.9,550.0,834.0,134.63,0.0,0.78,0.81,16.5,14.4,42.06
-15001021107,Tract 211.07 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,hurricane,1.0,1003.0,30.09,42.0,9.8,224.0,303.0,36.66,2.0,1.26,0.29,6.72,4.59,11.49
-15001021108,Tract 211.08 · near Hawaiian Beaches,near Hawaiian Beaches,Hawaiʻi Island,Hawaii,hurricane,1.0,6155.0,184.65,56.0,43.3,1497.0,1342.0,486.19,5.0,1.68,1.3,44.91,47.22,72.54
-15001021203,Tract 212.03 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,hurricane,1.0,5591.0,167.73,93.0,37.0,712.0,1147.0,439.63,59.0,2.79,1.11,21.36,40.41,67.53
+15001021101,Tract 211.01 · near Kamaili,near Kamaili,Hawaiʻi Island,Hawaii,hurricane,1.0,2996.0,89.88,26.0,26.9,550.0,834.0,134.63,0.0,0.78,0.81,16.5,14.4,42.06
+15001021107,Tract 211.07 · near Kalapana,near Kalapana,Hawaiʻi Island,Hawaii,hurricane,1.0,1003.0,30.09,42.0,9.8,224.0,303.0,36.66,2.0,1.26,0.29,6.72,4.59,11.49
+15001021108,Tract 211.08 · Hawaiian Beaches,Hawaiian Beaches,Hawaiʻi Island,Hawaii,hurricane,1.0,6155.0,184.65,56.0,43.3,1497.0,1342.0,486.19,5.0,1.68,1.3,44.91,47.22,72.54
+15001021203,Tract 212.03 · near Hawaiian Ocean View,near Hawaiian Ocean View,Hawaiʻi Island,Hawaii,hurricane,1.0,5591.0,167.73,93.0,37.0,712.0,1147.0,439.63,59.0,2.79,1.11,21.36,40.41,67.53
 15001021204,Tract 212.04 · near Hawaiian Ocean View,near Hawaiian Ocean View,Hawaiʻi Island,Hawaii,hurricane,1.0,2639.0,79.17,61.0,26.4,423.0,817.0,73.78,31.0,1.83,0.79,12.69,17.01,32.19
-15001021300,Tract 213 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,hurricane,1.0,7384.0,221.52,176.0,65.9,777.0,2042.0,170.12,39.0,5.28,1.98,23.31,29.76,74.22
-15001021402,Tract 214.02 · Kealakekua,Kealakekua,Hawaiʻi Island,Hawaii,hurricane,1.0,3858.0,115.74,233.0,31.4,786.0,971.0,261.77,108.0,6.99,0.94,23.58,27.24,37.14
-15001021502,Tract 215.02 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,hurricane,1.0,5103.0,153.09,80.0,37.7,452.0,1168.0,145.56,38.0,2.4,1.13,13.56,34.95,54.69
-15001021504,Tract 215.04 · Kailua,Kailua,Hawaiʻi Island,Hawaii,hurricane,1.0,6416.0,192.48,263.0,28.1,801.0,870.0,462.51,248.0,7.89,0.84,24.03,60.15,52.02
-15001021510,Tract 215.10 · Kahaluu-Keauhou,Kahaluu-Keauhou,Hawaiʻi Island,Hawaii,hurricane,1.0,5020.0,150.6,241.0,49.5,575.0,1532.0,197.1,771.0,7.23,1.49,17.25,31.59,50.43
+15001021300,Tract 213 · near Honaunau-Napoopoo,near Honaunau-Napoopoo,Hawaiʻi Island,Hawaii,hurricane,1.0,7384.0,221.52,176.0,65.9,777.0,2042.0,170.12,39.0,5.28,1.98,23.31,29.76,74.22
+15001021402,Tract 214.02 · Kealakekua / Captain Cook,Kealakekua / Captain Cook,Hawaiʻi Island,Hawaii,hurricane,1.0,3858.0,115.74,233.0,31.4,786.0,971.0,261.77,108.0,6.99,0.94,23.58,27.24,37.14
+15001021502,Tract 215.02 · near Holualoa,near Holualoa,Hawaiʻi Island,Hawaii,hurricane,1.0,5103.0,153.09,80.0,37.7,452.0,1168.0,145.56,38.0,2.4,1.13,13.56,34.95,54.69
+15001021504,Tract 215.04 · Kailua / Kaiminani,Kailua / Kaiminani,Hawaiʻi Island,Hawaii,hurricane,1.0,6416.0,192.48,263.0,28.1,801.0,870.0,462.51,248.0,7.89,0.84,24.03,60.15,52.02
+15001021510,Tract 215.10 · Kahaluu-Keauhou / Kealakekua,Kahaluu-Keauhou / Kealakekua,Hawaiʻi Island,Hawaii,hurricane,1.0,5020.0,150.6,241.0,49.5,575.0,1532.0,197.1,771.0,7.23,1.49,17.25,31.59,50.43
 15001021511,Tract 215.11 · Kahaluu-Keauhou,Kahaluu-Keauhou,Hawaiʻi Island,Hawaii,hurricane,1.0,2204.0,66.12,14.0,17.4,237.0,538.0,10.8,152.0,0.42,0.52,7.11,13.38,18.36
 15001021512,Tract 215.12 · Kaiminani,Kaiminani,Hawaiʻi Island,Hawaii,hurricane,1.0,4594.0,137.82,77.0,29.2,578.0,903.0,645.87,458.0,2.31,0.88,17.34,21.9,54.84
-15001021513,Tract 215.13 · near Kaiminani,near Kaiminani,Hawaiʻi Island,Hawaii,hurricane,1.0,5579.0,167.37,235.0,38.3,568.0,1187.0,133.94,0.0,7.05,1.15,17.04,29.82,61.23
+15001021513,Tract 215.13 · Kaiminani,Kaiminani,Hawaiʻi Island,Hawaii,hurricane,1.0,5579.0,167.37,235.0,38.3,568.0,1187.0,133.94,0.0,7.05,1.15,17.04,29.82,61.23
 15001021605,Tract 216.05 · Kailua,Kailua,Hawaiʻi Island,Hawaii,hurricane,1.0,4240.0,127.2,400.0,30.3,493.0,940.0,250.19,1101.0,12.0,0.91,14.79,17.28,47.79
-15001021606,Tract 216.06 · Kailua,Kailua,Hawaiʻi Island,Hawaii,hurricane,1.0,4118.0,123.54,157.0,24.4,532.0,755.0,530.87,424.0,4.71,0.73,15.96,33.15,41.19
-15001021607,Tract 216.07 · Kailua,Kailua,Hawaiʻi Island,Hawaii,hurricane,1.0,4731.0,141.93,227.0,31.8,302.0,984.0,0.0,87.0,6.81,0.95,9.06,29.94,53.16
+15001021606,Tract 216.06 · Kailua / Holualoa,Kailua / Holualoa,Hawaiʻi Island,Hawaii,hurricane,1.0,4118.0,123.54,157.0,24.4,532.0,755.0,530.87,424.0,4.71,0.73,15.96,33.15,41.19
+15001021607,Tract 216.07 · Kailua / Holualoa,Kailua / Holualoa,Hawaiʻi Island,Hawaii,hurricane,1.0,4731.0,141.93,227.0,31.8,302.0,984.0,0.0,87.0,6.81,0.95,9.06,29.94,53.16
 15001021608,Tract 216.08 · Kailua,Kailua,Hawaiʻi Island,Hawaii,hurricane,1.0,4381.0,131.43,334.0,35.0,587.0,1083.0,60.95,953.0,10.02,1.05,17.61,14.01,53.91
-15001021705,Tract 217.05 · near Waimea,near Waimea,Hawaiʻi Island,Hawaii,hurricane,1.0,6507.0,195.21,94.0,41.1,575.0,1272.0,54.91,91.0,2.82,1.23,17.25,46.74,71.1
-15001021706,Tract 217.06 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,hurricane,1.0,4153.0,124.59,39.0,28.3,546.0,876.0,44.35,0.0,1.17,0.85,16.38,35.94,39.33
+15001021705,Tract 217.05 · Waimea,Waimea,Hawaiʻi Island,Hawaii,hurricane,1.0,6507.0,195.21,94.0,41.1,575.0,1272.0,54.91,91.0,2.82,1.23,17.25,46.74,71.1
+15001021706,Tract 217.06 · near Waimea,near Waimea,Hawaiʻi Island,Hawaii,hurricane,1.0,4153.0,124.59,39.0,28.3,546.0,876.0,44.35,0.0,1.17,0.85,16.38,35.94,39.33
 15001021707,Tract 217.07 · near Waikoloa Village,near Waikoloa Village,Hawaiʻi Island,Hawaii,hurricane,1.0,4521.0,135.63,114.0,29.8,699.0,922.0,0.0,0.0,3.42,0.89,20.97,41.16,44.94
-15001021708,Tract 217.08 · Waikoloa Village,Waikoloa Village,Hawaiʻi Island,Hawaii,hurricane,1.0,4450.0,133.5,102.0,34.0,450.0,1054.0,107.79,1015.0,3.06,1.02,13.5,30.48,52.02
+15001021708,Tract 217.08 · near Waikoloa Village,near Waikoloa Village,Hawaiʻi Island,Hawaii,hurricane,1.0,4450.0,133.5,102.0,34.0,450.0,1054.0,107.79,1015.0,3.06,1.02,13.5,30.48,52.02
 15001021800,Tract 218 · near Hawi,near Hawi,Hawaiʻi Island,Hawaii,hurricane,1.0,6435.0,193.05,182.0,59.9,1134.0,1856.0,54.53,38.0,5.46,1.8,34.02,36.09,70.8
-15001021902,Tract 219.02 · near Kukuihaele,near Kukuihaele,Hawaiʻi Island,Hawaii,hurricane,1.0,3619.0,108.57,118.0,22.0,737.0,682.0,207.4,20.0,3.54,0.66,22.11,24.57,36.12
-15001022000,Tract 220 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,hurricane,1.0,2654.0,79.62,36.0,16.2,638.0,503.0,120.64,19.0,1.08,0.49,19.14,19.35,25.08
-15001022102,Tract 221.02 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,hurricane,1.0,1459.0,43.77,45.0,15.3,312.0,475.0,31.04,0.0,1.35,0.46,9.36,6.51,19.74
+15001021902,Tract 219.02 · near Honokaa,near Honokaa,Hawaiʻi Island,Hawaii,hurricane,1.0,3619.0,108.57,118.0,22.0,737.0,682.0,207.4,20.0,3.54,0.66,22.11,24.57,36.12
+15001022000,Tract 220 · near Paauilo,near Paauilo,Hawaiʻi Island,Hawaii,hurricane,1.0,2654.0,79.62,36.0,16.2,638.0,503.0,120.64,19.0,1.08,0.49,19.14,19.35,25.08
+15001022102,Tract 221.02 · near Laupahoehoe,near Laupahoehoe,Hawaiʻi Island,Hawaii,hurricane,1.0,1459.0,43.77,45.0,15.3,312.0,475.0,31.04,0.0,1.35,0.46,9.36,6.51,19.74
 15003000107,Tract 1.07 · East Honolulu,East Honolulu,Oʻahu,Honolulu,hurricane,1.0,2805.0,84.15,32.0,20.7,157.0,607.0,86.91,0.0,0.96,0.62,4.71,20.46,28.08
 15003000108,Tract 1.08 · East Honolulu,East Honolulu,Oʻahu,Honolulu,hurricane,1.0,3280.0,98.4,48.0,33.8,464.0,991.0,47.01,372.0,1.44,1.01,13.92,14.91,37.68
 15003000110,Tract 1.10 · East Honolulu,East Honolulu,Oʻahu,Honolulu,hurricane,1.0,4290.0,128.7,48.0,31.6,190.0,928.0,32.91,0.0,1.44,0.95,5.7,33.0,43.02
@@ -59,7 +59,7 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003000302,Tract 3.02 · East Honolulu,East Honolulu,Oʻahu,Honolulu,hurricane,1.0,2818.0,84.54,90.0,24.9,368.0,732.0,170.88,15.0,2.7,0.75,11.04,17.43,29.19
 15003000401,Tract 4.01 · East Honolulu,East Honolulu,Oʻahu,Honolulu,hurricane,1.0,2726.0,81.78,42.0,35.5,359.0,1043.0,101.16,40.0,1.26,1.06,10.77,9.66,30.72
 15003000402,Tract 4.02 · East Honolulu,East Honolulu,Oʻahu,Honolulu,hurricane,1.0,3912.0,117.36,124.0,39.7,345.0,1164.0,20.79,10.0,3.72,1.19,10.35,21.24,39.51
-15003000500,Tract 5 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,hurricane,1.0,3506.0,105.18,168.0,35.4,337.0,1039.0,132.01,270.0,5.04,1.06,10.11,20.91,41.43
+15003000500,Tract 5 · Urban Honolulu / East Honolulu,Urban Honolulu / East Honolulu,Oʻahu,Honolulu,hurricane,1.0,3506.0,105.18,168.0,35.4,337.0,1039.0,132.01,270.0,5.04,1.06,10.11,20.91,41.43
 15003000600,Tract 6 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,hurricane,1.0,1169.0,35.07,0.0,13.9,87.0,409.0,0.0,4.0,0.0,0.42,2.61,5.91,13.41
 15003000700,Tract 7 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,hurricane,1.0,3297.0,98.91,44.0,26.8,601.0,787.0,27.99,8.0,1.32,0.8,18.03,12.33,31.8
 15003000800,Tract 8 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,hurricane,1.0,3879.0,116.37,248.0,37.8,339.0,1108.0,215.5,34.0,7.44,1.13,10.17,18.57,39.42
@@ -187,12 +187,12 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003007002,Tract 70.02 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,hurricane,1.0,2620.0,78.6,0.0,0.0,57.0,0.0,27.66,0.0,0.0,0.0,1.71,25.38,31.26
 15003007100,Tract 71 · Hickam Housing,Hickam Housing,Oʻahu,Honolulu,hurricane,1.0,3884.0,116.52,25.0,1.7,208.0,49.0,0.0,0.0,0.75,0.05,6.24,42.09,33.51
 15003007302,Tract 73.02 · Hickam Housing,Hickam Housing,Oʻahu,Honolulu,hurricane,1.0,5032.0,150.96,28.0,2.0,212.0,58.0,109.01,46.0,0.84,0.06,6.36,56.28,51.24
-15003007400,Tract 74 · near Hickam Housing,near Hickam Housing,Oʻahu,Honolulu,hurricane,1.0,6954.0,208.62,12.0,0.1,32.0,4.0,0.0,22.0,0.36,0.0,0.96,36.87,26.46
+15003007400,Tract 74 · near Halawa,near Halawa,Oʻahu,Honolulu,hurricane,1.0,6954.0,208.62,12.0,0.1,32.0,4.0,0.0,22.0,0.36,0.0,0.96,36.87,26.46
 15003007504,Tract 75.04 · Halawa,Halawa,Oʻahu,Honolulu,hurricane,1.0,2864.0,85.92,196.0,16.2,574.0,476.0,651.31,391.0,5.88,0.49,17.22,19.71,28.89
-15003007507,Tract 75.07 · near Urban Honolulu,near Urban Honolulu,Oʻahu,Honolulu,hurricane,1.0,6241.0,187.23,182.0,48.3,761.0,1419.0,223.49,44.0,5.46,1.45,22.83,24.66,56.13
+15003007507,Tract 75.07 · near Halawa,near Halawa,Oʻahu,Honolulu,hurricane,1.0,6241.0,187.23,182.0,48.3,761.0,1419.0,223.49,44.0,5.46,1.45,22.83,24.66,56.13
 15003007508,Tract 75.08 · Halawa,Halawa,Oʻahu,Honolulu,hurricane,1.0,7233.0,216.99,280.0,49.0,1014.0,1437.0,229.51,406.0,8.4,1.47,30.42,49.38,66.18
 15003007701,Tract 77.01 · Aiea,Aiea,Oʻahu,Honolulu,hurricane,1.0,4079.0,122.37,97.0,29.8,533.0,876.0,146.04,68.0,2.91,0.89,15.99,30.6,36.03
-15003007702,Tract 77.02 · near Aiea,near Aiea,Oʻahu,Honolulu,hurricane,1.0,5492.0,164.76,51.0,40.7,748.0,1194.0,183.69,0.0,1.53,1.22,22.44,29.37,52.92
+15003007702,Tract 77.02 · Aiea,Aiea,Oʻahu,Honolulu,hurricane,1.0,5492.0,164.76,51.0,40.7,748.0,1194.0,183.69,0.0,1.53,1.22,22.44,29.37,52.92
 15003007804,Tract 78.04 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,2174.0,65.22,48.0,20.5,239.0,603.0,53.37,0.0,1.44,0.61,7.17,10.26,18.33
 15003007807,Tract 78.07 · Waimalu,Waimalu,Oʻahu,Honolulu,hurricane,1.0,5334.0,160.02,275.0,25.7,272.0,755.0,251.82,2436.0,8.25,0.77,8.16,17.91,83.88
 15003007808,Tract 78.08 · Waimalu,Waimalu,Oʻahu,Honolulu,hurricane,1.0,3527.0,105.81,52.0,22.2,360.0,652.0,284.28,556.0,1.56,0.67,10.8,19.35,33.87
@@ -200,51 +200,51 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003007812,Tract 78.12 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,2226.0,66.78,27.0,14.6,220.0,429.0,79.01,99.0,0.81,0.44,6.6,9.6,24.51
 15003007813,Tract 78.13 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,3382.0,101.46,54.0,16.4,384.0,480.0,80.79,50.0,1.62,0.49,11.52,24.12,27.63
 15003007814,Tract 78.14 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,3529.0,105.87,36.0,40.0,500.0,1173.0,27.31,0.0,1.08,1.2,15.0,15.51,34.89
-15003007815,Tract 78.15 · near Pearl City,near Pearl City,Oʻahu,Honolulu,hurricane,1.0,2118.0,63.54,91.0,19.3,194.0,565.0,51.1,0.0,2.73,0.58,5.82,8.64,22.38
-15003007816,Tract 78.16 · near Aiea,near Aiea,Oʻahu,Honolulu,hurricane,1.0,3456.0,103.68,78.0,31.1,335.0,912.0,28.22,378.0,2.34,0.93,10.05,19.8,40.41
+15003007815,Tract 78.15 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,2118.0,63.54,91.0,19.3,194.0,565.0,51.1,0.0,2.73,0.58,5.82,8.64,22.38
+15003007816,Tract 78.16 · Waimalu,Waimalu,Oʻahu,Honolulu,hurricane,1.0,3456.0,103.68,78.0,31.1,335.0,912.0,28.22,378.0,2.34,0.93,10.05,19.8,40.41
 15003007817,Tract 78.17 · Waimalu,Waimalu,Oʻahu,Honolulu,hurricane,1.0,1615.0,48.45,36.0,13.7,185.0,403.0,85.17,0.0,1.08,0.41,5.55,7.11,14.79
 15003008001,Tract 80.01 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,2873.0,86.19,158.0,26.3,622.0,771.0,509.93,571.0,4.74,0.79,18.66,17.4,27.72
 15003008002,Tract 80.02 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,3092.0,92.76,120.0,24.7,466.0,725.0,290.73,26.0,3.6,0.74,13.98,13.11,23.61
-15003008005,Tract 80.05 · near Pearl City,near Pearl City,Oʻahu,Honolulu,hurricane,1.0,6267.0,188.01,243.0,54.6,706.0,1603.0,382.13,0.0,7.29,1.64,21.18,36.09,63.96
+15003008005,Tract 80.05 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,6267.0,188.01,243.0,54.6,706.0,1603.0,382.13,0.0,7.29,1.64,21.18,36.09,63.96
 15003008008,Tract 80.08 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,1735.0,52.05,16.0,6.4,83.0,187.0,29.04,0.0,0.48,0.19,2.49,18.57,14.34
 15003008009,Tract 80.09 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,3102.0,93.06,103.0,19.2,556.0,563.0,548.27,836.0,3.09,0.58,16.68,19.2,38.19
 15003008010,Tract 80.10 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,2520.0,75.6,123.0,25.6,607.0,752.0,123.57,0.0,3.69,0.77,18.21,13.62,20.19
 15003008011,Tract 80.11 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,2670.0,80.1,117.0,31.9,276.0,937.0,134.34,0.0,3.51,0.96,8.28,14.43,23.85
 15003008012,Tract 80.12 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,2945.0,88.35,57.0,33.7,777.0,990.0,319.34,0.0,1.71,1.01,23.31,11.76,24.9
 15003008013,Tract 80.13 · Pearl City,Pearl City,Oʻahu,Honolulu,hurricane,1.0,2264.0,67.92,23.0,27.8,200.0,815.0,68.21,0.0,0.69,0.83,6.0,15.42,20.91
-15003008301,Tract 83.01 · near Ewa Beach,near Ewa Beach,Oʻahu,Honolulu,hurricane,1.0,5921.0,177.63,61.0,7.1,597.0,207.0,43.1,20.0,1.83,0.21,17.91,71.55,45.33
+15003008301,Tract 83.01 · near Iroquois Point,near Iroquois Point,Oʻahu,Honolulu,hurricane,1.0,5921.0,177.63,61.0,7.1,597.0,207.0,43.1,20.0,1.83,0.21,17.91,71.55,45.33
 15003008302,Tract 83.02 · Ewa Beach,Ewa Beach,Oʻahu,Honolulu,hurricane,1.0,6679.0,200.37,448.0,47.2,620.0,1385.0,372.42,13.0,13.44,1.42,18.6,33.96,40.89
 15003008405,Tract 84.05 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,hurricane,1.0,5287.0,158.61,292.0,26.6,556.0,780.0,55.24,13.0,8.76,0.8,16.68,35.52,40.2
 15003008407,Tract 84.07 · Ocean Pointe,Ocean Pointe,Oʻahu,Honolulu,hurricane,1.0,4185.0,125.55,50.0,8.3,231.0,243.0,39.48,0.0,1.5,0.25,6.93,42.0,34.98
 15003008408,Tract 84.08 · Ocean Pointe,Ocean Pointe,Oʻahu,Honolulu,hurricane,1.0,9678.0,290.34,84.0,24.4,1100.0,717.0,211.38,221.0,2.52,0.73,33.0,91.05,96.15
-15003008410,Tract 84.10 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,hurricane,1.0,6698.0,200.94,144.0,15.6,475.0,457.0,10.93,0.0,4.32,0.47,14.25,55.14,55.14
+15003008410,Tract 84.10 · Ewa Gentry / Ocean Pointe,Ewa Gentry / Ocean Pointe,Oʻahu,Honolulu,hurricane,1.0,6698.0,200.94,144.0,15.6,475.0,457.0,10.93,0.0,4.32,0.47,14.25,55.14,55.14
 15003008411,Tract 84.11 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,hurricane,1.0,3443.0,103.29,148.0,9.0,292.0,264.0,121.55,431.0,4.44,0.27,8.76,24.36,36.54
 15003008413,Tract 84.13 · Ewa Beach,Ewa Beach,Oʻahu,Honolulu,hurricane,1.0,3010.0,90.3,184.0,19.7,516.0,577.0,0.0,33.0,5.52,0.59,15.48,18.15,20.7
-15003008414,Tract 84.14 · near Ewa Gentry,near Ewa Gentry,Oʻahu,Honolulu,hurricane,1.0,2483.0,74.49,77.0,6.5,161.0,192.0,185.78,10.0,2.31,0.2,4.83,27.66,20.85
+15003008414,Tract 84.14 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,hurricane,1.0,2483.0,74.49,77.0,6.5,161.0,192.0,185.78,10.0,2.31,0.2,4.83,27.66,20.85
 15003008415,Tract 84.15 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,hurricane,1.0,4438.0,133.14,8.0,10.8,443.0,316.0,0.0,0.0,0.24,0.32,13.29,39.99,32.7
 15003008416,Tract 84.16 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,hurricane,1.0,3216.0,96.48,92.0,7.3,395.0,215.0,26.27,33.0,2.76,0.22,11.85,23.49,25.71
 15003008417,Tract 84.17 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,hurricane,1.0,3943.0,118.29,87.0,14.5,274.0,427.0,0.0,107.0,2.61,0.43,8.22,35.37,43.26
 15003008418,Tract 84.18 · Ewa Beach,Ewa Beach,Oʻahu,Honolulu,hurricane,1.0,5478.0,164.34,111.0,32.3,705.0,947.0,80.44,64.0,3.33,0.97,21.15,34.68,40.86
 15003008502,Tract 85.02 · Kalaeloa,Kalaeloa,Oʻahu,Honolulu,hurricane,1.0,2971.0,89.13,43.0,4.9,275.0,145.0,593.46,339.0,1.29,0.15,8.25,22.71,24.18
-15003008609,Tract 86.09 · near Ko Olina,near Ko Olina,Oʻahu,Honolulu,hurricane,1.0,1884.0,56.52,20.0,13.0,268.0,383.0,51.06,29.0,0.6,0.39,8.04,7.86,21.03
+15003008609,Tract 86.09 · Ko Olina / Kapolei,Ko Olina / Kapolei,Oʻahu,Honolulu,hurricane,1.0,1884.0,56.52,20.0,13.0,268.0,383.0,51.06,29.0,0.6,0.39,8.04,7.86,21.03
 15003008610,Tract 86.10 · Ko Olina,Ko Olina,Oʻahu,Honolulu,hurricane,1.0,987.0,29.61,54.0,10.6,91.0,311.0,21.13,290.0,1.62,0.32,2.73,4.08,14.01
 15003008611,Tract 86.11 · near Ko Olina,near Ko Olina,Oʻahu,Honolulu,hurricane,1.0,25.0,0.75,0.0,0.1,4.0,4.0,0.0,0.0,0.0,0.0,0.12,0.18,0.12
 15003008623,Tract 86.23 · Kapolei,Kapolei,Oʻahu,Honolulu,hurricane,1.0,5336.0,160.08,0.0,14.6,675.0,429.0,251.15,0.0,0.0,0.44,20.25,50.91,41.43
 15003008624,Tract 86.24 · West Loch Estate,West Loch Estate,Oʻahu,Honolulu,hurricane,1.0,3562.0,106.86,112.0,18.7,394.0,548.0,0.0,0.0,3.36,0.56,11.82,31.68,23.67
-15003008625,Tract 86.25 · Ewa Villages,Ewa Villages,Oʻahu,Honolulu,hurricane,1.0,3445.0,103.35,221.0,26.0,477.0,762.0,533.07,243.0,6.63,0.78,14.31,21.66,28.5
+15003008625,Tract 86.25 · Ewa Villages / West Loch Estate,Ewa Villages / West Loch Estate,Oʻahu,Honolulu,hurricane,1.0,3445.0,103.35,221.0,26.0,477.0,762.0,533.07,243.0,6.63,0.78,14.31,21.66,28.5
 15003008626,Tract 86.26 · Ewa Villages,Ewa Villages,Oʻahu,Honolulu,hurricane,1.0,3254.0,97.62,291.0,15.5,392.0,454.0,248.74,70.0,8.73,0.46,11.76,33.27,28.65
-15003008627,Tract 86.27 · near Royal Kunia,near Royal Kunia,Oʻahu,Honolulu,hurricane,1.0,9196.0,275.88,170.0,16.5,676.0,483.0,238.95,408.0,5.1,0.49,20.28,97.89,73.89
+15003008627,Tract 86.27 · near East Kapolei,near East Kapolei,Oʻahu,Honolulu,hurricane,1.0,9196.0,275.88,170.0,16.5,676.0,483.0,238.95,408.0,5.1,0.49,20.28,97.89,73.89
 15003008628,Tract 86.28 · Kapolei,Kapolei,Oʻahu,Honolulu,hurricane,1.0,3782.0,113.46,12.0,17.6,527.0,516.0,395.67,35.0,0.36,0.53,15.81,30.57,31.83
 15003008629,Tract 86.29 · Kapolei,Kapolei,Oʻahu,Honolulu,hurricane,1.0,2006.0,60.18,11.0,9.2,270.0,269.0,316.89,0.0,0.33,0.28,8.1,20.01,20.7
 15003008630,Tract 86.30 · Makakilo,Makakilo,Oʻahu,Honolulu,hurricane,1.0,3700.0,111.0,22.0,7.0,177.0,205.0,151.1,127.0,0.66,0.21,5.31,33.45,27.18
-15003008631,Tract 86.31 · near Makakilo,near Makakilo,Oʻahu,Honolulu,hurricane,1.0,2988.0,89.64,36.0,15.1,115.0,444.0,20.29,342.0,1.08,0.45,3.45,15.45,35.34
-15003008632,Tract 86.32 · near Makakilo,near Makakilo,Oʻahu,Honolulu,hurricane,1.0,5196.0,155.88,98.0,37.6,600.0,1103.0,87.87,7.0,2.94,1.13,18.0,38.34,40.8
+15003008631,Tract 86.31 · Makakilo,Makakilo,Oʻahu,Honolulu,hurricane,1.0,2988.0,89.64,36.0,15.1,115.0,444.0,20.29,342.0,1.08,0.45,3.45,15.45,35.34
+15003008632,Tract 86.32 · Makakilo,Makakilo,Oʻahu,Honolulu,hurricane,1.0,5196.0,155.88,98.0,37.6,600.0,1103.0,87.87,7.0,2.94,1.13,18.0,38.34,40.8
 15003008633,Tract 86.33 · Makakilo,Makakilo,Oʻahu,Honolulu,hurricane,1.0,3130.0,93.9,61.0,6.2,370.0,182.0,0.0,110.0,1.83,0.19,11.1,29.61,29.1
 15003008634,Tract 86.34 · Makakilo,Makakilo,Oʻahu,Honolulu,hurricane,1.0,3235.0,97.05,6.0,14.4,364.0,423.0,0.0,202.0,0.18,0.43,10.92,27.42,32.07
 15003008702,Tract 87.02 · Waipahu,Waipahu,Oʻahu,Honolulu,hurricane,1.0,5309.0,159.27,679.0,41.2,785.0,1210.0,914.98,679.0,20.37,1.24,23.55,34.47,44.91
-15003008704,Tract 87.04 · near Pearl City,near Pearl City,Oʻahu,Honolulu,hurricane,1.0,2707.0,81.21,188.0,17.1,349.0,502.0,158.46,131.0,5.64,0.51,10.47,15.06,18.45
+15003008704,Tract 87.04 · Waipahu,Waipahu,Oʻahu,Honolulu,hurricane,1.0,2707.0,81.21,188.0,17.1,349.0,502.0,158.46,131.0,5.64,0.51,10.47,15.06,18.45
 15003008705,Tract 87.05 · Waipahu,Waipahu,Oʻahu,Honolulu,hurricane,1.0,3585.0,107.55,197.0,6.7,255.0,196.0,542.27,321.0,5.91,0.2,7.65,39.27,24.99
-15003008706,Tract 87.06 · near West Loch Estate,near West Loch Estate,Oʻahu,Honolulu,hurricane,1.0,3940.0,118.2,186.0,20.8,469.0,610.0,384.57,226.0,5.58,0.62,14.07,27.42,32.58
+15003008706,Tract 87.06 · Waipahu / West Loch Estate,Waipahu / West Loch Estate,Oʻahu,Honolulu,hurricane,1.0,3940.0,118.2,186.0,20.8,469.0,610.0,384.57,226.0,5.58,0.62,14.07,27.42,32.58
 15003008707,Tract 87.07 · Waipahu,Waipahu,Oʻahu,Honolulu,hurricane,1.0,6198.0,185.94,517.0,56.3,976.0,1651.0,587.78,126.0,15.51,1.69,29.28,34.53,38.91
 15003008801,Tract 88.01 · Waipahu,Waipahu,Oʻahu,Honolulu,hurricane,1.0,3452.0,103.56,272.0,36.0,650.0,1056.0,703.89,52.0,8.16,1.08,19.5,14.46,24.57
 15003008802,Tract 88.02 · Waipahu,Waipahu,Oʻahu,Honolulu,hurricane,1.0,4750.0,142.5,276.0,43.4,829.0,1274.0,592.09,24.0,8.28,1.3,24.87,25.89,32.25
@@ -259,10 +259,10 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003008928,Tract 89.28 · Mililani Mauka,Mililani Mauka,Oʻahu,Honolulu,hurricane,1.0,3942.0,118.26,59.0,10.2,207.0,298.0,130.45,133.0,1.77,0.31,6.21,33.69,37.17
 15003008929,Tract 89.29 · Mililani Mauka,Mililani Mauka,Oʻahu,Honolulu,hurricane,1.0,5510.0,165.3,82.0,29.4,485.0,864.0,197.98,387.0,2.46,0.88,14.55,30.3,64.29
 15003008930,Tract 89.30 · Mililani Mauka,Mililani Mauka,Oʻahu,Honolulu,hurricane,1.0,2324.0,69.72,14.0,15.9,149.0,466.0,0.0,6.0,0.42,0.48,4.47,12.36,24.63
-15003008931,Tract 89.31 · near Pearl City,near Pearl City,Oʻahu,Honolulu,hurricane,1.0,3363.0,100.89,23.0,5.7,214.0,168.0,129.03,0.0,0.69,0.17,6.42,29.28,24.24
+15003008931,Tract 89.31 · near Mililani Mauka,near Mililani Mauka,Oʻahu,Honolulu,hurricane,1.0,3363.0,100.89,23.0,5.7,214.0,168.0,129.03,0.0,0.69,0.17,6.42,29.28,24.24
 15003008932,Tract 89.32 · Mililani Town,Mililani Town,Oʻahu,Honolulu,hurricane,1.0,2216.0,66.48,7.0,22.7,391.0,665.0,85.0,0.0,0.21,0.68,11.73,12.72,21.9
-15003008933,Tract 89.33 · near Mililani Town,near Mililani Town,Oʻahu,Honolulu,hurricane,1.0,3442.0,103.26,38.0,35.1,530.0,1031.0,75.35,0.0,1.14,1.05,15.9,17.43,34.26
-15003008934,Tract 89.34 · near Mililani Town,near Mililani Town,Oʻahu,Honolulu,hurricane,1.0,3844.0,115.32,174.0,18.2,504.0,533.0,64.75,0.0,5.22,0.55,15.12,24.36,33.84
+15003008933,Tract 89.33 · Mililani Town,Mililani Town,Oʻahu,Honolulu,hurricane,1.0,3442.0,103.26,38.0,35.1,530.0,1031.0,75.35,0.0,1.14,1.05,15.9,17.43,34.26
+15003008934,Tract 89.34 · Royal Kunia,Royal Kunia,Oʻahu,Honolulu,hurricane,1.0,3844.0,115.32,174.0,18.2,504.0,533.0,64.75,0.0,5.22,0.55,15.12,24.36,33.84
 15003008935,Tract 89.35 · Royal Kunia,Royal Kunia,Oʻahu,Honolulu,hurricane,1.0,3758.0,112.74,82.0,16.0,400.0,471.0,194.7,85.0,2.46,0.48,12.0,25.5,36.48
 15003008936,Tract 89.36 · Royal Kunia,Royal Kunia,Oʻahu,Honolulu,hurricane,1.0,2772.0,83.16,229.0,24.1,319.0,706.0,83.45,34.0,6.87,0.72,9.57,16.08,22.92
 15003008937,Tract 89.37 · Waipahu,Waipahu,Oʻahu,Honolulu,hurricane,1.0,2091.0,62.73,142.0,4.7,107.0,139.0,75.67,326.0,4.26,0.14,3.21,14.16,15.75
@@ -273,7 +273,7 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003008942,Tract 89.42 · Mililani Town,Mililani Town,Oʻahu,Honolulu,hurricane,1.0,2288.0,68.64,51.0,9.3,281.0,272.0,57.04,176.0,1.53,0.28,8.43,22.08,21.66
 15003008943,Tract 89.43 · Mililani Mauka,Mililani Mauka,Oʻahu,Honolulu,hurricane,1.0,1039.0,31.17,0.0,4.8,60.0,142.0,0.0,0.0,0.0,0.14,1.8,5.13,11.85
 15003008944,Tract 89.44 · Mililani Mauka,Mililani Mauka,Oʻahu,Honolulu,hurricane,1.0,3849.0,115.47,63.0,7.7,318.0,226.0,153.84,69.0,1.89,0.23,9.54,35.94,39.78
-15003008945,Tract 89.45 · near Mililani Town,near Mililani Town,Oʻahu,Honolulu,hurricane,1.0,1754.0,52.62,45.0,9.3,95.0,274.0,150.85,185.0,1.35,0.28,2.85,17.34,17.79
+15003008945,Tract 89.45 · near Waipio,near Waipio,Oʻahu,Honolulu,hurricane,1.0,1754.0,52.62,45.0,9.3,95.0,274.0,150.85,185.0,1.35,0.28,2.85,17.34,17.79
 15003008946,Tract 89.46 · Waipio,Waipio,Oʻahu,Honolulu,hurricane,1.0,2812.0,84.36,115.0,21.2,361.0,621.0,18.89,80.0,3.45,0.64,10.83,10.47,35.73
 15003008947,Tract 89.47 · Waipio,Waipio,Oʻahu,Honolulu,hurricane,1.0,1621.0,48.63,42.0,11.4,171.0,336.0,33.29,16.0,1.26,0.34,5.13,8.94,18.99
 15003008948,Tract 89.48 · Waipio,Waipio,Oʻahu,Honolulu,hurricane,1.0,2588.0,77.64,44.0,20.2,336.0,592.0,185.52,110.0,1.32,0.61,10.08,12.12,33.48
@@ -282,7 +282,7 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003008951,Tract 89.51 · Royal Kunia,Royal Kunia,Oʻahu,Honolulu,hurricane,1.0,1848.0,55.44,43.0,12.8,158.0,376.0,79.2,7.0,1.29,0.38,4.74,6.51,16.8
 15003008952,Tract 89.52 · Waikele,Waikele,Oʻahu,Honolulu,hurricane,1.0,5491.0,164.73,160.0,25.8,620.0,756.0,65.83,137.0,4.8,0.77,18.6,23.82,67.56
 15003009000,Tract 90 · Wheeler AFB,Wheeler AFB,Oʻahu,Honolulu,hurricane,1.0,2219.0,66.57,10.0,0.4,119.0,12.0,63.16,56.0,0.3,0.01,3.57,18.48,24.24
-15003009100,Tract 91 · near Wahiawa,near Wahiawa,Oʻahu,Honolulu,hurricane,1.0,5048.0,151.44,379.0,34.2,730.0,1005.0,461.94,148.0,11.37,1.03,21.9,35.49,36.39
+15003009100,Tract 91 · near Whitmore Village,near Whitmore Village,Oʻahu,Honolulu,hurricane,1.0,5048.0,151.44,379.0,34.2,730.0,1005.0,461.94,148.0,11.37,1.03,21.9,35.49,36.39
 15003009201,Tract 92.01 · Wahiawa,Wahiawa,Oʻahu,Honolulu,hurricane,1.0,3060.0,91.8,0.0,20.3,213.0,597.0,99.42,10.0,0.0,0.61,6.39,21.0,33.24
 15003009202,Tract 92.02 · Wahiawa,Wahiawa,Oʻahu,Honolulu,hurricane,1.0,2131.0,63.93,76.0,16.9,218.0,497.0,177.82,13.0,2.28,0.51,6.54,16.14,22.29
 15003009203,Tract 92.03 · Wahiawa,Wahiawa,Oʻahu,Honolulu,hurricane,1.0,2331.0,69.93,48.0,11.5,190.0,338.0,20.87,0.0,1.44,0.34,5.7,19.77,23.46
@@ -296,30 +296,30 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003009510,Tract 95.10 · Schofield Barracks,Schofield Barracks,Oʻahu,Honolulu,hurricane,1.0,1425.0,42.75,33.0,0.0,9.0,0.0,0.0,0.0,0.99,0.0,0.27,16.38,14.46
 15003009511,Tract 95.11 · Schofield Barracks,Schofield Barracks,Oʻahu,Honolulu,hurricane,1.0,3217.0,96.51,24.0,0.0,148.0,0.0,0.0,13.0,0.72,0.0,4.44,37.11,31.62
 15003009512,Tract 95.12 · Schofield Barracks,Schofield Barracks,Oʻahu,Honolulu,hurricane,1.0,5336.0,160.08,64.0,1.0,74.0,28.0,138.48,5.0,1.92,0.03,2.22,22.68,17.34
-15003009608,Tract 96.08 · near Waianae,near Waianae,Oʻahu,Honolulu,hurricane,1.0,5192.0,155.76,15.0,22.5,676.0,659.0,623.8,10.0,0.45,0.67,20.28,44.49,40.95
-15003009609,Tract 96.09 · near Maili,near Maili,Oʻahu,Honolulu,hurricane,1.0,5896.0,176.88,33.0,10.6,513.0,310.0,128.44,35.0,0.99,0.32,15.39,76.8,42.69
+15003009608,Tract 96.08 · near Nanakuli,near Nanakuli,Oʻahu,Honolulu,hurricane,1.0,5192.0,155.76,15.0,22.5,676.0,659.0,623.8,10.0,0.45,0.67,20.28,44.49,40.95
+15003009609,Tract 96.09 · Maili,Maili,Oʻahu,Honolulu,hurricane,1.0,5896.0,176.88,33.0,10.6,513.0,310.0,128.44,35.0,0.99,0.32,15.39,76.8,42.69
 15003009610,Tract 96.10 · Maili,Maili,Oʻahu,Honolulu,hurricane,1.0,6914.0,207.42,18.0,36.7,858.0,1076.0,115.85,42.0,0.54,1.1,25.74,64.08,50.13
 15003009704,Tract 97.04 · near Waianae,near Waianae,Oʻahu,Honolulu,hurricane,1.0,3324.0,99.72,101.0,12.5,392.0,368.0,177.83,0.0,3.03,0.38,11.76,31.11,21.87
 15003009705,Tract 97.05 · Waianae,Waianae,Oʻahu,Honolulu,hurricane,1.0,3099.0,92.97,10.0,16.7,402.0,489.0,211.95,133.0,0.3,0.5,12.06,26.22,28.95
 15003009706,Tract 97.06 · Waianae,Waianae,Oʻahu,Honolulu,hurricane,1.0,3590.0,107.7,17.0,18.3,467.0,538.0,0.0,0.0,0.51,0.55,14.01,33.6,22.74
-15003009707,Tract 97.07 · near Waianae,near Waianae,Oʻahu,Honolulu,hurricane,1.0,6622.0,198.66,68.0,31.1,1178.0,912.0,1866.88,554.0,2.04,0.93,35.34,58.2,58.74
-15003009801,Tract 98.01 · near Makaha,near Makaha,Oʻahu,Honolulu,hurricane,1.0,2716.0,81.48,45.0,14.9,421.0,438.0,590.54,993.0,1.35,0.45,12.63,18.39,34.77
+15003009707,Tract 97.07 · Waianae,Waianae,Oʻahu,Honolulu,hurricane,1.0,6622.0,198.66,68.0,31.1,1178.0,912.0,1866.88,554.0,2.04,0.93,35.34,58.2,58.74
+15003009801,Tract 98.01 · near Makaha Valley,near Makaha Valley,Oʻahu,Honolulu,hurricane,1.0,2716.0,81.48,45.0,14.9,421.0,438.0,590.54,993.0,1.35,0.45,12.63,18.39,34.77
 15003009803,Tract 98.03 · Makaha,Makaha,Oʻahu,Honolulu,hurricane,1.0,3162.0,94.86,657.0,13.8,480.0,404.0,480.77,315.0,19.71,0.41,14.4,27.51,25.65
 15003009804,Tract 98.04 · Makaha,Makaha,Oʻahu,Honolulu,hurricane,1.0,3486.0,104.58,8.0,15.4,697.0,453.0,680.1,54.0,0.24,0.46,20.91,39.69,25.68
 15003009902,Tract 99.02 · Haleiwa,Haleiwa,Oʻahu,Honolulu,hurricane,1.0,3584.0,107.52,37.0,27.2,551.0,798.0,240.31,218.0,1.11,0.82,16.53,22.77,31.32
 15003009905,Tract 99.05 · Waialua,Waialua,Oʻahu,Honolulu,hurricane,1.0,2947.0,88.41,90.0,23.4,475.0,687.0,150.2,5.0,2.7,0.7,14.25,15.6,29.43
 15003009906,Tract 99.06 · near Mokuleia,near Mokuleia,Oʻahu,Honolulu,hurricane,1.0,1787.0,53.61,3.0,10.7,194.0,315.0,34.28,390.0,0.09,0.32,5.82,7.26,23.46
-15003010000,Tract 100 · near Helemano,near Helemano,Oʻahu,Honolulu,hurricane,1.0,4636.0,139.08,10.0,15.7,479.0,462.0,53.29,0.0,0.3,0.47,14.37,38.64,49.59
+15003010000,Tract 100 · near Haleiwa,near Haleiwa,Oʻahu,Honolulu,hurricane,1.0,4636.0,139.08,10.0,15.7,479.0,462.0,53.29,0.0,0.3,0.47,14.37,38.64,49.59
 15003010101,Tract 101.01 · Pupukea,Pupukea,Oʻahu,Honolulu,hurricane,1.0,2377.0,71.31,50.0,16.6,233.0,487.0,14.48,33.0,1.5,0.5,6.99,8.97,24.63
 15003010102,Tract 101.02 · near Pupukea,near Pupukea,Oʻahu,Honolulu,hurricane,1.0,2858.0,85.74,56.0,24.4,264.0,715.0,212.67,11.0,1.68,0.73,7.92,22.05,22.98
 15003010103,Tract 101.03 · near Kahuku,near Kahuku,Oʻahu,Honolulu,hurricane,1.0,2639.0,79.17,47.0,12.6,267.0,370.0,125.33,129.0,1.41,0.38,8.01,26.31,22.11
 15003010202,Tract 102.02 · near Laie,near Laie,Oʻahu,Honolulu,hurricane,1.0,6980.0,209.4,82.0,19.8,456.0,582.0,705.78,15.0,2.46,0.59,13.68,53.7,40.35
 15003010203,Tract 102.03 · near Punaluu,near Punaluu,Oʻahu,Honolulu,hurricane,1.0,917.0,27.51,11.0,5.5,89.0,160.0,105.81,244.0,0.33,0.16,2.67,5.01,10.14
 15003010204,Tract 102.04 · near Hauula,near Hauula,Oʻahu,Honolulu,hurricane,1.0,2446.0,73.38,39.0,8.7,347.0,255.0,166.96,0.0,1.17,0.26,10.41,22.77,17.58
-15003010205,Tract 102.05 · near Waiahole-Waikane,near Waiahole-Waikane,Oʻahu,Honolulu,hurricane,1.0,1494.0,44.82,0.0,6.5,114.0,190.0,8.19,86.0,0.0,0.2,3.42,10.17,16.41
+15003010205,Tract 102.05 · near Kaaawa,near Kaaawa,Oʻahu,Honolulu,hurricane,1.0,1494.0,44.82,0.0,6.5,114.0,190.0,8.19,86.0,0.0,0.2,3.42,10.17,16.41
 15003010303,Tract 103.03 · Waiahole-Waikane,Waiahole-Waikane,Oʻahu,Honolulu,hurricane,1.0,4740.0,142.2,64.0,37.1,428.0,1090.0,99.61,26.0,1.92,1.11,12.84,38.91,41.4
-15003010305,Tract 103.05 · Ahuimanu,Ahuimanu,Oʻahu,Honolulu,hurricane,1.0,5991.0,179.73,17.0,33.9,546.0,996.0,169.88,63.0,0.51,1.02,16.38,52.8,47.61
-15003010308,Tract 103.08 · near Urban Honolulu,near Urban Honolulu,Oʻahu,Honolulu,hurricane,1.0,3470.0,104.1,8.0,29.5,431.0,865.0,60.03,0.0,0.24,0.88,12.93,15.48,34.68
+15003010305,Tract 103.05 · Ahuimanu / Kahaluu,Ahuimanu / Kahaluu,Oʻahu,Honolulu,hurricane,1.0,5991.0,179.73,17.0,33.9,546.0,996.0,169.88,63.0,0.51,1.02,16.38,52.8,47.61
+15003010308,Tract 103.08 · near Kaneohe,near Kaneohe,Oʻahu,Honolulu,hurricane,1.0,3470.0,104.1,8.0,29.5,431.0,865.0,60.03,0.0,0.24,0.88,12.93,15.48,34.68
 15003010309,Tract 103.09 · Heeia,Heeia,Oʻahu,Honolulu,hurricane,1.0,3749.0,112.47,0.0,27.8,308.0,816.0,34.3,24.0,0.0,0.83,9.24,23.61,42.63
 15003010310,Tract 103.10 · Heeia,Heeia,Oʻahu,Honolulu,hurricane,1.0,2585.0,77.55,0.0,13.4,113.0,393.0,0.0,12.0,0.0,0.4,3.39,17.04,27.51
 15003010503,Tract 105.03 · Kaneohe,Kaneohe,Oʻahu,Honolulu,hurricane,1.0,2143.0,64.29,138.0,17.7,338.0,520.0,66.71,27.0,4.14,0.53,10.14,11.46,15.42
@@ -336,7 +336,7 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003010903,Tract 109.03 · Kailua,Kailua,Oʻahu,Honolulu,hurricane,1.0,3936.0,118.08,47.0,23.1,590.0,677.0,98.2,159.0,1.41,0.69,17.7,27.15,43.29
 15003010904,Tract 109.04 · Kailua,Kailua,Oʻahu,Honolulu,hurricane,1.0,3920.0,117.6,37.0,24.9,396.0,731.0,74.84,0.0,1.11,0.75,11.88,30.0,33.0
 15003010905,Tract 109.05 · Kailua,Kailua,Oʻahu,Honolulu,hurricane,1.0,2619.0,78.57,42.0,21.9,360.0,642.0,185.51,172.0,1.26,0.66,10.8,17.4,28.8
-15003011000,Tract 110 · Maunawili,Maunawili,Oʻahu,Honolulu,hurricane,1.0,3766.0,112.98,39.0,31.8,397.0,933.0,67.31,10.0,1.17,0.95,11.91,20.55,35.25
+15003011000,Tract 110 · near Maunawili,near Maunawili,Oʻahu,Honolulu,hurricane,1.0,3766.0,112.98,39.0,31.8,397.0,933.0,67.31,10.0,1.17,0.95,11.91,20.55,35.25
 15003011103,Tract 111.03 · Kailua,Kailua,Oʻahu,Honolulu,hurricane,1.0,3694.0,110.82,32.0,27.6,370.0,811.0,32.53,0.0,0.96,0.83,11.1,16.53,37.47
 15003011104,Tract 111.04 · Kailua,Kailua,Oʻahu,Honolulu,hurricane,1.0,5322.0,159.66,136.0,33.0,556.0,968.0,139.44,13.0,4.08,0.99,16.68,36.66,48.09
 15003011105,Tract 111.05 · Kailua,Kailua,Oʻahu,Honolulu,hurricane,1.0,3455.0,103.65,31.0,22.7,301.0,667.0,128.4,1102.0,0.93,0.68,9.03,14.01,43.59
@@ -375,32 +375,32 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15007040104,Tract 401.04 · near Wainiha,near Wainiha,Kauaʻi,Kauai,hurricane,1.0,1278.0,38.34,0.0,6.9,190.0,289.0,113.04,30.0,0.0,0.21,5.7,11.43,12.21
 15007040105,Tract 401.05 · near Kilauea,near Kilauea,Kauaʻi,Kauai,hurricane,1.0,4508.0,135.24,94.0,24.7,525.0,1026.0,82.75,22.0,2.82,0.74,15.75,25.23,40.86
 15007040106,Tract 401.06 · Princeville,Princeville,Kauaʻi,Kauai,hurricane,1.0,2007.0,60.21,15.0,15.6,313.0,650.0,51.96,1001.0,0.45,0.47,9.39,12.36,27.81
-15007040204,Tract 402.04 · Wailua Homesteads,Wailua Homesteads,Kauaʻi,Kauai,hurricane,1.0,6039.0,181.17,48.0,32.0,558.0,1332.0,0.0,0.0,1.44,0.96,16.74,42.93,58.68
-15007040205,Tract 402.05 · Wailua Homesteads,Wailua Homesteads,Kauaʻi,Kauai,hurricane,1.0,4681.0,140.43,40.0,28.2,501.0,1175.0,66.75,591.0,1.2,0.85,15.03,26.91,50.49
+15007040204,Tract 402.04 · Wailua Homesteads / Kapaa,Wailua Homesteads / Kapaa,Kauaʻi,Kauai,hurricane,1.0,6039.0,181.17,48.0,32.0,558.0,1332.0,0.0,0.0,1.44,0.96,16.74,42.93,58.68
+15007040205,Tract 402.05 · Wailua Homesteads / Wailua,Wailua Homesteads / Wailua,Kauaʻi,Kauai,hurricane,1.0,4681.0,140.43,40.0,28.2,501.0,1175.0,66.75,591.0,1.2,0.85,15.03,26.91,50.49
 15007040301,Tract 403.01 · Kapaa,Kapaa,Kauaʻi,Kauai,hurricane,1.0,6116.0,183.48,112.0,29.5,872.0,1228.0,565.37,128.0,3.36,0.88,26.16,31.2,55.17
 15007040302,Tract 403.02 · Kapaa,Kapaa,Kauaʻi,Kauai,hurricane,1.0,2463.0,73.89,22.0,12.0,175.0,499.0,0.0,456.0,0.66,0.36,5.25,14.46,22.32
-15007040401,Tract 404.01 · near Puhi,near Puhi,Kauaʻi,Kauai,hurricane,1.0,7505.0,225.15,490.0,25.2,723.0,1048.0,469.58,653.0,14.7,0.76,21.69,41.55,54.18
+15007040401,Tract 404.01 · near Hanamaulu,near Hanamaulu,Kauaʻi,Kauai,hurricane,1.0,7505.0,225.15,490.0,25.2,723.0,1048.0,469.58,653.0,14.7,0.76,21.69,41.55,54.18
 15007040402,Tract 404.02 · Lihue,Lihue,Kauaʻi,Kauai,hurricane,1.0,2798.0,83.94,70.0,20.8,419.0,866.0,249.39,121.0,2.1,0.62,12.57,19.62,27.6
 15007040500,Tract 405 · Lihue,Lihue,Kauaʻi,Kauai,hurricane,1.0,7301.0,219.03,276.0,33.4,856.0,1388.0,119.8,283.0,8.28,1.0,25.68,56.94,63.99
-15007040603,Tract 406.03 · near Koloa,near Koloa,Kauaʻi,Kauai,hurricane,1.0,2972.0,89.16,49.0,19.3,284.0,801.0,254.41,667.0,1.47,0.58,8.52,20.01,30.84
-15007040604,Tract 406.04 · near Lawai,near Lawai,Kauaʻi,Kauai,hurricane,1.0,3509.0,105.27,18.0,19.9,299.0,829.0,78.64,220.0,0.54,0.6,8.97,25.29,38.82
+15007040603,Tract 406.03 · near Poipu,near Poipu,Kauaʻi,Kauai,hurricane,1.0,2972.0,89.16,49.0,19.3,284.0,801.0,254.41,667.0,1.47,0.58,8.52,20.01,30.84
+15007040604,Tract 406.04 · Lawai,Lawai,Kauaʻi,Kauai,hurricane,1.0,3509.0,105.27,18.0,19.9,299.0,829.0,78.64,220.0,0.54,0.6,8.97,25.29,38.82
 15007040701,Tract 407.01 · near Lawai,near Lawai,Kauaʻi,Kauai,hurricane,1.0,3092.0,92.76,0.0,12.1,374.0,504.0,40.46,0.0,0.0,0.36,11.22,23.7,27.51
-15007040702,Tract 407.02 · near Kalaheo,near Kalaheo,Kauaʻi,Kauai,hurricane,1.0,5494.0,164.82,173.0,28.1,496.0,1170.0,382.87,45.0,5.19,0.84,14.88,37.44,52.95
-15007040800,Tract 408 · rural Kauaʻi,rural Kauaʻi,Kauaʻi,Kauai,hurricane,1.0,4091.0,122.73,463.0,18.0,544.0,748.0,150.96,16.0,13.89,0.54,16.32,24.21,32.52
-15007040900,Tract 409 · rural Kauaʻi,rural Kauaʻi,Kauaʻi,Kauai,hurricane,1.0,5172.0,155.16,140.0,25.9,410.0,1077.0,364.56,51.0,4.2,0.78,12.3,32.49,52.35
+15007040702,Tract 407.02 · Kalaheo,Kalaheo,Kauaʻi,Kauai,hurricane,1.0,5494.0,164.82,173.0,28.1,496.0,1170.0,382.87,45.0,5.19,0.84,14.88,37.44,52.95
+15007040800,Tract 408 · near Pakala Village,near Pakala Village,Kauaʻi,Kauai,hurricane,1.0,4091.0,122.73,463.0,18.0,544.0,748.0,150.96,16.0,13.89,0.54,16.32,24.21,32.52
+15007040900,Tract 409 · near Waimea,near Waimea,Kauaʻi,Kauai,hurricane,1.0,5172.0,155.16,140.0,25.9,410.0,1077.0,364.56,51.0,4.2,0.78,12.3,32.49,52.35
 15007041200,Tract 412 · rural Niʻihau,rural Niʻihau,Niʻihau,Kauai,hurricane,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-15007940000,Tract 9400 · near Kapaa,near Kapaa,Kauaʻi,Kauai,hurricane,1.0,4485.0,134.55,49.0,22.3,553.0,927.0,193.43,17.0,1.47,0.67,16.59,28.29,41.04
-15009030100,Tract 301 · rural Maui,rural Maui,Maui,Maui,hurricane,1.0,1164.0,34.92,0.0,9.8,136.0,290.0,39.58,0.0,0.0,0.29,4.08,4.47,15.0
-15009030201,Tract 302.01 · near Olinda,near Olinda,Maui,Maui,hurricane,1.0,2838.0,85.14,0.0,25.8,270.0,766.0,59.24,0.0,0.0,0.77,8.1,11.16,31.62
+15007940000,Tract 9400 · near Anahola,near Anahola,Kauaʻi,Kauai,hurricane,1.0,4485.0,134.55,49.0,22.3,553.0,927.0,193.43,17.0,1.47,0.67,16.59,28.29,41.04
+15009030100,Tract 301 · near Hana,near Hana,Maui,Maui,hurricane,1.0,1164.0,34.92,0.0,9.8,136.0,290.0,39.58,0.0,0.0,0.29,4.08,4.47,15.0
+15009030201,Tract 302.01 · near Haiku-Pauwela,near Haiku-Pauwela,Maui,Maui,hurricane,1.0,2838.0,85.14,0.0,25.8,270.0,766.0,59.24,0.0,0.0,0.77,8.1,11.16,31.62
 15009030203,Tract 302.03 · Haiku-Pauwela,Haiku-Pauwela,Maui,Maui,hurricane,1.0,4575.0,137.25,41.0,27.8,484.0,823.0,178.88,0.0,1.23,0.83,14.52,32.19,45.27
 15009030204,Tract 302.04 · Haiku-Pauwela,Haiku-Pauwela,Maui,Maui,hurricane,1.0,3861.0,115.83,62.0,13.1,183.0,388.0,0.0,0.0,1.86,0.39,5.49,31.29,40.5
-15009030304,Tract 303.04 · Kula,Kula,Maui,Maui,hurricane,1.0,3603.0,108.09,3.0,19.6,281.0,582.0,3.85,0.0,0.09,0.59,8.43,26.79,28.11
-15009030305,Tract 303.05 · near Keokea,near Keokea,Maui,Maui,hurricane,1.0,5472.0,164.16,26.0,54.1,361.0,1603.0,33.93,33.0,0.78,1.62,10.83,32.88,67.74
-15009030306,Tract 303.06 · near Keokea,near Keokea,Maui,Maui,hurricane,1.0,2133.0,63.99,0.0,19.1,268.0,565.0,0.0,17.0,0.0,0.57,8.04,6.66,30.24
-15009030307,Tract 303.07 · Makena,Makena,Maui,Maui,hurricane,1.0,1903.0,57.09,28.0,30.1,285.0,893.0,14.11,523.0,0.84,0.9,8.55,4.83,24.27
+15009030304,Tract 303.04 · Kula / Keokea,Kula / Keokea,Maui,Maui,hurricane,1.0,3603.0,108.09,3.0,19.6,281.0,582.0,3.85,0.0,0.09,0.59,8.43,26.79,28.11
+15009030305,Tract 303.05 · near Kula,near Kula,Maui,Maui,hurricane,1.0,5472.0,164.16,26.0,54.1,361.0,1603.0,33.93,33.0,0.78,1.62,10.83,32.88,67.74
+15009030306,Tract 303.06 · Wailea,Wailea,Maui,Maui,hurricane,1.0,2133.0,63.99,0.0,19.1,268.0,565.0,0.0,17.0,0.0,0.57,8.04,6.66,30.24
+15009030307,Tract 303.07 · Makena / Wailea,Makena / Wailea,Maui,Maui,hurricane,1.0,1903.0,57.09,28.0,30.1,285.0,893.0,14.11,523.0,0.84,0.9,8.55,4.83,24.27
 15009030403,Tract 304.03 · Olinda,Olinda,Maui,Maui,hurricane,1.0,3687.0,110.61,25.0,25.9,718.0,767.0,191.39,64.0,0.75,0.78,21.54,23.16,39.3
 15009030404,Tract 304.04 · Haliimaile,Haliimaile,Maui,Maui,hurricane,1.0,6005.0,180.15,120.0,37.6,818.0,1114.0,109.24,14.0,3.6,1.13,24.54,38.91,59.37
-15009030405,Tract 304.05 · Kula,Kula,Maui,Maui,hurricane,1.0,2395.0,71.85,0.0,16.5,81.0,489.0,0.0,0.0,0.0,0.49,2.43,9.81,21.36
+15009030405,Tract 304.05 · near Kula,near Kula,Maui,Maui,hurricane,1.0,2395.0,71.85,0.0,16.5,81.0,489.0,0.0,0.0,0.0,0.49,2.43,9.81,21.36
 15009030406,Tract 304.06 · Pukalani,Pukalani,Maui,Maui,hurricane,1.0,6552.0,196.56,112.0,47.9,683.0,1421.0,218.86,57.0,3.36,1.44,20.49,34.29,71.85
 15009030501,Tract 305.01 · Paia,Paia,Maui,Maui,hurricane,1.0,2211.0,66.33,0.0,11.8,137.0,350.0,38.69,45.0,0.0,0.35,4.11,10.53,24.0
 15009030705,Tract 307.05 · Kihei,Kihei,Maui,Maui,hurricane,1.0,4485.0,134.55,194.0,13.5,292.0,399.0,72.69,41.0,5.82,0.4,8.76,33.63,37.02
@@ -411,10 +411,10 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15009030711,Tract 307.11 · Kihei,Kihei,Maui,Maui,hurricane,1.0,2216.0,66.48,56.0,10.9,136.0,323.0,72.89,235.0,1.68,0.33,4.08,13.08,27.36
 15009030712,Tract 307.12 · Kihei,Kihei,Maui,Maui,hurricane,1.0,2451.0,73.53,120.0,18.0,194.0,534.0,52.71,257.0,3.6,0.54,5.82,18.9,25.11
 15009030713,Tract 307.13 · Kihei,Kihei,Maui,Maui,hurricane,1.0,3834.0,115.02,33.0,13.1,286.0,389.0,118.15,960.0,0.99,0.39,8.58,19.59,38.94
-15009030800,Tract 308 · near Waihee-Waiehu,near Waihee-Waiehu,Maui,Maui,hurricane,1.0,8062.0,241.86,6.0,37.1,669.0,1100.0,95.19,31.0,0.18,1.11,20.07,66.78,66.06
+15009030800,Tract 308 · Waikapu,Waikapu,Maui,Maui,hurricane,1.0,8062.0,241.86,6.0,37.1,669.0,1100.0,95.19,31.0,0.18,1.11,20.07,66.78,66.06
 15009030901,Tract 309.01 · Wailuku,Wailuku,Maui,Maui,hurricane,1.0,2240.0,67.2,26.0,15.7,344.0,465.0,358.4,320.0,0.78,0.47,10.32,14.07,27.75
 15009030902,Tract 309.02 · Wailuku,Wailuku,Maui,Maui,hurricane,1.0,3167.0,95.01,82.0,16.5,235.0,488.0,234.48,191.0,2.46,0.49,7.05,24.3,32.01
-15009030903,Tract 309.03 · Waihee-Waiehu,Waihee-Waiehu,Maui,Maui,hurricane,1.0,7636.0,229.08,264.0,49.8,849.0,1476.0,384.55,78.0,7.92,1.49,25.47,61.62,54.21
+15009030903,Tract 309.03 · Waihee-Waiehu / Wailuku,Waihee-Waiehu / Wailuku,Maui,Maui,hurricane,1.0,7636.0,229.08,264.0,49.8,849.0,1476.0,384.55,78.0,7.92,1.49,25.47,61.62,54.21
 15009031001,Tract 310.01 · Wailuku,Wailuku,Maui,Maui,hurricane,1.0,6977.0,209.31,87.0,30.2,622.0,897.0,191.54,37.0,2.61,0.91,18.66,61.2,66.66
 15009031002,Tract 310.02 · Wailuku,Wailuku,Maui,Maui,hurricane,1.0,3774.0,113.22,44.0,31.6,381.0,938.0,335.79,441.0,1.32,0.95,11.43,24.24,46.53
 15009031102,Tract 311.02 · Kahului,Kahului,Maui,Maui,hurricane,1.0,5916.0,177.48,393.0,57.8,803.0,1715.0,670.37,55.0,11.79,1.73,24.09,25.47,52.95
@@ -422,29 +422,29 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15009031105,Tract 311.05 · Kahului,Kahului,Maui,Maui,hurricane,1.0,6530.0,195.9,331.0,52.7,542.0,1564.0,90.09,110.0,9.93,1.58,16.26,39.72,54.36
 15009031106,Tract 311.06 · Kahului,Kahului,Maui,Maui,hurricane,1.0,4690.0,140.7,259.0,29.0,547.0,859.0,357.79,587.0,7.77,0.87,16.41,32.07,47.19
 15009031107,Tract 311.07 · Kahului,Kahului,Maui,Maui,hurricane,1.0,2530.0,75.9,32.0,14.0,250.0,416.0,239.4,50.0,0.96,0.42,7.5,15.75,13.95
-15009031402,Tract 314.02 · near Lahaina,near Lahaina,Maui,Maui,hurricane,1.0,3364.0,100.92,62.0,16.2,224.0,480.0,15.74,52.0,1.86,0.49,6.72,25.02,25.65
+15009031402,Tract 314.02 · Lahaina,Lahaina,Maui,Maui,hurricane,1.0,3364.0,100.92,62.0,16.2,224.0,480.0,15.74,52.0,1.86,0.49,6.72,25.02,25.65
 15009031404,Tract 314.04 · Lahaina,Lahaina,Maui,Maui,hurricane,1.0,3100.0,93.0,97.0,23.4,306.0,693.0,123.28,407.0,2.91,0.7,9.18,17.43,36.21
 15009031405,Tract 314.05 · Lahaina,Lahaina,Maui,Maui,hurricane,1.0,6442.0,193.26,438.0,33.3,599.0,988.0,811.69,196.0,13.14,1.0,17.97,46.23,45.0
 15009031501,Tract 315.01 · Kapalua,Kapalua,Maui,Maui,hurricane,1.0,2522.0,75.66,28.0,12.6,130.0,374.0,7.02,507.0,0.84,0.38,3.9,17.28,21.57
-15009031503,Tract 315.03 · near Mahinahina,near Mahinahina,Maui,Maui,hurricane,1.0,2834.0,85.02,143.0,21.4,403.0,635.0,384.66,1808.0,4.29,0.64,12.09,11.67,36.69
+15009031503,Tract 315.03 · Kaanapali,Kaanapali,Maui,Maui,hurricane,1.0,2834.0,85.02,143.0,21.4,403.0,635.0,384.66,1808.0,4.29,0.64,12.09,11.67,36.69
 15009031504,Tract 315.04 · near Kapalua,near Kapalua,Maui,Maui,hurricane,1.0,1874.0,56.22,0.0,13.3,202.0,393.0,0.0,79.0,0.0,0.4,6.06,16.89,17.52
 15009031505,Tract 315.05 · Mahinahina,Mahinahina,Maui,Maui,hurricane,1.0,2341.0,70.23,31.0,15.1,178.0,447.0,145.36,1186.0,0.93,0.45,5.34,11.97,27.54
-15009031601,Tract 316.01 · Lanai City,Lanai City,Lānaʻi,Maui,hurricane,1.0,3218.0,96.54,175.0,22.5,513.0,667.0,368.22,45.0,5.25,0.67,15.39,18.93,37.23
-15009031700,Tract 317 · rural Molokaʻi,rural Molokaʻi,Molokaʻi,Maui,hurricane,1.0,4827.0,144.81,19.0,35.3,820.0,1047.0,236.77,263.0,0.57,1.06,24.6,38.67,45.87
-15009031801,Tract 318.01 · near Kualapuu,near Kualapuu,Molokaʻi,Maui,hurricane,1.0,2640.0,79.2,14.0,20.8,528.0,618.0,84.45,260.0,0.42,0.62,15.84,21.36,25.32
+15009031601,Tract 316.01 · near Lanai City,near Lanai City,Lānaʻi,Maui,hurricane,1.0,3218.0,96.54,175.0,22.5,513.0,667.0,368.22,45.0,5.25,0.67,15.39,18.93,37.23
+15009031700,Tract 317 · near Kaunakakai,near Kaunakakai,Molokaʻi,Maui,hurricane,1.0,4827.0,144.81,19.0,35.3,820.0,1047.0,236.77,263.0,0.57,1.06,24.6,38.67,45.87
+15009031801,Tract 318.01 · Kualapuu,Kualapuu,Molokaʻi,Maui,hurricane,1.0,2640.0,79.2,14.0,20.8,528.0,618.0,84.45,260.0,0.42,0.62,15.84,21.36,25.32
 15009031900,Tract 319 · Kahului,Kahului,Maui,Maui,hurricane,1.0,5325.0,159.75,489.0,29.2,609.0,866.0,516.96,241.0,14.67,0.88,18.27,38.34,50.37
-15009032000,Tract 320 · near Waikapu,near Waikapu,Maui,Maui,hurricane,1.0,951.0,28.53,4.0,11.2,91.0,332.0,24.91,576.0,0.12,0.34,2.73,3.45,12.6
+15009032000,Tract 320 · near Maalaea,near Maalaea,Maui,Maui,hurricane,1.0,951.0,28.53,4.0,11.2,91.0,332.0,24.91,576.0,0.12,0.34,2.73,3.45,12.6
 15009980000,Tract 9800 · rural Kahoʻolawe,rural Kahoʻolawe,Kahoʻolawe,Maui,hurricane,1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-15001021011,Tract 210.11 · near Mountain View,near Mountain View,Hawaiʻi Island,Hawaii,wildfire,1.0,4540.0,227.0,63.0,29.6,1027.0,916.0,73.18,0.0,3.15,1.48,51.35,55.15,77.55
-15001021013,Tract 210.13 · Keaau,Keaau,Hawaiʻi Island,Hawaii,wildfire,1.0,5059.0,252.95,207.0,40.7,955.0,1260.0,285.85,14.0,10.35,2.04,47.75,51.75,84.95
+15001021011,Tract 210.11 · Mountain View / Volcano,Mountain View / Volcano,Hawaiʻi Island,Hawaii,wildfire,1.0,4540.0,227.0,63.0,29.6,1027.0,916.0,73.18,0.0,3.15,1.48,51.35,55.15,77.55
+15001021013,Tract 210.13 · near Kurtistown,near Kurtistown,Hawaiʻi Island,Hawaii,wildfire,1.0,5059.0,252.95,207.0,40.7,955.0,1260.0,285.85,14.0,10.35,2.04,47.75,51.75,84.95
 15001021014,Tract 210.14 · Hawaiian Paradise Park,Hawaiian Paradise Park,Hawaiʻi Island,Hawaii,wildfire,1.0,8135.0,406.75,260.0,48.6,834.0,1504.0,0.0,75.0,13.0,2.43,41.7,93.25,129.6
-15001021016,Tract 210.16 · Hawaiian Acres,Hawaiian Acres,Hawaiʻi Island,Hawaii,wildfire,1.0,5088.0,254.4,50.0,40.2,974.0,1245.0,64.34,19.0,2.5,2.01,48.7,43.95,94.9
+15001021016,Tract 210.16 · Hawaiian Acres / Fern Acres,Hawaiian Acres / Fern Acres,Hawaiʻi Island,Hawaii,wildfire,1.0,5088.0,254.4,50.0,40.2,974.0,1245.0,64.34,19.0,2.5,2.01,48.7,43.95,94.9
 15001021017,Tract 210.17 · Fern Forest,Fern Forest,Hawaiʻi Island,Hawaii,wildfire,1.0,3566.0,178.3,34.0,30.9,833.0,957.0,265.6,10.0,1.7,1.55,41.65,27.6,86.6
-15001021502,Tract 215.02 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,wildfire,1.0,5103.0,255.15,80.0,37.7,452.0,1168.0,145.56,38.0,4.0,1.89,22.6,58.25,91.15
-15001021705,Tract 217.05 · near Waimea,near Waimea,Hawaiʻi Island,Hawaii,wildfire,1.0,6507.0,325.35,94.0,41.1,575.0,1272.0,54.91,91.0,4.7,2.06,28.75,77.9,118.5
-15001021706,Tract 217.06 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,wildfire,1.0,4153.0,207.65,39.0,28.3,546.0,876.0,44.35,0.0,1.95,1.42,27.3,59.9,65.55
+15001021502,Tract 215.02 · near Holualoa,near Holualoa,Hawaiʻi Island,Hawaii,wildfire,1.0,5103.0,255.15,80.0,37.7,452.0,1168.0,145.56,38.0,4.0,1.89,22.6,58.25,91.15
+15001021705,Tract 217.05 · Waimea,Waimea,Hawaiʻi Island,Hawaii,wildfire,1.0,6507.0,325.35,94.0,41.1,575.0,1272.0,54.91,91.0,4.7,2.06,28.75,77.9,118.5
+15001021706,Tract 217.06 · near Waimea,near Waimea,Hawaiʻi Island,Hawaii,wildfire,1.0,4153.0,207.65,39.0,28.3,546.0,876.0,44.35,0.0,1.95,1.42,27.3,59.9,65.55
 15001021707,Tract 217.07 · near Waikoloa Village,near Waikoloa Village,Hawaiʻi Island,Hawaii,wildfire,1.0,4521.0,226.05,114.0,29.8,699.0,922.0,0.0,0.0,5.7,1.49,34.95,68.6,74.9
-15001021708,Tract 217.08 · Waikoloa Village,Waikoloa Village,Hawaiʻi Island,Hawaii,wildfire,1.0,4450.0,222.5,102.0,34.0,450.0,1054.0,107.79,1015.0,5.1,1.7,22.5,50.8,86.7
+15001021708,Tract 217.08 · near Waikoloa Village,near Waikoloa Village,Hawaiʻi Island,Hawaii,wildfire,1.0,4450.0,222.5,102.0,34.0,450.0,1054.0,107.79,1015.0,5.1,1.7,22.5,50.8,86.7
 15001021800,Tract 218 · near Hawi,near Hawi,Hawaiʻi Island,Hawaii,wildfire,1.0,6435.0,321.75,182.0,59.9,1134.0,1856.0,54.53,38.0,9.1,3.0,56.7,60.15,118.0
 15003000110,Tract 1.10 · East Honolulu,East Honolulu,Oʻahu,Honolulu,wildfire,1.0,4290.0,214.5,48.0,31.6,190.0,928.0,32.91,0.0,2.4,1.58,9.5,55.0,71.7
 15003000115,Tract 1.15 · East Honolulu,East Honolulu,Oʻahu,Honolulu,wildfire,1.0,2250.0,112.5,61.0,32.4,368.0,950.0,365.06,513.0,3.05,1.62,18.4,10.0,47.15
@@ -466,60 +466,60 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003006500,Tract 65 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,wildfire,1.0,4609.0,230.45,260.0,32.4,511.0,952.0,94.23,0.0,13.0,1.62,25.55,52.35,56.25
 15003006703,Tract 67.03 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,wildfire,1.0,1746.0,87.3,49.0,10.2,128.0,299.0,33.43,25.0,2.45,0.51,6.4,24.25,23.5
 15003006704,Tract 67.04 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,wildfire,1.0,7339.0,366.95,258.0,53.0,870.0,1555.0,996.03,797.0,12.9,2.65,43.5,80.55,130.05
-15003007507,Tract 75.07 · near Urban Honolulu,near Urban Honolulu,Oʻahu,Honolulu,wildfire,1.0,6241.0,312.05,182.0,48.3,761.0,1419.0,223.49,44.0,9.1,2.42,38.05,41.1,93.55
-15003007702,Tract 77.02 · near Aiea,near Aiea,Oʻahu,Honolulu,wildfire,1.0,5492.0,274.6,51.0,40.7,748.0,1194.0,183.69,0.0,2.55,2.04,37.4,48.95,88.2
+15003007507,Tract 75.07 · near Halawa,near Halawa,Oʻahu,Honolulu,wildfire,1.0,6241.0,312.05,182.0,48.3,761.0,1419.0,223.49,44.0,9.1,2.42,38.05,41.1,93.55
+15003007702,Tract 77.02 · Aiea,Aiea,Oʻahu,Honolulu,wildfire,1.0,5492.0,274.6,51.0,40.7,748.0,1194.0,183.69,0.0,2.55,2.04,37.4,48.95,88.2
 15003007809,Tract 78.09 · Pearl City,Pearl City,Oʻahu,Honolulu,wildfire,1.0,3911.0,195.55,33.0,39.5,295.0,1160.0,0.0,149.0,1.65,1.98,14.75,35.65,65.65
 15003007814,Tract 78.14 · Pearl City,Pearl City,Oʻahu,Honolulu,wildfire,1.0,3529.0,176.45,36.0,40.0,500.0,1173.0,27.31,0.0,1.8,2.0,25.0,25.85,58.15
-15003007815,Tract 78.15 · near Pearl City,near Pearl City,Oʻahu,Honolulu,wildfire,1.0,2118.0,105.9,91.0,19.3,194.0,565.0,51.1,0.0,4.55,0.97,9.7,14.4,37.3
-15003007816,Tract 78.16 · near Aiea,near Aiea,Oʻahu,Honolulu,wildfire,1.0,3456.0,172.8,78.0,31.1,335.0,912.0,28.22,378.0,3.9,1.56,16.75,33.0,67.35
-15003008005,Tract 80.05 · near Pearl City,near Pearl City,Oʻahu,Honolulu,wildfire,1.0,6267.0,313.35,243.0,54.6,706.0,1603.0,382.13,0.0,12.15,2.73,35.3,60.15,106.6
+15003007815,Tract 78.15 · Pearl City,Pearl City,Oʻahu,Honolulu,wildfire,1.0,2118.0,105.9,91.0,19.3,194.0,565.0,51.1,0.0,4.55,0.97,9.7,14.4,37.3
+15003007816,Tract 78.16 · Waimalu,Waimalu,Oʻahu,Honolulu,wildfire,1.0,3456.0,172.8,78.0,31.1,335.0,912.0,28.22,378.0,3.9,1.56,16.75,33.0,67.35
+15003008005,Tract 80.05 · Pearl City,Pearl City,Oʻahu,Honolulu,wildfire,1.0,6267.0,313.35,243.0,54.6,706.0,1603.0,382.13,0.0,12.15,2.73,35.3,60.15,106.6
 15003008408,Tract 84.08 · Ocean Pointe,Ocean Pointe,Oʻahu,Honolulu,wildfire,1.0,9678.0,483.9,84.0,24.4,1100.0,717.0,211.38,221.0,4.2,1.22,55.0,151.75,160.25
-15003008410,Tract 84.10 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,wildfire,1.0,6698.0,334.9,144.0,15.6,475.0,457.0,10.93,0.0,7.2,0.78,23.75,91.9,91.9
-15003008414,Tract 84.14 · near Ewa Gentry,near Ewa Gentry,Oʻahu,Honolulu,wildfire,1.0,2483.0,124.15,77.0,6.5,161.0,192.0,185.78,10.0,3.85,0.33,8.05,46.1,34.75
+15003008410,Tract 84.10 · Ewa Gentry / Ocean Pointe,Ewa Gentry / Ocean Pointe,Oʻahu,Honolulu,wildfire,1.0,6698.0,334.9,144.0,15.6,475.0,457.0,10.93,0.0,7.2,0.78,23.75,91.9,91.9
+15003008414,Tract 84.14 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,wildfire,1.0,2483.0,124.15,77.0,6.5,161.0,192.0,185.78,10.0,3.85,0.33,8.05,46.1,34.75
 15003008502,Tract 85.02 · Kalaeloa,Kalaeloa,Oʻahu,Honolulu,wildfire,1.0,2971.0,148.55,43.0,4.9,275.0,145.0,593.46,339.0,2.15,0.25,13.75,37.85,40.3
-15003008609,Tract 86.09 · near Ko Olina,near Ko Olina,Oʻahu,Honolulu,wildfire,1.0,1884.0,94.2,20.0,13.0,268.0,383.0,51.06,29.0,1.0,0.65,13.4,13.1,35.05
+15003008609,Tract 86.09 · Ko Olina / Kapolei,Ko Olina / Kapolei,Oʻahu,Honolulu,wildfire,1.0,1884.0,94.2,20.0,13.0,268.0,383.0,51.06,29.0,1.0,0.65,13.4,13.1,35.05
 15003008610,Tract 86.10 · Ko Olina,Ko Olina,Oʻahu,Honolulu,wildfire,1.0,987.0,49.35,54.0,10.6,91.0,311.0,21.13,290.0,2.7,0.53,4.55,6.8,23.35
 15003008611,Tract 86.11 · near Ko Olina,near Ko Olina,Oʻahu,Honolulu,wildfire,1.0,25.0,1.25,0.0,0.1,4.0,4.0,0.0,0.0,0.0,0.01,0.2,0.3,0.2
 15003008623,Tract 86.23 · Kapolei,Kapolei,Oʻahu,Honolulu,wildfire,1.0,5336.0,266.8,0.0,14.6,675.0,429.0,251.15,0.0,0.0,0.73,33.75,84.85,69.05
-15003008627,Tract 86.27 · near Royal Kunia,near Royal Kunia,Oʻahu,Honolulu,wildfire,1.0,9196.0,459.8,170.0,16.5,676.0,483.0,238.95,408.0,8.5,0.83,33.8,163.15,123.15
+15003008627,Tract 86.27 · near East Kapolei,near East Kapolei,Oʻahu,Honolulu,wildfire,1.0,9196.0,459.8,170.0,16.5,676.0,483.0,238.95,408.0,8.5,0.83,33.8,163.15,123.15
 15003008630,Tract 86.30 · Makakilo,Makakilo,Oʻahu,Honolulu,wildfire,1.0,3700.0,185.0,22.0,7.0,177.0,205.0,151.1,127.0,1.1,0.35,8.85,55.75,45.3
-15003008631,Tract 86.31 · near Makakilo,near Makakilo,Oʻahu,Honolulu,wildfire,1.0,2988.0,149.4,36.0,15.1,115.0,444.0,20.29,342.0,1.8,0.76,5.75,25.75,58.9
-15003008632,Tract 86.32 · near Makakilo,near Makakilo,Oʻahu,Honolulu,wildfire,1.0,5196.0,259.8,98.0,37.6,600.0,1103.0,87.87,7.0,4.9,1.88,30.0,63.9,68.0
+15003008631,Tract 86.31 · Makakilo,Makakilo,Oʻahu,Honolulu,wildfire,1.0,2988.0,149.4,36.0,15.1,115.0,444.0,20.29,342.0,1.8,0.76,5.75,25.75,58.9
+15003008632,Tract 86.32 · Makakilo,Makakilo,Oʻahu,Honolulu,wildfire,1.0,5196.0,259.8,98.0,37.6,600.0,1103.0,87.87,7.0,4.9,1.88,30.0,63.9,68.0
 15003008633,Tract 86.33 · Makakilo,Makakilo,Oʻahu,Honolulu,wildfire,1.0,3130.0,156.5,61.0,6.2,370.0,182.0,0.0,110.0,3.05,0.31,18.5,49.35,48.5
 15003008634,Tract 86.34 · Makakilo,Makakilo,Oʻahu,Honolulu,wildfire,1.0,3235.0,161.75,6.0,14.4,364.0,423.0,0.0,202.0,0.3,0.72,18.2,45.7,53.45
 15003008918,Tract 89.18 · Mililani Town,Mililani Town,Oʻahu,Honolulu,wildfire,1.0,5116.0,255.8,36.0,35.0,456.0,1028.0,60.32,64.0,1.8,1.75,22.8,52.4,89.05
 15003008921,Tract 89.21 · Waipio,Waipio,Oʻahu,Honolulu,wildfire,1.0,2487.0,124.35,132.0,25.0,399.0,735.0,17.12,4.0,6.6,1.25,19.95,21.1,29.05
 15003008926,Tract 89.26 · Mililani Mauka,Mililani Mauka,Oʻahu,Honolulu,wildfire,1.0,1769.0,88.45,13.0,2.9,116.0,86.0,26.77,247.0,0.65,0.15,5.8,19.05,39.65
-15003008931,Tract 89.31 · near Pearl City,near Pearl City,Oʻahu,Honolulu,wildfire,1.0,3363.0,168.15,23.0,5.7,214.0,168.0,129.03,0.0,1.15,0.28,10.7,48.8,40.4
-15003008934,Tract 89.34 · near Mililani Town,near Mililani Town,Oʻahu,Honolulu,wildfire,1.0,3844.0,192.2,174.0,18.2,504.0,533.0,64.75,0.0,8.7,0.91,25.2,40.6,56.4
+15003008931,Tract 89.31 · near Mililani Mauka,near Mililani Mauka,Oʻahu,Honolulu,wildfire,1.0,3363.0,168.15,23.0,5.7,214.0,168.0,129.03,0.0,1.15,0.28,10.7,48.8,40.4
+15003008934,Tract 89.34 · Royal Kunia,Royal Kunia,Oʻahu,Honolulu,wildfire,1.0,3844.0,192.2,174.0,18.2,504.0,533.0,64.75,0.0,8.7,0.91,25.2,40.6,56.4
 15003008939,Tract 89.39 · Waipio Acres,Waipio Acres,Oʻahu,Honolulu,wildfire,1.0,2372.0,118.6,62.0,11.8,463.0,347.0,0.0,932.0,3.1,0.59,23.15,21.5,46.6
-15003008945,Tract 89.45 · near Mililani Town,near Mililani Town,Oʻahu,Honolulu,wildfire,1.0,1754.0,87.7,45.0,9.3,95.0,274.0,150.85,185.0,2.25,0.47,4.75,28.9,29.65
+15003008945,Tract 89.45 · near Waipio,near Waipio,Oʻahu,Honolulu,wildfire,1.0,1754.0,87.7,45.0,9.3,95.0,274.0,150.85,185.0,2.25,0.47,4.75,28.9,29.65
 15003008946,Tract 89.46 · Waipio,Waipio,Oʻahu,Honolulu,wildfire,1.0,2812.0,140.6,115.0,21.2,361.0,621.0,18.89,80.0,5.75,1.06,18.05,17.45,59.55
-15003009100,Tract 91 · near Wahiawa,near Wahiawa,Oʻahu,Honolulu,wildfire,1.0,5048.0,252.4,379.0,34.2,730.0,1005.0,461.94,148.0,18.95,1.71,36.5,59.15,60.65
+15003009100,Tract 91 · near Whitmore Village,near Whitmore Village,Oʻahu,Honolulu,wildfire,1.0,5048.0,252.4,379.0,34.2,730.0,1005.0,461.94,148.0,18.95,1.71,36.5,59.15,60.65
 15003009201,Tract 92.01 · Wahiawa,Wahiawa,Oʻahu,Honolulu,wildfire,1.0,3060.0,153.0,0.0,20.3,213.0,597.0,99.42,10.0,0.0,1.02,10.65,35.0,55.4
 15003009203,Tract 92.03 · Wahiawa,Wahiawa,Oʻahu,Honolulu,wildfire,1.0,2331.0,116.55,48.0,11.5,190.0,338.0,20.87,0.0,2.4,0.57,9.5,32.95,39.1
 15003009401,Tract 94.01 · Wahiawa,Wahiawa,Oʻahu,Honolulu,wildfire,1.0,1276.0,63.8,102.0,7.7,127.0,225.0,98.55,233.0,5.1,0.39,6.35,7.15,24.6
 15003009507,Tract 95.07 · Schofield Barracks,Schofield Barracks,Oʻahu,Honolulu,wildfire,1.0,2832.0,141.6,22.0,0.0,83.0,0.0,0.0,200.0,1.1,0.0,4.15,17.3,25.0
-15003009608,Tract 96.08 · near Waianae,near Waianae,Oʻahu,Honolulu,wildfire,1.0,5192.0,259.6,15.0,22.5,676.0,659.0,623.8,10.0,0.75,1.12,33.8,74.15,68.25
-15003009609,Tract 96.09 · near Maili,near Maili,Oʻahu,Honolulu,wildfire,1.0,5896.0,294.8,33.0,10.6,513.0,310.0,128.44,35.0,1.65,0.53,25.65,128.0,71.15
+15003009608,Tract 96.08 · near Nanakuli,near Nanakuli,Oʻahu,Honolulu,wildfire,1.0,5192.0,259.6,15.0,22.5,676.0,659.0,623.8,10.0,0.75,1.12,33.8,74.15,68.25
+15003009609,Tract 96.09 · Maili,Maili,Oʻahu,Honolulu,wildfire,1.0,5896.0,294.8,33.0,10.6,513.0,310.0,128.44,35.0,1.65,0.53,25.65,128.0,71.15
 15003009704,Tract 97.04 · near Waianae,near Waianae,Oʻahu,Honolulu,wildfire,1.0,3324.0,166.2,101.0,12.5,392.0,368.0,177.83,0.0,5.05,0.62,19.6,51.85,36.45
 15003009705,Tract 97.05 · Waianae,Waianae,Oʻahu,Honolulu,wildfire,1.0,3099.0,154.95,10.0,16.7,402.0,489.0,211.95,133.0,0.5,0.84,20.1,43.7,48.25
 15003009706,Tract 97.06 · Waianae,Waianae,Oʻahu,Honolulu,wildfire,1.0,3590.0,179.5,17.0,18.3,467.0,538.0,0.0,0.0,0.85,0.92,23.35,56.0,37.9
-15003009707,Tract 97.07 · near Waianae,near Waianae,Oʻahu,Honolulu,wildfire,1.0,6622.0,331.1,68.0,31.1,1178.0,912.0,1866.88,554.0,3.4,1.56,58.9,97.0,97.9
-15003009801,Tract 98.01 · near Makaha,near Makaha,Oʻahu,Honolulu,wildfire,1.0,2716.0,135.8,45.0,14.9,421.0,438.0,590.54,993.0,2.25,0.75,21.05,30.65,57.95
+15003009707,Tract 97.07 · Waianae,Waianae,Oʻahu,Honolulu,wildfire,1.0,6622.0,331.1,68.0,31.1,1178.0,912.0,1866.88,554.0,3.4,1.56,58.9,97.0,97.9
+15003009801,Tract 98.01 · near Makaha Valley,near Makaha Valley,Oʻahu,Honolulu,wildfire,1.0,2716.0,135.8,45.0,14.9,421.0,438.0,590.54,993.0,2.25,0.75,21.05,30.65,57.95
 15003009803,Tract 98.03 · Makaha,Makaha,Oʻahu,Honolulu,wildfire,1.0,3162.0,158.1,657.0,13.8,480.0,404.0,480.77,315.0,32.85,0.69,24.0,45.85,42.75
 15003009804,Tract 98.04 · Makaha,Makaha,Oʻahu,Honolulu,wildfire,1.0,3486.0,174.3,8.0,15.4,697.0,453.0,680.1,54.0,0.4,0.77,34.85,66.15,42.8
 15003009906,Tract 99.06 · near Mokuleia,near Mokuleia,Oʻahu,Honolulu,wildfire,1.0,1787.0,89.35,3.0,10.7,194.0,315.0,34.28,390.0,0.15,0.54,9.7,12.1,39.1
-15003010000,Tract 100 · near Helemano,near Helemano,Oʻahu,Honolulu,wildfire,1.0,4636.0,231.8,10.0,15.7,479.0,462.0,53.29,0.0,0.5,0.79,23.95,64.4,82.65
+15003010000,Tract 100 · near Haleiwa,near Haleiwa,Oʻahu,Honolulu,wildfire,1.0,4636.0,231.8,10.0,15.7,479.0,462.0,53.29,0.0,0.5,0.79,23.95,64.4,82.65
 15003010101,Tract 101.01 · Pupukea,Pupukea,Oʻahu,Honolulu,wildfire,1.0,2377.0,118.85,50.0,16.6,233.0,487.0,14.48,33.0,2.5,0.83,11.65,14.95,41.05
 15003010102,Tract 101.02 · near Pupukea,near Pupukea,Oʻahu,Honolulu,wildfire,1.0,2858.0,142.9,56.0,24.4,264.0,715.0,212.67,11.0,2.8,1.22,13.2,36.75,38.3
 15003010202,Tract 102.02 · near Laie,near Laie,Oʻahu,Honolulu,wildfire,1.0,6980.0,349.0,82.0,19.8,456.0,582.0,705.78,15.0,4.1,0.99,22.8,89.5,67.25
 15003010303,Tract 103.03 · Waiahole-Waikane,Waiahole-Waikane,Oʻahu,Honolulu,wildfire,1.0,4740.0,237.0,64.0,37.1,428.0,1090.0,99.61,26.0,3.2,1.85,21.4,64.85,69.0
-15003010305,Tract 103.05 · Ahuimanu,Ahuimanu,Oʻahu,Honolulu,wildfire,1.0,5991.0,299.55,17.0,33.9,546.0,996.0,169.88,63.0,0.85,1.7,27.3,88.0,79.35
+15003010305,Tract 103.05 · Ahuimanu / Kahaluu,Ahuimanu / Kahaluu,Oʻahu,Honolulu,wildfire,1.0,5991.0,299.55,17.0,33.9,546.0,996.0,169.88,63.0,0.85,1.7,27.3,88.0,79.35
 15003010309,Tract 103.09 · Heeia,Heeia,Oʻahu,Honolulu,wildfire,1.0,3749.0,187.45,0.0,27.8,308.0,816.0,34.3,24.0,0.0,1.39,15.4,39.35,71.05
 15003010507,Tract 105.07 · Kaneohe,Kaneohe,Oʻahu,Honolulu,wildfire,1.0,5275.0,263.75,68.0,31.5,587.0,924.0,147.66,697.0,3.4,1.57,29.35,53.75,83.95
 15003010701,Tract 107.01 · Kaneohe,Kaneohe,Oʻahu,Honolulu,wildfire,1.0,4236.0,211.8,34.0,29.8,229.0,876.0,108.93,54.0,1.7,1.49,11.45,37.6,70.0
-15003011000,Tract 110 · Maunawili,Maunawili,Oʻahu,Honolulu,wildfire,1.0,3766.0,188.3,39.0,31.8,397.0,933.0,67.31,10.0,1.95,1.59,19.85,34.25,58.75
+15003011000,Tract 110 · near Maunawili,near Maunawili,Oʻahu,Honolulu,wildfire,1.0,3766.0,188.3,39.0,31.8,397.0,933.0,67.31,10.0,1.95,1.59,19.85,34.25,58.75
 15003011103,Tract 111.03 · Kailua,Kailua,Oʻahu,Honolulu,wildfire,1.0,3694.0,184.7,32.0,27.6,370.0,811.0,32.53,0.0,1.6,1.38,18.5,27.55,62.45
 15003011106,Tract 111.06 · Kailua,Kailua,Oʻahu,Honolulu,wildfire,1.0,6649.0,332.45,54.0,43.2,599.0,1268.0,45.45,0.0,2.7,2.16,29.95,91.85,95.1
 15003011300,Tract 113 · Waimanalo,Waimanalo,Oʻahu,Honolulu,wildfire,1.0,5743.0,287.15,72.0,28.5,570.0,837.0,124.85,78.0,3.6,1.43,28.5,88.9,62.1
@@ -530,40 +530,40 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003940007,Tract 9400.07 · Nanakuli,Nanakuli,Oʻahu,Honolulu,wildfire,1.0,2326.0,116.3,65.0,9.8,290.0,288.0,438.29,179.0,3.25,0.49,14.5,36.25,26.8
 15003980600,Tract 9806 · near Schofield Barracks,near Schofield Barracks,Oʻahu,Honolulu,wildfire,1.0,100.0,5.0,0.0,0.0,16.0,0.0,0.0,0.0,0.0,0.0,0.8,3.0,1.0
 15007040105,Tract 401.05 · near Kilauea,near Kilauea,Kauaʻi,Kauai,wildfire,1.0,4508.0,225.4,94.0,24.7,525.0,1026.0,82.75,22.0,4.7,1.24,26.25,42.05,68.1
-15007040204,Tract 402.04 · Wailua Homesteads,Wailua Homesteads,Kauaʻi,Kauai,wildfire,1.0,6039.0,301.95,48.0,32.0,558.0,1332.0,0.0,0.0,2.4,1.6,27.9,71.55,97.8
-15007040604,Tract 406.04 · near Lawai,near Lawai,Kauaʻi,Kauai,wildfire,1.0,3509.0,175.45,18.0,19.9,299.0,829.0,78.64,220.0,0.9,0.99,14.95,42.15,64.7
+15007040204,Tract 402.04 · Wailua Homesteads / Kapaa,Wailua Homesteads / Kapaa,Kauaʻi,Kauai,wildfire,1.0,6039.0,301.95,48.0,32.0,558.0,1332.0,0.0,0.0,2.4,1.6,27.9,71.55,97.8
+15007040604,Tract 406.04 · Lawai,Lawai,Kauaʻi,Kauai,wildfire,1.0,3509.0,175.45,18.0,19.9,299.0,829.0,78.64,220.0,0.9,0.99,14.95,42.15,64.7
 15007040701,Tract 407.01 · near Lawai,near Lawai,Kauaʻi,Kauai,wildfire,1.0,3092.0,154.6,0.0,12.1,374.0,504.0,40.46,0.0,0.0,0.61,18.7,39.5,45.85
-15007940000,Tract 9400 · near Kapaa,near Kapaa,Kauaʻi,Kauai,wildfire,1.0,4485.0,224.25,49.0,22.3,553.0,927.0,193.43,17.0,2.45,1.11,27.65,47.15,68.4
-15009030100,Tract 301 · rural Maui,rural Maui,Maui,Maui,wildfire,1.0,1164.0,58.2,0.0,9.8,136.0,290.0,39.58,0.0,0.0,0.49,6.8,7.45,25.0
-15009030304,Tract 303.04 · Kula,Kula,Maui,Maui,wildfire,1.0,3603.0,180.15,3.0,19.6,281.0,582.0,3.85,0.0,0.15,0.98,14.05,44.65,46.85
-15009030305,Tract 303.05 · near Keokea,near Keokea,Maui,Maui,wildfire,1.0,5472.0,273.6,26.0,54.1,361.0,1603.0,33.93,33.0,1.3,2.71,18.05,54.8,112.9
+15007940000,Tract 9400 · near Anahola,near Anahola,Kauaʻi,Kauai,wildfire,1.0,4485.0,224.25,49.0,22.3,553.0,927.0,193.43,17.0,2.45,1.11,27.65,47.15,68.4
+15009030100,Tract 301 · near Hana,near Hana,Maui,Maui,wildfire,1.0,1164.0,58.2,0.0,9.8,136.0,290.0,39.58,0.0,0.0,0.49,6.8,7.45,25.0
+15009030304,Tract 303.04 · Kula / Keokea,Kula / Keokea,Maui,Maui,wildfire,1.0,3603.0,180.15,3.0,19.6,281.0,582.0,3.85,0.0,0.15,0.98,14.05,44.65,46.85
+15009030305,Tract 303.05 · near Kula,near Kula,Maui,Maui,wildfire,1.0,5472.0,273.6,26.0,54.1,361.0,1603.0,33.93,33.0,1.3,2.71,18.05,54.8,112.9
 15009030705,Tract 307.05 · Kihei,Kihei,Maui,Maui,wildfire,1.0,4485.0,224.25,194.0,13.5,292.0,399.0,72.69,41.0,9.7,0.67,14.6,56.05,61.7
 15009030709,Tract 307.09 · Kihei,Kihei,Maui,Maui,wildfire,1.0,3584.0,179.2,73.0,37.4,451.0,1109.0,285.14,2421.0,3.65,1.87,22.55,18.05,81.7
 15009031001,Tract 310.01 · Wailuku,Wailuku,Maui,Maui,wildfire,1.0,6977.0,348.85,87.0,30.2,622.0,897.0,191.54,37.0,4.35,1.51,31.1,102.0,111.1
-15009031402,Tract 314.02 · near Lahaina,near Lahaina,Maui,Maui,wildfire,1.0,3364.0,168.2,62.0,16.2,224.0,480.0,15.74,52.0,3.1,0.81,11.2,41.7,42.75
+15009031402,Tract 314.02 · Lahaina,Lahaina,Maui,Maui,wildfire,1.0,3364.0,168.2,62.0,16.2,224.0,480.0,15.74,52.0,3.1,0.81,11.2,41.7,42.75
 15009031405,Tract 314.05 · Lahaina,Lahaina,Maui,Maui,wildfire,1.0,6442.0,322.1,438.0,33.3,599.0,988.0,811.69,196.0,21.9,1.66,29.95,77.05,75.0
-15009031700,Tract 317 · rural Molokaʻi,rural Molokaʻi,Molokaʻi,Maui,wildfire,1.0,4827.0,241.35,19.0,35.3,820.0,1047.0,236.77,263.0,0.95,1.77,41.0,64.45,76.45
-15009031801,Tract 318.01 · near Kualapuu,near Kualapuu,Molokaʻi,Maui,wildfire,1.0,2640.0,132.0,14.0,20.8,528.0,618.0,84.45,260.0,0.7,1.04,26.4,35.6,42.2
+15009031700,Tract 317 · near Kaunakakai,near Kaunakakai,Molokaʻi,Maui,wildfire,1.0,4827.0,241.35,19.0,35.3,820.0,1047.0,236.77,263.0,0.95,1.77,41.0,64.45,76.45
+15009031801,Tract 318.01 · Kualapuu,Kualapuu,Molokaʻi,Maui,wildfire,1.0,2640.0,132.0,14.0,20.8,528.0,618.0,84.45,260.0,0.7,1.04,26.4,35.6,42.2
 15009031900,Tract 319 · Kahului,Kahului,Maui,Maui,wildfire,1.0,5325.0,266.25,489.0,29.2,609.0,866.0,516.96,241.0,24.45,1.46,30.45,63.9,83.95
-15009032000,Tract 320 · near Waikapu,near Waikapu,Maui,Maui,wildfire,1.0,951.0,47.55,4.0,11.2,91.0,332.0,24.91,576.0,0.2,0.56,4.55,5.75,21.0
+15009032000,Tract 320 · near Maalaea,near Maalaea,Maui,Maui,wildfire,1.0,951.0,47.55,4.0,11.2,91.0,332.0,24.91,576.0,0.2,0.56,4.55,5.75,21.0
 15001020300,Tract 203 · Hilo,Hilo,Hawaiʻi Island,Hawaii,tsunami,0.08,320.86,16.04,2.39,2.5,51.59,77.62,76.34,68.76,0.12,0.13,2.58,3.2,6.93
 15001020400,Tract 204 · Hilo,Hilo,Hawaiʻi Island,Hawaii,tsunami,0.38,1284.44,64.22,30.24,8.16,184.46,253.26,171.26,93.74,1.51,0.41,9.22,15.42,25.8
 15001020500,Tract 205 · Hilo,Hilo,Hawaiʻi Island,Hawaii,tsunami,0.24,1343.58,67.18,36.06,7.6,202.31,235.71,291.03,178.84,1.8,0.38,10.12,15.31,24.91
 15001020600,Tract 206 · Hilo,Hilo,Hawaiʻi Island,Hawaii,tsunami,0.18,1217.56,60.88,11.99,8.05,225.72,249.53,69.19,67.48,0.6,0.4,11.29,12.84,19.22
-15001021013,Tract 210.13 · Keaau,Keaau,Hawaiʻi Island,Hawaii,tsunami,0.08,419.9,20.99,17.18,3.38,79.27,104.58,23.73,1.16,0.86,0.17,3.96,4.3,7.05
+15001021013,Tract 210.13 · near Kurtistown,near Kurtistown,Hawaiʻi Island,Hawaii,tsunami,0.08,419.9,20.99,17.18,3.38,79.27,104.58,23.73,1.16,0.86,0.17,3.96,4.3,7.05
 15001021014,Tract 210.14 · Hawaiian Paradise Park,Hawaiian Paradise Park,Hawaiʻi Island,Hawaii,tsunami,0.17,1391.09,69.55,44.46,8.31,142.61,257.18,0.0,12.83,2.22,0.42,7.13,15.95,22.16
 15001021015,Tract 210.15 · Hawaiian Paradise Park,Hawaiian Paradise Park,Hawaiʻi Island,Hawaii,tsunami,0.1,473.59,23.68,6.08,3.06,118.55,94.76,0.0,0.0,0.3,0.15,5.93,4.91,9.36
-15001021101,Tract 211.01 · Kamaili,Kamaili,Hawaiʻi Island,Hawaii,tsunami,0.09,257.66,12.88,2.24,2.31,47.3,71.72,11.58,0.0,0.11,0.12,2.37,2.06,6.03
-15001021108,Tract 211.08 · near Hawaiian Beaches,near Hawaiian Beaches,Hawaiʻi Island,Hawaii,tsunami,0.08,473.94,23.7,4.31,3.33,115.27,103.33,37.44,0.39,0.22,0.17,5.76,6.06,9.31
+15001021101,Tract 211.01 · near Kamaili,near Kamaili,Hawaiʻi Island,Hawaii,tsunami,0.09,257.66,12.88,2.24,2.31,47.3,71.72,11.58,0.0,0.11,0.12,2.37,2.06,6.03
+15001021108,Tract 211.08 · Hawaiian Beaches,Hawaiian Beaches,Hawaiʻi Island,Hawaii,tsunami,0.08,473.94,23.7,4.31,3.33,115.27,103.33,37.44,0.39,0.22,0.17,5.76,6.06,9.31
 15001021204,Tract 212.04 · near Hawaiian Ocean View,near Hawaiian Ocean View,Hawaiʻi Island,Hawaii,tsunami,0.02,60.7,3.03,1.4,0.61,9.73,18.79,1.7,0.71,0.07,0.03,0.49,0.65,1.23
-15001021300,Tract 213 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,tsunami,0.02,147.68,7.38,3.52,1.32,15.54,40.84,3.4,0.78,0.18,0.07,0.78,0.99,2.47
-15001021402,Tract 214.02 · Kealakekua,Kealakekua,Hawaiʻi Island,Hawaii,tsunami,0.06,235.34,11.77,14.21,1.92,47.95,59.23,15.97,6.59,0.71,0.1,2.4,2.77,3.78
-15001021504,Tract 215.04 · Kailua,Kailua,Hawaiʻi Island,Hawaii,tsunami,0.14,917.49,45.87,37.61,4.02,114.54,124.41,66.14,35.46,1.88,0.2,5.73,14.34,12.4
-15001021510,Tract 215.10 · Kahaluu-Keauhou,Kahaluu-Keauhou,Hawaiʻi Island,Hawaii,tsunami,0.14,717.86,35.89,34.46,7.08,82.22,219.08,28.18,110.25,1.72,0.35,4.11,7.53,12.02
-15001021513,Tract 215.13 · near Kaiminani,near Kaiminani,Hawaiʻi Island,Hawaii,tsunami,0.09,518.85,25.94,21.86,3.56,52.82,110.39,12.46,0.0,1.09,0.18,2.64,4.62,9.49
+15001021300,Tract 213 · near Honaunau-Napoopoo,near Honaunau-Napoopoo,Hawaiʻi Island,Hawaii,tsunami,0.02,147.68,7.38,3.52,1.32,15.54,40.84,3.4,0.78,0.18,0.07,0.78,0.99,2.47
+15001021402,Tract 214.02 · Kealakekua / Captain Cook,Kealakekua / Captain Cook,Hawaiʻi Island,Hawaii,tsunami,0.06,235.34,11.77,14.21,1.92,47.95,59.23,15.97,6.59,0.71,0.1,2.4,2.77,3.78
+15001021504,Tract 215.04 · Kailua / Kaiminani,Kailua / Kaiminani,Hawaiʻi Island,Hawaii,tsunami,0.14,917.49,45.87,37.61,4.02,114.54,124.41,66.14,35.46,1.88,0.2,5.73,14.34,12.4
+15001021510,Tract 215.10 · Kahaluu-Keauhou / Kealakekua,Kahaluu-Keauhou / Kealakekua,Hawaiʻi Island,Hawaii,tsunami,0.14,717.86,35.89,34.46,7.08,82.22,219.08,28.18,110.25,1.72,0.35,4.11,7.53,12.02
+15001021513,Tract 215.13 · Kaiminani,Kaiminani,Hawaiʻi Island,Hawaii,tsunami,0.09,518.85,25.94,21.86,3.56,52.82,110.39,12.46,0.0,1.09,0.18,2.64,4.62,9.49
 15001021605,Tract 216.05 · Kailua,Kailua,Hawaiʻi Island,Hawaii,tsunami,0.09,373.12,18.66,35.2,2.67,43.38,82.72,22.02,96.89,1.76,0.13,2.17,2.53,7.01
 15001021608,Tract 216.08 · Kailua,Kailua,Hawaiʻi Island,Hawaii,tsunami,0.45,1971.45,98.57,150.3,15.75,264.15,487.35,27.43,428.85,7.52,0.79,13.21,10.51,40.43
-15001021708,Tract 217.08 · Waikoloa Village,Waikoloa Village,Hawaiʻi Island,Hawaii,tsunami,0.05,240.3,12.02,5.51,1.84,24.3,56.92,5.82,54.81,0.28,0.09,1.22,2.74,4.68
+15001021708,Tract 217.08 · near Waikoloa Village,near Waikoloa Village,Hawaiʻi Island,Hawaii,tsunami,0.05,240.3,12.02,5.51,1.84,24.3,56.92,5.82,54.81,0.28,0.09,1.22,2.74,4.68
 15001021800,Tract 218 · near Hawi,near Hawi,Hawaiʻi Island,Hawaii,tsunami,0.01,96.52,4.83,2.73,0.9,17.01,27.84,0.82,0.57,0.14,0.04,0.85,0.9,1.77
 15003000108,Tract 1.08 · East Honolulu,East Honolulu,Oʻahu,Honolulu,tsunami,0.29,957.76,47.89,14.02,9.87,135.49,289.37,13.73,108.62,0.7,0.49,6.77,7.26,18.34
 15003000110,Tract 1.10 · East Honolulu,East Honolulu,Oʻahu,Honolulu,tsunami,0.27,1154.01,57.7,12.91,8.5,51.11,249.63,8.85,0.0,0.65,0.43,2.56,14.79,19.29
@@ -574,7 +574,7 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003000301,Tract 3.01 · East Honolulu,East Honolulu,Oʻahu,Honolulu,tsunami,0.03,96.66,4.83,3.13,0.77,8.96,22.48,4.02,0.0,0.16,0.04,0.45,0.71,1.74
 15003000302,Tract 3.02 · East Honolulu,East Honolulu,Oʻahu,Honolulu,tsunami,0.28,783.4,39.17,25.02,6.92,102.3,203.5,47.5,4.17,1.25,0.35,5.12,8.08,13.52
 15003000402,Tract 4.02 · East Honolulu,East Honolulu,Oʻahu,Honolulu,tsunami,0.02,82.15,4.11,2.6,0.83,7.25,24.44,0.44,0.21,0.13,0.04,0.36,0.74,1.38
-15003000500,Tract 5 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,tsunami,0.49,1703.92,85.2,81.65,17.2,163.78,504.95,64.16,131.22,4.08,0.86,8.19,16.94,33.56
+15003000500,Tract 5 · Urban Honolulu / East Honolulu,Urban Honolulu / East Honolulu,Oʻahu,Honolulu,tsunami,0.49,1703.92,85.2,81.65,17.2,163.78,504.95,64.16,131.22,4.08,0.86,8.19,16.94,33.56
 15003000600,Tract 6 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,tsunami,0.07,87.67,4.38,0.0,1.04,6.53,30.67,0.0,0.3,0.0,0.05,0.33,0.74,1.68
 15003001700,Tract 17 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,tsunami,0.58,1233.08,61.65,5.22,12.93,65.54,379.32,99.33,724.42,0.26,0.65,3.28,9.69,31.32
 15003001801,Tract 18.01 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,tsunami,1.0,939.0,46.95,69.0,7.0,95.0,204.0,399.12,1293.0,3.45,0.35,4.75,3.8,28.35
@@ -610,11 +610,11 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003005900,Tract 59 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,tsunami,0.25,741.25,37.06,84.25,2.25,57.5,66.25,201.94,17.75,4.21,0.11,2.88,4.84,7.52
 15003006000,Tract 60 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,tsunami,0.05,286.9,14.34,45.52,1.64,25.92,48.02,46.29,11.37,2.28,0.08,1.3,3.04,2.99
 15003007302,Tract 73.02 · Hickam Housing,Hickam Housing,Oʻahu,Honolulu,tsunami,0.02,90.58,4.53,0.5,0.04,3.82,1.04,1.96,0.83,0.03,0.0,0.19,1.69,1.54
-15003007400,Tract 74 · near Hickam Housing,near Hickam Housing,Oʻahu,Honolulu,tsunami,0.05,340.75,17.04,0.59,0.0,1.57,0.2,0.0,1.08,0.03,0.0,0.08,3.01,2.16
+15003007400,Tract 74 · near Halawa,near Halawa,Oʻahu,Honolulu,tsunami,0.05,340.75,17.04,0.59,0.0,1.57,0.2,0.0,1.08,0.03,0.0,0.08,3.01,2.16
 15003007504,Tract 75.04 · Halawa,Halawa,Oʻahu,Honolulu,tsunami,0.02,45.82,2.29,3.14,0.26,9.18,7.62,10.42,6.26,0.16,0.01,0.46,0.53,0.77
 15003007701,Tract 77.01 · Aiea,Aiea,Oʻahu,Honolulu,tsunami,0.06,252.9,12.64,6.01,1.85,33.05,54.31,9.05,4.22,0.3,0.09,1.65,3.16,3.72
 15003007808,Tract 78.08 · Waimalu,Waimalu,Oʻahu,Honolulu,tsunami,0.06,215.15,10.76,3.17,1.35,21.96,39.77,17.34,33.92,0.16,0.07,1.1,1.97,3.44
-15003008301,Tract 83.01 · near Ewa Beach,near Ewa Beach,Oʻahu,Honolulu,tsunami,0.1,574.34,28.72,5.92,0.69,57.91,20.08,4.18,1.94,0.3,0.03,2.9,11.57,7.33
+15003008301,Tract 83.01 · near Iroquois Point,near Iroquois Point,Oʻahu,Honolulu,tsunami,0.1,574.34,28.72,5.92,0.69,57.91,20.08,4.18,1.94,0.3,0.03,2.9,11.57,7.33
 15003008302,Tract 83.02 · Ewa Beach,Ewa Beach,Oʻahu,Honolulu,tsunami,0.1,687.94,34.4,46.14,4.86,63.86,142.66,38.36,1.34,2.31,0.24,3.19,5.83,7.02
 15003008408,Tract 84.08 · Ocean Pointe,Ocean Pointe,Oʻahu,Honolulu,tsunami,0.28,2671.13,133.56,23.18,6.73,303.6,197.89,58.34,61.0,1.16,0.34,15.18,41.88,44.23
 15003008418,Tract 84.18 · Ewa Beach,Ewa Beach,Oʻahu,Honolulu,tsunami,0.69,3779.82,188.99,76.59,22.29,486.45,653.43,55.5,44.16,3.83,1.11,24.32,39.88,46.99
@@ -622,30 +622,30 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003008610,Tract 86.10 · Ko Olina,Ko Olina,Oʻahu,Honolulu,tsunami,0.18,173.71,8.69,9.5,1.87,16.02,54.74,3.72,51.04,0.48,0.09,0.8,1.2,4.11
 15003008611,Tract 86.11 · near Ko Olina,near Ko Olina,Oʻahu,Honolulu,tsunami,0.02,0.45,0.02,0.0,0.0,0.07,0.07,0.0,0.0,0.0,0.0,0.0,0.01,0.0
 15003008624,Tract 86.24 · West Loch Estate,West Loch Estate,Oʻahu,Honolulu,tsunami,0.05,167.41,8.37,5.26,0.88,18.52,25.76,0.0,0.0,0.26,0.04,0.93,2.48,1.85
-15003008704,Tract 87.04 · near Pearl City,near Pearl City,Oʻahu,Honolulu,tsunami,0.08,208.44,10.42,14.48,1.32,26.87,38.65,12.2,10.09,0.72,0.07,1.34,1.93,2.37
+15003008704,Tract 87.04 · Waipahu,Waipahu,Oʻahu,Honolulu,tsunami,0.08,208.44,10.42,14.48,1.32,26.87,38.65,12.2,10.09,0.72,0.07,1.34,1.93,2.37
 15003008705,Tract 87.05 · Waipahu,Waipahu,Oʻahu,Honolulu,tsunami,0.3,1068.33,53.42,58.71,2.0,75.99,58.41,161.6,95.66,2.94,0.1,3.8,19.5,12.41
-15003008706,Tract 87.06 · near West Loch Estate,near West Loch Estate,Oʻahu,Honolulu,tsunami,0.07,260.04,13.0,12.28,1.37,30.95,40.26,25.38,14.92,0.61,0.07,1.55,3.02,3.58
-15003009608,Tract 96.08 · near Waianae,near Waianae,Oʻahu,Honolulu,tsunami,0.02,109.03,5.45,0.32,0.47,14.2,13.84,13.1,0.21,0.02,0.02,0.71,1.56,1.43
-15003009609,Tract 96.09 · near Maili,near Maili,Oʻahu,Honolulu,tsunami,0.12,695.73,34.79,3.89,1.25,60.53,36.58,15.16,4.13,0.19,0.06,3.03,15.1,8.4
+15003008706,Tract 87.06 · Waipahu / West Loch Estate,Waipahu / West Loch Estate,Oʻahu,Honolulu,tsunami,0.07,260.04,13.0,12.28,1.37,30.95,40.26,25.38,14.92,0.61,0.07,1.55,3.02,3.58
+15003009608,Tract 96.08 · near Nanakuli,near Nanakuli,Oʻahu,Honolulu,tsunami,0.02,109.03,5.45,0.32,0.47,14.2,13.84,13.1,0.21,0.02,0.02,0.71,1.56,1.43
+15003009609,Tract 96.09 · Maili,Maili,Oʻahu,Honolulu,tsunami,0.12,695.73,34.79,3.89,1.25,60.53,36.58,15.16,4.13,0.19,0.06,3.03,15.1,8.4
 15003009610,Tract 96.10 · Maili,Maili,Oʻahu,Honolulu,tsunami,0.88,6049.75,302.49,15.75,32.11,750.75,941.5,101.37,36.75,0.79,1.61,37.54,93.45,73.11
 15003009705,Tract 97.05 · Waianae,Waianae,Oʻahu,Honolulu,tsunami,0.23,725.17,36.26,2.34,3.91,94.07,114.43,49.6,31.12,0.12,0.2,4.7,10.23,11.29
-15003009707,Tract 97.07 · near Waianae,near Waianae,Oʻahu,Honolulu,tsunami,0.11,735.04,36.75,7.55,3.45,130.76,101.23,207.22,61.49,0.38,0.17,6.54,10.77,10.87
-15003009801,Tract 98.01 · near Makaha,near Makaha,Oʻahu,Honolulu,tsunami,0.06,168.39,8.42,2.79,0.92,26.1,27.16,36.61,61.57,0.14,0.05,1.31,1.9,3.59
+15003009707,Tract 97.07 · Waianae,Waianae,Oʻahu,Honolulu,tsunami,0.11,735.04,36.75,7.55,3.45,130.76,101.23,207.22,61.49,0.38,0.17,6.54,10.77,10.87
+15003009801,Tract 98.01 · near Makaha Valley,near Makaha Valley,Oʻahu,Honolulu,tsunami,0.06,168.39,8.42,2.79,0.92,26.1,27.16,36.61,61.57,0.14,0.05,1.31,1.9,3.59
 15003009803,Tract 98.03 · Makaha,Makaha,Oʻahu,Honolulu,tsunami,0.69,2188.1,109.41,454.64,9.55,332.16,279.57,332.69,217.98,22.73,0.48,16.61,31.73,29.58
 15003009804,Tract 98.04 · Makaha,Makaha,Oʻahu,Honolulu,tsunami,0.11,386.95,19.35,0.89,1.71,77.37,50.28,75.49,5.99,0.04,0.09,3.87,7.34,4.75
 15003009902,Tract 99.02 · Haleiwa,Haleiwa,Oʻahu,Honolulu,tsunami,0.67,2408.45,120.42,24.86,18.28,370.27,536.26,161.49,146.5,1.24,0.91,18.51,25.5,35.08
 15003009905,Tract 99.05 · Waialua,Waialua,Oʻahu,Honolulu,tsunami,0.33,981.35,49.07,29.97,7.79,158.17,228.77,50.02,1.67,1.5,0.39,7.91,8.66,16.33
 15003009906,Tract 99.06 · near Mokuleia,near Mokuleia,Oʻahu,Honolulu,tsunami,0.04,76.84,3.84,0.13,0.46,8.34,13.54,1.47,16.77,0.01,0.02,0.42,0.52,1.68
-15003010000,Tract 100 · near Helemano,near Helemano,Oʻahu,Honolulu,tsunami,0.01,69.54,3.48,0.15,0.24,7.18,6.93,0.8,0.0,0.01,0.01,0.36,0.97,1.24
+15003010000,Tract 100 · near Haleiwa,near Haleiwa,Oʻahu,Honolulu,tsunami,0.01,69.54,3.48,0.15,0.24,7.18,6.93,0.8,0.0,0.01,0.01,0.36,0.97,1.24
 15003010101,Tract 101.01 · Pupukea,Pupukea,Oʻahu,Honolulu,tsunami,0.07,175.9,8.79,3.7,1.23,17.24,36.04,1.07,2.44,0.18,0.06,0.86,1.11,3.04
 15003010102,Tract 101.02 · near Pupukea,near Pupukea,Oʻahu,Honolulu,tsunami,0.12,357.25,17.86,7.0,3.05,33.0,89.38,26.58,1.38,0.35,0.15,1.65,4.59,4.79
 15003010103,Tract 101.03 · near Kahuku,near Kahuku,Oʻahu,Honolulu,tsunami,0.14,356.27,17.81,6.35,1.7,36.05,49.95,16.92,17.42,0.32,0.09,1.8,5.92,4.97
 15003010202,Tract 102.02 · near Laie,near Laie,Oʻahu,Honolulu,tsunami,0.14,942.3,47.12,11.07,2.67,61.56,78.57,95.28,2.03,0.55,0.13,3.08,12.08,9.08
 15003010203,Tract 102.03 · near Punaluu,near Punaluu,Oʻahu,Honolulu,tsunami,0.1,91.7,4.58,1.1,0.55,8.9,16.0,10.58,24.4,0.06,0.03,0.45,0.84,1.69
 15003010204,Tract 102.04 · near Hauula,near Hauula,Oʻahu,Honolulu,tsunami,0.09,227.48,11.37,3.63,0.81,32.27,23.71,15.53,0.0,0.18,0.04,1.61,3.53,2.72
-15003010205,Tract 102.05 · near Waiahole-Waikane,near Waiahole-Waikane,Oʻahu,Honolulu,tsunami,0.04,56.77,2.84,0.0,0.25,4.33,7.22,0.31,3.27,0.0,0.01,0.22,0.64,1.04
+15003010205,Tract 102.05 · near Kaaawa,near Kaaawa,Oʻahu,Honolulu,tsunami,0.04,56.77,2.84,0.0,0.25,4.33,7.22,0.31,3.27,0.0,0.01,0.22,0.64,1.04
 15003010303,Tract 103.03 · Waiahole-Waikane,Waiahole-Waikane,Oʻahu,Honolulu,tsunami,0.06,260.7,13.04,3.52,2.04,23.54,59.95,5.48,1.43,0.18,0.1,1.18,3.57,3.79
-15003010305,Tract 103.05 · Ahuimanu,Ahuimanu,Oʻahu,Honolulu,tsunami,0.12,724.91,36.25,2.06,4.1,66.07,120.52,20.56,7.62,0.1,0.21,3.3,10.65,9.6
+15003010305,Tract 103.05 · Ahuimanu / Kahaluu,Ahuimanu / Kahaluu,Oʻahu,Honolulu,tsunami,0.12,724.91,36.25,2.06,4.1,66.07,120.52,20.56,7.62,0.1,0.21,3.3,10.65,9.6
 15003010310,Tract 103.10 · Heeia,Heeia,Oʻahu,Honolulu,tsunami,0.02,62.04,3.1,0.0,0.32,2.71,9.43,0.0,0.29,0.0,0.02,0.14,0.68,1.1
 15003010505,Tract 105.05 · Heeia,Heeia,Oʻahu,Honolulu,tsunami,0.19,616.64,30.83,10.34,6.45,105.47,189.32,4.73,0.0,0.52,0.32,5.27,3.2,9.81
 15003010508,Tract 105.08 · Kaneohe,Kaneohe,Oʻahu,Honolulu,tsunami,0.02,59.01,2.95,0.17,0.42,3.84,12.45,4.3,7.9,0.01,0.02,0.19,0.53,1.05
@@ -681,18 +681,18 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15007040104,Tract 401.04 · near Wainiha,near Wainiha,Kauaʻi,Kauai,tsunami,0.08,98.41,4.92,0.0,0.53,14.63,22.25,8.7,2.31,0.0,0.03,0.73,1.47,1.57
 15007040105,Tract 401.05 · near Kilauea,near Kilauea,Kauaʻi,Kauai,tsunami,0.07,338.1,16.9,7.05,1.85,39.37,76.95,6.21,1.65,0.35,0.09,1.97,3.15,5.11
 15007040106,Tract 401.06 · Princeville,Princeville,Kauaʻi,Kauai,tsunami,0.2,401.4,20.07,3.0,3.12,62.6,130.0,10.39,200.2,0.15,0.16,3.13,4.12,9.27
-15007040205,Tract 402.05 · Wailua Homesteads,Wailua Homesteads,Kauaʻi,Kauai,tsunami,0.21,964.29,48.21,8.24,5.81,103.21,242.05,13.75,121.75,0.41,0.29,5.16,9.24,17.33
+15007040205,Tract 402.05 · Wailua Homesteads / Wailua,Wailua Homesteads / Wailua,Kauaʻi,Kauai,tsunami,0.21,964.29,48.21,8.24,5.81,103.21,242.05,13.75,121.75,0.41,0.29,5.16,9.24,17.33
 15007040302,Tract 403.02 · Kapaa,Kapaa,Kauaʻi,Kauai,tsunami,0.56,1369.43,68.47,12.23,6.67,97.3,277.44,0.0,253.54,0.61,0.33,4.87,13.4,20.68
-15007040401,Tract 404.01 · near Puhi,near Puhi,Kauaʻi,Kauai,tsunami,0.05,360.24,18.01,23.52,1.21,34.7,50.3,22.54,31.34,1.18,0.06,1.74,3.32,4.33
+15007040401,Tract 404.01 · near Hanamaulu,near Hanamaulu,Kauaʻi,Kauai,tsunami,0.05,360.24,18.01,23.52,1.21,34.7,50.3,22.54,31.34,1.18,0.06,1.74,3.32,4.33
 15007040402,Tract 404.02 · Lihue,Lihue,Kauaʻi,Kauai,tsunami,0.06,173.48,8.67,4.34,1.29,25.98,53.69,15.46,7.5,0.22,0.06,1.3,2.03,2.85
 15007040500,Tract 405 · Lihue,Lihue,Kauaʻi,Kauai,tsunami,0.09,664.39,33.22,25.12,3.04,77.9,126.31,10.9,25.75,1.26,0.15,3.89,8.64,9.71
-15007040603,Tract 406.03 · near Koloa,near Koloa,Kauaʻi,Kauai,tsunami,0.06,166.43,8.32,2.74,1.08,15.9,44.86,14.25,37.35,0.14,0.05,0.8,1.87,2.88
-15007040604,Tract 406.04 · near Lawai,near Lawai,Kauaʻi,Kauai,tsunami,0.05,171.94,8.6,0.88,0.98,14.65,40.62,3.85,10.78,0.04,0.05,0.73,2.07,3.17
-15007040702,Tract 407.02 · near Kalaheo,near Kalaheo,Kauaʻi,Kauai,tsunami,0.03,159.33,7.97,5.02,0.81,14.38,33.93,11.1,1.31,0.25,0.04,0.72,1.81,2.56
-15007040800,Tract 408 · rural Kauaʻi,rural Kauaʻi,Kauaʻi,Kauai,tsunami,0.03,135.0,6.75,15.28,0.59,17.95,24.68,4.98,0.53,0.76,0.03,0.9,1.33,1.79
-15007040900,Tract 409 · rural Kauaʻi,rural Kauaʻi,Kauaʻi,Kauai,tsunami,0.22,1158.53,57.93,31.36,5.8,91.84,241.25,81.66,11.42,1.57,0.29,4.59,12.13,19.54
+15007040603,Tract 406.03 · near Poipu,near Poipu,Kauaʻi,Kauai,tsunami,0.06,166.43,8.32,2.74,1.08,15.9,44.86,14.25,37.35,0.14,0.05,0.8,1.87,2.88
+15007040604,Tract 406.04 · Lawai,Lawai,Kauaʻi,Kauai,tsunami,0.05,171.94,8.6,0.88,0.98,14.65,40.62,3.85,10.78,0.04,0.05,0.73,2.07,3.17
+15007040702,Tract 407.02 · Kalaheo,Kalaheo,Kauaʻi,Kauai,tsunami,0.03,159.33,7.97,5.02,0.81,14.38,33.93,11.1,1.31,0.25,0.04,0.72,1.81,2.56
+15007040800,Tract 408 · near Pakala Village,near Pakala Village,Kauaʻi,Kauai,tsunami,0.03,135.0,6.75,15.28,0.59,17.95,24.68,4.98,0.53,0.76,0.03,0.9,1.33,1.79
+15007040900,Tract 409 · near Waimea,near Waimea,Kauaʻi,Kauai,tsunami,0.22,1158.53,57.93,31.36,5.8,91.84,241.25,81.66,11.42,1.57,0.29,4.59,12.13,19.54
 15007041200,Tract 412 · rural Niʻihau,rural Niʻihau,Niʻihau,Kauai,tsunami,0.38,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
-15009030307,Tract 303.07 · Makena,Makena,Maui,Maui,tsunami,0.11,203.62,10.18,3.0,3.22,30.5,95.55,1.51,55.96,0.15,0.16,1.52,0.86,4.33
+15009030307,Tract 303.07 · Makena / Wailea,Makena / Wailea,Maui,Maui,tsunami,0.11,203.62,10.18,3.0,3.22,30.5,95.55,1.51,55.96,0.15,0.16,1.52,0.86,4.33
 15009030501,Tract 305.01 · Paia,Paia,Maui,Maui,tsunami,0.07,165.82,8.29,0.0,0.89,10.28,26.25,2.9,3.38,0.0,0.04,0.51,1.32,3.0
 15009030706,Tract 307.06 · Kihei,Kihei,Maui,Maui,tsunami,0.7,1957.2,97.86,17.5,8.89,245.0,263.2,7.97,212.1,0.88,0.44,12.25,21.0,34.37
 15009030708,Tract 307.08 · Kihei,Kihei,Maui,Maui,tsunami,0.33,959.37,47.97,27.31,5.66,114.89,167.5,0.0,88.58,1.37,0.28,5.74,5.81,18.38
@@ -702,30 +702,30 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15009030712,Tract 307.12 · Kihei,Kihei,Maui,Maui,tsunami,0.66,1612.76,80.64,78.96,11.84,127.65,351.37,34.68,169.11,3.95,0.59,6.38,20.73,27.54
 15009030713,Tract 307.13 · Kihei,Kihei,Maui,Maui,tsunami,0.67,2557.28,127.86,22.01,8.74,190.76,259.46,78.81,640.32,1.1,0.44,9.54,21.78,43.29
 15009030902,Tract 309.02 · Wailuku,Wailuku,Maui,Maui,tsunami,0.29,905.76,45.29,23.45,4.72,67.21,139.57,67.06,54.63,1.17,0.24,3.36,11.58,15.26
-15009030903,Tract 309.03 · Waihee-Waiehu,Waihee-Waiehu,Maui,Maui,tsunami,0.2,1496.66,74.83,51.74,9.76,166.4,289.3,75.37,15.29,2.59,0.49,8.32,20.13,17.71
+15009030903,Tract 309.03 · Waihee-Waiehu / Wailuku,Waihee-Waiehu / Wailuku,Maui,Maui,tsunami,0.2,1496.66,74.83,51.74,9.76,166.4,289.3,75.37,15.29,2.59,0.49,8.32,20.13,17.71
 15009031002,Tract 310.02 · Wailuku,Wailuku,Maui,Maui,tsunami,0.05,181.15,9.06,2.11,1.52,18.29,45.02,16.12,21.17,0.11,0.08,0.91,1.94,3.72
 15009031106,Tract 311.06 · Kahului,Kahului,Maui,Maui,tsunami,0.25,1172.5,58.62,64.75,7.25,136.75,214.75,89.45,146.75,3.24,0.36,6.84,13.36,19.66
-15009031402,Tract 314.02 · near Lahaina,near Lahaina,Maui,Maui,tsunami,0.02,57.19,2.86,1.05,0.28,3.81,8.16,0.27,0.88,0.05,0.01,0.19,0.71,0.73
+15009031402,Tract 314.02 · Lahaina,Lahaina,Maui,Maui,tsunami,0.02,57.19,2.86,1.05,0.28,3.81,8.16,0.27,0.88,0.05,0.01,0.19,0.71,0.73
 15009031404,Tract 314.04 · Lahaina,Lahaina,Maui,Maui,tsunami,0.71,2213.4,110.67,69.26,16.71,218.48,494.8,88.02,290.6,3.46,0.84,10.92,20.74,43.09
 15009031501,Tract 315.01 · Kapalua,Kapalua,Maui,Maui,tsunami,0.15,370.73,18.54,4.12,1.85,19.11,54.98,1.03,74.53,0.21,0.09,0.96,4.23,5.28
-15009031503,Tract 315.03 · near Mahinahina,near Mahinahina,Maui,Maui,tsunami,0.11,300.4,15.02,15.16,2.27,42.72,67.31,40.77,191.65,0.76,0.11,2.14,2.06,6.48
+15009031503,Tract 315.03 · Kaanapali,Kaanapali,Maui,Maui,tsunami,0.11,300.4,15.02,15.16,2.27,42.72,67.31,40.77,191.65,0.76,0.11,2.14,2.06,6.48
 15009031504,Tract 315.04 · near Kapalua,near Kapalua,Maui,Maui,tsunami,0.04,84.33,4.22,0.0,0.6,9.09,17.69,0.0,3.55,0.0,0.03,0.45,1.27,1.31
 15009031505,Tract 315.05 · Mahinahina,Mahinahina,Maui,Maui,tsunami,0.08,180.26,9.01,2.39,1.16,13.71,34.42,11.19,91.32,0.12,0.06,0.69,1.54,3.53
-15009031601,Tract 316.01 · Lanai City,Lanai City,Lānaʻi,Maui,tsunami,0.01,48.27,2.41,2.62,0.34,7.69,10.0,5.52,0.67,0.13,0.02,0.38,0.47,0.93
-15009031700,Tract 317 · rural Molokaʻi,rural Molokaʻi,Molokaʻi,Maui,tsunami,0.06,270.31,13.52,1.06,1.98,45.92,58.63,13.26,14.73,0.05,0.1,2.3,3.61,4.28
-15009031801,Tract 318.01 · near Kualapuu,near Kualapuu,Molokaʻi,Maui,tsunami,0.06,150.48,7.52,0.8,1.19,30.1,35.23,4.81,14.82,0.04,0.06,1.5,2.03,2.41
+15009031601,Tract 316.01 · near Lanai City,near Lanai City,Lānaʻi,Maui,tsunami,0.01,48.27,2.41,2.62,0.34,7.69,10.0,5.52,0.67,0.13,0.02,0.38,0.47,0.93
+15009031700,Tract 317 · near Kaunakakai,near Kaunakakai,Molokaʻi,Maui,tsunami,0.06,270.31,13.52,1.06,1.98,45.92,58.63,13.26,14.73,0.05,0.1,2.3,3.61,4.28
+15009031801,Tract 318.01 · Kualapuu,Kualapuu,Molokaʻi,Maui,tsunami,0.06,150.48,7.52,0.8,1.19,30.1,35.23,4.81,14.82,0.04,0.06,1.5,2.03,2.41
 15009031900,Tract 319 · Kahului,Kahului,Maui,Maui,tsunami,0.15,814.73,40.74,74.82,4.47,93.18,132.5,79.09,36.87,3.74,0.22,4.66,9.78,12.84
-15009032000,Tract 320 · near Waikapu,near Waikapu,Maui,Maui,tsunami,0.1,95.1,4.76,0.4,1.12,9.1,33.2,2.49,57.6,0.02,0.06,0.46,0.58,2.1
+15009032000,Tract 320 · near Maalaea,near Maalaea,Maui,Maui,tsunami,0.1,95.1,4.76,0.4,1.12,9.1,33.2,2.49,57.6,0.02,0.06,0.46,0.58,2.1
 15001020300,Tract 203 · Hilo,Hilo,Hawaiʻi Island,Hawaii,inland_flood,1.0,4167.0,208.35,31.0,32.5,670.0,1008.0,991.37,893.0,1.55,1.63,33.5,41.55,89.95
 15001020500,Tract 205 · Hilo,Hilo,Hawaiʻi Island,Hawaii,inland_flood,1.0,5552.0,277.6,149.0,31.4,836.0,974.0,1202.62,739.0,7.45,1.57,41.8,63.25,102.95
 15001020600,Tract 206 · Hilo,Hilo,Hawaiʻi Island,Hawaii,inland_flood,1.0,6802.0,340.1,67.0,45.0,1261.0,1394.0,386.51,377.0,3.35,2.25,63.05,71.75,107.35
 15001020701,Tract 207.01 · Hilo,Hilo,Hawaiʻi Island,Hawaii,inland_flood,1.0,5246.0,262.3,261.0,43.7,918.0,1354.0,97.68,50.0,13.05,2.19,45.9,48.2,91.3
 15001020802,Tract 208.02 · Hilo,Hilo,Hawaiʻi Island,Hawaii,inland_flood,1.0,7010.0,350.5,50.0,63.7,1087.0,1974.0,357.59,103.0,2.5,3.19,54.35,66.15,118.6
-15001021013,Tract 210.13 · Keaau,Keaau,Hawaiʻi Island,Hawaii,inland_flood,1.0,5059.0,252.95,207.0,40.7,955.0,1260.0,285.85,14.0,10.35,2.04,47.75,51.75,84.95
+15001021013,Tract 210.13 · near Kurtistown,near Kurtistown,Hawaiʻi Island,Hawaii,inland_flood,1.0,5059.0,252.95,207.0,40.7,955.0,1260.0,285.85,14.0,10.35,2.04,47.75,51.75,84.95
 15001021014,Tract 210.14 · Hawaiian Paradise Park,Hawaiian Paradise Park,Hawaiʻi Island,Hawaii,inland_flood,1.0,8135.0,406.75,260.0,48.6,834.0,1504.0,0.0,75.0,13.0,2.43,41.7,93.25,129.6
-15001021108,Tract 211.08 · near Hawaiian Beaches,near Hawaiian Beaches,Hawaiʻi Island,Hawaii,inland_flood,1.0,6155.0,307.75,56.0,43.3,1497.0,1342.0,486.19,5.0,2.8,2.17,74.85,78.7,120.9
-15001021705,Tract 217.05 · near Waimea,near Waimea,Hawaiʻi Island,Hawaii,inland_flood,1.0,6507.0,325.35,94.0,41.1,575.0,1272.0,54.91,91.0,4.7,2.06,28.75,77.9,118.5
-15001021708,Tract 217.08 · Waikoloa Village,Waikoloa Village,Hawaiʻi Island,Hawaii,inland_flood,1.0,4450.0,222.5,102.0,34.0,450.0,1054.0,107.79,1015.0,5.1,1.7,22.5,50.8,86.7
+15001021108,Tract 211.08 · Hawaiian Beaches,Hawaiian Beaches,Hawaiʻi Island,Hawaii,inland_flood,1.0,6155.0,307.75,56.0,43.3,1497.0,1342.0,486.19,5.0,2.8,2.17,74.85,78.7,120.9
+15001021705,Tract 217.05 · Waimea,Waimea,Hawaiʻi Island,Hawaii,inland_flood,1.0,6507.0,325.35,94.0,41.1,575.0,1272.0,54.91,91.0,4.7,2.06,28.75,77.9,118.5
+15001021708,Tract 217.08 · near Waikoloa Village,near Waikoloa Village,Hawaiʻi Island,Hawaii,inland_flood,1.0,4450.0,222.5,102.0,34.0,450.0,1054.0,107.79,1015.0,5.1,1.7,22.5,50.8,86.7
 15001021800,Tract 218 · near Hawi,near Hawi,Hawaiʻi Island,Hawaii,inland_flood,1.0,6435.0,321.75,182.0,59.9,1134.0,1856.0,54.53,38.0,9.1,3.0,56.7,60.15,118.0
 15003000108,Tract 1.08 · East Honolulu,East Honolulu,Oʻahu,Honolulu,inland_flood,1.0,3280.0,164.0,48.0,33.8,464.0,991.0,47.01,372.0,2.4,1.69,23.2,24.85,62.8
 15003000110,Tract 1.10 · East Honolulu,East Honolulu,Oʻahu,Honolulu,inland_flood,1.0,4290.0,214.5,48.0,31.6,190.0,928.0,32.91,0.0,2.4,1.58,9.5,55.0,71.7
@@ -735,7 +735,7 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003000200,Tract 2 · East Honolulu,East Honolulu,Oʻahu,Honolulu,inland_flood,1.0,5537.0,276.85,21.0,47.4,590.0,1390.0,215.77,11.0,1.05,2.37,29.5,40.95,91.1
 15003000301,Tract 3.01 · East Honolulu,East Honolulu,Oʻahu,Honolulu,inland_flood,1.0,3333.0,166.65,108.0,26.4,309.0,775.0,138.64,0.0,5.4,1.32,15.45,24.4,60.1
 15003000402,Tract 4.02 · East Honolulu,East Honolulu,Oʻahu,Honolulu,inland_flood,1.0,3912.0,195.6,124.0,39.7,345.0,1164.0,20.79,10.0,6.2,1.99,17.25,35.4,65.85
-15003000500,Tract 5 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,inland_flood,1.0,3506.0,175.3,168.0,35.4,337.0,1039.0,132.01,270.0,8.4,1.77,16.85,34.85,69.05
+15003000500,Tract 5 · Urban Honolulu / East Honolulu,Urban Honolulu / East Honolulu,Oʻahu,Honolulu,inland_flood,1.0,3506.0,175.3,168.0,35.4,337.0,1039.0,132.01,270.0,8.4,1.77,16.85,34.85,69.05
 15003001803,Tract 18.03 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,inland_flood,1.0,2627.0,131.35,132.0,18.0,276.0,529.0,1163.43,2086.0,6.6,0.9,13.8,11.2,81.4
 15003001901,Tract 19.01 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,inland_flood,1.0,482.0,24.1,5.0,5.4,11.0,158.0,168.61,1978.0,0.25,0.27,0.55,0.1,14.15
 15003002003,Tract 20.03 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,inland_flood,1.0,1605.0,80.25,159.0,11.9,240.0,349.0,674.31,1861.0,7.95,0.59,12.0,4.0,60.1
@@ -758,23 +758,23 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003005900,Tract 59 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,inland_flood,1.0,2965.0,148.25,337.0,9.0,230.0,265.0,807.74,71.0,16.85,0.45,11.5,19.35,30.1
 15003006704,Tract 67.04 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,inland_flood,1.0,7339.0,366.95,258.0,53.0,870.0,1555.0,996.03,797.0,12.9,2.65,43.5,80.55,130.05
 15003006813,Tract 68.13 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,inland_flood,1.0,5427.0,271.35,92.0,33.7,321.0,990.0,151.91,1611.0,4.6,1.69,16.05,46.4,103.6
-15003007702,Tract 77.02 · near Aiea,near Aiea,Oʻahu,Honolulu,inland_flood,1.0,5492.0,274.6,51.0,40.7,748.0,1194.0,183.69,0.0,2.55,2.04,37.4,48.95,88.2
-15003008005,Tract 80.05 · near Pearl City,near Pearl City,Oʻahu,Honolulu,inland_flood,1.0,6267.0,313.35,243.0,54.6,706.0,1603.0,382.13,0.0,12.15,2.73,35.3,60.15,106.6
-15003008301,Tract 83.01 · near Ewa Beach,near Ewa Beach,Oʻahu,Honolulu,inland_flood,1.0,5921.0,296.05,61.0,7.1,597.0,207.0,43.1,20.0,3.05,0.35,29.85,119.25,75.55
+15003007702,Tract 77.02 · Aiea,Aiea,Oʻahu,Honolulu,inland_flood,1.0,5492.0,274.6,51.0,40.7,748.0,1194.0,183.69,0.0,2.55,2.04,37.4,48.95,88.2
+15003008005,Tract 80.05 · Pearl City,Pearl City,Oʻahu,Honolulu,inland_flood,1.0,6267.0,313.35,243.0,54.6,706.0,1603.0,382.13,0.0,12.15,2.73,35.3,60.15,106.6
+15003008301,Tract 83.01 · near Iroquois Point,near Iroquois Point,Oʻahu,Honolulu,inland_flood,1.0,5921.0,296.05,61.0,7.1,597.0,207.0,43.1,20.0,3.05,0.35,29.85,119.25,75.55
 15003008302,Tract 83.02 · Ewa Beach,Ewa Beach,Oʻahu,Honolulu,inland_flood,1.0,6679.0,333.95,448.0,47.2,620.0,1385.0,372.42,13.0,22.4,2.36,31.0,56.6,68.15
 15003008405,Tract 84.05 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,inland_flood,1.0,5287.0,264.35,292.0,26.6,556.0,780.0,55.24,13.0,14.6,1.33,27.8,59.2,67.0
 15003008407,Tract 84.07 · Ocean Pointe,Ocean Pointe,Oʻahu,Honolulu,inland_flood,1.0,4185.0,209.25,50.0,8.3,231.0,243.0,39.48,0.0,2.5,0.42,11.55,70.0,58.3
 15003008408,Tract 84.08 · Ocean Pointe,Ocean Pointe,Oʻahu,Honolulu,inland_flood,1.0,9678.0,483.9,84.0,24.4,1100.0,717.0,211.38,221.0,4.2,1.22,55.0,151.75,160.25
-15003008410,Tract 84.10 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,inland_flood,1.0,6698.0,334.9,144.0,15.6,475.0,457.0,10.93,0.0,7.2,0.78,23.75,91.9,91.9
+15003008410,Tract 84.10 · Ewa Gentry / Ocean Pointe,Ewa Gentry / Ocean Pointe,Oʻahu,Honolulu,inland_flood,1.0,6698.0,334.9,144.0,15.6,475.0,457.0,10.93,0.0,7.2,0.78,23.75,91.9,91.9
 15003008411,Tract 84.11 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,inland_flood,1.0,3443.0,172.15,148.0,9.0,292.0,264.0,121.55,431.0,7.4,0.45,14.6,40.6,60.9
 15003008415,Tract 84.15 · Ewa Gentry,Ewa Gentry,Oʻahu,Honolulu,inland_flood,1.0,4438.0,221.9,8.0,10.8,443.0,316.0,0.0,0.0,0.4,0.54,22.15,66.65,54.5
 15003008418,Tract 84.18 · Ewa Beach,Ewa Beach,Oʻahu,Honolulu,inland_flood,1.0,5478.0,273.9,111.0,32.3,705.0,947.0,80.44,64.0,5.55,1.61,35.25,57.8,68.1
 15003008502,Tract 85.02 · Kalaeloa,Kalaeloa,Oʻahu,Honolulu,inland_flood,1.0,2971.0,148.55,43.0,4.9,275.0,145.0,593.46,339.0,2.15,0.25,13.75,37.85,40.3
 15003008623,Tract 86.23 · Kapolei,Kapolei,Oʻahu,Honolulu,inland_flood,1.0,5336.0,266.8,0.0,14.6,675.0,429.0,251.15,0.0,0.0,0.73,33.75,84.85,69.05
-15003008627,Tract 86.27 · near Royal Kunia,near Royal Kunia,Oʻahu,Honolulu,inland_flood,1.0,9196.0,459.8,170.0,16.5,676.0,483.0,238.95,408.0,8.5,0.83,33.8,163.15,123.15
+15003008627,Tract 86.27 · near East Kapolei,near East Kapolei,Oʻahu,Honolulu,inland_flood,1.0,9196.0,459.8,170.0,16.5,676.0,483.0,238.95,408.0,8.5,0.83,33.8,163.15,123.15
 15003008628,Tract 86.28 · Kapolei,Kapolei,Oʻahu,Honolulu,inland_flood,1.0,3782.0,189.1,12.0,17.6,527.0,516.0,395.67,35.0,0.6,0.88,26.35,50.95,53.05
 15003008702,Tract 87.02 · Waipahu,Waipahu,Oʻahu,Honolulu,inland_flood,1.0,5309.0,265.45,679.0,41.2,785.0,1210.0,914.98,679.0,33.95,2.06,39.25,57.45,74.85
-15003008706,Tract 87.06 · near West Loch Estate,near West Loch Estate,Oʻahu,Honolulu,inland_flood,1.0,3940.0,197.0,186.0,20.8,469.0,610.0,384.57,226.0,9.3,1.04,23.45,45.7,54.3
+15003008706,Tract 87.06 · Waipahu / West Loch Estate,Waipahu / West Loch Estate,Oʻahu,Honolulu,inland_flood,1.0,3940.0,197.0,186.0,20.8,469.0,610.0,384.57,226.0,9.3,1.04,23.45,45.7,54.3
 15003008707,Tract 87.07 · Waipahu,Waipahu,Oʻahu,Honolulu,inland_flood,1.0,6198.0,309.9,517.0,56.3,976.0,1651.0,587.78,126.0,25.85,2.81,48.8,57.55,64.85
 15003008802,Tract 88.02 · Waipahu,Waipahu,Oʻahu,Honolulu,inland_flood,1.0,4750.0,237.5,276.0,43.4,829.0,1274.0,592.09,24.0,13.8,2.17,41.45,43.15,53.75
 15003008906,Tract 89.06 · Mililani Town,Mililani Town,Oʻahu,Honolulu,inland_flood,1.0,3674.0,183.7,33.0,38.8,602.0,1139.0,23.64,241.0,1.65,1.94,30.1,27.65,69.95
@@ -787,21 +787,21 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003008929,Tract 89.29 · Mililani Mauka,Mililani Mauka,Oʻahu,Honolulu,inland_flood,1.0,5510.0,275.5,82.0,29.4,485.0,864.0,197.98,387.0,4.1,1.47,24.25,50.5,107.15
 15003008930,Tract 89.30 · Mililani Mauka,Mililani Mauka,Oʻahu,Honolulu,inland_flood,1.0,2324.0,116.2,14.0,15.9,149.0,466.0,0.0,6.0,0.7,0.8,7.45,20.6,41.05
 15003008932,Tract 89.32 · Mililani Town,Mililani Town,Oʻahu,Honolulu,inland_flood,1.0,2216.0,110.8,7.0,22.7,391.0,665.0,85.0,0.0,0.35,1.14,19.55,21.2,36.5
-15003008933,Tract 89.33 · near Mililani Town,near Mililani Town,Oʻahu,Honolulu,inland_flood,1.0,3442.0,172.1,38.0,35.1,530.0,1031.0,75.35,0.0,1.9,1.76,26.5,29.05,57.1
-15003008934,Tract 89.34 · near Mililani Town,near Mililani Town,Oʻahu,Honolulu,inland_flood,1.0,3844.0,192.2,174.0,18.2,504.0,533.0,64.75,0.0,8.7,0.91,25.2,40.6,56.4
+15003008933,Tract 89.33 · Mililani Town,Mililani Town,Oʻahu,Honolulu,inland_flood,1.0,3442.0,172.1,38.0,35.1,530.0,1031.0,75.35,0.0,1.9,1.76,26.5,29.05,57.1
+15003008934,Tract 89.34 · Royal Kunia,Royal Kunia,Oʻahu,Honolulu,inland_flood,1.0,3844.0,192.2,174.0,18.2,504.0,533.0,64.75,0.0,8.7,0.91,25.2,40.6,56.4
 15003008936,Tract 89.36 · Royal Kunia,Royal Kunia,Oʻahu,Honolulu,inland_flood,1.0,2772.0,138.6,229.0,24.1,319.0,706.0,83.45,34.0,11.45,1.21,15.95,26.8,38.2
 15003008948,Tract 89.48 · Waipio,Waipio,Oʻahu,Honolulu,inland_flood,1.0,2588.0,129.4,44.0,20.2,336.0,592.0,185.52,110.0,2.2,1.01,16.8,20.2,55.8
 15003008952,Tract 89.52 · Waikele,Waikele,Oʻahu,Honolulu,inland_flood,1.0,5491.0,274.55,160.0,25.8,620.0,756.0,65.83,137.0,8.0,1.29,31.0,39.7,112.6
-15003009608,Tract 96.08 · near Waianae,near Waianae,Oʻahu,Honolulu,inland_flood,1.0,5192.0,259.6,15.0,22.5,676.0,659.0,623.8,10.0,0.75,1.12,33.8,74.15,68.25
-15003009609,Tract 96.09 · near Maili,near Maili,Oʻahu,Honolulu,inland_flood,1.0,5896.0,294.8,33.0,10.6,513.0,310.0,128.44,35.0,1.65,0.53,25.65,128.0,71.15
+15003009608,Tract 96.08 · near Nanakuli,near Nanakuli,Oʻahu,Honolulu,inland_flood,1.0,5192.0,259.6,15.0,22.5,676.0,659.0,623.8,10.0,0.75,1.12,33.8,74.15,68.25
+15003009609,Tract 96.09 · Maili,Maili,Oʻahu,Honolulu,inland_flood,1.0,5896.0,294.8,33.0,10.6,513.0,310.0,128.44,35.0,1.65,0.53,25.65,128.0,71.15
 15003009610,Tract 96.10 · Maili,Maili,Oʻahu,Honolulu,inland_flood,1.0,6914.0,345.7,18.0,36.7,858.0,1076.0,115.85,42.0,0.9,1.84,42.9,106.8,83.55
 15003009704,Tract 97.04 · near Waianae,near Waianae,Oʻahu,Honolulu,inland_flood,1.0,3324.0,166.2,101.0,12.5,392.0,368.0,177.83,0.0,5.05,0.62,19.6,51.85,36.45
 15003009705,Tract 97.05 · Waianae,Waianae,Oʻahu,Honolulu,inland_flood,1.0,3099.0,154.95,10.0,16.7,402.0,489.0,211.95,133.0,0.5,0.84,20.1,43.7,48.25
-15003009707,Tract 97.07 · near Waianae,near Waianae,Oʻahu,Honolulu,inland_flood,1.0,6622.0,331.1,68.0,31.1,1178.0,912.0,1866.88,554.0,3.4,1.56,58.9,97.0,97.9
+15003009707,Tract 97.07 · Waianae,Waianae,Oʻahu,Honolulu,inland_flood,1.0,6622.0,331.1,68.0,31.1,1178.0,912.0,1866.88,554.0,3.4,1.56,58.9,97.0,97.9
 15003009902,Tract 99.02 · Haleiwa,Haleiwa,Oʻahu,Honolulu,inland_flood,1.0,3584.0,179.2,37.0,27.2,551.0,798.0,240.31,218.0,1.85,1.36,27.55,37.95,52.2
 15003009905,Tract 99.05 · Waialua,Waialua,Oʻahu,Honolulu,inland_flood,1.0,2947.0,147.35,90.0,23.4,475.0,687.0,150.2,5.0,4.5,1.17,23.75,26.0,49.05
 15003010202,Tract 102.02 · near Laie,near Laie,Oʻahu,Honolulu,inland_flood,1.0,6980.0,349.0,82.0,19.8,456.0,582.0,705.78,15.0,4.1,0.99,22.8,89.5,67.25
-15003010305,Tract 103.05 · Ahuimanu,Ahuimanu,Oʻahu,Honolulu,inland_flood,1.0,5991.0,299.55,17.0,33.9,546.0,996.0,169.88,63.0,0.85,1.7,27.3,88.0,79.35
+15003010305,Tract 103.05 · Ahuimanu / Kahaluu,Ahuimanu / Kahaluu,Oʻahu,Honolulu,inland_flood,1.0,5991.0,299.55,17.0,33.9,546.0,996.0,169.88,63.0,0.85,1.7,27.3,88.0,79.35
 15003010507,Tract 105.07 · Kaneohe,Kaneohe,Oʻahu,Honolulu,inland_flood,1.0,5275.0,263.75,68.0,31.5,587.0,924.0,147.66,697.0,3.4,1.57,29.35,53.75,83.95
 15003010602,Tract 106.02 · Kaneohe,Kaneohe,Oʻahu,Honolulu,inland_flood,1.0,5392.0,269.6,77.0,49.3,637.0,1446.0,258.99,35.0,3.85,2.47,31.85,41.4,86.4
 15003010701,Tract 107.01 · Kaneohe,Kaneohe,Oʻahu,Honolulu,inland_flood,1.0,4236.0,211.8,34.0,29.8,229.0,876.0,108.93,54.0,1.7,1.49,11.45,37.6,70.0
@@ -811,33 +811,33 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003011300,Tract 113 · Waimanalo,Waimanalo,Oʻahu,Honolulu,inland_flood,1.0,5743.0,287.15,72.0,28.5,570.0,837.0,124.85,78.0,3.6,1.43,28.5,88.9,62.1
 15003011500,Tract 115 · Kapolei,Kapolei,Oʻahu,Honolulu,inland_flood,1.0,11577.0,578.85,223.0,37.5,871.0,1101.0,334.07,526.0,11.15,1.88,43.55,153.35,190.6
 15007040104,Tract 401.04 · near Wainiha,near Wainiha,Kauaʻi,Kauai,inland_flood,1.0,1278.0,63.9,0.0,6.9,190.0,289.0,113.04,30.0,0.0,0.35,9.5,19.05,20.35
-15007040205,Tract 402.05 · Wailua Homesteads,Wailua Homesteads,Kauaʻi,Kauai,inland_flood,1.0,4681.0,234.05,40.0,28.2,501.0,1175.0,66.75,591.0,2.0,1.41,25.05,44.85,84.15
+15007040205,Tract 402.05 · Wailua Homesteads / Wailua,Wailua Homesteads / Wailua,Kauaʻi,Kauai,inland_flood,1.0,4681.0,234.05,40.0,28.2,501.0,1175.0,66.75,591.0,2.0,1.41,25.05,44.85,84.15
 15007040500,Tract 405 · Lihue,Lihue,Kauaʻi,Kauai,inland_flood,1.0,7301.0,365.05,276.0,33.4,856.0,1388.0,119.8,283.0,13.8,1.67,42.8,94.9,106.65
-15007040603,Tract 406.03 · near Koloa,near Koloa,Kauaʻi,Kauai,inland_flood,1.0,2972.0,148.6,49.0,19.3,284.0,801.0,254.41,667.0,2.45,0.96,14.2,33.35,51.4
-15007040900,Tract 409 · rural Kauaʻi,rural Kauaʻi,Kauaʻi,Kauai,inland_flood,1.0,5172.0,258.6,140.0,25.9,410.0,1077.0,364.56,51.0,7.0,1.29,20.5,54.15,87.25
-15009030304,Tract 303.04 · Kula,Kula,Maui,Maui,inland_flood,1.0,3603.0,180.15,3.0,19.6,281.0,582.0,3.85,0.0,0.15,0.98,14.05,44.65,46.85
-15009030305,Tract 303.05 · near Keokea,near Keokea,Maui,Maui,inland_flood,1.0,5472.0,273.6,26.0,54.1,361.0,1603.0,33.93,33.0,1.3,2.71,18.05,54.8,112.9
-15009030307,Tract 303.07 · Makena,Makena,Maui,Maui,inland_flood,1.0,1903.0,95.15,28.0,30.1,285.0,893.0,14.11,523.0,1.4,1.51,14.25,8.05,40.45
+15007040603,Tract 406.03 · near Poipu,near Poipu,Kauaʻi,Kauai,inland_flood,1.0,2972.0,148.6,49.0,19.3,284.0,801.0,254.41,667.0,2.45,0.96,14.2,33.35,51.4
+15007040900,Tract 409 · near Waimea,near Waimea,Kauaʻi,Kauai,inland_flood,1.0,5172.0,258.6,140.0,25.9,410.0,1077.0,364.56,51.0,7.0,1.29,20.5,54.15,87.25
+15009030304,Tract 303.04 · Kula / Keokea,Kula / Keokea,Maui,Maui,inland_flood,1.0,3603.0,180.15,3.0,19.6,281.0,582.0,3.85,0.0,0.15,0.98,14.05,44.65,46.85
+15009030305,Tract 303.05 · near Kula,near Kula,Maui,Maui,inland_flood,1.0,5472.0,273.6,26.0,54.1,361.0,1603.0,33.93,33.0,1.3,2.71,18.05,54.8,112.9
+15009030307,Tract 303.07 · Makena / Wailea,Makena / Wailea,Maui,Maui,inland_flood,1.0,1903.0,95.15,28.0,30.1,285.0,893.0,14.11,523.0,1.4,1.51,14.25,8.05,40.45
 15009030406,Tract 304.06 · Pukalani,Pukalani,Maui,Maui,inland_flood,1.0,6552.0,327.6,112.0,47.9,683.0,1421.0,218.86,57.0,5.6,2.4,34.15,57.15,119.75
 15009030708,Tract 307.08 · Kihei,Kihei,Maui,Maui,inland_flood,1.0,2881.0,144.05,82.0,17.0,345.0,503.0,0.0,266.0,4.1,0.85,17.25,17.45,55.2
 15009030709,Tract 307.09 · Kihei,Kihei,Maui,Maui,inland_flood,1.0,3584.0,179.2,73.0,37.4,451.0,1109.0,285.14,2421.0,3.65,1.87,22.55,18.05,81.7
 15009030713,Tract 307.13 · Kihei,Kihei,Maui,Maui,inland_flood,1.0,3834.0,191.7,33.0,13.1,286.0,389.0,118.15,960.0,1.65,0.66,14.3,32.65,64.9
-15009030800,Tract 308 · near Waihee-Waiehu,near Waihee-Waiehu,Maui,Maui,inland_flood,1.0,8062.0,403.1,6.0,37.1,669.0,1100.0,95.19,31.0,0.3,1.86,33.45,111.3,110.1
+15009030800,Tract 308 · Waikapu,Waikapu,Maui,Maui,inland_flood,1.0,8062.0,403.1,6.0,37.1,669.0,1100.0,95.19,31.0,0.3,1.86,33.45,111.3,110.1
 15009031002,Tract 310.02 · Wailuku,Wailuku,Maui,Maui,inland_flood,1.0,3774.0,188.7,44.0,31.6,381.0,938.0,335.79,441.0,2.2,1.58,19.05,40.4,77.55
-15009031503,Tract 315.03 · near Mahinahina,near Mahinahina,Maui,Maui,inland_flood,1.0,2834.0,141.7,143.0,21.4,403.0,635.0,384.66,1808.0,7.15,1.07,20.15,19.45,61.15
-15009031700,Tract 317 · rural Molokaʻi,rural Molokaʻi,Molokaʻi,Maui,inland_flood,1.0,4827.0,241.35,19.0,35.3,820.0,1047.0,236.77,263.0,0.95,1.77,41.0,64.45,76.45
+15009031503,Tract 315.03 · Kaanapali,Kaanapali,Maui,Maui,inland_flood,1.0,2834.0,141.7,143.0,21.4,403.0,635.0,384.66,1808.0,7.15,1.07,20.15,19.45,61.15
+15009031700,Tract 317 · near Kaunakakai,near Kaunakakai,Molokaʻi,Maui,inland_flood,1.0,4827.0,241.35,19.0,35.3,820.0,1047.0,236.77,263.0,0.95,1.77,41.0,64.45,76.45
 15009031900,Tract 319 · Kahului,Kahului,Maui,Maui,inland_flood,1.0,5325.0,266.25,489.0,29.2,609.0,866.0,516.96,241.0,24.45,1.46,30.45,63.9,83.95
 15001020300,Tract 203 · Hilo,Hilo,Hawaiʻi Island,Hawaii,coastal_flood,1.0,4167.0,208.35,31.0,32.5,670.0,1008.0,991.37,893.0,1.55,1.63,33.5,41.55,89.95
 15001020400,Tract 204 · Hilo,Hilo,Hawaiʻi Island,Hawaii,coastal_flood,1.0,3398.0,169.9,80.0,21.6,488.0,670.0,453.07,248.0,4.0,1.08,24.4,40.8,68.25
 15001020500,Tract 205 · Hilo,Hilo,Hawaiʻi Island,Hawaii,coastal_flood,1.0,5552.0,277.6,149.0,31.4,836.0,974.0,1202.62,739.0,7.45,1.57,41.8,63.25,102.95
 15001020600,Tract 206 · Hilo,Hilo,Hawaiʻi Island,Hawaii,coastal_flood,1.0,6802.0,340.1,67.0,45.0,1261.0,1394.0,386.51,377.0,3.35,2.25,63.05,71.75,107.35
-15001021101,Tract 211.01 · Kamaili,Kamaili,Hawaiʻi Island,Hawaii,coastal_flood,1.0,2996.0,149.8,26.0,26.9,550.0,834.0,134.63,0.0,1.3,1.35,27.5,24.0,70.1
-15001021300,Tract 213 · rural Hawaiʻi Island,rural Hawaiʻi Island,Hawaiʻi Island,Hawaii,coastal_flood,1.0,7384.0,369.2,176.0,65.9,777.0,2042.0,170.12,39.0,8.8,3.3,38.85,49.6,123.7
-15001021510,Tract 215.10 · Kahaluu-Keauhou,Kahaluu-Keauhou,Hawaiʻi Island,Hawaii,coastal_flood,1.0,5020.0,251.0,241.0,49.5,575.0,1532.0,197.1,771.0,12.05,2.48,28.75,52.65,84.05
-15001021513,Tract 215.13 · near Kaiminani,near Kaiminani,Hawaiʻi Island,Hawaii,coastal_flood,1.0,5579.0,278.95,235.0,38.3,568.0,1187.0,133.94,0.0,11.75,1.91,28.4,49.7,102.05
+15001021101,Tract 211.01 · near Kamaili,near Kamaili,Hawaiʻi Island,Hawaii,coastal_flood,1.0,2996.0,149.8,26.0,26.9,550.0,834.0,134.63,0.0,1.3,1.35,27.5,24.0,70.1
+15001021300,Tract 213 · near Honaunau-Napoopoo,near Honaunau-Napoopoo,Hawaiʻi Island,Hawaii,coastal_flood,1.0,7384.0,369.2,176.0,65.9,777.0,2042.0,170.12,39.0,8.8,3.3,38.85,49.6,123.7
+15001021510,Tract 215.10 · Kahaluu-Keauhou / Kealakekua,Kahaluu-Keauhou / Kealakekua,Hawaiʻi Island,Hawaii,coastal_flood,1.0,5020.0,251.0,241.0,49.5,575.0,1532.0,197.1,771.0,12.05,2.48,28.75,52.65,84.05
+15001021513,Tract 215.13 · Kaiminani,Kaiminani,Hawaiʻi Island,Hawaii,coastal_flood,1.0,5579.0,278.95,235.0,38.3,568.0,1187.0,133.94,0.0,11.75,1.91,28.4,49.7,102.05
 15001021605,Tract 216.05 · Kailua,Kailua,Hawaiʻi Island,Hawaii,coastal_flood,1.0,4240.0,212.0,400.0,30.3,493.0,940.0,250.19,1101.0,20.0,1.51,24.65,28.8,79.65
 15001021608,Tract 216.08 · Kailua,Kailua,Hawaiʻi Island,Hawaii,coastal_flood,1.0,4381.0,219.05,334.0,35.0,587.0,1083.0,60.95,953.0,16.7,1.75,29.35,23.35,89.85
-15001021708,Tract 217.08 · Waikoloa Village,Waikoloa Village,Hawaiʻi Island,Hawaii,coastal_flood,1.0,4450.0,222.5,102.0,34.0,450.0,1054.0,107.79,1015.0,5.1,1.7,22.5,50.8,86.7
+15001021708,Tract 217.08 · near Waikoloa Village,near Waikoloa Village,Hawaiʻi Island,Hawaii,coastal_flood,1.0,4450.0,222.5,102.0,34.0,450.0,1054.0,107.79,1015.0,5.1,1.7,22.5,50.8,86.7
 15003000108,Tract 1.08 · East Honolulu,East Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,3280.0,164.0,48.0,33.8,464.0,991.0,47.01,372.0,2.4,1.69,23.2,24.85,62.8
 15003000114,Tract 1.14 · East Honolulu,East Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,1475.0,73.75,17.0,12.4,203.0,365.0,57.68,5.0,0.85,0.62,10.15,18.4,26.85
 15003000120,Tract 1.20 · East Honolulu,East Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,2361.0,118.05,36.0,20.2,113.0,592.0,44.83,7.0,1.8,1.01,5.65,19.4,39.5
@@ -845,7 +845,7 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003000200,Tract 2 · East Honolulu,East Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,5537.0,276.85,21.0,47.4,590.0,1390.0,215.77,11.0,1.05,2.37,29.5,40.95,91.1
 15003000301,Tract 3.01 · East Honolulu,East Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,3333.0,166.65,108.0,26.4,309.0,775.0,138.64,0.0,5.4,1.32,15.45,24.4,60.1
 15003000302,Tract 3.02 · East Honolulu,East Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,2818.0,140.9,90.0,24.9,368.0,732.0,170.88,15.0,4.5,1.25,18.4,29.05,48.65
-15003000500,Tract 5 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,3506.0,175.3,168.0,35.4,337.0,1039.0,132.01,270.0,8.4,1.77,16.85,34.85,69.05
+15003000500,Tract 5 · Urban Honolulu / East Honolulu,Urban Honolulu / East Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,3506.0,175.3,168.0,35.4,337.0,1039.0,132.01,270.0,8.4,1.77,16.85,34.85,69.05
 15003001700,Tract 17 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,2126.0,106.3,9.0,22.3,113.0,654.0,171.26,1249.0,0.45,1.12,5.65,16.7,54.0
 15003001801,Tract 18.01 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,939.0,46.95,69.0,7.0,95.0,204.0,399.12,1293.0,3.45,0.35,4.75,3.8,28.35
 15003001803,Tract 18.03 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,2627.0,131.35,132.0,18.0,276.0,529.0,1163.43,2086.0,6.6,0.9,13.8,11.2,81.4
@@ -880,31 +880,31 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15003005700,Tract 57 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,2869.0,143.45,562.0,22.2,565.0,652.0,942.75,939.0,28.1,1.11,28.25,17.7,49.3
 15003005900,Tract 59 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,2965.0,148.25,337.0,9.0,230.0,265.0,807.74,71.0,16.85,0.45,11.5,19.35,30.1
 15003006000,Tract 60 · Urban Honolulu,Urban Honolulu,Oʻahu,Honolulu,coastal_flood,1.0,5855.0,292.75,929.0,33.4,529.0,980.0,944.66,232.0,46.45,1.67,26.45,62.1,61.05
-15003007400,Tract 74 · near Hickam Housing,near Hickam Housing,Oʻahu,Honolulu,coastal_flood,1.0,6954.0,347.7,12.0,0.1,32.0,4.0,0.0,22.0,0.6,0.01,1.6,61.45,44.1
+15003007400,Tract 74 · near Halawa,near Halawa,Oʻahu,Honolulu,coastal_flood,1.0,6954.0,347.7,12.0,0.1,32.0,4.0,0.0,22.0,0.6,0.01,1.6,61.45,44.1
 15003007504,Tract 75.04 · Halawa,Halawa,Oʻahu,Honolulu,coastal_flood,1.0,2864.0,143.2,196.0,16.2,574.0,476.0,651.31,391.0,9.8,0.81,28.7,32.85,48.15
 15003007701,Tract 77.01 · Aiea,Aiea,Oʻahu,Honolulu,coastal_flood,1.0,4079.0,203.95,97.0,29.8,533.0,876.0,146.04,68.0,4.85,1.49,26.65,51.0,60.05
 15003007808,Tract 78.08 · Waimalu,Waimalu,Oʻahu,Honolulu,coastal_flood,1.0,3527.0,176.35,52.0,22.2,360.0,652.0,284.28,556.0,2.6,1.11,18.0,32.25,56.45
-15003008301,Tract 83.01 · near Ewa Beach,near Ewa Beach,Oʻahu,Honolulu,coastal_flood,1.0,5921.0,296.05,61.0,7.1,597.0,207.0,43.1,20.0,3.05,0.35,29.85,119.25,75.55
+15003008301,Tract 83.01 · near Iroquois Point,near Iroquois Point,Oʻahu,Honolulu,coastal_flood,1.0,5921.0,296.05,61.0,7.1,597.0,207.0,43.1,20.0,3.05,0.35,29.85,119.25,75.55
 15003008418,Tract 84.18 · Ewa Beach,Ewa Beach,Oʻahu,Honolulu,coastal_flood,1.0,5478.0,273.9,111.0,32.3,705.0,947.0,80.44,64.0,5.55,1.61,35.25,57.8,68.1
 15003008702,Tract 87.02 · Waipahu,Waipahu,Oʻahu,Honolulu,coastal_flood,1.0,5309.0,265.45,679.0,41.2,785.0,1210.0,914.98,679.0,33.95,2.06,39.25,57.45,74.85
-15003008704,Tract 87.04 · near Pearl City,near Pearl City,Oʻahu,Honolulu,coastal_flood,1.0,2707.0,135.35,188.0,17.1,349.0,502.0,158.46,131.0,9.4,0.85,17.45,25.1,30.75
+15003008704,Tract 87.04 · Waipahu,Waipahu,Oʻahu,Honolulu,coastal_flood,1.0,2707.0,135.35,188.0,17.1,349.0,502.0,158.46,131.0,9.4,0.85,17.45,25.1,30.75
 15003009610,Tract 96.10 · Maili,Maili,Oʻahu,Honolulu,coastal_flood,1.0,6914.0,345.7,18.0,36.7,858.0,1076.0,115.85,42.0,0.9,1.84,42.9,106.8,83.55
-15003009707,Tract 97.07 · near Waianae,near Waianae,Oʻahu,Honolulu,coastal_flood,1.0,6622.0,331.1,68.0,31.1,1178.0,912.0,1866.88,554.0,3.4,1.56,58.9,97.0,97.9
-15003009801,Tract 98.01 · near Makaha,near Makaha,Oʻahu,Honolulu,coastal_flood,1.0,2716.0,135.8,45.0,14.9,421.0,438.0,590.54,993.0,2.25,0.75,21.05,30.65,57.95
+15003009707,Tract 97.07 · Waianae,Waianae,Oʻahu,Honolulu,coastal_flood,1.0,6622.0,331.1,68.0,31.1,1178.0,912.0,1866.88,554.0,3.4,1.56,58.9,97.0,97.9
+15003009801,Tract 98.01 · near Makaha Valley,near Makaha Valley,Oʻahu,Honolulu,coastal_flood,1.0,2716.0,135.8,45.0,14.9,421.0,438.0,590.54,993.0,2.25,0.75,21.05,30.65,57.95
 15003009803,Tract 98.03 · Makaha,Makaha,Oʻahu,Honolulu,coastal_flood,1.0,3162.0,158.1,657.0,13.8,480.0,404.0,480.77,315.0,32.85,0.69,24.0,45.85,42.75
 15003009804,Tract 98.04 · Makaha,Makaha,Oʻahu,Honolulu,coastal_flood,1.0,3486.0,174.3,8.0,15.4,697.0,453.0,680.1,54.0,0.4,0.77,34.85,66.15,42.8
 15003009902,Tract 99.02 · Haleiwa,Haleiwa,Oʻahu,Honolulu,coastal_flood,1.0,3584.0,179.2,37.0,27.2,551.0,798.0,240.31,218.0,1.85,1.36,27.55,37.95,52.2
 15003009905,Tract 99.05 · Waialua,Waialua,Oʻahu,Honolulu,coastal_flood,1.0,2947.0,147.35,90.0,23.4,475.0,687.0,150.2,5.0,4.5,1.17,23.75,26.0,49.05
 15003009906,Tract 99.06 · near Mokuleia,near Mokuleia,Oʻahu,Honolulu,coastal_flood,1.0,1787.0,89.35,3.0,10.7,194.0,315.0,34.28,390.0,0.15,0.54,9.7,12.1,39.1
-15003010000,Tract 100 · near Helemano,near Helemano,Oʻahu,Honolulu,coastal_flood,1.0,4636.0,231.8,10.0,15.7,479.0,462.0,53.29,0.0,0.5,0.79,23.95,64.4,82.65
+15003010000,Tract 100 · near Haleiwa,near Haleiwa,Oʻahu,Honolulu,coastal_flood,1.0,4636.0,231.8,10.0,15.7,479.0,462.0,53.29,0.0,0.5,0.79,23.95,64.4,82.65
 15003010102,Tract 101.02 · near Pupukea,near Pupukea,Oʻahu,Honolulu,coastal_flood,1.0,2858.0,142.9,56.0,24.4,264.0,715.0,212.67,11.0,2.8,1.22,13.2,36.75,38.3
 15003010103,Tract 101.03 · near Kahuku,near Kahuku,Oʻahu,Honolulu,coastal_flood,1.0,2639.0,131.95,47.0,12.6,267.0,370.0,125.33,129.0,2.35,0.63,13.35,43.85,36.85
 15003010202,Tract 102.02 · near Laie,near Laie,Oʻahu,Honolulu,coastal_flood,1.0,6980.0,349.0,82.0,19.8,456.0,582.0,705.78,15.0,4.1,0.99,22.8,89.5,67.25
 15003010203,Tract 102.03 · near Punaluu,near Punaluu,Oʻahu,Honolulu,coastal_flood,1.0,917.0,45.85,11.0,5.5,89.0,160.0,105.81,244.0,0.55,0.28,4.45,8.35,16.9
 15003010204,Tract 102.04 · near Hauula,near Hauula,Oʻahu,Honolulu,coastal_flood,1.0,2446.0,122.3,39.0,8.7,347.0,255.0,166.96,0.0,1.95,0.43,17.35,37.95,29.3
-15003010205,Tract 102.05 · near Waiahole-Waikane,near Waiahole-Waikane,Oʻahu,Honolulu,coastal_flood,1.0,1494.0,74.7,0.0,6.5,114.0,190.0,8.19,86.0,0.0,0.33,5.7,16.95,27.35
+15003010205,Tract 102.05 · near Kaaawa,near Kaaawa,Oʻahu,Honolulu,coastal_flood,1.0,1494.0,74.7,0.0,6.5,114.0,190.0,8.19,86.0,0.0,0.33,5.7,16.95,27.35
 15003010303,Tract 103.03 · Waiahole-Waikane,Waiahole-Waikane,Oʻahu,Honolulu,coastal_flood,1.0,4740.0,237.0,64.0,37.1,428.0,1090.0,99.61,26.0,3.2,1.85,21.4,64.85,69.0
-15003010305,Tract 103.05 · Ahuimanu,Ahuimanu,Oʻahu,Honolulu,coastal_flood,1.0,5991.0,299.55,17.0,33.9,546.0,996.0,169.88,63.0,0.85,1.7,27.3,88.0,79.35
+15003010305,Tract 103.05 · Ahuimanu / Kahaluu,Ahuimanu / Kahaluu,Oʻahu,Honolulu,coastal_flood,1.0,5991.0,299.55,17.0,33.9,546.0,996.0,169.88,63.0,0.85,1.7,27.3,88.0,79.35
 15003010505,Tract 105.05 · Heeia,Heeia,Oʻahu,Honolulu,coastal_flood,1.0,3280.0,164.0,55.0,34.3,561.0,1007.0,25.13,0.0,2.75,1.71,28.05,17.0,52.2
 15003010508,Tract 105.08 · Kaneohe,Kaneohe,Oʻahu,Honolulu,coastal_flood,1.0,2810.0,140.5,8.0,20.2,183.0,593.0,204.93,376.0,0.4,1.01,9.15,25.3,50.05
 15003010510,Tract 105.10 · Kaneohe,Kaneohe,Oʻahu,Honolulu,coastal_flood,1.0,3541.0,177.05,58.0,27.5,342.0,808.0,244.57,7.0,2.9,1.38,17.1,36.3,49.95
@@ -924,17 +924,17 @@ tract_fips,tract_label,community,island,county,hazard,share_at_risk,at_risk_pop,
 15007040104,Tract 401.04 · near Wainiha,near Wainiha,Kauaʻi,Kauai,coastal_flood,1.0,1278.0,63.9,0.0,6.9,190.0,289.0,113.04,30.0,0.0,0.35,9.5,19.05,20.35
 15007040302,Tract 403.02 · Kapaa,Kapaa,Kauaʻi,Kauai,coastal_flood,1.0,2463.0,123.15,22.0,12.0,175.0,499.0,0.0,456.0,1.1,0.6,8.75,24.1,37.2
 15007040500,Tract 405 · Lihue,Lihue,Kauaʻi,Kauai,coastal_flood,1.0,7301.0,365.05,276.0,33.4,856.0,1388.0,119.8,283.0,13.8,1.67,42.8,94.9,106.65
-15007040603,Tract 406.03 · near Koloa,near Koloa,Kauaʻi,Kauai,coastal_flood,1.0,2972.0,148.6,49.0,19.3,284.0,801.0,254.41,667.0,2.45,0.96,14.2,33.35,51.4
-15007040900,Tract 409 · rural Kauaʻi,rural Kauaʻi,Kauaʻi,Kauai,coastal_flood,1.0,5172.0,258.6,140.0,25.9,410.0,1077.0,364.56,51.0,7.0,1.29,20.5,54.15,87.25
-15009030307,Tract 303.07 · Makena,Makena,Maui,Maui,coastal_flood,1.0,1903.0,95.15,28.0,30.1,285.0,893.0,14.11,523.0,1.4,1.51,14.25,8.05,40.45
+15007040603,Tract 406.03 · near Poipu,near Poipu,Kauaʻi,Kauai,coastal_flood,1.0,2972.0,148.6,49.0,19.3,284.0,801.0,254.41,667.0,2.45,0.96,14.2,33.35,51.4
+15007040900,Tract 409 · near Waimea,near Waimea,Kauaʻi,Kauai,coastal_flood,1.0,5172.0,258.6,140.0,25.9,410.0,1077.0,364.56,51.0,7.0,1.29,20.5,54.15,87.25
+15009030307,Tract 303.07 · Makena / Wailea,Makena / Wailea,Maui,Maui,coastal_flood,1.0,1903.0,95.15,28.0,30.1,285.0,893.0,14.11,523.0,1.4,1.51,14.25,8.05,40.45
 15009030706,Tract 307.06 · Kihei,Kihei,Maui,Maui,coastal_flood,1.0,2796.0,139.8,25.0,12.7,350.0,376.0,11.39,303.0,1.25,0.64,17.5,30.0,49.1
 15009030708,Tract 307.08 · Kihei,Kihei,Maui,Maui,coastal_flood,1.0,2881.0,144.05,82.0,17.0,345.0,503.0,0.0,266.0,4.1,0.85,17.25,17.45,55.2
 15009030713,Tract 307.13 · Kihei,Kihei,Maui,Maui,coastal_flood,1.0,3834.0,191.7,33.0,13.1,286.0,389.0,118.15,960.0,1.65,0.66,14.3,32.65,64.9
-15009031402,Tract 314.02 · near Lahaina,near Lahaina,Maui,Maui,coastal_flood,1.0,3364.0,168.2,62.0,16.2,224.0,480.0,15.74,52.0,3.1,0.81,11.2,41.7,42.75
+15009031402,Tract 314.02 · Lahaina,Lahaina,Maui,Maui,coastal_flood,1.0,3364.0,168.2,62.0,16.2,224.0,480.0,15.74,52.0,3.1,0.81,11.2,41.7,42.75
 15009031404,Tract 314.04 · Lahaina,Lahaina,Maui,Maui,coastal_flood,1.0,3100.0,155.0,97.0,23.4,306.0,693.0,123.28,407.0,4.85,1.17,15.3,29.05,60.35
 15009031501,Tract 315.01 · Kapalua,Kapalua,Maui,Maui,coastal_flood,1.0,2522.0,126.1,28.0,12.6,130.0,374.0,7.02,507.0,1.4,0.63,6.5,28.8,35.95
-15009031503,Tract 315.03 · near Mahinahina,near Mahinahina,Maui,Maui,coastal_flood,1.0,2834.0,141.7,143.0,21.4,403.0,635.0,384.66,1808.0,7.15,1.07,20.15,19.45,61.15
+15009031503,Tract 315.03 · Kaanapali,Kaanapali,Maui,Maui,coastal_flood,1.0,2834.0,141.7,143.0,21.4,403.0,635.0,384.66,1808.0,7.15,1.07,20.15,19.45,61.15
 15009031505,Tract 315.05 · Mahinahina,Mahinahina,Maui,Maui,coastal_flood,1.0,2341.0,117.05,31.0,15.1,178.0,447.0,145.36,1186.0,1.55,0.76,8.9,19.95,45.9
-15009031700,Tract 317 · rural Molokaʻi,rural Molokaʻi,Molokaʻi,Maui,coastal_flood,1.0,4827.0,241.35,19.0,35.3,820.0,1047.0,236.77,263.0,0.95,1.77,41.0,64.45,76.45
+15009031700,Tract 317 · near Kaunakakai,near Kaunakakai,Molokaʻi,Maui,coastal_flood,1.0,4827.0,241.35,19.0,35.3,820.0,1047.0,236.77,263.0,0.95,1.77,41.0,64.45,76.45
 15009031900,Tract 319 · Kahului,Kahului,Maui,Maui,coastal_flood,1.0,5325.0,266.25,489.0,29.2,609.0,866.0,516.96,241.0,24.45,1.46,30.45,63.9,83.95
-15009032000,Tract 320 · near Waikapu,near Waikapu,Maui,Maui,coastal_flood,1.0,951.0,47.55,4.0,11.2,91.0,332.0,24.91,576.0,0.2,0.56,4.55,5.75,21.0
+15009032000,Tract 320 · near Maalaea,near Maalaea,Maui,Maui,coastal_flood,1.0,951.0,47.55,4.0,11.2,91.0,332.0,24.91,576.0,0.2,0.56,4.55,5.75,21.0

@@ -2,7 +2,7 @@
  "title": "Hawaiʻi ESF-6 MATCH plan: needs x partner roles, decision points, communication pathways",
  "status": "proposed – supports, does not replace, county plans. Roles are proposed – to be confirmed with partner.",
  "privacy": "Aggregate tract and county estimates only. No individual records.",
- "inputs_built_at": "2026-10-28T07:57:25+00:00",
+ "inputs_built_at": "2026-10-27T22:04:03-10:00",
  "sources": {
   "partners": {
    "document": "HAIC_AI Challenge_Submission_DHS_Disaster_2026.pdf (2026 HAIC AI Challenge Submission, Hawaii DHS: 'Enhancing ESF-6 Planning Through AI-Supported Insights')",
@@ -322,7 +322,7 @@
     {
      "rank": 1,
      "tract_fips": "15007040401",
-     "tract_label": "Tract 404.01 · near Puhi",
+     "tract_label": "Tract 404.01 · near Hanamaulu",
      "at_risk_pop": 7505,
      "power_dependent": 25,
      "disability": 723,
@@ -355,7 +355,7 @@
     {
      "rank": 4,
      "tract_fips": "15007040800",
-     "tract_label": "Tract 408 · rural Kauaʻi",
+     "tract_label": "Tract 408 · near Pakala Village",
      "at_risk_pop": 4091,
      "power_dependent": 18,
      "disability": 544,
@@ -366,7 +366,7 @@
     {
      "rank": 5,
      "tract_fips": "15007040702",
-     "tract_label": "Tract 407.02 · near Kalaheo",
+     "tract_label": "Tract 407.02 · Kalaheo",
      "at_risk_pop": 5494,
      "power_dependent": 28,
      "disability": 496,
@@ -377,7 +377,7 @@
     {
      "rank": 6,
      "tract_fips": "15007040900",
-     "tract_label": "Tract 409 · rural Kauaʻi",
+     "tract_label": "Tract 409 · near Waimea",
      "at_risk_pop": 5172,
      "power_dependent": 26,
      "disability": 410,
@@ -388,7 +388,7 @@
     {
      "rank": 7,
      "tract_fips": "15007940000",
-     "tract_label": "Tract 9400 · near Kapaa",
+     "tract_label": "Tract 9400 · near Anahola",
      "at_risk_pop": 4485,
      "power_dependent": 22,
      "disability": 553,
@@ -421,7 +421,7 @@
     {
      "rank": 10,
      "tract_fips": "15007040204",
-     "tract_label": "Tract 402.04 · Wailua Homesteads",
+     "tract_label": "Tract 402.04 · Wailua Homesteads / Kapaa",
      "at_risk_pop": 6039,
      "power_dependent": 32,
      "disability": 558,
@@ -778,7 +778,7 @@
     {
      "rank": 1,
      "tract_fips": "15003009707",
-     "tract_label": "Tract 97.07 · near Waianae",
+     "tract_label": "Tract 97.07 · Waianae",
      "at_risk_pop": 6622,
      "power_dependent": 31,
      "disability": 1178,
@@ -1222,7 +1222,7 @@
     {
      "rank": 4,
      "tract_fips": "15009030903",
-     "tract_label": "Tract 309.03 · Waihee-Waiehu",
+     "tract_label": "Tract 309.03 · Waihee-Waiehu / Wailuku",
      "at_risk_pop": 7636,
      "power_dependent": 50,
      "disability": 849,
@@ -1244,7 +1244,7 @@
     {
      "rank": 6,
      "tract_fips": "15009031700",
-     "tract_label": "Tract 317 · rural Molokaʻi",
+     "tract_label": "Tract 317 · near Kaunakakai",
      "at_risk_pop": 4827,
      "power_dependent": 35,
      "disability": 820,
@@ -1266,7 +1266,7 @@
     {
      "rank": 8,
      "tract_fips": "15009031601",
-     "tract_label": "Tract 316.01 · Lanai City",
+     "tract_label": "Tract 316.01 · near Lanai City",
      "at_risk_pop": 3218,
      "power_dependent": 22,
      "disability": 513,
@@ -1641,7 +1641,7 @@
     {
      "rank": 2,
      "tract_fips": "15001021108",
-     "tract_label": "Tract 211.08 · near Hawaiian Beaches",
+     "tract_label": "Tract 211.08 · Hawaiian Beaches",
      "at_risk_pop": 6155,
      "power_dependent": 43,
      "disability": 1497,
@@ -1696,7 +1696,7 @@
     {
      "rank": 7,
      "tract_fips": "15001021504",
-     "tract_label": "Tract 215.04 · Kailua",
+     "tract_label": "Tract 215.04 · Kailua / Kaiminani",
      "at_risk_pop": 6416,
      "power_dependent": 28,
      "disability": 801,
@@ -1707,7 +1707,7 @@
     {
      "rank": 8,
      "tract_fips": "15001021013",
-     "tract_label": "Tract 210.13 · Keaau",
+     "tract_label": "Tract 210.13 · near Kurtistown",
      "at_risk_pop": 5059,
      "power_dependent": 41,
      "disability": 955,
@@ -2041,7 +2041,7 @@
     {
      "rank": 1,
      "tract_fips": "15007940000",
-     "tract_label": "Tract 9400 · near Kapaa",
+     "tract_label": "Tract 9400 · near Anahola",
      "at_risk_pop": 4485,
      "power_dependent": 22,
      "disability": 553,
@@ -2063,7 +2063,7 @@
     {
      "rank": 3,
      "tract_fips": "15007040204",
-     "tract_label": "Tract 402.04 · Wailua Homesteads",
+     "tract_label": "Tract 402.04 · Wailua Homesteads / Kapaa",
      "at_risk_pop": 6039,
      "power_dependent": 32,
      "disability": 558,
@@ -2085,7 +2085,7 @@
     {
      "rank": 5,
      "tract_fips": "15007040604",
-     "tract_label": "Tract 406.04 · near Lawai",
+     "tract_label": "Tract 406.04 · Lawai",
      "at_risk_pop": 3509,
      "power_dependent": 20,
      "disability": 299,
@@ -2442,7 +2442,7 @@
     {
      "rank": 1,
      "tract_fips": "15003009707",
-     "tract_label": "Tract 97.07 · near Waianae",
+     "tract_label": "Tract 97.07 · Waianae",
      "at_risk_pop": 6622,
      "power_dependent": 31,
      "disability": 1178,
@@ -2497,7 +2497,7 @@
     {
      "rank": 6,
      "tract_fips": "15003009100",
-     "tract_label": "Tract 91 · near Wahiawa",
+     "tract_label": "Tract 91 · near Whitmore Village",
      "at_risk_pop": 5048,
      "power_dependent": 34,
      "disability": 730,
@@ -2541,7 +2541,7 @@
     {
      "rank": 10,
      "tract_fips": "15003008005",
-     "tract_label": "Tract 80.05 · near Pearl City",
+     "tract_label": "Tract 80.05 · Pearl City",
      "at_risk_pop": 6267,
      "power_dependent": 55,
      "disability": 706,
@@ -2875,7 +2875,7 @@
     {
      "rank": 3,
      "tract_fips": "15009031700",
-     "tract_label": "Tract 317 · rural Molokaʻi",
+     "tract_label": "Tract 317 · near Kaunakakai",
      "at_risk_pop": 4827,
      "power_dependent": 35,
      "disability": 820,
@@ -2908,7 +2908,7 @@
     {
      "rank": 6,
      "tract_fips": "15009031801",
-     "tract_label": "Tract 318.01 · near Kualapuu",
+     "tract_label": "Tract 318.01 · Kualapuu",
      "at_risk_pop": 2640,
      "power_dependent": 21,
      "disability": 528,
@@ -2930,7 +2930,7 @@
     {
      "rank": 8,
      "tract_fips": "15009030305",
-     "tract_label": "Tract 303.05 · near Keokea",
+     "tract_label": "Tract 303.05 · near Kula",
      "at_risk_pop": 5472,
      "power_dependent": 54,
      "disability": 361,
@@ -2941,7 +2941,7 @@
     {
      "rank": 9,
      "tract_fips": "15009031402",
-     "tract_label": "Tract 314.02 · near Lahaina",
+     "tract_label": "Tract 314.02 · Lahaina",
      "at_risk_pop": 3364,
      "power_dependent": 16,
      "disability": 224,
@@ -2952,7 +2952,7 @@
     {
      "rank": 10,
      "tract_fips": "15009030304",
-     "tract_label": "Tract 303.04 · Kula",
+     "tract_label": "Tract 303.04 · Kula / Keokea",
      "at_risk_pop": 3603,
      "power_dependent": 20,
      "disability": 281,
@@ -3294,7 +3294,7 @@
     {
      "rank": 1,
      "tract_fips": "15001021013",
-     "tract_label": "Tract 210.13 · Keaau",
+     "tract_label": "Tract 210.13 · near Kurtistown",
      "at_risk_pop": 5059,
      "power_dependent": 41,
      "disability": 955,
@@ -3316,7 +3316,7 @@
     {
      "rank": 3,
      "tract_fips": "15001021011",
-     "tract_label": "Tract 210.11 · near Mountain View",
+     "tract_label": "Tract 210.11 · Mountain View / Volcano",
      "at_risk_pop": 4540,
      "power_dependent": 30,
      "disability": 1027,
@@ -3349,7 +3349,7 @@
     {
      "rank": 6,
      "tract_fips": "15001021016",
-     "tract_label": "Tract 210.16 · Hawaiian Acres",
+     "tract_label": "Tract 210.16 · Hawaiian Acres / Fern Acres",
      "at_risk_pop": 5088,
      "power_dependent": 40,
      "disability": 974,
@@ -3371,7 +3371,7 @@
     {
      "rank": 8,
      "tract_fips": "15001021705",
-     "tract_label": "Tract 217.05 · near Waimea",
+     "tract_label": "Tract 217.05 · Waimea",
      "at_risk_pop": 6507,
      "power_dependent": 41,
      "disability": 575,
@@ -3382,7 +3382,7 @@
     {
      "rank": 9,
      "tract_fips": "15001021502",
-     "tract_label": "Tract 215.02 · rural Hawaiʻi Island",
+     "tract_label": "Tract 215.02 · near Holualoa",
      "at_risk_pop": 5103,
      "power_dependent": 38,
      "disability": 452,
@@ -3393,7 +3393,7 @@
     {
      "rank": 10,
      "tract_fips": "15001021708",
-     "tract_label": "Tract 217.08 · Waikoloa Village",
+     "tract_label": "Tract 217.08 · near Waikoloa Village",
      "at_risk_pop": 4450,
      "power_dependent": 34,
      "disability": 450,
@@ -3705,7 +3705,7 @@
     {
      "rank": 1,
      "tract_fips": "15007040900",
-     "tract_label": "Tract 409 · rural Kauaʻi",
+     "tract_label": "Tract 409 · near Waimea",
      "at_risk_pop": 1159,
      "power_dependent": 6,
      "disability": 92,
@@ -3716,7 +3716,7 @@
     {
      "rank": 2,
      "tract_fips": "15007040205",
-     "tract_label": "Tract 402.05 · Wailua Homesteads",
+     "tract_label": "Tract 402.05 · Wailua Homesteads / Wailua",
      "at_risk_pop": 964,
      "power_dependent": 6,
      "disability": 103,
@@ -3749,7 +3749,7 @@
     {
      "rank": 5,
      "tract_fips": "15007040401",
-     "tract_label": "Tract 404.01 · near Puhi",
+     "tract_label": "Tract 404.01 · near Hanamaulu",
      "at_risk_pop": 360,
      "power_dependent": 1,
      "disability": 35,
@@ -3793,7 +3793,7 @@
     {
      "rank": 9,
      "tract_fips": "15007040800",
-     "tract_label": "Tract 408 · rural Kauaʻi",
+     "tract_label": "Tract 408 · near Pakala Village",
      "at_risk_pop": 135,
      "power_dependent": 1,
      "disability": 18,
@@ -3804,7 +3804,7 @@
     {
      "rank": 10,
      "tract_fips": "15007040603",
-     "tract_label": "Tract 406.03 · near Koloa",
+     "tract_label": "Tract 406.03 · near Poipu",
      "at_risk_pop": 166,
      "power_dependent": 1,
      "disability": 16,
@@ -4583,7 +4583,7 @@
     {
      "rank": 2,
      "tract_fips": "15009030903",
-     "tract_label": "Tract 309.03 · Waihee-Waiehu",
+     "tract_label": "Tract 309.03 · Waihee-Waiehu / Wailuku",
      "at_risk_pop": 1497,
      "power_dependent": 10,
      "disability": 166,
@@ -5057,7 +5057,7 @@
     {
      "rank": 5,
      "tract_fips": "15001021504",
-     "tract_label": "Tract 215.04 · Kailua",
+     "tract_label": "Tract 215.04 · Kailua / Kaiminani",
      "at_risk_pop": 917,
      "power_dependent": 4,
      "disability": 115,
@@ -5079,7 +5079,7 @@
     {
      "rank": 7,
      "tract_fips": "15001021108",
-     "tract_label": "Tract 211.08 · near Hawaiian Beaches",
+     "tract_label": "Tract 211.08 · Hawaiian Beaches",
      "at_risk_pop": 474,
      "power_dependent": 3,
      "disability": 115,
@@ -5090,7 +5090,7 @@
     {
      "rank": 8,
      "tract_fips": "15001021510",
-     "tract_label": "Tract 215.10 · Kahaluu-Keauhou",
+     "tract_label": "Tract 215.10 · Kahaluu-Keauhou / Kealakekua",
      "at_risk_pop": 718,
      "power_dependent": 7,
      "disability": 82,
@@ -5435,7 +5435,7 @@
     {
      "rank": 2,
      "tract_fips": "15007040900",
-     "tract_label": "Tract 409 · rural Kauaʻi",
+     "tract_label": "Tract 409 · near Waimea",
      "at_risk_pop": 5172,
      "power_dependent": 26,
      "disability": 410,
@@ -5446,7 +5446,7 @@
     {
      "rank": 3,
      "tract_fips": "15007040205",
-     "tract_label": "Tract 402.05 · Wailua Homesteads",
+     "tract_label": "Tract 402.05 · Wailua Homesteads / Wailua",
      "at_risk_pop": 4681,
      "power_dependent": 28,
      "disability": 501,
@@ -5457,7 +5457,7 @@
     {
      "rank": 4,
      "tract_fips": "15007040603",
-     "tract_label": "Tract 406.03 · near Koloa",
+     "tract_label": "Tract 406.03 · near Poipu",
      "at_risk_pop": 2972,
      "power_dependent": 19,
      "disability": 284,
@@ -5825,7 +5825,7 @@
     {
      "rank": 1,
      "tract_fips": "15003009707",
-     "tract_label": "Tract 97.07 · near Waianae",
+     "tract_label": "Tract 97.07 · Waianae",
      "at_risk_pop": 6622,
      "power_dependent": 31,
      "disability": 1178,
@@ -6247,7 +6247,7 @@
     {
      "rank": 2,
      "tract_fips": "15009031700",
-     "tract_label": "Tract 317 · rural Molokaʻi",
+     "tract_label": "Tract 317 · near Kaunakakai",
      "at_risk_pop": 4827,
      "power_dependent": 35,
      "disability": 820,
@@ -6269,7 +6269,7 @@
     {
      "rank": 4,
      "tract_fips": "15009031503",
-     "tract_label": "Tract 315.03 · near Mahinahina",
+     "tract_label": "Tract 315.03 · Kaanapali",
      "at_risk_pop": 2834,
      "power_dependent": 21,
      "disability": 403,
@@ -6291,7 +6291,7 @@
     {
      "rank": 6,
      "tract_fips": "15009030800",
-     "tract_label": "Tract 308 · near Waihee-Waiehu",
+     "tract_label": "Tract 308 · Waikapu",
      "at_risk_pop": 8062,
      "power_dependent": 37,
      "disability": 669,
@@ -6313,7 +6313,7 @@
     {
      "rank": 8,
      "tract_fips": "15009030305",
-     "tract_label": "Tract 303.05 · near Keokea",
+     "tract_label": "Tract 303.05 · near Kula",
      "at_risk_pop": 5472,
      "power_dependent": 54,
      "disability": 361,
@@ -6688,7 +6688,7 @@
     {
      "rank": 2,
      "tract_fips": "15001021108",
-     "tract_label": "Tract 211.08 · near Hawaiian Beaches",
+     "tract_label": "Tract 211.08 · Hawaiian Beaches",
      "at_risk_pop": 6155,
      "power_dependent": 43,
      "disability": 1497,
@@ -6732,7 +6732,7 @@
     {
      "rank": 6,
      "tract_fips": "15001021013",
-     "tract_label": "Tract 210.13 · Keaau",
+     "tract_label": "Tract 210.13 · near Kurtistown",
      "at_risk_pop": 5059,
      "power_dependent": 41,
      "disability": 955,
@@ -6776,7 +6776,7 @@
     {
      "rank": 10,
      "tract_fips": "15001021705",
-     "tract_label": "Tract 217.05 · near Waimea",
+     "tract_label": "Tract 217.05 · Waimea",
      "at_risk_pop": 6507,
      "power_dependent": 41,
      "disability": 575,
@@ -7099,7 +7099,7 @@
     {
      "rank": 2,
      "tract_fips": "15007040900",
-     "tract_label": "Tract 409 · rural Kauaʻi",
+     "tract_label": "Tract 409 · near Waimea",
      "at_risk_pop": 5172,
      "power_dependent": 26,
      "disability": 410,
@@ -7110,7 +7110,7 @@
     {
      "rank": 3,
      "tract_fips": "15007040603",
-     "tract_label": "Tract 406.03 · near Koloa",
+     "tract_label": "Tract 406.03 · near Poipu",
      "at_risk_pop": 2972,
      "power_dependent": 19,
      "disability": 284,
@@ -7489,7 +7489,7 @@
     {
      "rank": 1,
      "tract_fips": "15003009707",
-     "tract_label": "Tract 97.07 · near Waianae",
+     "tract_label": "Tract 97.07 · Waianae",
      "at_risk_pop": 6622,
      "power_dependent": 31,
      "disability": 1178,
@@ -7911,7 +7911,7 @@
     {
      "rank": 2,
      "tract_fips": "15009031700",
-     "tract_label": "Tract 317 · rural Molokaʻi",
+     "tract_label": "Tract 317 · near Kaunakakai",
      "at_risk_pop": 4827,
      "power_dependent": 35,
      "disability": 820,
@@ -7922,7 +7922,7 @@
     {
      "rank": 3,
      "tract_fips": "15009031503",
-     "tract_label": "Tract 315.03 · near Mahinahina",
+     "tract_label": "Tract 315.03 · Kaanapali",
      "at_risk_pop": 2834,
      "power_dependent": 21,
      "disability": 403,
@@ -7988,7 +7988,7 @@
     {
      "rank": 9,
      "tract_fips": "15009030307",
-     "tract_label": "Tract 303.07 · Makena",
+     "tract_label": "Tract 303.07 · Makena / Wailea",
      "at_risk_pop": 1903,
      "power_dependent": 30,
      "disability": 285,
@@ -7999,7 +7999,7 @@
     {
      "rank": 10,
      "tract_fips": "15009031402",
-     "tract_label": "Tract 314.02 · near Lahaina",
+     "tract_label": "Tract 314.02 · Lahaina",
      "at_risk_pop": 3364,
      "power_dependent": 16,
      "disability": 224,
@@ -8374,7 +8374,7 @@
     {
      "rank": 4,
      "tract_fips": "15001021300",
-     "tract_label": "Tract 213 · rural Hawaiʻi Island",
+     "tract_label": "Tract 213 · near Honaunau-Napoopoo",
      "at_risk_pop": 7384,
      "power_dependent": 66,
      "disability": 777,
@@ -8396,7 +8396,7 @@
     {
      "rank": 6,
      "tract_fips": "15001021510",
-     "tract_label": "Tract 215.10 · Kahaluu-Keauhou",
+     "tract_label": "Tract 215.10 · Kahaluu-Keauhou / Kealakekua",
      "at_risk_pop": 5020,
      "power_dependent": 50,
      "disability": 575,
@@ -8429,7 +8429,7 @@
     {
      "rank": 9,
      "tract_fips": "15001021513",
-     "tract_label": "Tract 215.13 · near Kaiminani",
+     "tract_label": "Tract 215.13 · Kaiminani",
      "at_risk_pop": 5579,
      "power_dependent": 38,
      "disability": 568,
@@ -8440,7 +8440,7 @@
     {
      "rank": 10,
      "tract_fips": "15001021101",
-     "tract_label": "Tract 211.01 · Kamaili",
+     "tract_label": "Tract 211.01 · near Kamaili",
      "at_risk_pop": 2996,
      "power_dependent": 27,
      "disability": 550,

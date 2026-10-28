@@ -25,10 +25,10 @@ import json
 import math
 import sys
 import time
-from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from hawaii_time import now_hst  # noqa: E402
 from fetch_data import COUNTIES  # noqa: E402
 from build_tract_labels import load_labels, tract_number  # noqa: E402
 
@@ -312,7 +312,7 @@ def main() -> int:
     write_csv(PROC / "needs_by_tract.csv", tract_out)
     write_csv(PROC / "backtest.csv", bt)
     (PROC / "needs_by_scenario.json").write_text(json.dumps({
-        "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "built_at": now_hst(),
         "data_as_of": afn.get("metadata", {}).get("built_at"),
         "runtime_seconds": round(secs, 2),
         "privacy": "Aggregate tract estimates only. No individual records.",

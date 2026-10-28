@@ -21,8 +21,10 @@ import json
 import sys
 import time
 import urllib.parse
-from datetime import datetime, timezone
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from hawaii_time import now_hst  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "data" / "sources" / "site_flood_zones.csv"
@@ -148,7 +150,7 @@ def main(argv=None) -> int:
             w.writerow({"site_key": site_key, "lon": f"{lon:.6f}", "lat": f"{lat:.6f}",
                         "fld_zone": zone, "in_sfha": "" if sf is None else sf,
                         "source_url": url,
-                        "queried_at": datetime.now(timezone.utc).isoformat(timespec="seconds")})
+                        "queried_at": now_hst()})
             fh.flush()
             if i % 25 == 0:
                 print(f"  {i}/{len(todo)}")

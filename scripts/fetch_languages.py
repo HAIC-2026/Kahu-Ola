@@ -26,11 +26,11 @@ import csv
 import json
 import math
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_data import COUNTIES, COUNTY_FIPS, fetch_json  # noqa: E402
+from hawaii_time import from_timestamp_hst  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
@@ -112,8 +112,7 @@ def main(argv=None) -> int:
     if not args.offline:
         raw_data.write_text(json.dumps(fetch_json(DATA_URL)), encoding="utf-8")
         raw_labels.write_text(json.dumps(fetch_json(LABELS_URL)), encoding="utf-8")
-    fetched = datetime.fromtimestamp(raw_data.stat().st_mtime, timezone.utc).isoformat(
-        timespec="seconds")
+    fetched = from_timestamp_hst(raw_data.stat().st_mtime)
     rows = tidy(json.loads(raw_data.read_text(encoding="utf-8")),
                 json.loads(raw_labels.read_text(encoding="utf-8"))["variables"], fetched)
     with open(OUT, "w", newline="", encoding="utf-8") as fh:

@@ -22,10 +22,10 @@ import sys
 import time
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from hawaii_time import now_hst  # noqa: E402
 from geo import ZoneIndex  # noqa: E402
 from fetch_flood_zones import load_cache, lookup  # noqa: E402
 
@@ -157,7 +157,7 @@ def download_layer(key: str, src: dict) -> dict:
         "metadata": {
             "source": src["label"],
             "source_url": src["url"],
-            "fetched_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "fetched_at": now_hst(),
             "count": len(features),
         },
     }
@@ -278,7 +278,7 @@ def build_candidates(layers: dict, tracts: ZoneIndex | None = None,
         "features": out,
         "metadata": {
             "title": "Hawaiʻi ESF-6 candidate shelter facilities",
-            "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "built_at": now_hst(),
             "disclaimer": DISCLAIMER,
             "sources": [l["metadata"] for k, l in layers.items()
                         if l and k in ("schools", "fema_open_shelters",

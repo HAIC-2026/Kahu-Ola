@@ -32,6 +32,7 @@ from fetch_data import COUNTIES  # noqa: E402
 from fetch_flood_zones import CACHE as FLOOD_CACHE, LAYER_URL as FLOOD_URL  # noqa: E402
 from match import load_languages, select_languages  # noqa: E402
 from build_tract_labels import load_labels  # noqa: E402
+from hawaii_time import hst_date  # noqa: E402
 from model_needs import HAZARDS, site_status  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -85,7 +86,7 @@ def load_inputs() -> dict:
         "comm": load_json(CONFIG / "communication.json"),
         "languages": load_languages(),
         "labels": load_labels(),
-        "data_as_of": (needs.get("built_at") or "")[:10],
+        "data_as_of": hst_date(needs.get("built_at")),
     }
 
 
@@ -334,7 +335,7 @@ def sources_html(inp: dict) -> str:
     rows.append(["Staffing ratios", escape(staff), escape(pf["staff_per_shift"]["_about"])])
     for k, v in pf["pets"].items():
         rows.append([escape(k.replace("_", " ")), escape(str(v["value"])), escape(v["source"])])
-    data = [[escape(s["source"]), escape(s.get("fetched_at", "")[:10]), escape(s["source_url"])]
+    data = [[escape(s["source"]), escape(hst_date(s.get("fetched_at", ""))), escape(s["source_url"])]
             for s in inp["afn"]["metadata"].get("sources", [])]
     flood_dates = []
     if FLOOD_CACHE.exists():

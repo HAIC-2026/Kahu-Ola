@@ -46,16 +46,35 @@ class Join(unittest.TestCase):
         return {"properties": {"tract_fips": fips, "county": "Maui"},
                 "geometry": square(x - 0.001, y - 0.001, x + 0.001, y + 0.001)}
 
-    def test_inside_near_rural(self):
+    def test_overlap_near_rural(self):
         afn = {"features": [self.tract("15009000100", 0.05, 0.05),     # inside Alpha
                             self.tract("15009000200", 0.13, 0.05),     # ~3.3 km east of Alpha
                             self.tract("15009000300", 0.5, 0.05)]}     # ~44 km from both
         rows = {r["tract_fips"]: r for r in tl.build(afn, self.CDPS, self.ISL)}
         self.assertEqual(rows["15009000100"]["community"], "Alpha")
-        self.assertEqual(rows["15009000100"]["method"], "inside")
+        self.assertEqual(rows["15009000100"]["method"], "overlap")
         self.assertEqual(rows["15009000200"]["community"], "near Alpha")
         self.assertEqual(rows["15009000300"]["community"], "rural Maui")
         self.assertEqual(rows["15009000300"]["tract_label"], "Tract 3 · rural Maui")
+
+    def tract_box(self, fips, x0, x1):
+        return {"properties": {"tract_fips": fips, "county": "Maui"},
+                "geometry": square(x0, 0.0, x1, 0.1)}
+
+    def test_two_cdps_largest_first(self):
+        afn = {"features": [self.tract_box("15009000400", 0.04, 0.19)]}   # Alpha 0.06/0.15 = 40%
+        r = tl.build(afn, self.CDPS, self.ISL)[0]
+        self.assertEqual(r["community"], "Alpha")                         # one CDP >= 20%
+        cdps = {"features": self.CDPS["features"] + [
+            {"properties": {"GEOID": "1500003", "BASENAME": "Gamma"},
+             "geometry": square(0.1, 0, 0.2, 0.1)}]}
+        isl = {**self.ISL, "1500003": ("Maui", "Maui")}
+        r = tl.build({"features": [self.tract_box("15009000500", 0.04, 0.2)]}, cdps, isl)[0]
+        self.assertEqual(r["community"], "Gamma / Alpha")                 # 62% / 38%
+        self.assertEqual(r["method"], "overlap_2")
+        r = tl.build({"features": [self.tract_box("15009000600", 0.09, 0.8)]}, cdps, isl)[0]
+        self.assertEqual(r["community"], "near Gamma")                    # Gamma 14%, Alpha 1%
+        self.assertEqual(r["method"], "near")
 
     def test_remote_islands(self):
         self.assertEqual(tl.remote_island("Kauai", -160.15, 21.9), "Niʻihau")
@@ -71,7 +90,9 @@ class Committed(unittest.TestCase):
         for r in LABELS.values():
             self.assertTrue(r["community"], r)
             self.assertIn(r["island"], ISLANDS, r)
-            self.assertIn(r["method"], ("inside", "near", "rural"))
+            self.assertIn(r["method"], ("overlap", "overlap_2", "near", "rural"))
+            if r["method"] == "overlap_2":
+                self.assertEqual(r["community"].count(" / "), 1)
             if r["method"] == "near":
                 self.assertLessEqual(float(r["distance_km"]), tl.NEAR_KM)
                 self.assertTrue(r["community"].startswith("near "))
@@ -80,11 +101,11 @@ class Committed(unittest.TestCase):
             self.assertTrue(r["source_url"].startswith("https://tigerweb.geo.census.gov/"))
 
     def test_spot_checks_against_tigerweb(self):
-        # Verified 2026-10-27 with TIGERweb tigerWMS_Census2020 layer 28 point queries at
-        # the tract's representative point and at TIGERweb's own internal point (layer 6).
-        self.assertEqual(LABELS["15009030903"]["tract_label"], "Tract 309.03 · Waihee-Waiehu")
+        # Checked 2026-10-27: TIGERweb tigerWMS_Census2020 layer 28 CDPs intersecting each
+        # tract's TIGERweb polygon (layer 6) include every CDP named here.
+        self.assertEqual(LABELS["15009030903"]["tract_label"], "Tract 309.03 · Waihee-Waiehu / Wailuku")
         self.assertEqual(LABELS["15009031001"]["tract_label"], "Tract 310.01 · Wailuku")
-        self.assertEqual(LABELS["15009030800"]["tract_label"], "Tract 308 · near Waihee-Waiehu")
+        self.assertEqual(LABELS["15009030800"]["tract_label"], "Tract 308 · Waikapu")
         self.assertEqual(LABELS["15009980000"]["island"], "Kahoʻolawe")
 
 
