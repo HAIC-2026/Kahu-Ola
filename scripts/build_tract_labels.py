@@ -8,8 +8,10 @@ official Census files (no geometry):
   * 2020 PL 94-171 redistricting file, block-level total population (P1_001N)
 For each tract (block GEOID characters 1-11) the population is split by CDP; blocks in
 no CDP count as "outside CDPs". Rule (thresholds tested at their edges):
-  * outside CDPs > 50% of the people -> "rural near <largest CDP>", or "rural <island>"
-    when no one in the tract lives in a CDP                       (method "pop_rural")
+  * outside CDPs > 50% of the people -> "rural near <largest CDP>"  (method "pop_rural")
+  * people, but no block in any CDP  -> "near <nearest CDP>" by geography, i.e. the CDP
+    the area method below finds (overlapping, or within 5 km)     (method "pop_near");
+    "rural <island>" only if no CDP is within 5 km                (method "pop_rural")
   * else the CDP with the most people; add the second CDP as "A / B" when it has
     >= 25% of the tract's people                                  (method "pop", "pop_2")
 Tracts with 0 people in 2020 fall back to the area method: the share of the tract's
@@ -324,6 +326,9 @@ def apply_population(rows: list, tract_pops: dict, names: dict, islands: dict) -
                                      for k, v in ranked[:4]) if total else ""}
         if community is not None:                       # else: area fallback, 0 people
             lead = next((k for k, v in ranked if k != OUTSIDE and v > 0), "")
+            if not lead and r["method"] != "area_rural" and r["cdp_geoid"]:
+                lead = r["cdp_geoid"][-5:]               # nearest CDP by geography
+                community, method = f"near {names[lead]}", "pop_near"
             island = islands.get("15" + lead, (r["island"],))[0] if lead else r["island"]
             if community == "rural":
                 community = f"rural {island}"
@@ -384,7 +389,8 @@ def main(argv=None) -> int:
             w.writeheader()
             w.writerows(data)
     counts = {m: sum(r["method"] == m for r in rows)
-              for m in ("pop", "pop_2", "pop_rural", "area", "area_2", "near", "area_rural")}
+              for m in ("pop", "pop_2", "pop_near", "pop_rural", "area", "area_2", "near",
+                        "area_rural")}
     print(f"Wrote {OUT.relative_to(ROOT)}: {len(rows)} tracts, {len(cdps['features'])} CDPs; "
           + ", ".join(f"{k} {v}" for k, v in counts.items()))
     return 0

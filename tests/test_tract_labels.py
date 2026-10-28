@@ -147,10 +147,12 @@ class Committed(unittest.TestCase):
         for r in LABELS.values():
             self.assertTrue(r["community"], r)
             self.assertIn(r["island"], ISLANDS, r)
-            self.assertIn(r["method"], ("pop", "pop_2", "pop_rural",
+            self.assertIn(r["method"], ("pop", "pop_2", "pop_near", "pop_rural",
                                         "area", "area_2", "near", "area_rural"))
             if r["method"] in ("pop_2", "area_2"):
                 self.assertEqual(r["community"].count(" / "), 1)
+            if r["method"] in ("near", "pop_near"):
+                self.assertTrue(r["community"].startswith("near "))
             if r["method"] == "near":
                 self.assertLessEqual(float(r["distance_km"]), tl.NEAR_KM)
                 self.assertTrue(r["community"].startswith("near "))
@@ -162,6 +164,19 @@ class Committed(unittest.TestCase):
             else:                                        # area fallback only for 0 people
                 self.assertEqual(int(r["pop_2020"]), 0, r["tract_label"])
                 self.assertTrue(r["source_url"].startswith("https://tigerweb.geo.census.gov/"))
+
+    def test_populated_tract_without_cdp_blocks_is_near_nearest_cdp(self):
+        r = LABELS["15003007400"]
+        self.assertEqual(r["tract_label"], "Tract 74 · near Halawa")
+        self.assertEqual(r["method"], "pop_near")
+        self.assertEqual(float(r["pop_outside_cdp"]), 1.0)
+        for x in LABELS.values():
+            if x["method"] == "pop_rural" and not x["community"].startswith("rural near "):
+                self.assertEqual(x["area_label"].split(" · ")[1][:6], "rural ", x["tract_label"])
+
+    def test_no_guessed_reasons(self):
+        for path in (tl.OUT, ROOT / "PLAN.md", ROOT / "README.md"):
+            self.assertNotIn("military", path.read_text(encoding="utf-8").lower(), path.name)
 
     def test_pinned_maui_tracts(self):
         # 2020 block population by CDP (Block Assignment File + PL 94-171), reported 2026-10-27.
