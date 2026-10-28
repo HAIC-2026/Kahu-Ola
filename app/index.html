@@ -31,9 +31,9 @@
 
 <form id="controls" class="controls" aria-label="Choose county and hazard">
   <label for="county">County</label>
-  <select id="county" name="county" disabled></select>
+  <select id="county" name="county" disabled><option>Loading…</option></select>
   <label for="hazard">Hazard</label>
-  <select id="hazard" name="hazard" disabled></select>
+  <select id="hazard" name="hazard" disabled><option>Loading…</option></select>
   <p class="hint">You choose the hazard. This app does not read live alerts or call any outside service.</p>
 </form>
 
@@ -53,7 +53,7 @@
 </ul>
 <!-- END GENERATED PDF LINKS -->
   </noscript>
-  <div id="app"></div>
+  <div id="app"><div class="skeleton" aria-hidden="true"><h2>&nbsp;</h2><ul class="kpis"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul></div></div>
 </main>
 
 <footer class="site-footer">

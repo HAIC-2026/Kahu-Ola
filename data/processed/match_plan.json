@@ -2,7 +2,7 @@
  "title": "Hawaiʻi ESF-6 MATCH plan: needs x partner roles, decision points, communication pathways",
  "status": "proposed – supports, does not replace, county plans. Roles are proposed – to be confirmed with partner.",
  "privacy": "Aggregate tract and county estimates only. No individual records.",
- "inputs_built_at": "2026-10-27T23:55:07-10:00",
+ "inputs_built_at": "2026-10-28T00:16:11-10:00",
  "sources": {
   "partners": {
    "document": "HAIC_AI Challenge_Submission_DHS_Disaster_2026.pdf (2026 HAIC AI Challenge Submission, Hawaii DHS: 'Enhancing ESF-6 Planning Through AI-Supported Insights')",
@@ -15,7 +15,8 @@
    "tsunami_warning": "https://www.tsunami.gov/?page=message_definitions",
    "flash_flood_warning": "https://www.weather.gov/safety/flood-watch-warning",
    "red_flag_warning": "https://www.weather.gov/safety/wildfire-ww",
-   "coastal_flood_warning": "https://www.weather.gov/okx/marinedef"
+   "coastal_flood_warning": "https://www.weather.gov/okx/marinedef",
+   "coastal_flood_warning_in_effect": "https://www.weather.gov/okx/marinedef"
   },
   "languages": "data/sources/languages_by_county.csv (ACS C16001)"
  },
@@ -8877,6 +8878,19 @@
    },
    {
     "hazard": "hurricane",
+    "timing": "during",
+    "trigger": "Hurricane conditions / county shelter-in-place order",
+    "issuer": "NOAA NWS / Central Pacific Hurricane Center; County",
+    "trigger_definition": "Hurricane conditions are occurring, or the county has ordered residents to shelter in place. No single official product; follow NWS/CPHC warnings and county orders.",
+    "trigger_source": "",
+    "action": "Run open shelters, track occupancy and power-dependent residents, pause outdoor transport until winds drop, resume when the county says safe.",
+    "owner": "county_em",
+    "owner_name": "County Emergency Management (each county)",
+    "support": "red_cross; dhs; doh",
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "hazard": "hurricane",
     "timing": "after",
     "trigger": "Warning cancelled or all clear",
     "issuer": "County / NWS / PTWC",
@@ -9102,6 +9116,19 @@
     "owner": "county_em",
     "owner_name": "County Emergency Management (each county)",
     "support": "dhs; faith_based; oha; hawaii_voad",
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "hazard": "coastal_flood",
+    "timing": "during",
+    "trigger": "Coastal Flood Warning in effect",
+    "issuer": "NOAA NWS Honolulu",
+    "trigger_definition": "'Issued when tidal flooding or storm induced flooding is occurring, imminent or highly likely along coastal areas within approximately the next 12 hours.'",
+    "trigger_source": "https://www.weather.gov/okx/marinedef",
+    "action": "Use inland sites only; close sites in flood zones; move residents who need transport before high tide.",
+    "owner": "county_em",
+    "owner_name": "County Emergency Management (each county)",
+    "support": "red_cross; dhs; dot",
     "status": "proposed – supports, does not replace, county plans"
    },
    {

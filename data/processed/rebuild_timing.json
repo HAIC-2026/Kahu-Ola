@@ -1,5 +1,5 @@
 {
- "seconds": 68.5,
+ "seconds": 69.0,
  "steps": 11,
  "step_scripts": [
   "fetch_data.py",
@@ -17,6 +17,6 @@
  "scenarios": 20,
  "playbooks": 20,
  "machine": "Apple M4",
- "measured_at": "2026-10-27T23:55:21-10:00",
+ "measured_at": "2026-10-28T00:16:25-10:00",
  "note": "Full rebuild from local data (no downloads), all build steps in order."
 }

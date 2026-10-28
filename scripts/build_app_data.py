@@ -34,6 +34,7 @@ import message_library  # noqa: E402
 import svgmap  # noqa: E402
 from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, COUNTY_LINE_LABEL,  # noqa: E402
                              DETAIL_KEYS, DISCLAIMER, KALAWAO_NOTE, SERVICE_ANIMALS, WHO_ELSE,
+                             results_data,
                              FOOTPRINT_TEXT, HAZARD_LABEL, HURRICANE_SCOPE_NOTE, PROV_NUMBERS,
                              PROV_SHELTERS, RATE_NOTE,
                              SITE_KEY_STATUS, SOURCE, area_label, lang_label, partner_names,
@@ -160,7 +161,7 @@ def build(inp: dict) -> dict:
         "reach": reach(inp),
         "county_lines": [{**r, "label": COUNTY_LINE_LABEL.get(r["line"], r["line"]),
                           "value": int(r["value"])} for r in inp["county_lines"]],
-        "results": results(),
+        "results": results_data(),
         "provenance": {"numbers": PROV_NUMBERS, "shelters": PROV_SHELTERS,
                        "sources_url": message_library.SOURCES_URL},
     }
@@ -178,30 +179,6 @@ def reach(inp: dict) -> dict:
                           partner_text("; ".join(c["support"]), names)]
                          for c in inp["comm"]["channels"]],
             "formats": inp["comm"].get("accessible_formats", {}).get("formats", [])}
-
-
-def results() -> dict:
-    """Results section: every number read from data files (and config/results.json)."""
-    cov = json.loads((PROC / "coverage.json").read_text(encoding="utf-8"))
-    counties = {k: v for k, v in cov.items() if isinstance(v, dict) and "tracts" in v}
-    with open(PROC / "backtest.csv", newline="", encoding="utf-8") as fh:
-        bt = list(csv.DictReader(fh))
-    timing_path = PROC / "rebuild_timing.json"
-    timing = json.loads(timing_path.read_text(encoding="utf-8")) if timing_path.exists() else None
-    base = json.loads((ROOT / "config" / "results.json").read_text(encoding="utf-8"))["time_baseline"]
-    return {
-        "tracts": sum(v["tracts"] for v in counties.values()),
-        "with_cmist": sum(v["with_cmist"] for v in counties.values()),
-        "with_nri": sum(v["with_nri"] for v in counties.values()),
-        "backtest": [{k: r[k] for k in ("event", "date", "observed", "model_low", "model_central",
-                                        "model_high", "observed_within_band", "calibration_event")}
-                     for r in bt],
-        "rebuild": timing, "baseline": base,
-        "sources": {"coverage": "data/processed/coverage.json",
-                    "backtest": "data/processed/backtest.csv",
-                    "rebuild": "data/processed/rebuild_timing.json",
-                    "baseline": "config/results.json"},
-    }
 
 
 def replace_block(text: str, start: str, end: str, new: str) -> str:

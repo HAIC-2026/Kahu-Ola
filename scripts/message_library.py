@@ -74,9 +74,20 @@ def review_status(r: dict) -> str:
     return NEEDS_TRANSLATOR if not r.get("text", "").strip() else DRAFT
 
 
+TRIGGERS = ROOT / "config" / "decision_points.json"
+
+
+def trigger_names(path: Path = TRIGGERS) -> dict:
+    """Trigger id -> official product name ("hurricane_watch" -> "Hurricane Watch")."""
+    import json
+    trig = json.loads(path.read_text(encoding="utf-8"))["triggers"]
+    return {k: v["product"] for k, v in trig.items()}
+
+
 def bundle_messages(rows: list | None = None) -> list:
     """Message rows for the app: text and review fields, neutral status."""
     rows = load_messages() if rows is None else rows
+    names = trigger_names()
     out = []
     for r in rows:
         out.append({
@@ -88,6 +99,7 @@ def bundle_messages(rows: list | None = None) -> list:
             "notes": "" if NOTE_HIDDEN.search(r["notes"]) else r["notes"],
             "phase": PHASES.get(r["message_id"].rsplit("-", 1)[-1], r["timing"]),
             "lang": LANG_TAG.get(r["language"], ""),
+            "trigger_label": names.get(r["trigger"], r["trigger"].replace("_", " ").title()),
             "language_label": LANG_LABEL.get(r["language"], r["language"]),
             "file": r["file"],
         })

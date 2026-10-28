@@ -152,6 +152,14 @@ details > summary { min-height: 44px; padding: var(--space-2) 0; }
 .footer-title { font-size: 1rem; margin: var(--space-3) 0 var(--space-1); }
 details.areas ul { columns: 2; font-size: var(--font-size-small); }
 @media (max-width: 480px) {
-  .map svg text { font-size: 26px; }   /* viewBox is 720 wide: about 13 px on a 390 px screen */
+  .map svg text { font-size: 28px; }   /* viewBox is 720 wide: about 14 px on a 390 px screen */
   details.areas ul { columns: 1; }
 }
+
+/* no layout jump while the data loads: reserve the lines that change, skeleton first view */
+.dataver { min-height: calc(2 * 1.5 * var(--font-size-small)); }
+.controls select { width: 11rem; max-width: 100%; }
+.skeleton h2 { min-height: 1.5em; }
+.skeleton .kpis li { height: 6.5rem; background: var(--color-surface); border-color: var(--color-surface); }
+.site-footer li a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-1); }
+.results small { font-size: var(--font-size-small); }

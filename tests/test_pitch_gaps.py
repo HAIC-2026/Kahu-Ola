@@ -178,7 +178,9 @@ class Results(unittest.TestCase):
         timing = json.loads((PROC / "rebuild_timing.json").read_text(encoding="utf-8"))
         self.assertEqual(r["rebuild"]["seconds"], timing["seconds"])
         base = json.loads((ROOT / "config" / "results.json").read_text(encoding="utf-8"))
-        self.assertEqual(r["baseline"], base["time_baseline"])
+        self.assertEqual((r["baseline"]["value"], r["baseline"]["unit"]),
+                         (base["time_baseline"]["value"], base["time_baseline"]["unit"]))
+        self.assertNotIn("PLAN.md", r["baseline"]["source"])
         self.assertIn("function resultsSection()", JS)
         self.assertIn("calibration event, not validation", JS)
 

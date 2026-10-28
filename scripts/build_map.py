@@ -226,7 +226,7 @@ def build(svi, nri: dict | None, tsunami, extreme, empower, samples: int = 100,
                    + ([{"source": "ACS 2020-2024 5-year, tract tables B18102 (hearing), B18103 "
                                   "(vision), B18104 (cognitive), B09020 (age 65+ living alone)",
                         "source_url": fetch_cmist_detail.data_url("B18102"),
-                        "fetched_at": "see data/sources/cmist_detail_by_tract.csv"}] if detail else []),
+                        "fetched_at": "2026-10-27"}] if detail else []),
     }
     return {"type": "FeatureCollection", "features": features, "metadata": meta}
 

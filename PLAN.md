@@ -1,7 +1,7 @@
 # Hawaiʻi ESF-6 AFN Planning Framework – AI-Developed Plan
 
 **HAIC 2026 · DHS challenge "Enhancing ESF-6 Planning Through AI-Supported Insights"**
-**Team Kahu Ola** · Data as of 2026-10-27 · Official repository: https://github.com/HAIC-2026/Kahu-Ola (mirror: https://github.com/nguyenhuulong2222/haic2026-esf6-shelters). All numbers below are read from files in it.
+**Team Kahu Ola** · Data as of 2026-10-28 · Official repository: https://github.com/HAIC-2026/Kahu-Ola (mirror: https://github.com/nguyenhuulong2222/haic2026-esf6-shelters). All numbers below are read from files in it.
 
 > Planning aid. Supports, does not replace, county emergency plans. Not an official shelter list.
 > Every role, decision point and message in this plan is **proposed – supports, does not replace, county plans**.
@@ -176,7 +176,7 @@ Result: Lahaina wildfire, 2023-08-11. Observed 1,418 people in shelters (Maui No
 The challenge PDF gives no baseline number ("Teams may propose their own baseline and target time", p. 7).
 - **Baseline (team assumption, to be confirmed with DHS):** at least **2 working days per county per event**, about 8 working days statewide. Reasoning: the manual steps DHS describes (p. 3–4): pull program and provider reports, cross-reference lists with hazard zones, recompile shelter lists, and call partners to confirm capacity "for each planning cycle and each event". These steps are done by hand, often "only after an event begins" (p. 4).
 - **Target:** same day, under 1 working day statewide.
-- **Measured:** a full rebuild from local data (all 11 build steps, 20 scenarios, 20 PDFs, app bundle) takes **68.5 seconds** on an Apple M4 laptop (measured 2026-10-27 with `scripts/time_rebuild.py`; result in `data/processed/rebuild_timing.json`). The test suite (214 automated tests) takes about 2 s. A full data refresh from the internet adds downloads plus the flood-zone queries, which are paced at 1 s per point for 311 points (at least 5.2 minutes). That refresh is not timed end to end.
+- **Measured:** a full rebuild from local data (all 11 build steps, 20 scenarios, 20 PDFs, app bundle) takes **69.0 seconds** on an Apple M4 laptop (measured 2026-10-27 with `scripts/time_rebuild.py`; result in `data/processed/rebuild_timing.json`). The test suite (222 automated tests, including headless-browser checks of every view) takes about 11 s. A full data refresh from the internet adds downloads plus the flood-zone queries, which are paced at 1 s per point for 311 points (at least 5.2 minutes). That refresh is not timed end to end.
 - **Plus human review (team assumption):** one review session per county to confirm sites, roles and pledges. The pipeline removes the compiling and arithmetic; it does not remove the partner calls. It turns them into filling in blank capacity fields.
 - **Measurement plan.** The baseline above stays a team assumption until it is measured. We propose a timed tabletop exercise with DHS and one county. The same planners produce a needs-and-resources draft for one county × hazard scenario twice: once with their current manual process (baseline) and once with this tool (tool-assisted). **Start** = hazard selected; **stop** = needs-and-resources draft approved by the county or DHS lead. We report both times in minutes (baseline vs tool-assisted), with the number of partner calls and corrections made during review.
 
@@ -208,9 +208,9 @@ The challenge PDF requires usability "during high-stress, low-connectivity condi
 | Tier | Conditions | What works |
 |---|---|---|
 | 1. Online | Normal internet | Web app (https://shelters.kahuola.org, also https://haic2026-shelters.pages.dev) |
-| 2. Weak | Slow or intermittent | The app loads from its local cache. The only data is one 622 KB bundle, and every PDF is already cached |
+| 2. Weak | Slow or intermittent | The app loads from its local cache. The only data is one 630 KB bundle, and every PDF is already cached |
 | 3. Offline | No internet (after one earlier visit) | Installed web app (PWA). The service worker pre-caches the app, the data and all 20 PDFs, and the app shows "Offline – data as of <date>". Tested in airplane mode in Chrome. |
-| 4. Paper | No power or devices | 20 printed playbooks (`playbooks/*.pdf`): US Letter, black-and-white safe, 12 pages each, with the disclaimer and "Data as of" on every page |
+| 4. Paper | No power or devices | 20 printed playbooks (`playbooks/*.pdf`): US Letter, black-and-white safe, 13 pages each, with the disclaimer and "Data as of" on every page |
 
 ## 9. How AI was used
 

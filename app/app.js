@@ -34,6 +34,11 @@ function el(tag, attrs, ...kids) {
   }
   return e;
 }
+/* append only real nodes or text: skips null, undefined and false (never shows "null") */
+function append(parent, ...items) {
+  parent.append(...items.flat(Infinity).filter((x) => x !== null && x !== undefined && x !== false));
+  return parent;
+}
 function svg(tag, attrs) {
   const e = document.createElementNS(SVG_NS, tag);
   for (const [k, v] of Object.entries(attrs || {})) e.setAttribute(k, v);
@@ -228,13 +233,11 @@ function needNames(k) {
 function community(main, sub) {
   return [el("span", null, main), el("br"), el("small", null, sub || "")];
 }
-/* source line; "{SOURCES}" becomes a "see Sources" link (the PDFs say "section 8") */
-const source = (key) => {
-  const parts = DATA.meta.sources[key].split("{SOURCES}");
-  return el("p", { class: "src" }, parts.flatMap((part, i) => (i
-    ? [el("a", { href: DATA.provenance.sources_url, rel: "noopener noreferrer" }, "see Sources"), part]
-    : [part])));
-};
+/* "{SOURCES}" becomes a "see Sources" link (the PDFs say "section 8") */
+const linkSources = (text) => text.split("{SOURCES}").flatMap((part, i) => (i
+  ? [el("a", { href: DATA.provenance.sources_url, rel: "noopener noreferrer" }, "see Sources"), part]
+  : [part]));
+const source = (key) => el("p", { class: "src" }, linkSources(DATA.meta.sources[key]));
 
 /* ---------- help panel ("?") ---------- */
 function helpPanel(sc, hazard) {
@@ -351,10 +354,10 @@ function renderMessages() {
   const cards = shown.map((m) => el("article", { class: "msg" },
     el("header", null,
       el("strong", null, `${m.language_label} · ${hz[m.hazard] || m.hazard} · ${m.phase}`),
-      " ", el("small", null, `${m.message_id} · trigger: ${m.trigger.replaceAll("_", " ")} · ${m.timing}`),
+      " ", el("small", null, `Trigger: ${m.trigger_label}`),
       countyLangs.has(m.language) ? el("span", { class: "tag" }, `In ${cLabel}'s list`) : null),
     m.text ? el("p", { class: "msg-text", lang: m.lang || null }, m.text)
-      : el("p", { class: "msg-text empty" }, `No text yet: needs a translator (translate from the English message ${m.message_id}).`),
+      : el("p", { class: "msg-text empty" }, `No text yet: needs a translator (translate from the English message ${hz[m.hazard] || m.hazard} · ${m.phase}).`),
     el("dl", { class: "msg-meta" },
       el("dt", null, "Status"), el("dd", null, badge(m.status)),
       el("dt", null, "Review assigned to"), el("dd", null, m.review_assignee || "—"),
@@ -364,7 +367,8 @@ function renderMessages() {
       m.notes ? [el("dt", null, "Notes"), el("dd", null, m.notes)] : null),
     copyButton(m.text)));
 
-  app.replaceChildren(
+  app.replaceChildren();
+  append(app,
     el("h2", { id: "messages" }, "Messages"),
     el("p", { class: "note" }, el("strong", null, `Reviewed: ${fmt(reviewed)} of ${fmt(all.length)}. `),
       "These are drafts for county review. Do not send any message until a native speaker and the county have reviewed it."),
@@ -412,7 +416,7 @@ function renderPlan() {
   const largestTitle = "Largest single community (the Census areas with the most people who may need a shelter)";
 
   const L = DATA.languages[county];
-  app.append(
+  append(app,
     el("h2", { id: "summary" }, `${cLabel} – ${hLabel}`),
     helpPanel(sc, hazard),
     provLabel(DATA.provenance.numbers, DATA.provenance.sources_url),
@@ -461,7 +465,7 @@ function renderPlan() {
     lines.length ? source("county_lines") : null,
     county === "Maui" ? el("p", null, DATA.meta.kalawao_note) : null,
     el("div", { class: "note" }, el("strong", null, "Who else to plan for"),
-      el("ul", null, DATA.meta.who_else.map(([k, v]) => el("li", null, el("strong", null, `${k}: `), v)))),
+      el("ul", null, DATA.meta.who_else.map(([k, v]) => el("li", null, el("strong", null, `${k}: `), linkSources(v))))),
 
     el("h2", null, "Decision points"),
     el("p", { class: "note" }, DATA.meta.decision_status),
@@ -539,6 +543,12 @@ async function init() {
   fb.hidden = true;
   fillSelect("county", DATA.counties);
   fillSelect("hazard", DATA.hazards);
+  // optional deep link: ?county=Maui&hazard=hurricane (same-page, no request)
+  const q = new URLSearchParams(location.search);
+  for (const id of ["county", "hazard"]) {
+    const v = q.get(id), s = document.getElementById(id);
+    if (v && [...s.options].some((o) => o.value === v)) s.value = v;
+  }
   for (const id of ["county", "hazard"]) document.getElementById(id).disabled = false;
   document.getElementById("controls").addEventListener("change", () => { MSG.county = null; render(); });
   document.getElementById("controls").addEventListener("submit", (e) => e.preventDefault());

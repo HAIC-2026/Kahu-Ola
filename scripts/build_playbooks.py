@@ -80,7 +80,14 @@ WHO_ELSE = [
     ("Off-grid households", "No public Census-area data; county and health partners to supply."),
     ("People on dialysis or receiving home care",
      "No public Census-area data; county and health partners to supply."),
-    ("Earthquake", "Not modeled; see PLAN.md §10."),
+    ("Earthquake", "Not modeled; listed as a limitation in the plan."),
+    ("Caregivers and personal care attendants",
+     "Stay with the person they support; count them for cots, meals and space."),
+    ("Behavioral health", "Mental-health staff at each shelter (ratio: {SOURCES})."),
+    ("Niʻihau", "Privately owned island, no public shelter; plan with the landowner and "
+                "Kauaʻi County."),
+    ("Families afraid to seek shelter (including immigrant families)",
+     "The county publishes who may use shelters; trusted community messengers share it."),
 ]
 COUNTY_LINE_LABEL = {"homelessness": "People experiencing homelessness (Point-in-Time count)",
                      "visitors": "Visitors on island (average per day)"}
@@ -120,10 +127,9 @@ SOURCE = {
     "county_lines": "Source: Point-in-Time counts – Bridging the Gap 2026 report (Hawaiʻi, "
                     "Maui, Kauaʻi; night of Jan 25, 2026) and Partners In Care 2026 count for "
                     "Oʻahu as released by the City and County of Honolulu; visitors – DBEDT "
-                    "State of Hawaiʻi Data Book 2025, Table 7.06. Details: "
-                    "data/sources/county_lines.csv.",
-    "reach": "Source: proposed channels and formats in config/communication.json – supports, "
-             "does not replace, county and State public-information plans.",
+                    "State of Hawaiʻi Data Book 2025, Table 7.06. Details: {SOURCES}.",
+    "reach": "Source: proposed channels and formats in the plan's communication pathways – "
+             "supports, does not replace, county and State public-information plans.",
 }
 SOURCES_TOKEN = "{SOURCES}"            # PDFs: "section 8"; app: a "see Sources" link
 
@@ -145,6 +151,26 @@ def lang_label(text: str) -> str:
     for raw, shown in LANG_LABEL.items():
         text = text.replace(raw, shown)
     return text
+
+
+RULE_TEXT = {"all": "Every Census area",
+             "tsunami_zone_share": "Share living inside the tsunami evacuation zone",
+             "nri_top_share_by_county": "Top {share} of Census areas by FEMA risk score",
+             "nri_top_share": "Top {share} of Census areas statewide by FEMA risk score",
+             "nri_rating": "Census areas with a high FEMA risk rating"}
+
+
+def plain(text: str) -> str:
+    """Reader wording for config text: no code words or file names."""
+    text = re.sub(r"\bteam_assumption\b", "Team assumption", str(text))
+    text = re.sub(r"\b(?:config|data|scripts)/[\w./-]+", "the plan's sources", text)
+    text = re.sub(r"PLAN\.md(?: §[\d.]+)?", "the plan", text)
+    return text
+
+
+def rule_text(rule: str, share=None) -> str:
+    s = RULE_TEXT.get(rule, rule.replace("_", " "))
+    return s.replace("{share}", pct_text(share) if share is not None else "")
 
 
 def pct_text(x: float) -> str:
@@ -248,6 +274,7 @@ def load_inputs() -> dict:
         "comm": load_json(CONFIG / "communication.json"),
         "partners": load_json(CONFIG / "partners.json"),
         "county_lines": load_county_lines(),
+        "results": results_data(),
         "languages": load_languages(),
         "labels": load_labels(),
         "data_as_of": hst_date(needs.get("built_at")),
@@ -536,7 +563,8 @@ def county_lines_html(lines: list, county: str) -> str:
 
 
 def who_else_html() -> str:
-    items = "".join(f"<li><b>{escape(k)}:</b> {escape(v)}</li>" for k, v in WHO_ELSE)
+    items = "".join(f"<li><b>{escape(k)}:</b> {escape(v.replace(SOURCES_TOKEN, 'section 8'))}</li>"
+                    for k, v in WHO_ELSE)
     return f'<div class="note"><b>Who else to plan for</b><ul>{items}</ul></div>'
 
 
@@ -619,6 +647,54 @@ def outreach_html(ms: dict, langs: list, county: str, comms: list | None = None,
               'human review.</p>')
 
 
+def results_data() -> dict:
+    """Results: every number read from data files (and config/results.json)."""
+    cov = json.loads((PROC / "coverage.json").read_text(encoding="utf-8"))
+    counties = {k: v for k, v in cov.items() if isinstance(v, dict) and "tracts" in v}
+    with open(PROC / "backtest.csv", newline="", encoding="utf-8") as fh:
+        bt = list(csv.DictReader(fh))
+    timing_path = PROC / "rebuild_timing.json"
+    timing = json.loads(timing_path.read_text(encoding="utf-8")) if timing_path.exists() else None
+    base = dict(json.loads((CONFIG / "results.json").read_text(encoding="utf-8"))["time_baseline"])
+    base["source"] = "Team assumption, to be confirmed with DHS in a timed tabletop exercise"
+    return {
+        "tracts": sum(v["tracts"] for v in counties.values()),
+        "with_cmist": sum(v["with_cmist"] for v in counties.values()),
+        "with_nri": sum(v["with_nri"] for v in counties.values()),
+        "backtest": [{k: r[k] for k in ("event", "date", "observed", "model_low", "model_central",
+                                        "model_high", "observed_within_band", "calibration_event")}
+                     for r in bt],
+        "rebuild": timing, "baseline": base,
+        "sources": {"coverage": "coverage check of the needs layer (CDC SVI 2022, FEMA NRI v1.20)",
+                    "backtest": "Lahaina 2023 backtest (Maui Now count of people in shelters)",
+                    "rebuild": "timed full rebuild from local data",
+                    "baseline": base["source"]},
+    }
+
+
+def results_html(r: dict) -> str:
+    items = [f'<li><b>Coverage:</b> {n(r["with_cmist"])} of {n(r["tracts"])} Census areas have '
+             f'needs data (FEMA risk data joined for {n(r["with_nri"])} of {n(r["tracts"])}). '
+             f'<small>Source: {escape(r["sources"]["coverage"])}.</small></li>']
+    for b in r["backtest"]:
+        items.append(
+            f'<li><b>Backtest – {escape(b["event"])} ({escape(b["date"])}):</b> observed '
+            f'{n(b["observed"])} people in shelters; model {n(b["model_low"])} / '
+            f'{n(b["model_central"])} / {n(b["model_high"])} (low / likely / high). '
+            + ("This is a calibration event, not validation: the high rate was set from it. "
+               if b["calibration_event"] == "True" else "")
+            + f'<small>Source: {escape(r["sources"]["backtest"])}.</small></li>')
+    t, base = r["rebuild"], r["baseline"]
+    if t:
+        items.append(
+            f'<li><b>Time:</b> a full rebuild from local data ({n(t["steps"])} steps, '
+            f'{n(t["scenarios"])} scenarios, {n(t["playbooks"])} playbooks) took {t["seconds"]} '
+            f'seconds on {escape(t["machine"])} ({escape(t["measured_at"][:10])}). Team-assumed '
+            f'baseline without this tool: {base["value"]} {escape(base["unit"])}. '
+            f'<small>Sources: {escape(r["sources"]["rebuild"])}; {escape(base["source"])}.</small></li>')
+    return '<h2 class="page">9. Results</h2><ul class="results">' + "".join(items) + "</ul>"
+
+
 def sources_html(inp: dict) -> str:
     pf = inp["needs"]["planning_factors"]
     rows = []
@@ -626,20 +702,24 @@ def sources_html(inp: dict) -> str:
         if hz.startswith("_"):
             continue
         rows.append([f"Shelter-seeking rate – {escape(HAZARD_LABEL.get(hz, hz))}",
-                     f'{r["low"]} / {r["central"]} / {r["high"]}', escape(r["source"])])
+                     f'{pct_text(r["low"])} / {pct_text(r["central"])} / {pct_text(r["high"])}',
+                     escape(plain(r["source"]))])
     for hz, r in pf["footprint"].items():
         if isinstance(r, dict):
-            rows.append([f"Footprint – {escape(HAZARD_LABEL.get(hz, hz))}", escape(r["rule"])
-                         + (f' ({r["share"]:.0%})' if "share" in r else ""),
-                         escape(r.get("note") or pf["footprint"].get(
-                             "nri_top_share_by_county_note", "team assumption"))])
+            rows.append([f"Footprint – {escape(HAZARD_LABEL.get(hz, hz))}",
+                         escape(rule_text(r["rule"], r.get("share"))),
+                         escape(plain(r.get("note") or pf["footprint"].get(
+                             "nri_top_share_by_county_note", "Team assumption")))])
     for k, v in pf["per_person"].items():
-        rows.append([escape(k.replace("_", " ")), escape(str(v["value"])), escape(v["source"])])
+        rows.append([escape(k.replace("_", " ").capitalize()), escape(str(v["value"])),
+                     escape(plain(v["source"]))])
     staff = ", ".join(f"{k.replace('_', ' ')} 1:{v['per_children'] if isinstance(v, dict) else v}"
                       for k, v in pf["staff_per_shift"].items() if not k.startswith("_"))
-    rows.append(["Staffing ratios", escape(staff), escape(pf["staff_per_shift"]["_about"])])
+    rows.append(["Staffing ratios (one staff member per N residents)", escape(staff),
+                 escape(plain(pf["staff_per_shift"]["_about"]))])
     for k, v in pf["pets"].items():
-        rows.append([escape(k.replace("_", " ")), escape(str(v["value"])), escape(v["source"])])
+        rows.append([escape(k.replace("_", " ").capitalize()), escape(str(v["value"])),
+                     escape(plain(v["source"]))])
     data = [[escape(s["source"]), escape(hst_date(s.get("fetched_at", ""))), escape(s["source_url"])]
             for s in inp["afn"]["metadata"].get("sources", [])]
     flood_dates = []
@@ -649,8 +729,8 @@ def sources_html(inp: dict) -> str:
     data += [
         ["Hawaiʻi Statewide GIS – State DFIRM (FEMA flood hazard areas, 6/15/26)",
          escape(flood_dates[-1] if flood_dates else ""), escape(FLOOD_URL)],
-        ["County shelter activations 2026 (official county releases)", "see table",
-         "data/sources/county_shelter_activations.csv"],
+        ["County shelter activations 2026 (official county releases)", "2026-10-27",
+         "County shelter activation table: one official county source per row"],
         ["2020 Census Block Assignment File, place/CDP (tract community labels)", "2026-10-27",
          "https://www2.census.gov/geo/docs/maps-data/data/baf2020/BlockAssign_ST15_HI.zip"],
         ["2020 Census PL 94-171 block population P1_001N (tract community labels)", "2026-10-27",
@@ -702,6 +782,7 @@ def playbook_html(inp: dict, county: str, hazard: str) -> str:
 {decisions_html(inp["match"], hazard, partner_names(inp["partners"]))}
 {outreach_html(ms, langs, county, comms, inp["comm"], partner_names(inp["partners"]))}
 {sources_html(inp)}
+{results_html(inp["results"])}
 </main>
 <footer class="footer">Data as of {escape(inp["data_as_of"])} · {escape(DISCLAIMER)}</footer>
 </body></html>

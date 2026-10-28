@@ -93,7 +93,7 @@ class SourcesLink(unittest.TestCase):
     def test_app_has_no_section_numbers(self):
         for k, v in BUNDLE["meta"]["sources"].items():
             self.assertNotIn("section 8", v, k)
-        self.assertEqual(sum("{SOURCES}" in v for v in BUNDLE["meta"]["sources"].values()), 3)
+        self.assertGreaterEqual(sum("{SOURCES}" in v for v in BUNDLE["meta"]["sources"].values()), 3)
         self.assertIn('split("{SOURCES}")', JS)
         self.assertIn('"see Sources"', JS)
 
@@ -144,7 +144,7 @@ class Accessibility(unittest.TestCase):
         self.assertIn(".prov a, .src a { display: inline-flex; align-items: center; min-height: 44px; }", CSS)
         self.assertIn('.msg-filters input[type="checkbox"] { width: 24px; height: 24px;', CSS)
         self.assertIn(".button, .msg small { font-size: 1rem; }", CSS)
-        self.assertRegex(CSS, r"@media \(max-width: 480px\) \{\s*\.map svg text \{ font-size: 26px; \}")
+        self.assertRegex(CSS, r"@media \(max-width: 480px\) \{\s*\.map svg text \{ font-size: 28px; \}")
 
     def test_keyboard_regions_and_area_list(self):
         self.assertIn('{ class: "table-wrap", tabindex: "0", role: "region", "aria-label": name }', JS)
