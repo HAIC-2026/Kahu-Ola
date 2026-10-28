@@ -202,7 +202,7 @@ class Used(unittest.TestCase):
             self.assertTrue(r["island"])
 
     def test_playbooks_show_labels_and_hurricane_note(self):
-        note = "Hurricanes affect the whole county, so these are simply the most populous at-risk tracts."
+        note = "Hurricanes affect the whole county, so these are simply the most populous at-risk Census areas."
         for path in (ROOT / "playbooks").glob("*.html"):
             if path.name == "index.html":
                 continue

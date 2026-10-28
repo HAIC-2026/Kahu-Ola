@@ -133,7 +133,7 @@ Census publishes detailed race only down to county. **Honolulu County is Oʻahu 
 | Hawaiʻi Island (205,769) | Hilo 50,404 ±2,228; Kailua (Kona) 21,818 ±2,034; Hawaiian Paradise Park 13,203 ±1,721; Kaiminani 11,465 ±1,347; Waimea 9,286 ±1,189 | 13,267 (6.4%) |
 | Maui (152,418) | Kahului 28,288 ±1,914; Kīhei 21,567 ±1,407; Wailuku 16,926 ±1,455; Waiheʻe-Waiehu 10,988 ±1,300; Lahaina 10,162 ±1,143 | Maui County, all islands: 4,225 (2.6%) |
 | Molokaʻi (8,728, includes Kalawao) | Kaunakakai 4,360 ±985; Kualapuʻu 2,535 ±421; ʻUalapuʻe 440 ±168; Maunaloa 293 ±133 | (in Maui County figure) |
-| Lānaʻi (3,443) | Lānaʻi City 3,393 ±431; Mānele 50 ±33 | (in Maui County figure) |
+| Lānaʻi (3,443) | Lānaʻi City 3,393 ±431; Manele 50 ±33 | (in Maui County figure) |
 | Kauaʻi (73,731) | Kapaʻa 11,094 ±1,301; Līhuʻe 7,901 ±872; Wailua Homesteads 5,431 ±920; Hanamāʻulu 4,972 ±832; Kalāheo 4,435 ±676 | Kauaʻi County, both islands: 2,722 (3.7%) |
 | Niʻihau | No Census Designated Places (DBEDT note) | (in Kauaʻi County figure) |
 

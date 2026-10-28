@@ -331,7 +331,7 @@ def summary_html(sc: dict, hazard: str) -> str:
 
 
 HURRICANE_SCOPE_NOTE = ("Hurricanes affect the whole county, so these are simply the most "
-                        "populous at-risk tracts.")
+                        "populous at-risk Census areas.")
 
 
 def scope_html(sc: dict, comms: list, hazard: str = "") -> str:

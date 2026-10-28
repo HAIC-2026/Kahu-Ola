@@ -60,6 +60,19 @@ class PlaceNames(unittest.TestCase):
                 self.assertNotIn(part, ascii_only, r["tract_label"])
 
 
+    def test_docs_use_only_sourced_diacritics(self):
+        # A place name written with ʻokina or kahakō must match the GNIS display spelling.
+        display = {}
+        for r in NAMES:
+            display.setdefault(pn.fold(r["display_name"]), set()).add(r["display_name"])
+        marks = "ʻāēīōūĀĒĪŌŪ"
+        for doc in ("PLAN.md", "README.md"):
+            text = (ROOT / doc).read_text(encoding="utf-8")
+            for w in set(re.findall(r"[A-Za-zʻĀĒĪŌŪāēīōū][A-Za-zʻĀĒĪŌŪāēīōū\-]*", text)):
+                if any(c in w for c in marks) and pn.fold(w) in display:
+                    self.assertIn(w, display[pn.fold(w)], (doc, w))
+
+
 class Playbooks(unittest.TestCase):
     def test_plain_headers_and_no_jargon(self):
         for path in PAGES:
