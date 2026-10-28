@@ -55,7 +55,7 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 | Census Bureau Population Estimates, Vintage 2025 (`co-est2025-alldata`, `cc-est2025-alldata-15`) | County totals July 1, 2025; broad race groups | released 2026-06-25; `data/sources/county_population_2020_2025.csv` |
 | ACS 2020-2024 5-year: B01003 (places, counties), B02001, B02008–B02012, B03002, B02015, B02016, B02018, B02019 | Communities by island; detailed race/ethnicity by county | `data/sources/communities_by_island.csv`, `race_ethnicity_by_county.csv` |
 | 2020 Census PL 94-171 (P1) and DHC-A (T01001 by POPGROUP) | 2020 baseline and cross-check | same files, one table ID and URL per row |
-| Census TIGERweb 2020 Census Designated Places (layer 28) | Community name for every tract ("Tract 308 · near Waihee-Waiehu") | `data/sources/tract_communities.csv` |
+| 2020 Census Block Assignment File (place/CDP) and 2020 PL 94-171 block population (P1_001N) | Community name for every tract, weighted by where its people live ("Tract 308 · Waikapu / Waihee-Waiehu"); TIGERweb CDP polygons only for the 4 tracts with no 2020 population | `data/sources/tract_communities.csv`, `tract_cdp_population_2020.csv` |
 | DBEDT State Data Book 2025, Table 01.12 (island and CDP) | Assigns every CDP to an island; island totals | `data/sources/communities_by_island.csv` |
 
 ## 4. Privacy model
@@ -95,7 +95,7 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 
 | County | Hazard | Demand low / **central** / high (people) | Largest single community: tract (FIPS), central demand |
 |---|---|---|---|
-| Kauaʻi | Hurricane | 1,470 / **2,205** / 3,676 | Tract 404.01 · near Hanamaulu (15007040401): 225 |
+| Kauaʻi | Hurricane | 1,470 / **2,205** / 3,676 | Tract 404.01 · Hanamaulu / Puhi (15007040401): 225 |
 | Kauaʻi | Wildfire | 433 / **1,082** / 2,423 | Tract 402.04 · Wailua Homesteads / Kapaa (15007040204): 302 |
 | Kauaʻi | Tsunami | 123 / **308** / 678 | Tract 403.02 · Kapaa (15007040302): 68 |
 | Kauaʻi | Inland flooding | 428 / **1,070** / 2,354 | Tract 405 · Lihue (15007040500): 365 |
@@ -104,17 +104,17 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 | Honolulu | Wildfire | 6,285 / **15,713** / 35,197 | Tract 115 · Kapolei (15003011500): 579 |
 | Honolulu | Tsunami | 1,644 / **4,110** / 9,042 | Tract 96.10 · Maili (15003009610): 302 |
 | Honolulu | Inland flooding | 7,389 / **18,473** / 40,641 | Tract 115 · Kapolei (15003011500): 579 |
-| Honolulu | Coastal flooding | 4,868 / **12,170** / 26,775 | Tract 102.02 · near Laie (15003010202): 349 |
-| Maui | Hurricane | 3,296 / **4,944** / 8,241 | Tract 308 · Waikapu (15009030800): 242 |
+| Honolulu | Coastal flooding | 4,868 / **12,170** / 26,775 | Tract 102.02 · Laie (15003010202): 349 |
+| Maui | Hurricane | 3,296 / **4,944** / 8,241 | Tract 308 · Waikapu / Waihee-Waiehu (15009030800): 242 |
 | Maui | Wildfire | 977 / **2,442** / 5,469 | Tract 310.01 · Wailuku (15009031001): 349 |
 | Maui | Tsunami | 365 / **912** / 2,006 | Tract 307.13 · Kihei (15009030713): 128 |
-| Maui | Inland flooding | 1,053 / **2,633** / 5,792 | Tract 308 · Waikapu (15009030800): 403 |
+| Maui | Inland flooding | 1,053 / **2,633** / 5,792 | Tract 308 · Waikapu / Waihee-Waiehu (15009030800): 403 |
 | Maui | Coastal flooding | 734 / **1,834** / 4,035 | Tract 319 · Kahului (15009031900): 266 |
 | Hawaiʻi | Hurricane | 4,043 / **6,065** / 10,108 | Tract 210.14 · Hawaiian Paradise Park (15001021014): 244 |
 | Hawaiʻi | Wildfire | 1,151 / **2,878** / 6,446 | Tract 210.14 · Hawaiian Paradise Park (15001021014): 407 |
 | Hawaiʻi | Tsunami | 249 / **623** / 1,371 | Tract 216.08 · Kailua (15001021608): 99 |
 | Hawaiʻi | Inland flooding | 1,310 / **3,276** / 7,207 | Tract 210.14 · Hawaiian Paradise Park (15001021014): 407 |
-| Hawaiʻi | Coastal flooding | 1,079 / **2,698** / 5,937 | Tract 213 · near Honaunau-Napoopoo (15001021300): 369 |
+| Hawaiʻi | Coastal flooding | 1,079 / **2,698** / 5,937 | Tract 213 · Honaunau-Napoopoo (15001021300): 369 |
 
 Shelter-seeking rates (`config/planning_factors.json`): hurricane 2 / 3 / 5% (South Carolina EMD Annex G). Wildfire high 11.2%, the observed Lahaina 2023 rate (central and low are team assumptions). Tsunami and flood 2 / 5 / 11% (team assumption). Each scenario also has CMIST counts, resources (cots, floor space, water, meals, toilets, staff, power outlets, pet households) and an extreme-zone number for tsunami. These are in the playbooks.
 

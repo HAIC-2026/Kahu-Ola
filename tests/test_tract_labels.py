@@ -52,7 +52,7 @@ class Join(unittest.TestCase):
                             self.tract("15009000300", 0.5, 0.05)]}     # ~44 km from both
         rows = {r["tract_fips"]: r for r in tl.build(afn, self.CDPS, self.ISL)}
         self.assertEqual(rows["15009000100"]["community"], "Alpha")
-        self.assertEqual(rows["15009000100"]["method"], "overlap")
+        self.assertEqual(rows["15009000100"]["method"], "area")
         self.assertEqual(rows["15009000200"]["community"], "near Alpha")
         self.assertEqual(rows["15009000300"]["community"], "rural Maui")
         self.assertEqual(rows["15009000300"]["tract_label"], "Tract 3 · rural Maui")
@@ -71,7 +71,7 @@ class Join(unittest.TestCase):
         isl = {**self.ISL, "1500003": ("Maui", "Maui")}
         r = tl.build({"features": [self.tract_box("15009000500", 0.04, 0.2)]}, cdps, isl)[0]
         self.assertEqual(r["community"], "Gamma / Alpha")                 # 62% / 38%
-        self.assertEqual(r["method"], "overlap_2")
+        self.assertEqual(r["method"], "area_2")
         r = tl.build({"features": [self.tract_box("15009000600", 0.09, 0.8)]}, cdps, isl)[0]
         self.assertEqual(r["community"], "near Gamma")                    # Gamma 14%, Alpha 1%
         self.assertEqual(r["method"], "near")
@@ -83,6 +83,63 @@ class Join(unittest.TestCase):
         self.assertEqual(tl.remote_island("Kauai", -159.5, 22.0), "")
 
 
+class PopulationRule(unittest.TestCase):
+    NAMES = {"00001": "Alpha", "00002": "Beta"}
+
+    def label(self, alpha, beta, outside):
+        return tl.population_label({"00001": alpha, "00002": beta, tl.OUTSIDE: outside},
+                                   self.NAMES)
+
+    def test_largest_cdp(self):
+        self.assertEqual(self.label(80, 20, 0)[:2], ("Alpha", "pop"))
+
+    def test_second_cdp_at_exactly_25_percent(self):
+        self.assertEqual(self.label(75, 25, 0)[:2], ("Alpha / Beta", "pop_2"))
+        self.assertEqual(self.label(7501, 2499, 0)[:2], ("Alpha", "pop"))
+
+    def test_outside_majority_edge(self):
+        self.assertEqual(self.label(50, 0, 50)[:2], ("Alpha", "pop"))         # exactly 50%: not rural
+        self.assertEqual(self.label(4999, 0, 5001)[:2], ("rural near Alpha", "pop_rural"))
+        self.assertEqual(self.label(0, 0, 10)[:2], ("rural", "pop_rural"))      # island added later
+
+    def test_zero_population_falls_back(self):
+        self.assertIsNone(self.label(0, 0, 0)[0])
+
+
+POP = list(csv.DictReader(open(tl.OUT_POP, encoding="utf-8")))
+
+
+class PopulationTable(unittest.TestCase):
+    def test_shares_sum_to_one_per_tract(self):
+        by = {}
+        for r in POP:
+            by.setdefault(r["tract_fips"], []).append(r)
+        for tract, rows in by.items():
+            total = int(rows[0]["tract_pop_2020"])
+            self.assertEqual(sum(int(r["pop_2020"]) for r in rows), total, tract)
+            if total:
+                self.assertAlmostEqual(sum(float(r["share"]) for r in rows), 1.0, delta=0.002)
+
+    def test_labels_use_the_same_totals(self):
+        totals = {r["tract_fips"]: int(r["tract_pop_2020"]) for r in POP}
+        for fips, r in LABELS.items():
+            self.assertEqual(int(r["pop_2020"]), totals.get(fips, 0), fips)
+            if int(r["pop_2020"]):
+                s = float(r["pop_share_top"]) + float(r["pop_outside_cdp"])
+                self.assertLessEqual(s, 1.0001)
+
+    @unittest.skipUnless((tl.BLOCKS / "hi2020.pl.zip").exists(), "raw Census files not cached")
+    def test_block_population_sums_to_pl_tract_total(self):
+        b = tl.read_blocks()
+        self.assertEqual(b["pop"], b["pop100"])                 # P1_001N == POP100 per block
+        sums = {}
+        for block, pop in b["pop"].items():
+            sums[block[:11]] = sums.get(block[:11], 0) + pop
+        self.assertEqual(sums, {k: v for k, v in b["tract_pop"].items()})
+        self.assertEqual(sum(b["pop"].values()), 1455271)       # 2020 PL state total
+        self.assertTrue(set(b["place"]) <= set(b["pop"]))       # every assigned block exists
+
+
 class Committed(unittest.TestCase):
     def test_every_tract_has_community_and_island(self):
         fips = {f["properties"]["tract_fips"] for f in AFN["features"]}
@@ -90,22 +147,29 @@ class Committed(unittest.TestCase):
         for r in LABELS.values():
             self.assertTrue(r["community"], r)
             self.assertIn(r["island"], ISLANDS, r)
-            self.assertIn(r["method"], ("overlap", "overlap_2", "near", "rural"))
-            if r["method"] == "overlap_2":
+            self.assertIn(r["method"], ("pop", "pop_2", "pop_rural",
+                                        "area", "area_2", "near", "area_rural"))
+            if r["method"] in ("pop_2", "area_2"):
                 self.assertEqual(r["community"].count(" / "), 1)
             if r["method"] == "near":
                 self.assertLessEqual(float(r["distance_km"]), tl.NEAR_KM)
                 self.assertTrue(r["community"].startswith("near "))
-            if r["method"] == "rural":
+            if r["method"] in ("pop_rural", "area_rural"):
                 self.assertTrue(r["community"].startswith("rural "))
-            self.assertTrue(r["source_url"].startswith("https://tigerweb.geo.census.gov/"))
+            if r["method"].startswith("pop"):
+                self.assertGreater(int(r["pop_2020"]), 0)
+                self.assertIn("BlockAssign_ST15_HI.zip", r["source_url"])
+            else:                                        # area fallback only for 0 people
+                self.assertEqual(int(r["pop_2020"]), 0, r["tract_label"])
+                self.assertTrue(r["source_url"].startswith("https://tigerweb.geo.census.gov/"))
 
-    def test_spot_checks_against_tigerweb(self):
-        # Checked 2026-10-27: TIGERweb tigerWMS_Census2020 layer 28 CDPs intersecting each
-        # tract's TIGERweb polygon (layer 6) include every CDP named here.
-        self.assertEqual(LABELS["15009030903"]["tract_label"], "Tract 309.03 · Waihee-Waiehu / Wailuku")
+    def test_pinned_maui_tracts(self):
+        # 2020 block population by CDP (Block Assignment File + PL 94-171), reported 2026-10-27.
+        self.assertEqual(LABELS["15009030800"]["tract_label"], "Tract 308 · Waikapu / Waihee-Waiehu")
+        self.assertEqual(LABELS["15009030903"]["tract_label"], "Tract 309.03 · Waihee-Waiehu")
         self.assertEqual(LABELS["15009031001"]["tract_label"], "Tract 310.01 · Wailuku")
-        self.assertEqual(LABELS["15009030800"]["tract_label"], "Tract 308 · Waikapu")
+        self.assertEqual(LABELS["15009030800"]["pop_2020"], "7413")
+        self.assertEqual(LABELS["15009030800"]["pop_share_top"], "0.4636")
         self.assertEqual(LABELS["15009980000"]["island"], "Kahoʻolawe")
 
 

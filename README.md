@@ -25,7 +25,7 @@ python3 scripts/fetch_data.py               # SVI, NRI, tsunami zones, emPOWER, 
 python3 scripts/fetch_flood_zones.py        # FEMA flood zone per site (cached)
 python3 scripts/fetch_languages.py          # ACS C16001 (secondary)
 python3 scripts/build_demographics.py       # Vintage 2025, ACS 2020-2024, 2020 Census: communities, race/ethnicity
-python3 scripts/build_tract_labels.py       # TIGERweb 2020 CDP polygons -> tract community names
+python3 scripts/build_tract_labels.py       # 2020 Block Assignment File + PL block population -> tract community names
 #    ACS PUMS: download the files listed in scripts/build_languages_pums.py into data/raw/pums/
 
 # 2. Rebuild everything from local data (offline, about 1 minute)
