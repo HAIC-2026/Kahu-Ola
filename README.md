@@ -1,4 +1,4 @@
-# Hawaiʻi ESF-6 AFN Planning Framework (HAIC 2026)
+# Kahu-Ola: Hawaiʻi ESF-6 AFN Planning Framework (HAIC 2026)
 
 > **Planning aid. Supports, does not replace, county emergency plans. Not an official shelter list.**
 
@@ -63,6 +63,10 @@ python3 -m unittest discover tests
 ## Disclaimer
 
 This is a planning aid built from public, aggregate data. It supports, and does not replace, county and State emergency plans or alerting systems. Sites listed are places a county opened in past events; not every site opens in every event. Roles, decision points and messages are proposals to be confirmed with each partner and county. Message translations are AI drafts that need native-speaker review before use. In an emergency, follow official county announcements and call 911 if you are in danger.
+
+## Team
+
+Built by Team Kahu Ola for HAIC 2026: Tiffanie Nguyen (Team Captain, UI), Long Nguyen (data and AI), Kim Quynh Do (UI, Vietnamese review).
 
 ## License
 
