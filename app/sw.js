@@ -5,7 +5,7 @@
 "use strict";
 
 // BEGIN GENERATED
-const VERSION = "d76d039f545d";
+const VERSION = "7b0fc75f9f1d";
 const PRECACHE = [
   "./",
   "index.html",

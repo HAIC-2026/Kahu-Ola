@@ -65,7 +65,25 @@ COL = {
     "age65": "Age 65 and older",
     "no_car": "People in households without a car",
     "needs_total": "Needs total (a person can be in more than one column)",
+    "hearing": "Hearing difficulty",
+    "vision": "Vision difficulty",
+    "cognitive": "Cognitive difficulty (memory, decisions)",
+    "age65_alone": "Age 65 and older, living alone",
+    "highrise": "Homes in buildings with 10+ units: may lose elevator and AC in a long power outage",
 }
+DETAIL_KEYS = [("hearing", "C_hearing_at_risk", "C"), ("vision", "C_vision_at_risk", "C"),
+               ("cognitive", "I_cognitive_at_risk", "I"), ("age65_alone", "S_age65_alone_at_risk", "S")]
+SERVICE_ANIMALS = "Service animals stay with their handler (ADA); not counted as pets."
+KALAWAO_NOTE = "Kalawao County (Kalaupapa, Molokaʻi) is planned with Maui County."
+WHO_ELSE = [
+    ("Domestic-violence survivors", "Served through confidential providers; no counts by design."),
+    ("Off-grid households", "No public Census-area data; county and health partners to supply."),
+    ("People on dialysis or receiving home care",
+     "No public Census-area data; county and health partners to supply."),
+    ("Earthquake", "Not modeled; see PLAN.md §10."),
+]
+COUNTY_LINE_LABEL = {"homelessness": "People experiencing homelessness (Point-in-Time count)",
+                     "visitors": "Visitors on island (average per day)"}
 FOOTPRINT_TEXT = {
     "all tracts": "every Census area in the county",
     "share inside tsunami zone": "the people living inside the tsunami evacuation zone",
@@ -95,6 +113,17 @@ SOURCE = {
                  "Pacific Tsunami Warning Center product definitions (links: {SOURCES}).",
     "languages": "Source: ACS PUMS 2019–2023 5-year (validated against the DBEDT State of "
                  "Hawaiʻi Data Book 2024, Table 1.44).",
+    "detail": "Source: ACS 2020–2024 5-year Census-area tables B18102 (hearing), B18103 "
+              "(vision), B18104 (cognitive) and B09020 (age 65 and older living alone), times the share "
+              "of each area in the risk area; homes in 10+ unit buildings: CDC/ATSDR SVI 2022 "
+              "(E_MUNIT, housing units).",
+    "county_lines": "Source: Point-in-Time counts – Bridging the Gap 2026 report (Hawaiʻi, "
+                    "Maui, Kauaʻi; night of Jan 25, 2026) and Partners In Care 2026 count for "
+                    "Oʻahu as released by the City and County of Honolulu; visitors – DBEDT "
+                    "State of Hawaiʻi Data Book 2025, Table 7.06. Details: "
+                    "data/sources/county_lines.csv.",
+    "reach": "Source: proposed channels and formats in config/communication.json – supports, "
+             "does not replace, county and State public-information plans.",
 }
 SOURCES_TOKEN = "{SOURCES}"            # PDFs: "section 8"; app: a "see Sources" link
 
@@ -122,13 +151,15 @@ def pct_text(x: float) -> str:
     """Percent with a decimal only when needed: 0.112 -> '11.2%', 0.11 -> '11%'."""
     v = round(x * 100, 1)
     return f"{v:.0f}%" if v == int(v) else f"{v}%"
-CMIST = [("C – Communication", "people who speak English less than well; they may need "
-          "interpreters and translated messages."),
+CMIST = [("C – Communication", "people who speak English less than well (they may need "
+          "interpreters and translated messages), and people with hearing or vision "
+          "difficulty."),
          ("M – Medical", "people who use power-dependent medical equipment (an estimate from "
           "HHS emPOWER)."),
-         ("I – Independence", "people with a disability and people age 65 and older."),
-         ("S – Safety and support", "children and people living in group quarters (in the "
-          "needs table)."),
+         ("I – Independence", "people with a disability, people with cognitive difficulty "
+          "(memory, decisions) and people age 65 and older."),
+         ("S – Safety and support", "people age 65 and older living alone, children and "
+          "people living in group quarters (in the needs table)."),
          ("T – Transportation", "people in households without a car.")]
 
 
@@ -216,10 +247,18 @@ def load_inputs() -> dict:
         "match": load_json(PROC / "match_plan.json"),
         "comm": load_json(CONFIG / "communication.json"),
         "partners": load_json(CONFIG / "partners.json"),
+        "county_lines": load_county_lines(),
         "languages": load_languages(),
         "labels": load_labels(),
         "data_as_of": hst_date(needs.get("built_at")),
     }
+
+
+def load_county_lines(path: Path = ROOT / "data" / "sources" / "county_lines.csv") -> list:
+    if not path.exists():
+        return []
+    with open(path, newline="", encoding="utf-8") as fh:
+        return list(csv.DictReader(fh))
 
 
 def scenario(inp: dict, county: str, hazard: str) -> dict:
@@ -273,7 +312,8 @@ def largest_communities(rows: list, rates: dict, k: int = 3) -> list:
                     "label_sub": r.get("label_sub", ""), "at_risk_pop": ar,
                     "low": ar * rates["low"], "central": float(r["shelter_demand"]),
                     "high": ar * rates["high"],
-                    **{k: float(r[k]) for k in AFN_PARTS + ("I_age65_at_risk",)}})
+                    **{k: float(r[k]) for k in AFN_PARTS + ("I_age65_at_risk",)},
+                    **{f: float(r.get(f) or 0) for _k, f, _l in DETAIL_KEYS}})
     return out
 
 
@@ -354,6 +394,9 @@ def summary_html(sc: dict, hazard: str) -> str:
             (COL["age65"] + " (I)", n(sc["I_age65_at_risk"])),
             (COL["no_car"] + " (T)", n(sc["T_no_vehicle_persons_at_risk"])),
             ("Known 2026 shelter sites usable for this hazard", n(sc.get("known_sites_usable")))]
+    kpis[8:8] = [(f"{COL[k]} ({letter})", n(sc.get(field))) for k, field, letter in DETAIL_KEYS]
+    if hazard == "hurricane":
+        kpis.append((COL["highrise"], n(sc.get("highrise_units_at_risk"))))
     if hazard == "tsunami":
         kpis.append(("People in the extreme tsunami zone (worst case)",
                      n(sc.get("at_risk_pop_extreme_zone"))))
@@ -481,7 +524,45 @@ def sites_html(sites: list, sc: dict) -> str:
               'event. Always follow current county announcements.</p>')
 
 
-def needs_html(ms: dict, partners: dict) -> str:
+def county_lines_html(lines: list, county: str) -> str:
+    """County counts planned separately; never added to the Census-area totals."""
+    rows = [[escape(COUNTY_LINE_LABEL.get(r["line"], r["line"])), n(r["value"]),
+             escape(r["detail"]), escape(r["period"])] for r in lines if r["county"] == county]
+    if not rows:
+        return ""
+    return ('<h3>Also plan for (county counts, not included in the totals above)</h3>'
+            + table(["Group", "People", "Detail", "Date"], rows, num_cols=(1,))
+            + f'<p class="src">{escape(src_text("county_lines"))}</p>')
+
+
+def who_else_html() -> str:
+    items = "".join(f"<li><b>{escape(k)}:</b> {escape(v)}</li>" for k, v in WHO_ELSE)
+    return f'<div class="note"><b>Who else to plan for</b><ul>{items}</ul></div>'
+
+
+def reach_html(comm: dict, partners: dict) -> str:
+    rows = [[escape(c["description"]), escape(partners.get(c["owner"], c["owner"])
+                                             if c["owner"] != "county_em" else
+                                             "County Emergency Management (each county)"),
+             escape(partner_text("; ".join(c["support"]), partners))] for c in comm["channels"]]
+    fmts = "".join(f"<li><b>{escape(k)}:</b> {escape(v)}</li>"
+                   for k, v in comm.get("accessible_formats", {}).get("formats", []))
+    return ('<h3>How to reach residents</h3>'
+            + table(["Channel", "Owner (proposed)", "Support (proposed)"], rows)
+            + f'<p class="src">{escape(src_text("reach"))}</p>'
+            + f'<p><b>Accessible formats for every message:</b></p><ul>{fmts}</ul>')
+
+
+def more_needs_html(comms: list) -> str:
+    rows = [[community_cell(c["label_main"], c["label_sub"])]
+            + [n(c.get(field)) for _k, field, _l in DETAIL_KEYS] for c in comms]
+    return ('<h3>More needs in the largest communities</h3>'
+            + table([COL["area"]] + [COL[k] for k, _f, _l in DETAIL_KEYS], rows,
+                    num_cols=(1, 2, 3, 4))
+            + f'<p class="src">{escape(src_text("detail"))}</p>')
+
+
+def needs_html(ms: dict, partners: dict, county: str = "", lines: list | None = None) -> str:
     rows = [[escape(lang_label(l["need"])), n(l["quantity"]), escape(l["unit"]),
              escape(partner_text(l["lead_partner_types"], partners)),
              escape(partner_text(l["support_partner_types"], partners)),
@@ -492,7 +573,11 @@ def needs_html(ms: dict, partners: dict) -> str:
             'The pledged column stays blank until a partner confirms it.</p>'
             + table(["Need", "How many", "Unit", "Proposed lead", "Proposed support",
                      "Pledged by partner", "Still needed"], rows, num_cols=(1,))
-            + f'<p class="src">{escape(src_text("needs"))}</p>')
+            + f'<p class="src">{escape(src_text("needs"))}</p>'
+            + f'<p><b>{escape(SERVICE_ANIMALS)}</b></p>'
+            + county_lines_html(lines or [], county)
+            + (f'<p>{escape(KALAWAO_NOTE)}</p>' if county == "Maui" else "")
+            + who_else_html())
 
 
 def decisions_html(match: dict, hazard: str, partners: dict) -> str:
@@ -506,7 +591,8 @@ def decisions_html(match: dict, hazard: str, partners: dict) -> str:
             + f'<p class="src">{escape(src_text("decisions"))}</p>')
 
 
-def outreach_html(ms: dict, langs: list, county: str) -> str:
+def outreach_html(ms: dict, langs: list, county: str, comms: list | None = None,
+                  comm: dict | None = None, partners: dict | None = None) -> str:
     rows = [[str(t["rank"]), community_cell(t.get("label_main") or t.get("tract_label", ""),
                                             t.get("label_sub", "")),
              n(t["at_risk_pop"]), n(t["power_dependent"]), n(t["disability"]),
@@ -522,6 +608,8 @@ def outreach_html(ms: dict, langs: list, county: str) -> str:
                      COL["lep"], COL["no_car"], COL["needs_total"]], rows,
                     num_cols=(0, 2, 3, 4, 5, 6, 7))
             + f'<p class="src">{escape(src_text("people"))}</p>'
+            + (more_needs_html(comms) if comms else "")
+            + (reach_html(comm, partners or {}) if comm else "")
             + f'<h3>Languages: people age 5 and older who speak English less than "very well" '
               f'({escape(area_label(area))})</h3>'
             + note
@@ -610,9 +698,9 @@ def playbook_html(inp: dict, county: str, hazard: str) -> str:
 {guide_html(sc, comms, hazard)}
 {map_html(inp, county, hazard, sites)}
 {sites_html(sites, sc)}
-{needs_html(ms, partner_names(inp["partners"]))}
+{needs_html(ms, partner_names(inp["partners"]), county, inp["county_lines"])}
 {decisions_html(inp["match"], hazard, partner_names(inp["partners"]))}
-{outreach_html(ms, langs, county)}
+{outreach_html(ms, langs, county, comms, inp["comm"], partner_names(inp["partners"]))}
 {sources_html(inp)}
 </main>
 <footer class="footer">Data as of {escape(inp["data_as_of"])} · {escape(DISCLAIMER)}</footer>

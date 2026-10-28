@@ -119,6 +119,11 @@ def tract_rows(tracts: list, hazard: str, shares: dict, rate: float) -> list:
             "I_age65_at_risk": at_risk * per_cap("I_age_65_plus"),
             "T_no_vehicle_persons_at_risk": nz(t.get("T_households_no_vehicle")) * share * pph,
             "highrise_units_at_risk": nz(t.get("multi_unit_10plus")) * share,
+            # more CMIST detail (ACS 2020-2024 5-year counts x share at risk)
+            "C_hearing_at_risk": nz(t.get("C_hearing_difficulty")) * share,
+            "C_vision_at_risk": nz(t.get("C_vision_difficulty")) * share,
+            "I_cognitive_at_risk": nz(t.get("I_cognitive_difficulty")) * share,
+            "S_age65_alone_at_risk": nz(t.get("S_age65_living_alone")) * share,
             # inside public shelters
             "C_lep_in_shelter": demand * per_cap("C_limited_english"),
             "M_power_dependent_in_shelter": demand * per_cap("M_power_dependent_est"),
@@ -229,7 +234,9 @@ def run(tracts: list, shelters: list, schools: list, cfg: dict):
             agg = {k: sum(r[k] for r in rows) for k in (
                 "shelter_demand", "C_lep_at_risk", "M_power_dependent_at_risk",
                 "I_disability_at_risk", "I_age65_at_risk", "T_no_vehicle_persons_at_risk",
-                "highrise_units_at_risk", "C_lep_in_shelter", "M_power_dependent_in_shelter",
+                "highrise_units_at_risk", "C_hearing_at_risk", "C_vision_at_risk",
+                "I_cognitive_at_risk", "S_age65_alone_at_risk",
+                "C_lep_in_shelter", "M_power_dependent_in_shelter",
                 "I_disability_in_shelter", "S_children_in_shelter", "households_in_shelter")}
             sc = {
                 "county": county, "hazard": hz, "footprint_rule": rule,

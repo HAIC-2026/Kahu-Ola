@@ -62,6 +62,13 @@
    "product": "Warning cancelled or all clear",
    "definition": "Hazard has passed; recovery sheltering begins.",
    "url": ""
+  },
+  "shelter_access_notice": {
+   "issuer": "County (sets the date)",
+   "product": "Before each season: who may use shelters (no official product)",
+   "definition": "Team proposal: the county confirms and publishes who may use public shelters and what ID, if any, is needed, before an event, so residents are not turned away or afraid to come.",
+   "url": "",
+   "note": "Proposed – supports, does not replace, county plans. Not a NWS/PTWC product, so no URL."
   }
  },
  "decision_points": {
@@ -101,6 +108,19 @@
      "dhs",
      "doe",
      "dot"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "shelter_access_notice",
+    "timing": "before",
+    "action": "County confirms and publishes who may use shelters and what ID is needed; trusted community messengers share it.",
+    "owner": "county_em",
+    "support": [
+     "dhs",
+     "faith_based",
+     "oha",
+     "hawaii_voad"
     ],
     "status": "proposed – supports, does not replace, county plans"
    },
@@ -145,6 +165,19 @@
     "status": "proposed – supports, does not replace, county plans"
    },
    {
+    "trigger": "shelter_access_notice",
+    "timing": "before",
+    "action": "County confirms and publishes who may use shelters and what ID is needed; trusted community messengers share it.",
+    "owner": "county_em",
+    "support": [
+     "dhs",
+     "faith_based",
+     "oha",
+     "hawaii_voad"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
     "trigger": "county_evacuation_order",
     "timing": "during",
     "action": "Open shelters/refuge outside the fire area; run accessible transport; issue multilingual messages through all channels.",
@@ -185,6 +218,19 @@
     "status": "proposed – supports, does not replace, county plans"
    },
    {
+    "trigger": "shelter_access_notice",
+    "timing": "before",
+    "action": "County confirms and publishes who may use shelters and what ID is needed; trusted community messengers share it.",
+    "owner": "county_em",
+    "support": [
+     "dhs",
+     "faith_based",
+     "oha",
+     "hawaii_voad"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
     "trigger": "tsunami_warning",
     "timing": "during",
     "action": "Evacuate the zone; open refuge outside the zone; prioritize residents who cannot evacuate on their own.",
@@ -219,6 +265,19 @@
     "support": [
      "doe",
      "dhs"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "shelter_access_notice",
+    "timing": "before",
+    "action": "County confirms and publishes who may use shelters and what ID is needed; trusted community messengers share it.",
+    "owner": "county_em",
+    "support": [
+     "dhs",
+     "faith_based",
+     "oha",
+     "hawaii_voad"
     ],
     "status": "proposed – supports, does not replace, county plans"
    },
@@ -267,6 +326,19 @@
     "support": [
      "dot",
      "dhs"
+    ],
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "trigger": "shelter_access_notice",
+    "timing": "before",
+    "action": "County confirms and publishes who may use shelters and what ID is needed; trusted community messengers share it.",
+    "owner": "county_em",
+    "support": [
+     "dhs",
+     "faith_based",
+     "oha",
+     "hawaii_voad"
     ],
     "status": "proposed – supports, does not replace, county plans"
    },

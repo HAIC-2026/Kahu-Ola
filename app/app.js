@@ -404,7 +404,10 @@ function renderPlan() {
     [`${C.no_car} (T)`, fmt(s.T_no_vehicle_persons_at_risk)],
     ["Known 2026 shelter sites usable for this hazard", fmt(s.known_sites_usable)],
   ];
+  kpis.splice(8, 0, ...DATA.meta.detail_keys.map(([k, field, letter]) => [`${C[k]} (${letter})`, fmt(s[field])]));
+  if (hazard === "hurricane") kpis.push([C.highrise, fmt(s.highrise_units_at_risk)]);
   if (hazard === "tsunami") kpis.push(["People in the extreme tsunami zone (worst case)", fmt(s.at_risk_pop_extreme_zone)]);
+  const lines = DATA.county_lines.filter((r) => r.county === county);
   const area = DATA.meta.footprint_text[s.footprint_rule] || s.footprint_rule;
   const largestTitle = "Largest single community (the Census areas with the most people who may need a shelter)";
 
@@ -430,6 +433,10 @@ function renderPlan() {
         fmt(c.C_lep_at_risk), fmt(c.M_power_dependent_at_risk), fmt(c.I_disability_at_risk), fmt(c.I_age65_at_risk),
         fmt(c.T_no_vehicle_persons_at_risk)]), [1, 2, 3, 4, 5, 6, 7]),
     source("people"),
+    table("More needs in the largest communities", [C.area, ...DATA.meta.detail_keys.map(([k]) => C[k])],
+      sc.largest.map((c) => [community(c.label_main || c.tract_label, c.label_sub),
+        ...DATA.meta.detail_keys.map(([, field]) => fmt(c[field]))]), [1, 2, 3, 4]),
+    source("detail"),
 
     el("h2", null, "Map: people with needs and known sites"),
     ...renderMap(county, sc, sites, `${cLabel} ${hLabel}: people with needs by Census area and known shelter sites`),
@@ -448,6 +455,13 @@ function renderPlan() {
     table("Needs (likely estimate)", ["Need", "How many", "Unit", "Proposed lead", "Proposed support", "Pledged by partner", "Still needed"],
       sc.needs.map((n) => [n[0], fmt(n[1]), n[2], n[3], n[4], n[5] === "" ? "—" : fmt(n[5]), n[6]]), [1]),
     source("needs"),
+    el("p", null, el("strong", null, DATA.meta.service_animals)),
+    lines.length ? table("Also plan for (county counts, not included in the totals above)", ["Group", "People", "Detail", "Date"],
+      lines.map((r) => [r.label, fmt(r.value), r.detail, r.period]), [1]) : null,
+    lines.length ? source("county_lines") : null,
+    county === "Maui" ? el("p", null, DATA.meta.kalawao_note) : null,
+    el("div", { class: "note" }, el("strong", null, "Who else to plan for"),
+      el("ul", null, DATA.meta.who_else.map(([k, v]) => el("li", null, el("strong", null, `${k}: `), v)))),
 
     el("h2", null, "Decision points"),
     el("p", { class: "note" }, DATA.meta.decision_status),
@@ -461,12 +475,36 @@ function renderPlan() {
       sc.priority_tracts.map((t) => [t.rank, community(t.label_main || t.tract_label, t.label_sub), fmt(t.at_risk_pop), fmt(t.power_dependent), fmt(t.disability),
         fmt(t.limited_english), fmt(t.no_vehicle), fmt(t.afn_need_sum)]), [0, 2, 3, 4, 5, 6, 7]),
     source("people"),
+    el("h3", null, "How to reach residents"),
+    table("Channels", ["Channel", "Owner (proposed)", "Support (proposed)"], DATA.reach.channels),
+    source("reach"),
+    el("p", null, el("strong", null, "Accessible formats for every message:")),
+    el("ul", null, DATA.reach.formats.map(([k, v]) => el("li", null, el("strong", null, `${k}: `), v))),
     L.note ? el("p", null, L.note) : null,
     table(`Languages: people age 5 and older who speak English less than “very well” (${L.area})`, ["Language", "People", "Margin of error (90%)"],
       L.rows.map((r) => [r[0], fmt(r[1]), `±${fmt(r[2])}`]), [1, 2]),
     source("languages"),
+    ...resultsSection(),
   );
   showVersion();
+}
+
+/* ---------- results: every number read from data files at build time ---------- */
+function resultsSection() {
+  const r = DATA.results, b = r.backtest[0], t = r.rebuild, base = r.baseline;
+  const items = [
+    el("li", null, el("strong", null, "Coverage: "),
+      `${fmt(r.with_cmist)} of ${fmt(r.tracts)} Census areas have needs data (FEMA risk data joined for ${fmt(r.with_nri)} of ${fmt(r.tracts)}). `,
+      el("small", null, `Source: ${r.sources.coverage}`)),
+    b ? el("li", null, el("strong", null, `Backtest – ${b.event} (${b.date}): `),
+      `observed ${fmt(+b.observed)} people in shelters; model ${fmt(+b.model_low)} / ${fmt(+b.model_central)} / ${fmt(+b.model_high)} (low / likely / high). `,
+      b.calibration_event === "True" ? "This is a calibration event, not validation: the high rate was set from it. " : "",
+      el("small", null, `Source: ${r.sources.backtest}`)) : null,
+    t ? el("li", null, el("strong", null, "Time: "),
+      `a full rebuild from local data (${fmt(t.steps)} steps, ${fmt(t.scenarios)} scenarios, ${fmt(t.playbooks)} playbooks) took ${t.seconds} seconds on ${t.machine} (${t.measured_at.slice(0, 10)}). Team-assumed baseline without this tool: ${base.value} ${base.unit}. `,
+      el("small", null, `Sources: ${r.sources.rebuild}; ${r.sources.baseline} (${base.source})`)) : null,
+  ];
+  return [el("h2", { id: "results" }, "Results"), el("ul", { class: "results" }, items)];
 }
 
 function fillSelect(id, pairs) {

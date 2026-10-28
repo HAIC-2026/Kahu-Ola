@@ -25,6 +25,14 @@
    ]
   },
   {
+   "channel": "sirens",
+   "description": "Outdoor warning sirens: a signal to turn on radio, TV or phone alerts for instructions",
+   "owner": "hiema",
+   "support": [
+    "county_em"
+   ]
+  },
+  {
    "channel": "trusted_messengers",
    "description": "Trusted community messengers: faith-based groups, Native Hawaiian organizations, health care providers, community nonprofits",
    "owner": "dhs",
@@ -70,5 +78,30 @@
   "review_assignees": {
    "Vietnamese": "Kim Quynh Do"
   }
+ },
+ "accessible_formats": {
+  "_about": "Formats to prepare for every message so residents with access and functional needs get the same information. Proposed – to be confirmed with partner.",
+  "formats": [
+   [
+    "ASL video",
+    "short American Sign Language video of each message"
+   ],
+   [
+    "Captions",
+    "captions on every video and broadcast"
+   ],
+   [
+    "Large print",
+    "printed notices in large print"
+   ],
+   [
+    "Plain language",
+    "short sentences, one action at a time"
+   ],
+   [
+    "Screen-reader-friendly text",
+    "plain text or tagged web pages, not images of text"
+   ]
+  ]
  }
 }

@@ -1,0 +1,9 @@
+{
+ "_about": "Inputs to the Results section that are not computed by the pipeline.",
+ "time_baseline": {
+  "value": 2,
+  "unit": "working days per county per event",
+  "status": "team_assumption",
+  "source": "Team assumption, PLAN.md §6 metric 3; to be confirmed with DHS in a timed tabletop exercise."
+ }
+}

@@ -2,7 +2,7 @@
  "title": "Hawaiʻi ESF-6 MATCH plan: needs x partner roles, decision points, communication pathways",
  "status": "proposed – supports, does not replace, county plans. Roles are proposed – to be confirmed with partner.",
  "privacy": "Aggregate tract and county estimates only. No individual records.",
- "inputs_built_at": "2026-10-27T22:25:44-10:00",
+ "inputs_built_at": "2026-10-27T23:55:07-10:00",
  "sources": {
   "partners": {
    "document": "HAIC_AI Challenge_Submission_DHS_Disaster_2026.pdf (2026 HAIC AI Challenge Submission, Hawaii DHS: 'Enhancing ESF-6 Planning Through AI-Supported Insights')",
@@ -8864,6 +8864,19 @@
    },
    {
     "hazard": "hurricane",
+    "timing": "before",
+    "trigger": "Before each season: who may use shelters (no official product)",
+    "issuer": "County (sets the date)",
+    "trigger_definition": "Team proposal: the county confirms and publishes who may use public shelters and what ID, if any, is needed, before an event, so residents are not turned away or afraid to come.",
+    "trigger_source": "",
+    "action": "County confirms and publishes who may use shelters and what ID is needed; trusted community messengers share it.",
+    "owner": "county_em",
+    "owner_name": "County Emergency Management (each county)",
+    "support": "dhs; faith_based; oha; hawaii_voad",
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "hazard": "hurricane",
     "timing": "after",
     "trigger": "Warning cancelled or all clear",
     "issuer": "County / NWS / PTWC",
@@ -8901,6 +8914,19 @@
     "owner": "county_em",
     "owner_name": "County Emergency Management (each county)",
     "support": "dot; dhs; doh",
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "hazard": "wildfire",
+    "timing": "before",
+    "trigger": "Before each season: who may use shelters (no official product)",
+    "issuer": "County (sets the date)",
+    "trigger_definition": "Team proposal: the county confirms and publishes who may use public shelters and what ID, if any, is needed, before an event, so residents are not turned away or afraid to come.",
+    "trigger_source": "",
+    "action": "County confirms and publishes who may use shelters and what ID is needed; trusted community messengers share it.",
+    "owner": "county_em",
+    "owner_name": "County Emergency Management (each county)",
+    "support": "dhs; faith_based; oha; hawaii_voad",
     "status": "proposed – supports, does not replace, county plans"
    },
    {
@@ -8946,6 +8972,19 @@
    },
    {
     "hazard": "tsunami",
+    "timing": "before",
+    "trigger": "Before each season: who may use shelters (no official product)",
+    "issuer": "County (sets the date)",
+    "trigger_definition": "Team proposal: the county confirms and publishes who may use public shelters and what ID, if any, is needed, before an event, so residents are not turned away or afraid to come.",
+    "trigger_source": "",
+    "action": "County confirms and publishes who may use shelters and what ID is needed; trusted community messengers share it.",
+    "owner": "county_em",
+    "owner_name": "County Emergency Management (each county)",
+    "support": "dhs; faith_based; oha; hawaii_voad",
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "hazard": "tsunami",
     "timing": "during",
     "trigger": "Tsunami Warning",
     "issuer": "NOAA Pacific Tsunami Warning Center (PTWC)",
@@ -8983,6 +9022,19 @@
     "owner": "county_em",
     "owner_name": "County Emergency Management (each county)",
     "support": "doe; dhs",
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "hazard": "inland_flood",
+    "timing": "before",
+    "trigger": "Before each season: who may use shelters (no official product)",
+    "issuer": "County (sets the date)",
+    "trigger_definition": "Team proposal: the county confirms and publishes who may use public shelters and what ID, if any, is needed, before an event, so residents are not turned away or afraid to come.",
+    "trigger_source": "",
+    "action": "County confirms and publishes who may use shelters and what ID is needed; trusted community messengers share it.",
+    "owner": "county_em",
+    "owner_name": "County Emergency Management (each county)",
+    "support": "dhs; faith_based; oha; hawaii_voad",
     "status": "proposed – supports, does not replace, county plans"
    },
    {
@@ -9037,6 +9089,19 @@
     "owner": "county_em",
     "owner_name": "County Emergency Management (each county)",
     "support": "dot; dhs",
+    "status": "proposed – supports, does not replace, county plans"
+   },
+   {
+    "hazard": "coastal_flood",
+    "timing": "before",
+    "trigger": "Before each season: who may use shelters (no official product)",
+    "issuer": "County (sets the date)",
+    "trigger_definition": "Team proposal: the county confirms and publishes who may use public shelters and what ID, if any, is needed, before an event, so residents are not turned away or afraid to come.",
+    "trigger_source": "",
+    "action": "County confirms and publishes who may use shelters and what ID is needed; trusted community messengers share it.",
+    "owner": "county_em",
+    "owner_name": "County Emergency Management (each county)",
+    "support": "dhs; faith_based; oha; hawaii_voad",
     "status": "proposed – supports, does not replace, county plans"
    },
    {
@@ -9128,6 +9193,14 @@
      "owner": "county_em",
      "support": [
       "hiema"
+     ]
+    },
+    {
+     "channel": "sirens",
+     "description": "Outdoor warning sirens: a signal to turn on radio, TV or phone alerts for instructions",
+     "owner": "hiema",
+     "support": [
+      "county_em"
      ]
     },
     {
@@ -9257,6 +9330,14 @@
      ]
     },
     {
+     "channel": "sirens",
+     "description": "Outdoor warning sirens: a signal to turn on radio, TV or phone alerts for instructions",
+     "owner": "hiema",
+     "support": [
+      "county_em"
+     ]
+    },
+    {
      "channel": "trusted_messengers",
      "description": "Trusted community messengers: faith-based groups, Native Hawaiian organizations, health care providers, community nonprofits",
      "owner": "dhs",
@@ -9353,6 +9434,14 @@
      "owner": "county_em",
      "support": [
       "hiema"
+     ]
+    },
+    {
+     "channel": "sirens",
+     "description": "Outdoor warning sirens: a signal to turn on radio, TV or phone alerts for instructions",
+     "owner": "hiema",
+     "support": [
+      "county_em"
      ]
     },
     {
@@ -9470,6 +9559,14 @@
      "owner": "county_em",
      "support": [
       "hiema"
+     ]
+    },
+    {
+     "channel": "sirens",
+     "description": "Outdoor warning sirens: a signal to turn on radio, TV or phone alerts for instructions",
+     "owner": "hiema",
+     "support": [
+      "county_em"
      ]
     },
     {

@@ -151,7 +151,7 @@ class Committed(unittest.TestCase):
         for r in LABELS.values():
             self.assertTrue(r["community"], r)
             self.assertIn(r["island"], ISLANDS, r)
-            self.assertIn(r["method"], ("pop", "pop_2", "pop_near", "pop_rural",
+            self.assertIn(r["method"], ("pop", "pop_2", "pop_near", "pop_rural", "named_area",
                                         "area", "area_2", "near", "area_rural"))
             if r["method"] in ("pop_2", "area_2"):
                 self.assertEqual(r["community"].count(" / "), 1)
@@ -165,6 +165,8 @@ class Committed(unittest.TestCase):
             if r["method"].startswith("pop"):
                 self.assertGreater(int(r["pop_2020"]), 0)
                 self.assertIn("BlockAssign_ST15_HI.zip", r["source_url"])
+            elif r["method"] == "named_area":            # Kalaupapa (Kalawao), Niʻihau
+                self.assertIn(r["community"], ("Kalaupapa (Kalawao)", "Niʻihau"))
             else:                                        # area fallback only for 0 people
                 self.assertEqual(int(r["pop_2020"]), 0, r["tract_label"])
                 self.assertTrue(r["source_url"].startswith("https://tigerweb.geo.census.gov/"))

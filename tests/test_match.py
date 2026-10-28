@@ -234,7 +234,8 @@ class Communication(unittest.TestCase):
         self.assertEqual(c["Maui"]["top_languages_lep"][0]["language"], "Ilocano")
         self.assertEqual(c["Maui"]["language_area"], "Kauai + Maui")
         self.assertEqual({ch["channel"] for ch in c["Maui"]["channels"]},
-                         {"official_alerts", "radio", "trusted_messengers", "printed_notices"})
+                         {"official_alerts", "radio", "sirens", "trusted_messengers",
+                          "printed_notices"})
         self.assertEqual(c["Maui"]["message_library_status"], "no approved templates yet")
 
 

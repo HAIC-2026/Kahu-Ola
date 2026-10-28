@@ -28,6 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from hawaii_time import now_hst  # noqa: E402
 from geo import ZoneIndex, representative_point  # noqa: E402
 from fetch_data import COUNTIES, NRI_HAZARD_LAYERS, county_from_fips  # noqa: E402
+import fetch_cmist_detail  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
@@ -42,6 +43,9 @@ CMIST_FIELDS = {
     "T": {"households_no_vehicle": "E_NOVEH"},
 }
 HOUSING_FIELDS = {"multi_unit_10plus": "E_MUNIT", "mobile_homes": "E_MOBILE"}
+# More CMIST detail from ACS 2020-2024 5-year tract tables (scripts/fetch_cmist_detail.py)
+DETAIL_FIELDS = {"C_hearing_difficulty": "hearing", "C_vision_difficulty": "vision",
+                 "I_cognitive_difficulty": "cognitive", "S_age65_living_alone": "age65_alone"}
 
 # Confirmed via Datatrove (Oct 27, 2026). Do NOT use Any_Healthcare_Srvc_Any_DME:
 # it sums service columns and double-counts people with several services.
@@ -105,8 +109,11 @@ def percentile_ranks(values: list) -> list:
     return ranks
 
 
-def build(svi, nri: dict | None, tsunami, extreme, empower, samples: int = 100) -> dict:
-    """nri = {hazard_key: FeatureCollection} from the NRI v1.20 per-hazard layers."""
+def build(svi, nri: dict | None, tsunami, extreme, empower, samples: int = 100,
+          detail: dict | None = None) -> dict:
+    """nri = {hazard_key: FeatureCollection} from the NRI v1.20 per-hazard layers;
+    detail = {tract_fips: row} from data/sources/cmist_detail_by_tract.csv."""
+    detail = fetch_cmist_detail.load() if detail is None else detail
     nri = {k: v for k, v in (nri or {}).items() if v}
     # tract FIPS -> {hazard: properties}
     nri_by_fips: dict = {}
@@ -136,6 +143,9 @@ def build(svi, nri: dict | None, tsunami, extreme, empower, samples: int = 100) 
                 r[f"{theme}_{name}"] = num(p.get(src))
         for name, src in HOUSING_FIELDS.items():
             r[name] = num(p.get(src))
+        d = detail.get(fips, {})
+        for name, src in DETAIL_FIELDS.items():
+            r[name] = num(d.get(src))
 
         # NRI: exact FIPS match, else tract containing our representative point
         by_hz = nri_by_fips.get(fips)
@@ -212,7 +222,11 @@ def build(svi, nri: dict | None, tsunami, extreme, empower, samples: int = 100) 
             "nri_join": "NRI v1.20 per-hazard layers joined on tract FIPS (2020 tracts); spatial fallback",
             "afn_index": "mean statewide percentile of C, M, I, S, T per-capita rates",
         },
-        "sources": [l["metadata"] for l in (svi, *nri.values(), tsunami, extreme, empower) if l],
+        "sources": [l["metadata"] for l in (svi, *nri.values(), tsunami, extreme, empower) if l]
+                   + ([{"source": "ACS 2020-2024 5-year, tract tables B18102 (hearing), B18103 "
+                                  "(vision), B18104 (cognitive), B09020 (age 65+ living alone)",
+                        "source_url": fetch_cmist_detail.data_url("B18102"),
+                        "fetched_at": "see data/sources/cmist_detail_by_tract.csv"}] if detail else []),
     }
     return {"type": "FeatureCollection", "features": features, "metadata": meta}
 

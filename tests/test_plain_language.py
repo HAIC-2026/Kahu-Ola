@@ -56,6 +56,8 @@ class PlaceNames(unittest.TestCase):
             for part in main.split(" / "):
                 if r["method"] in ("pop_rural", "area_rural") and not r["label_main"].startswith("rural near"):
                     continue                                   # "rural <island>"
+                if r["method"] == "named_area":
+                    continue                                   # Kalaupapa (Kalawao), Niʻihau (GNIS)
                 self.assertIn(part, display, r["tract_label"])
                 self.assertNotIn(part, ascii_only, r["tract_label"])
 
@@ -77,7 +79,9 @@ class Playbooks(unittest.TestCase):
     def test_plain_headers_and_no_jargon(self):
         for path in PAGES:
             html = path.read_text(encoding="utf-8")
-            for col in bp.COL.values():
+            for key, col in bp.COL.items():
+                if key == "highrise" and not path.stem.endswith("_hurricane"):
+                    continue                                   # hurricane-only card
                 self.assertIn(col, html, path.name)
             for word in JARGON:
                 self.assertNotIn(word, html, (path.name, word))

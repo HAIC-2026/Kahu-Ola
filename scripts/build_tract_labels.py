@@ -375,6 +375,21 @@ def population_rows(tract_pops: dict, names: dict) -> list:
     return rows
 
 
+NAMED_AREAS_NOTE = ("Kalawao County (Kalaupapa, Molokaʻi) is planned with Maui County; "
+                    "names from USGS GNIS (Kalaupapa: populated place 360096; Niʻihau: island "
+                    "359509).")
+
+
+def named_area(r: dict) -> str:
+    """Census areas named for their island or settlement: Kalaupapa (Kalawao County) and
+    Niʻihau. Spellings from USGS GNIS."""
+    if r["tract_fips"].startswith("15005"):
+        return "Kalaupapa (Kalawao)"
+    if r["island"] == "Niʻihau":
+        return "Niʻihau"
+    return ""
+
+
 def load_labels(path: Path = OUT) -> dict:
     """tract_fips -> row (community, island, tract_label, ...). Empty if not built."""
     if not path.exists():
@@ -400,6 +415,10 @@ def main(argv=None) -> int:
     rows = apply_population(build(afn, cdps, islands, display), tract_pops, blocks["names"],
                             islands, display)
     for r in rows:
+        named = named_area(r)
+        if named:
+            r.update({"community": named, "method": "named_area",
+                      "tract_label": tract_label(r["tract_fips"], named)})
         r["label_main"], r["label_sub"] = r["community"], census_area(r["tract_fips"])
     for path, fields, data in ((OUT, FIELDS, rows),
                                (OUT_POP, POP_FIELDS, population_rows(tract_pops, blocks["names"]))):
