@@ -44,7 +44,17 @@ def usable_sites(county: str, hazard: str) -> list:
 
 
 def expected_nearest(county: str, hazard: str, fips: str) -> list:
-    return [s["name"] for _km, s in nearest(TRACTS[fips]["p"], usable_sites(county, hazard))]
+    """Same island only; never a site on another island."""
+    island = TRACTS[fips]["i"]
+    same = [s for s in usable_sites(county, hazard) if s["island"] == island]
+    return [s["name"] for _km, s in nearest(TRACTS[fips]["p"], same)]
+
+
+def nearest_section(dom: str) -> str:
+    """The panel part that lists nearest sites (up to the partners line)."""
+    p = panel(dom)
+    m = re.search(r"<h4>Nearest sites usable.*?(?=<p><strong>Proposed partners)", p, re.S)
+    return m.group(0) if m else ""
 
 
 def free_port() -> int:
@@ -97,6 +107,8 @@ class Nearest(unittest.TestCase):
 
     def test_js_uses_same_rules(self):
         self.assertIn("const R = 6371.0088", JS)
+        self.assertIn('s.st === "ok" && s.lon !== null && tr.i && s.island === tr.i', JS)
+        self.assertIn("km straight-line, same island", JS)
         self.assertIn('s.st === "ok" && s.lon !== null', JS)
         self.assertIn("a.km - b.km || a.s.name.localeCompare(b.s.name)", JS)
         self.assertIn("km straight-line", JS)
@@ -120,13 +132,39 @@ class PanelNumbers(unittest.TestCase):
                                        delta=0.02 * float(r[col]) + 1, msg=(r["tract_fips"], k))
 
 
+class Islands(unittest.TestCase):
+    def test_every_area_and_site_has_an_island(self):
+        main = {"Niʻihau", "Kauaʻi", "Oʻahu", "Molokaʻi", "Lānaʻi", "Maui", "Kahoʻolawe", "Hawaiʻi"}
+        for t in BUNDLE["tracts"]:
+            self.assertIn(t["i"], main, t["f"])
+        for s in BUNDLE["sites"]:
+            if s["lon"] is not None:
+                self.assertIn(s["island"], main, s["name"])
+        with open(ROOT / "data" / "sources" / "islands.csv", newline="", encoding="utf-8") as fh:
+            rows = list(csv.DictReader(fh))
+        self.assertTrue(all(r["island"] for r in rows))
+        self.assertTrue(all(r["source_url"].startswith("https://geodata.hawaii.gov/") for r in rows))
+        self.assertEqual(TRACTS["15005031900"]["i"], "Molokaʻi")              # Kalawao
+
+    def test_build_fails_without_an_island(self):
+        import build_islands as bi
+        square = {"type": "Polygon", "coordinates": [[[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]]}
+        coast = {"features": [{"properties": {"isle": "Maui"}, "geometry": square}]}
+        afn = {"features": [{"properties": {"tract_fips": "1", "county": "Maui"}, "geometry": square}]}
+        sites = {"features": [{"properties": {"name": "At sea", "county": "Maui"},
+                               "geometry": {"type": "Point", "coordinates": [5.0, 5.0]}}]}
+        rows, missing = bi.assign(afn, sites, coast)
+        self.assertEqual(rows[0]["island"], "Maui")
+        self.assertEqual(missing, ["site At sea"])
+
+
 class Overlay(unittest.TestCase):
     def test_tsunami_zone_built_in_and_small(self):
         zone = BUNDLE["tsunami_zone"]
         self.assertEqual(set(zone), {"Honolulu", "Hawaii", "Maui", "Kauai"})
         size = len(json.dumps(zone, separators=(",", ":")))
         self.assertLess(size, 150_000)
-        self.assertLess((APP / "data" / "bundle.json").stat().st_size, 780_000)
+        self.assertLess((APP / "data" / "bundle.json").stat().st_size, 645_000 + 150 * 1024)
         self.assertIn('hazard === "tsunami" ? (DATA.tsunami_zone[county] || []) : []', JS)
 
     def test_official_map_is_a_plain_link(self):
@@ -165,12 +203,40 @@ class DeepLinks(unittest.TestCase):
             county, hazard, fips = case
             with tempfile.TemporaryDirectory() as prof:
                 return chrome(f"{cls.base}?county={county}&hazard={hazard}&area={fips}", prof)
+        # Molokaʻi (Kalaupapa, Kalawao), Lānaʻi and Niʻihau areas
+        cls.extra = [("Maui", "hurricane", "15005031900"), ("Maui", "tsunami", "15009031601"),
+                     ("Kauai", "hurricane", "15007041200")]
         with ThreadPoolExecutor(max_workers=6) as pool:
             cls.doms = list(pool.map(run, cls.cases))
+            cls.extra_doms = list(pool.map(run, cls.extra))
 
     @classmethod
     def tearDownClass(cls):
         cls.server.stop()
+
+    def test_no_site_from_another_island(self):
+        for (county, hazard, fips), dom in zip(self.cases + self.extra, self.doms + self.extra_doms):
+            section = text(nearest_section(dom))
+            self.assertTrue(section, (county, hazard, fips))
+            island = TRACTS[fips]["i"]
+            for s in BUNDLE["sites"]:
+                if s["island"] != island:
+                    self.assertNotIn(s["name"], section, (county, hazard, fips, s["name"]))
+            want = expected_nearest(county, hazard, fips)
+            if island == "Niʻihau":
+                self.assertIn("privately owned", section.lower())
+            elif not want:
+                self.assertIn("No known usable site on this island for this hazard", section)
+            else:
+                self.assertIn("km straight-line, same island", section)
+
+    def test_molokai_lanai_niihau_cases(self):
+        got = {TRACTS[f]["i"] for _c, _h, f in self.extra}
+        self.assertEqual(got, {"Molokaʻi", "Lānaʻi", "Niʻihau"})
+        for (county, hazard, fips), dom in zip(self.extra, self.extra_doms):
+            section = text(nearest_section(dom))
+            for name in expected_nearest(county, hazard, fips):
+                self.assertIn(name, section)
 
     def test_all_20_views_open_the_area_panel(self):
         self.assertEqual(len(self.cases), 20)

@@ -1,6 +1,6 @@
 {
- "seconds": 67.9,
- "steps": 11,
+ "seconds": 68.9,
+ "steps": 12,
  "step_scripts": [
   "fetch_data.py",
   "build_map.py",
@@ -9,6 +9,7 @@
   "build_demographics.py",
   "build_place_names.py",
   "build_tract_labels.py",
+  "build_islands.py",
   "model_needs.py",
   "match.py",
   "build_playbooks.py",
@@ -17,6 +18,6 @@
  "scenarios": 20,
  "playbooks": 20,
  "machine": "Apple M4",
- "measured_at": "2026-10-28T00:28:55-10:00",
+ "measured_at": "2026-10-28T07:27:22-10:00",
  "note": "Full rebuild from local data (no downloads), all build steps in order."
 }

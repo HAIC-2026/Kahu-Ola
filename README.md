@@ -37,6 +37,7 @@ python3 scripts/build_languages_pums.py
 python3 scripts/build_demographics.py --offline
 python3 scripts/build_place_names.py --offline    # Hawaiian spellings of place names (USGS GNIS)
 python3 scripts/build_tract_labels.py --offline   # tract community names (before model_needs)
+python3 scripts/build_islands.py --offline        # island of every Census area and site (coastline layer)
 python3 scripts/model_needs.py
 python3 scripts/match.py
 python3 scripts/build_playbooks.py          # add --html-only to skip PDFs

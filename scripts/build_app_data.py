@@ -33,6 +33,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import message_library  # noqa: E402
 import svgmap  # noqa: E402
 from geo import area_centroid  # noqa: E402
+import build_islands  # noqa: E402
 from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, COUNTY_LINE_LABEL,  # noqa: E402
                              DETAIL_KEYS, DISCLAIMER, KALAWAO_NOTE, SERVICE_ANIMALS, WHO_ELSE,
                              results_data,
@@ -111,6 +112,9 @@ def tsunami_overlay(path: Path = ROOT / "data" / "raw" / "tsunami_zone.geojson")
     return out
 
 
+ISLANDS = build_islands.load()        # data/sources/islands.csv (build_islands.py)
+
+
 def tract_geometry(afn: dict, labels: dict | None = None) -> list:
     labels = labels or {}
     out = []
@@ -128,7 +132,8 @@ def tract_geometry(afn: dict, labels: dict | None = None) -> list:
             cx, cy = area_centroid(f["geometry"])
             out.append({"f": fips, "c": f["properties"]["county"],
                         "l": labels.get(fips, {}).get("tract_label", fips), "g": rings,
-                        "p": [r4(cx), r4(cy)], "n": area_counts(f["properties"])})
+                        "p": [r4(cx), r4(cy)], "n": area_counts(f["properties"]),
+                        "i": ISLANDS.get(("area", fips), "")})
     return out
 
 
@@ -148,6 +153,7 @@ def build(inp: dict) -> dict:
                     "id": len(sites) + 1, "name": s["name"], "address": s["address"],
                     "county": c, "site_type": s["site_type"],
                     "times_opened_2026": s["times_opened_2026"],
+                    "island": ISLANDS.get(("site", f"{s['name']}|{c}"), ""),
                     "lon": s["lon"] and r4(s["lon"]), "lat": s["lat"] and r4(s["lat"]),
                     "status": {}})
                 site["status"][h] = [s["status"], plain_reason(s["reason"])]
@@ -188,6 +194,9 @@ def build(inp: dict) -> dict:
                  "site_key_status": SITE_KEY_STATUS, "need_names": svgmap.need_names(5),
                  "detail_keys": DETAIL_KEYS, "service_animals": SERVICE_ANIMALS,
                  "kalawao_note": KALAWAO_NOTE, "who_else": WHO_ELSE,
+                 "no_island_site": "No known usable site on this island for this hazard. The "
+                                   "county designates shelters; follow county announcements.",
+                 "niihau_note": dict(WHO_ELSE)["Niʻihau"],
                  "privacy": "Counts for whole Census areas and public facility names only. "
                             "No individual records."},
         "counties": [[c, COUNTY_LABEL[c]] for c in COUNTIES],

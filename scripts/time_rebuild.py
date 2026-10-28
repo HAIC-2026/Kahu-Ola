@@ -28,6 +28,7 @@ STEPS = [
     ["fetch_data.py", "--offline"], ["build_map.py"], ["build_shelters.py"],
     ["build_languages_pums.py"], ["build_demographics.py", "--offline"],
     ["build_place_names.py", "--offline"], ["build_tract_labels.py", "--offline"],
+    ["build_islands.py", "--offline"],
     ["model_needs.py"], ["match.py"], ["build_playbooks.py"], ["build_app_data.py"],
 ]
 

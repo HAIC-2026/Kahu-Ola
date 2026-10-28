@@ -310,8 +310,10 @@ function haversineKm(lon1, lat1, lon2, lat2) {
   return 2 * R * Math.asin(Math.sqrt(h));
 }
 
-function nearestSites(point, sites, k = 3) {
-  return sites.filter((s) => s.st === "ok" && s.lon !== null)
+/* usable sites on the SAME island only (never another island), nearest first */
+function nearestSites(tr, sites, k = 3) {
+  const point = tr.p;
+  return sites.filter((s) => s.st === "ok" && s.lon !== null && tr.i && s.island === tr.i)
     .map((s) => ({ s, km: haversineKm(point[0], point[1], s.lon, s.lat) }))
     .sort((a, b) => a.km - b.km || a.s.name.localeCompare(b.s.name)).slice(0, k);
 }
@@ -334,7 +336,7 @@ function openArea(f, opener) {
   const [main, sub] = (tr.l || f).split(" · ");
   const hz = Object.fromEntries(DATA.hazards)[hazard];
   const counts = DATA.area_fields.map((k, i) => [C[k], fmt(inRisk ? tr.n[i + 1] * share : tr.n[i + 1])]);
-  const near = nearestSites(tr.p, MAP.sites);
+  const near = nearestSites(tr, MAP.sites);
   const lead = new Set(), support = new Set();
   for (const n of sc.needs) { n[3].split(", ").forEach((x) => x && lead.add(x)); n[4].split(", ").forEach((x) => x && support.add(x)); }
   const L = DATA.languages[county];
@@ -360,9 +362,13 @@ function openArea(f, opener) {
       inRisk ? [el("dt", null, "May need a public shelter (likely)"), el("dd", null, fmt(v[1]))] : null),
     table(inRisk ? "Access and functional needs (people in the risk area)" : "Access and functional needs (people living in the area)",
       ["Need", "People"], counts, [1]),
-    table(`Nearest sites usable for ${hz.toLowerCase()} (straight-line distance from the area's center)`,
-      ["#", "Site", "Straight-line"],
-      near.length ? near.map(({ s, km }) => [s.n, s.name, `${km.toFixed(1)} km straight-line`]) : [["–", "No usable known site with a location", "–"]], [0, 2]),
+    el("h4", null, `Nearest sites usable for ${hz.toLowerCase()} on ${tr.i || "this island"}`),
+    tr.i === "Niʻihau"
+      ? el("p", { class: "note", id: "nearest-none" }, DATA.meta.niihau_note)
+      : near.length
+        ? table(`Same island only; straight-line distance from the area's center`, ["#", "Site", "Distance"],
+          near.map(({ s, km }) => [s.n, s.name, `${km.toFixed(1)} km straight-line, same island`]), [0, 2])
+        : el("p", { class: "note", id: "nearest-none" }, DATA.meta.no_island_site),
     el("p", null, el("strong", null, "Proposed partners: "), `lead – ${[...lead].join(", ") || "—"}; support – ${[...support].join(", ") || "—"}. `, DATA.meta.role_status),
     el("p", null, el("strong", null, `Top languages (${L.area}): `), langs.map((r) => `${r[0]} ${fmt(r[1])}`).join("; ") || "—"),
     el("p", null, el("strong", null, "Messages: "), msgLink(`all ${hz.toLowerCase()} messages`),
