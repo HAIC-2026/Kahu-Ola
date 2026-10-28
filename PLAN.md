@@ -26,10 +26,10 @@ Scope (p. 5–6) has three parts: population mapping, resource identification an
 
 | Step | What it does | Code | Output |
 |---|---|---|---|
-| **MAP** | CMIST counts per census tract (436 tracts, 4 counties) joined to hazard exposure (FEMA NRI v1.20, State tsunami evacuation and extreme zones); HHS emPOWER power-dependent counts allocated to tracts | `scripts/fetch_data.py`, `scripts/build_map.py` | `data/processed/afn_tracts.geojson`, `coverage.json` |
+| **MAP** | CMIST counts for 436 Census areas (Census tracts) in 4 counties, joined to hazard exposure (FEMA NRI v1.20, State tsunami evacuation and extreme zones); HHS emPOWER power-dependent counts allocated to Census areas | `scripts/fetch_data.py`, `scripts/build_map.py` | `data/processed/afn_tracts.geojson`, `coverage.json` |
 | **MAP** (sites) | Sites the counties actually opened in 2026 events, located from public sources; site-level FEMA flood zone | `scripts/build_shelters.py`, `scripts/geocode_shelters.py`, `scripts/fetch_flood_zones.py` | `data/processed/shelters_2026.geojson`, `data/sources/site_flood_zones.csv` |
 | **MODEL** | For each county × hazard (4 × 5 = 20): footprint, at-risk population, shelter demand (low / central / high), CMIST counts, resources (cots, space, water, meals, toilets, staff, power outlets, pets), usable sites | `scripts/model_needs.py`, `config/planning_factors.json` | `data/processed/needs_by_scenario.json`, `needs_by_tract.csv`, `backtest.csv` |
-| **MATCH** | Each need → proposed lead and support partner types → pledged capacity (blank) → gap; decision points; communication pathways; top 10 outreach tracts | `scripts/match.py`, `config/partners.json`, `config/decision_points.json`, `config/communication.json` | `data/processed/match_plan.json`, `match_plan.csv` |
+| **MATCH** | Each need → proposed lead and support partner types → pledged capacity (blank) → gap; decision points; communication pathways; top 10 outreach Census areas | `scripts/match.py`, `config/partners.json`, `config/decision_points.json`, `config/communication.json` | `data/processed/match_plan.json`, `match_plan.csv` |
 | **Deliver** | 20 printable playbooks and an offline web app | `scripts/build_playbooks.py`, `scripts/build_app_data.py` | `playbooks/`, `app/` |
 
 The pipeline is deterministic Python (standard library only). AI is not needed to run it, and it does not call AI.
@@ -40,11 +40,11 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 
 | Source | Use | Vintage / fetched |
 |---|---|---|
-| CDC/ATSDR Social Vulnerability Index 2022, census tracts | CMIST proxies (limited English, disability, 65+, under 18, no vehicle, group quarters) | SVI 2022; fetched 2026-10-27 |
-| FEMA National Risk Index v1.20, census tracts (hurricane, wildfire, tsunami, inland and coastal flooding) | Hazard footprint (NRI risk score) | v1.20; fetched 2026-10-27 |
+| CDC/ATSDR Social Vulnerability Index 2022, by Census area | CMIST proxies (limited English, disability, 65+, under 18, no vehicle, group quarters) | SVI 2022; fetched 2026-10-27 |
+| FEMA National Risk Index v1.20, by Census area (hurricane, wildfire, tsunami, inland and coastal flooding) | Hazard footprint (NRI risk score) | v1.20; fetched 2026-10-27 |
 | Hawaiʻi Statewide GIS: tsunami evacuation zones and extreme tsunami evacuation zones | Tsunami footprint; site exclusion | fetched 2026-10-27 |
 | Hawaiʻi Statewide GIS "State DFIRM" (FEMA flood hazard areas, downloaded from FEMA 6/15/26) | Site-level flood zone for 311 site points | queried 2026-10-27 (`data/sources/site_flood_zones.csv`) |
-| HHS emPOWER, county level (`Power_Dependent_Devices_DME`) | Power-dependent residents, allocated to tracts by 65+ share (estimate) | fetched 2026-10-27 |
+| HHS emPOWER, county level (`Power_Dependent_Devices_DME`) | Power-dependent residents, allocated to Census areas by 65+ share (estimate) | fetched 2026-10-27 |
 | Hawaiʻi DOE public schools (Statewide GIS) | Candidate sites (292 schools) | fetched 2026-10-27 |
 | County announcements of shelters opened in 2026 events (official county releases; earlier news reports kept in notes) | Commonly used shelters | `data/sources/county_shelter_activations.csv`, one official source URL per row |
 | U.S. Census Geocoder; Hawaiʻi and Maui County address points | Locating shelter addresses | `data/sources/geocodes.csv`, source URL per row |
@@ -56,12 +56,12 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 | Census Bureau Population Estimates, Vintage 2025 (`co-est2025-alldata`, `cc-est2025-alldata-15`) | County totals July 1, 2025; broad race groups | released 2026-06-25; `data/sources/county_population_2020_2025.csv` |
 | ACS 2020-2024 5-year: B01003 (places, counties), B02001, B02008–B02012, B03002, B02015, B02016, B02018, B02019 | Communities by island; detailed race/ethnicity by county | `data/sources/communities_by_island.csv`, `race_ethnicity_by_county.csv` |
 | 2020 Census PL 94-171 (P1) and DHC-A (T01001 by POPGROUP) | 2020 baseline and cross-check | same files, one table ID and URL per row |
-| 2020 Census Block Assignment File (place/CDP) and 2020 PL 94-171 block population (P1_001N) | Community name for every Census area, weighted by where its people live ("Waikapū / Waiheʻe-Waiehu", Census area 308); TIGERweb CDP polygons only for the 4 tracts with no 2020 population | `data/sources/tract_communities.csv`, `tract_cdp_population_2020.csv` |
+| 2020 Census Block Assignment File (place/CDP) and 2020 PL 94-171 block population (P1_001N) | Community name for every Census area, weighted by where its people live ("Waikapū / Waiheʻe-Waiehu", Census area 308); TIGERweb CDP polygons only for the 4 Census areas with no 2020 population | `data/sources/tract_communities.csv`, `tract_cdp_population_2020.csv` |
 | DBEDT State Data Book 2025, Table 01.12 (island and CDP) | Assigns every CDP to an island; island totals | `data/sources/communities_by_island.csv` |
 
 ## 4. Privacy model
 
-- **Aggregate data only.** The model works on census-tract and county totals. No individual records, no client data, no registries (challenge PDF p. 5: "no personally identifiable information").
+- **Aggregate data only.** The model works on Census-area and county totals. No individual records, no client data, no registries (challenge PDF p. 5: "no personally identifiable information").
 - The only names and addresses in the outputs are those of **public facilities** (shelters, schools). Tests check that the app data bundle has no person-level fields (`tests/test_deliverables.py`).
 - The language table comes from Census microdata (PUMS). The microdata stays in `data/raw/` (gitignored) and is never committed or printed. Outputs are aggregates, and any cell under 100 weighted people or under 10 sample persons is suppressed (149 of 194 area × language cells).
 - The web app has no accounts, no analytics and no location access, and it makes no calls to outside services. It only reads its own data file.
@@ -69,7 +69,7 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 ## 5. Key findings
 
 ### 5.1 Coverage
-- **CMIST data for 436 of 436 census tracts (100%)** in all four counties. FEMA NRI joined for **435 of 436** (one Honolulu tract has no NRI record). Source: `data/processed/coverage.json`.
+- **CMIST data for 436 of 436 Census areas (100%)** in all four counties. FEMA NRI joined for **435 of 436** (one Honolulu Census area has no NRI record). Source: `data/processed/coverage.json`.
 
 ### 5.2 Shelters: no standing public list
 - Counties announce sites when they open them. The challenge PDF lists "recompiling shelter and refuge lists" as repetitive work (p. 4). We compiled **30 sites opened in 2026 events** (Kauaʻi 5, Honolulu 7, Maui 8, Hawaiʻi 10). The events were April 2026 severe weather, Hurricane Lala, Hurricane Lowell, Tropical Storm Nolo, and the Olowalu brush fire. All **30 of 30 sites have an official county source** (kauai.gov, honolulu.gov, mauicounty.gov, hawaiicounty.gov); 0 rely on news media only. Sixteen sites were first found in news reports; we then matched each to the county release and kept the news URL in the notes. Names and addresses matched the county releases. Two naming variants are recorded in the notes rather than changed: "Yano Memorial Hall" and "Hisaoka Gym" appear in one Hawaiʻi County release. The Maui County and Hawaiʻi County pages block automated downloads (HTTP 403); their shelter names and addresses were confirmed by a team member reading the county page on 2026-10-27. 29 of 30 are located. The Mayor Hannibal Tavares Community Center (Pukalani) has no verifiable point and is left unlocated. Source: `data/processed/shelters_2026.geojson`.
@@ -92,7 +92,7 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 
 ### 5.5 Shelter demand by county × hazard
 
-**County totals are upper bounds:** they assume every at-risk tract is hit at once. The "largest single community" column is the highest-demand census tract, which is a realistic one-community scenario. Source: `data/processed/needs_by_scenario.json`, `needs_by_tract.csv`.
+**County totals are upper bounds:** they assume every at-risk Census area is hit at once. The "largest single community" column is the highest-demand Census area, which is a realistic one-community scenario. Source: `data/processed/needs_by_scenario.json`, `needs_by_tract.csv`.
 
 | County | Hazard | May need a public shelter: low / **likely** / high (people) | Largest single community (Census area): likely shelter demand |
 |---|---|---|---|
@@ -160,8 +160,8 @@ Census publishes detailed race only down to county. **Honolulu County is Oʻahu 
 
 The challenge PDF (p. 7) sets three measurable goals.
 
-**(1) Hazard-specific AFN maps covering every county – target 100% of census tracts.**
-Result: CMIST coverage **100% (436/436 tracts)**, NRI hazard join **99.8% (435/436)**, for all 5 hazards and 4 counties: 20 maps, one in each playbook (`playbooks/*.pdf`) and in the app.
+**(1) Hazard-specific AFN maps covering every county – target 100% of Census areas.**
+Result: CMIST coverage **100% (436/436 Census areas)**, NRI hazard join **99.8% (435/436)**, for all 5 hazards and 4 counties: 20 maps, one in each playbook (`playbooks/*.pdf`) and in the app.
 
 **(2) Needs estimates validated "within an agreed margin against past events".**
 Result: Lahaina wildfire, 2023-08-11. Observed 1,418 people in shelters (Maui Now). Model 254 / 635 / **1,423** (low / central / high). The observed count is **inside the band**, and the high estimate is 0.3% from it (`data/processed/backtest.csv`).
@@ -195,7 +195,7 @@ All proposed – supports, does not replace, county plans.
 - **Channels:** official alerts (WEA/EAS and county sign-ups), radio, trusted community messengers (faith-based groups, OHA, health care, community nonprofits), and printed notices at shelters, libraries and schools.
 - **Languages per county:** from §5.4, the top 6 plus Hawaiian, Chuukese and Marshallese where above the suppression threshold.
 - **Message library:** `data/sources/messages/` (see §9).
-- **Priority outreach:** top 10 tracts per county × hazard by AFN need (tract counts only), in each playbook.
+- **Priority outreach:** top 10 Census areas per county × hazard by AFN need (Census-area counts only), in each playbook.
 
 ## 8. Low-connectivity operation
 
@@ -213,7 +213,7 @@ The challenge PDF requires usability "during high-stress, low-connectivity condi
 We used AI to **build** the framework and **draft** content, not to run it. Specifically:
 
 1. **Building the pipeline – Claude Code.** An AI coding assistant wrote and tested most of the Python pipeline, the playbook generator and the web app, under team direction and review. That included checking sources (opening each cited document and comparing values), the DBEDT validation, and the browser tests in airplane mode. The 110 automated tests are in `tests/`.
-2. **Data discovery – Datatrove.** The challenge names Datatrove as the primary data source (p. 4). We used Datatrove to find current FEMA NRI v1.20 tract layers and their field names, the HHS emPOWER county fields, and a keyless Census download route when the Census API began to require a key.
+2. **Data discovery – Datatrove.** The challenge names Datatrove as the primary data source (p. 4). We used Datatrove to find current FEMA NRI v1.20 Census-area layers and their field names, the HHS emPOWER county fields, and a keyless Census download route when the Census API began to require a key.
 3. **Shelter announcement normalization.** The 2026 shelter activation table was compiled by an AI assistant (Claude) from county press releases and news reports via web search, extracting site name, address, event, date and pet policy, each row with its source URL. A team member reviewed the table; deterministic code then grouped, geocoded and hazard-checked the sites. The table is `data/sources/county_shelter_activations.csv`; the code is `scripts/build_shelters.py` (grouping, name normalization including ʻokina and diacritics, DOE school matching), `scripts/fetch_flood_zones.py` and `scripts/model_needs.py`.
 4. **Multilingual message drafting, with mandatory human review.** AI drafted 15 short English messages (before / evacuate / shelter open × 5 hazards) and translations into 9 languages. Every draft has status "DRAFT – AI translation, needs native-speaker review", `approved = no`, and an empty reviewer field. A test blocks any approved row without a named reviewer and review date. For **Chuukese and Marshallese the AI did not produce drafts**: its output in those languages is not reliable enough to help a reviewer, so those rows are marked "NEEDS HUMAN TRANSLATION". Vietnamese drafts are assigned to Kim Quynh Do for review. The messages make no promises the counties have not made: they say "follow county announcements", and they make no statements about law enforcement at shelters.
 
@@ -227,21 +227,21 @@ AI is **not** used at run time: the model, the matching, the playbooks and the a
 4. **Assumptions in `config/planning_factors.json`:**
    - tsunami and flood shelter-seeking rates (2 / 5 / 11%);
    - the wildfire low and central rates;
-   - the footprint rule (top 25% of each county's tracts by NRI score);
+   - the footprint rule (top 25% of each county's Census areas by NRI score);
    - one power outlet per power-dependent person.
 
    All are marked "team_assumption" and should be replaced with county figures.
 5. **Validation:** see §6(2). We need 2026 shelter counts from the counties.
-6. **Upper bounds:** county totals assume all at-risk tracts are hit at once. Use the largest-single-community rows for realistic planning.
+6. **Upper bounds:** county totals assume all at-risk Census areas are hit at once. Use the largest-single-community rows for realistic planning.
 7. **Data gaps:**
    - one shelter is unlocated (Pukalani);
-   - one tract has no NRI record;
+   - one Census area has no NRI record;
    - 22 Honolulu candidate schools are in flood zone D (undetermined);
-   - power-dependent counts are an allocation of county totals, not tract data;
+   - power-dependent counts are an allocation of county totals, not Census-area data;
    - limited-English counts in shelter (CDC SVI, "less than well") and the language mix (PUMS, "less than very well") use different definitions.
 8. **Not yet modeled:** earthquake, sheltering in place (including high-rise power loss), and shelter-in-place support, all named in the challenge PDF (pp. 4, 8).
 9. **Messages:** all drafts need native-speaker and county review. **Chuukese and Marshallese need human translators.** Next: request translators through the Hawaiʻi State Office of Language Access (Department of Health; it keeps an interpreter roster and publishes materials in Chuukese and Marshallese: https://health.hawaii.gov/ola/), or through community partners such as We Are Oceania, a Micronesian-led organization whose helpline offers help in Chuukese and Marshallese (Civil Beat resource guide: https://www.civilbeat.org/covid-19-resources/). Confirm availability with each organization; the helpline listing dates from the COVID-19 response.
-10. **Population figures predate the Lahaina fire.** CDC SVI 2022 (ACS 2018-2022) and the 2020 Census mostly predate the **August 8, 2023 Lahaina fire**, so West Maui tract populations in the AFN layer may be overstated. ACS 2020-2024 shows Lahaina CDP at 10,162 ±1,143 against 12,702 in the 2020 Census, and part of that 5-year window is before the fire. Planners should use current County of Maui figures for Lahaina.
+10. **Population figures predate the Lahaina fire.** CDC SVI 2022 (ACS 2018-2022) and the 2020 Census mostly predate the **August 8, 2023 Lahaina fire**, so West Maui Census-area populations in the AFN layer may be overstated. ACS 2020-2024 shows Lahaina CDP at 10,162 ±1,143 against 12,702 in the 2020 Census, and part of that 5-year window is before the fire. Planners should use current County of Maui figures for Lahaina.
 11. **TODO – ACS 2025 1-year (released October 29, 2026):** refresh county figures for Honolulu, Hawaiʻi, Maui and Kauaʻi counties (`scripts/build_demographics.py`). Kalawao is too small for 1-year data and keeps the 5-year figures.
 
 ## 11. Team
