@@ -141,3 +141,4 @@ details.help summary { cursor: pointer; font-weight: 700; }
 .badge.human { background: var(--color-surface); }
 .tag { margin-left: var(--space-1); font-size: var(--font-size-small); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 0 var(--space-1); }
 ul.notdone li { margin-bottom: var(--space-1); }
+.kpi-text { display: block; font-weight: 700; margin-top: var(--space-1); }

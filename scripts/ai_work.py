@@ -9,6 +9,7 @@ Every count is computed; none is typed in.
 from __future__ import annotations
 
 import csv
+import json
 import re
 import subprocess
 import unittest
@@ -17,6 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MESSAGES = ROOT / "data" / "sources" / "messages"
 SHELTERS = ROOT / "data" / "sources" / "county_shelter_activations.csv"
+SITES = ROOT / "data" / "processed" / "shelters_2026.geojson"
 REPO = "https://github.com/HAIC-2026/Kahu-Ola"
 LINKS = {
     "shelters": f"{REPO}/blob/main/data/sources/county_shelter_activations.csv",
@@ -97,12 +99,28 @@ def test_count(root: Path = ROOT) -> int:
     return unittest.TestLoader().discover(str(root / "tests")).countTestCases()
 
 
-def shelter_stats(path: Path = SHELTERS) -> dict:
+def shelter_stats(path: Path = SHELTERS, sites: Path = SITES) -> dict:
+    """Activation records (one per site per event) and the distinct sites they cover."""
     with open(path, newline="", encoding="utf-8") as fh:
         rows = list(csv.DictReader(fh))
     official = ("kauai.gov", "honolulu.gov", "mauicounty.gov", "hawaiicounty.gov", "hawaii.gov")
+    opened = [f["properties"].get("times_opened_2026", 1)
+              for f in json.loads(sites.read_text(encoding="utf-8"))["features"]]
     return {"rows": len(rows),
-            "official_rows": sum(any(d in r["source_url"] for d in official) for r in rows)}
+            "official_rows": sum(any(d in r["source_url"] for d in official) for r in rows),
+            "sites": len(opened), "repeat": {k: opened.count(k) for k in sorted(set(opened)) if k > 1}}
+
+
+def records_text(sh: dict) -> str:
+    """'32 activation records for 30 sites (2 sites opened twice), all citing an official
+    county source' – every number from the files."""
+    times = {2: "twice", 3: "three times"}
+    repeat = ", ".join(f"{c} site{'s' if c != 1 else ''} opened {times.get(k, f'{k} times')}"
+                       for k, c in sh["repeat"].items())
+    cite = ("all citing an official county source" if sh["official_rows"] == sh["rows"]
+            else f"{n(sh['official_rows'])} citing an official county source")
+    return (f"{n(sh['rows'])} activation records for {n(sh['sites'])} sites"
+            + (f" ({repeat})" if repeat else "") + f", {cite}")
 
 
 def n(v) -> str:
@@ -127,9 +145,8 @@ def summary(rows: list | None = None) -> dict:
         {"task": "Shelter list",
          "ai": "An AI assistant (Claude) compiled the 2026 shelter list from county press "
                "releases and news reports: site name, address, event, date and pet policy, "
-               f"with the source URL on every row ({n(sh['rows'])} rows). News reports were then "
-               f"matched to official county releases: {n(sh['official_rows'])} of "
-               f"{n(sh['rows'])} rows now cite an official county source.",
+               "with the source URL on every row. News reports were then matched to official "
+               f"county releases. Result: {records_text(sh)}.",
          "people": "A team member reviewed the table and read the county pages that block "
                    "automated tools (2026-10-27). Open code then grouped, located and "
                    "hazard-checked the sites.",
@@ -158,7 +175,7 @@ def summary(rows: list | None = None) -> dict:
                    + f"; {label(human)} need human translators.",
          "evidence": [["Messages tab", "#messages"], ["Message files on GitHub", LINKS["messages"]]]},
     ]
-    return {"tasks": tasks, "not_done": NOT_DONE, "message_counts": counts,
+    return {"tasks": tasks, "not_done": NOT_DONE, "shelter_records": records_text(sh), "message_counts": counts,
             "messages_total": total, "messages_approved": approved,
             "translated_languages": translated, "human_translation_languages": human,
             "commits": g["commits"], "coauthored": g["coauthored"], "head": g["head"],

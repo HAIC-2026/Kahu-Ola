@@ -88,6 +88,21 @@ class AIPage(unittest.TestCase):
         self.assertIn(f"{ai['coauthored']:,} of them co-authored by Claude", software)
         self.assertIn(f"{ai['tests']:,} automated tests", software)
 
+    def test_shelter_records_label_from_files(self):
+        sh = ai_work.shelter_stats()
+        with open(ai_work.SHELTERS, newline="", encoding="utf-8") as fh:
+            records = sum(1 for _ in fh) - 1
+        sites = json.loads(ai_work.SITES.read_text(encoding="utf-8"))["features"]
+        twice = sum(f["properties"]["times_opened_2026"] == 2 for f in sites)
+        self.assertEqual((sh["rows"], sh["sites"]), (records, len(sites)))
+        want = (f"{records} activation records for {len(sites)} sites ({twice} sites opened "
+                "twice), all citing an official county source")
+        self.assertEqual(BUNDLE["ai"]["shelter_records"], want)
+        self.assertIn(want, BUNDLE["ai"]["tasks"][0]["ai"])
+        self.assertIn("ai.shelter_records", JS)
+        for path in PAGES:
+            self.assertIn(want, path.read_text(encoding="utf-8"), path.name)
+
     def test_every_playbook_has_ai_section(self):
         for path in PAGES:
             html = path.read_text(encoding="utf-8")
