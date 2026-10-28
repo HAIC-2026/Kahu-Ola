@@ -55,6 +55,7 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 | Census Bureau Population Estimates, Vintage 2025 (`co-est2025-alldata`, `cc-est2025-alldata-15`) | County totals July 1, 2025; broad race groups | released 2026-06-25; `data/sources/county_population_2020_2025.csv` |
 | ACS 2020-2024 5-year: B01003 (places, counties), B02001, B02008–B02012, B03002, B02015, B02016, B02018, B02019 | Communities by island; detailed race/ethnicity by county | `data/sources/communities_by_island.csv`, `race_ethnicity_by_county.csv` |
 | 2020 Census PL 94-171 (P1) and DHC-A (T01001 by POPGROUP) | 2020 baseline and cross-check | same files, one table ID and URL per row |
+| Census TIGERweb 2020 Census Designated Places (layer 28) | Community name for every tract ("Tract 308 · near Waihee-Waiehu") | `data/sources/tract_communities.csv` |
 | DBEDT State Data Book 2025, Table 01.12 (island and CDP) | Assigns every CDP to an island; island totals | `data/sources/communities_by_island.csv` |
 
 ## 4. Privacy model

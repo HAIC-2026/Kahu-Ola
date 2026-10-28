@@ -32,7 +32,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import svgmap  # noqa: E402
 from build_playbooks import (AFN_PARTS, COUNTY_LABEL, DISCLAIMER, HAZARD_LABEL,  # noqa: E402
-                             KAUAI_MAUI_NOTE, STATUS_LABEL, largest_communities, load_inputs,
+                             HURRICANE_SCOPE_NOTE, KAUAI_MAUI_NOTE, STATUS_LABEL, largest_communities, load_inputs,
                              scenario, sites_for, slug, tract_rows)
 from fetch_data import COUNTIES  # noqa: E402
 from match import select_languages  # noqa: E402
@@ -58,7 +58,8 @@ def r4(v: float) -> float:
     return round(v, 4)
 
 
-def tract_geometry(afn: dict) -> list:
+def tract_geometry(afn: dict, labels: dict | None = None) -> list:
+    labels = labels or {}
     out = []
     for f in afn["features"]:
         rings = []
@@ -70,8 +71,9 @@ def tract_geometry(afn: dict) -> list:
                 flat += [r4(x), r4(y)]
             rings.append(flat)
         if rings:
-            out.append({"f": f["properties"]["tract_fips"], "c": f["properties"]["county"],
-                        "g": rings})
+            fips = f["properties"]["tract_fips"]
+            out.append({"f": fips, "c": f["properties"]["county"],
+                        "l": labels.get(fips, {}).get("tract_label", fips), "g": rings})
     return out
 
 
@@ -122,12 +124,13 @@ def build(inp: dict) -> dict:
         "meta": {"data_as_of": inp["data_as_of"], "disclaimer": DISCLAIMER,
                  "decision_status": "Proposed – supports, does not replace, county plans.",
                  "role_status": "Proposed – to be confirmed with partner.",
+                 "hurricane_scope_note": HURRICANE_SCOPE_NOTE,
                  "privacy": "Aggregate census-tract data and public facility names only. "
                             "No individual records."},
         "counties": [[c, COUNTY_LABEL[c]] for c in COUNTIES],
         "hazards": [[h, HAZARD_LABEL[h]] for h in HAZARDS],
         "status_labels": STATUS_LABEL,
-        "tracts": tract_geometry(inp["afn"]),
+        "tracts": tract_geometry(inp["afn"], inp.get("labels")),
         "sites": sorted(sites.values(), key=lambda s: s["id"]),
         "scenarios": scenarios,
         "decision_points": decisions,

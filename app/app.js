@@ -113,9 +113,11 @@ function renderMap(county, sc, sites, title) {
     }).join(" ");
     const risk = tr.f in sc.tracts;
     const fill = risk && afn[tr.f] > 0 ? css(RAMP[cls(afn[tr.f])]) : "#ffffff";
-    root.append(svg("path", risk
+    const path = svg("path", risk
       ? { d, fill, stroke: "#000000", "stroke-width": "1.4" }
-      : { d, fill, stroke: "#9a9a9a", "stroke-width": "0.5", "stroke-dasharray": "2,2" }));
+      : { d, fill, stroke: "#9a9a9a", "stroke-width": "0.5", "stroke-dasharray": "2,2" });
+    const tip = svg("title"); tip.textContent = tr.l || tr.f; path.append(tip);   // hover tooltip
+    root.append(path);
   }
   for (const s of sites) {
     if (s.lon === null) continue;
@@ -194,9 +196,12 @@ function render() {
     el("h2", null, "Scope: county total vs. one community"),
     el("p", { class: "note" }, el("strong", null, "County total = upper bound. "),
       `It assumes every at-risk tract is hit at once (${s.footprint_rule}). Real events usually hit fewer communities.`),
-    table("Largest single community (highest-demand census tracts)",
+    table(hazard === "hurricane"
+      ? ["Largest single community (highest-demand census tracts)", el("br"),
+         el("span", { class: "caption-note" }, DATA.meta.hurricane_scope_note)]
+      : "Largest single community (highest-demand census tracts)",
       ["Tract", "At risk", "Shelter low / central / high", "Limited English", "Power-dep.", "Disability", "65+", "No vehicle"],
-      sc.largest.map((c) => [c.tract_fips, fmt(c.at_risk_pop), `${fmt(c.low)} / ${fmt(c.central)} / ${fmt(c.high)}`,
+      sc.largest.map((c) => [c.tract_label || c.tract_fips, fmt(c.at_risk_pop), `${fmt(c.low)} / ${fmt(c.central)} / ${fmt(c.high)}`,
         fmt(c.C_lep_at_risk), fmt(c.M_power_dependent_at_risk), fmt(c.I_disability_at_risk), fmt(c.I_age65_at_risk),
         fmt(c.T_no_vehicle_persons_at_risk)]), [1, 2, 3, 4, 5, 6, 7]),
 
@@ -222,7 +227,7 @@ function render() {
     el("h2", null, "Priority outreach and languages"),
     table("Top 10 census tracts by AFN need (tract-level counts only)",
       ["#", "Tract", "At risk", "Power-dep.", "Disability", "Limited English", "No vehicle", "AFN need"],
-      sc.priority_tracts.map((t) => [t.rank, t.tract_fips, fmt(t.at_risk_pop), fmt(t.power_dependent), fmt(t.disability),
+      sc.priority_tracts.map((t) => [t.rank, t.tract_label || t.tract_fips, fmt(t.at_risk_pop), fmt(t.power_dependent), fmt(t.disability),
         fmt(t.limited_english), fmt(t.no_vehicle), fmt(t.afn_need_sum)]), [0, 2, 3, 4, 5, 6, 7]),
     L.note ? el("p", null, L.note) : null,
     table(`People who speak English less than "very well" (${L.area}; ACS PUMS 2019-2023)`, ["Language", "People 5+", "90% MOE"],

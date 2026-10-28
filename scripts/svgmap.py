@@ -132,9 +132,11 @@ def marker(shape: str, x: float, y: float, r: float = 7) -> str:
 
 
 def render(tracts: list, values: dict, at_risk: set, sites: list, title: str,
-           width: int = 720, height: int = 520, tol: float = 0.0008) -> str:
+           width: int = 720, height: int = 520, tol: float = 0.0008,
+           labels: dict | None = None) -> str:
     """tracts: features with properties.tract_fips; values: fips -> AFN need;
-    sites: [{"n": label number, "lon", "lat", "status"}]."""
+    sites: [{"n": label number, "lon", "lat", "status"}];
+    labels: fips -> readable tract label, shown as a hover tooltip."""
     proj = Projection(extent(tracts), width, height)
     cls, bounds = classify({k: v for k, v in values.items() if k in at_risk})
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
@@ -150,7 +152,9 @@ def render(tracts: list, values: dict, at_risk: set, sites: list, title: str,
         fill = RAMP[cls[fips]] if fips in cls else NOT_AT_RISK
         stroke = ('stroke="#000000" stroke-width="1.4"' if risk
                   else 'stroke="#9a9a9a" stroke-width="0.5" stroke-dasharray="2,2"')
-        out.append(f'<path d="{d}" fill="{fill}" {stroke}/>')
+        tip = (labels or {}).get(fips)
+        out.append(f'<path d="{d}" fill="{fill}" {stroke}><title>{escape(tip)}</title></path>'
+                   if tip else f'<path d="{d}" fill="{fill}" {stroke}/>')
     for s in sites:
         x, y = proj(s["lon"], s["lat"])
         shape = MARKERS.get(s["status"], ("circle", ""))[0]

@@ -30,6 +30,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_data import COUNTIES  # noqa: E402
+from build_tract_labels import load_labels, tract_number  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "planning_factors.json"
@@ -102,7 +103,10 @@ def tract_rows(tracts: list, hazard: str, shares: dict, rate: float) -> list:
 
         pph = pop / hh if hh else 0.0
         rows.append({
-            "tract_fips": t["tract_fips"], "county": t["county"], "hazard": hazard,
+            "tract_fips": t["tract_fips"],
+            "tract_label": t.get("tract_label") or f"Tract {tract_number(t['tract_fips'])}",
+            "community": t.get("community", ""), "island": t.get("island", ""),
+            "county": t["county"], "hazard": hazard,
             "share_at_risk": round(share, 3),
             "at_risk_pop": at_risk,
             "shelter_demand": demand,
@@ -292,7 +296,11 @@ def main() -> int:
         print("Missing config/planning_factors.json or data/processed/afn_tracts.geojson",
               file=sys.stderr)
         return 1
-    tracts = [f["properties"] for f in afn["features"]]
+    labels = load_labels()          # data/sources/tract_communities.csv (build_tract_labels.py)
+    tracts = [{**f["properties"],
+               **{k: labels.get(f["properties"]["tract_fips"], {}).get(k, "")
+                  for k in ("tract_label", "community", "island")}}
+              for f in afn["features"]]
     shelters = (load_json(PROC / "shelters_2026.geojson") or {}).get("features", [])
     schools = (load_json(PROC / "candidates.geojson") or {}).get("features", [])
 

@@ -31,6 +31,7 @@ import svgmap  # noqa: E402
 from fetch_data import COUNTIES  # noqa: E402
 from fetch_flood_zones import CACHE as FLOOD_CACHE, LAYER_URL as FLOOD_URL  # noqa: E402
 from match import load_languages, select_languages  # noqa: E402
+from build_tract_labels import load_labels  # noqa: E402
 from model_needs import HAZARDS, site_status  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -83,6 +84,7 @@ def load_inputs() -> dict:
         "match": load_json(PROC / "match_plan.json"),
         "comm": load_json(CONFIG / "communication.json"),
         "languages": load_languages(),
+        "labels": load_labels(),
         "data_as_of": (needs.get("built_at") or "")[:10],
     }
 
@@ -132,7 +134,8 @@ def largest_communities(rows: list, rates: dict, k: int = 3) -> list:
     out = []
     for r in rows:
         ar = float(r["at_risk_pop"])
-        out.append({"tract_fips": r["tract_fips"], "at_risk_pop": ar,
+        out.append({"tract_fips": r["tract_fips"],
+                    "tract_label": r.get("tract_label") or r["tract_fips"], "at_risk_pop": ar,
                     "low": ar * rates["low"], "central": float(r["shelter_demand"]),
                     "high": ar * rates["high"],
                     **{k: float(r[k]) for k in AFN_PARTS + ("I_age65_at_risk",)}})
@@ -214,8 +217,12 @@ def summary_html(sc: dict, hazard: str) -> str:
             f'estimates; one person can appear in more than one count.</p>')
 
 
-def scope_html(sc: dict, comms: list) -> str:
-    rows = [[escape(c["tract_fips"]), n(c["at_risk_pop"]),
+HURRICANE_SCOPE_NOTE = ("Hurricanes affect the whole county, so these are simply the most "
+                        "populous at-risk tracts.")
+
+
+def scope_html(sc: dict, comms: list, hazard: str = "") -> str:
+    rows = [[escape(c["tract_label"]), n(c["at_risk_pop"]),
              f'{n(c["low"])} / <b>{n(c["central"])}</b> / {n(c["high"])}',
              n(c["C_lep_at_risk"]), n(c["M_power_dependent_at_risk"]),
              n(c["I_disability_at_risk"]), n(c["I_age65_at_risk"]),
@@ -225,6 +232,7 @@ def scope_html(sc: dict, comms: list) -> str:
             f'tract is hit at once ({escape(sc.get("footprint_rule", ""))}). Real events '
             'usually hit fewer communities.</div>'
             '<h3>Largest single community (highest-demand census tracts)</h3>'
+            + (f'<p>{escape(HURRICANE_SCOPE_NOTE)}</p>' if hazard == "hurricane" else "")
             + table(["Tract", "At risk", "Shelter low / central / high", "Limited English",
                      "Power-dep.", "Disability", "65+", "No vehicle"], rows,
                     num_cols=(1, 2, 3, 4, 5, 6, 7))
@@ -235,11 +243,12 @@ def map_html(inp: dict, county: str, hazard: str, sites: list) -> str:
     tracts = [f for f in inp["afn"]["features"] if f["properties"]["county"] == county]
     rows = tract_rows(inp, county, hazard)
     values = {r["tract_fips"]: sum(float(r[k]) for k in AFN_PARTS) for r in rows}
+    labels = {fips: r["tract_label"] for fips, r in inp.get("labels", {}).items()}
     svg, bounds = svgmap.render(
         tracts, values, set(values),
         [s for s in sites if s["lon"] is not None],
         f"{COUNTY_LABEL[county]} {HAZARD_LABEL[hazard]}: AFN need by census tract and "
-        f"known shelter sites")
+        f"known shelter sites", labels=labels)
     return (f'<h2 class="page">3. Map: AFN need and known sites</h2>'
             f'<div class="map">{svg}</div>{svgmap.legend(bounds)}'
             '<p>AFN need = power-dependent + disability + limited English + no-vehicle people '
@@ -285,7 +294,7 @@ def decisions_html(match: dict, hazard: str) -> str:
 
 
 def outreach_html(ms: dict, langs: list, county: str) -> str:
-    rows = [[str(t["rank"]), escape(t["tract_fips"]), n(t["at_risk_pop"]),
+    rows = [[str(t["rank"]), escape(t.get("tract_label") or t["tract_fips"]), n(t["at_risk_pop"]),
              n(t["power_dependent"]), n(t["disability"]), n(t["limited_english"]),
              n(t["no_vehicle"]), n(t["afn_need_sum"])] for t in ms["priority_tracts"]]
     lrows = [[escape(l["language"]), n(l["speak_english_less_than_very_well"]),
@@ -336,6 +345,8 @@ def sources_html(inp: dict) -> str:
          escape(flood_dates[-1] if flood_dates else ""), escape(FLOOD_URL)],
         ["County shelter activations 2026 (official county releases)", "see table",
          "data/sources/county_shelter_activations.csv"],
+        ["Census TIGERweb 2020 Census Designated Places (tract community labels)", "2026-10-27",
+         "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/28"],
         ["ACS PUMS 2019-2023 5-year (detailed languages)", "2026-10-27",
          "https://www2.census.gov/programs-surveys/acs/data/pums/2023/5-Year/csv_phi.zip"],
         ["DBEDT State of Hawaii Data Book 2024, Table 1.44 (validation)", "2026-10-27",
@@ -375,7 +386,7 @@ def playbook_html(inp: dict, county: str, hazard: str) -> str:
 </header>
 <main>
 {summary_html(sc, hazard)}
-{scope_html(sc, comms)}
+{scope_html(sc, comms, hazard)}
 {map_html(inp, county, hazard, sites)}
 {sites_html(sites, sc)}
 {needs_html(ms)}
