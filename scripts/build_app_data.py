@@ -30,9 +30,11 @@ from html import escape
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import ai_work  # noqa: E402
 import svgmap  # noqa: E402
 from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, DISCLAIMER,  # noqa: E402
-                             FOOTPRINT_TEXT, HAZARD_LABEL, HURRICANE_SCOPE_NOTE, RATE_NOTE,
+                             FOOTPRINT_TEXT, HAZARD_LABEL, HURRICANE_SCOPE_NOTE, PROV_NUMBERS,
+                             PROV_SHELTERS, RATE_NOTE,
                              SITE_KEY_STATUS, SOURCE, partner_names, partner_text, plain_reason,
                              KAUAI_MAUI_NOTE, STATUS_LABEL, largest_communities, load_inputs,
                              scenario, sites_for, slug, tract_rows)
@@ -143,6 +145,13 @@ def build(inp: dict) -> dict:
         "scenarios": scenarios,
         "decision_points": decisions,
         "languages": languages,
+        # Every message row from data/sources/messages/, stored values unchanged
+        "messages": ai_work.bundle_messages(),
+        "message_languages": {c: [l["language"] for l in select_languages(
+            inp["languages"].get(c, []), inp["comm"])] for c in COUNTIES},
+        "ai": inp["ai"],
+        "provenance": {"numbers": PROV_NUMBERS, "shelters": PROV_SHELTERS,
+                       "sources_url": ai_work.LINKS["sources"]},
     }
     body = json.dumps(bundle, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
     bundle["meta"]["version"] = hashlib.sha256(body.encode()).hexdigest()[:12]

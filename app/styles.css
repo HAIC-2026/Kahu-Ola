@@ -122,3 +122,22 @@ td small, .src, .legend small { font-size: var(--font-size-small); color: var(--
 details.help { border: 2px solid var(--color-text); border-radius: var(--radius); padding: var(--space-2) var(--space-3); margin: var(--space-2) 0; }
 details.help summary { cursor: pointer; font-weight: 700; }
 .help-icon { display: inline-block; width: 1.5em; height: 1.5em; line-height: 1.5em; text-align: center; border-radius: 50%; border: 2px solid currentColor; }
+
+/* main menu, provenance, messages, AI page */
+.menu { display: flex; flex-wrap: wrap; gap: var(--space-1); margin-top: var(--space-2); }
+.menu a { padding: var(--space-1) var(--space-3); border: 2px solid var(--color-accent); border-radius: var(--radius); color: var(--color-accent); font-weight: 700; text-decoration: none; }
+.menu a[aria-current="page"] { background: var(--color-accent); color: var(--color-accent-text); }
+.prov { font-weight: 700; font-size: var(--font-size-small); }
+.msg-filters .check { display: inline-flex; align-items: center; gap: var(--space-1); }
+.msg { border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-2) var(--space-3); margin: 0 0 var(--space-2); }
+.msg header small { color: var(--color-muted); }
+.msg-text { font-size: 1.05em; }
+.msg-text.empty { font-style: italic; color: var(--color-muted); }
+.msg-meta { display: grid; grid-template-columns: max-content 1fr; gap: 2px var(--space-2); font-size: var(--font-size-small); margin: var(--space-1) 0 var(--space-2); }
+.msg-meta dt { font-weight: 700; }
+.msg-meta dd { margin: 0; }
+.badge { display: inline-block; padding: 1px var(--space-1); border: 2px solid var(--color-text); border-radius: var(--radius); font-weight: 700; }
+.badge.draft { background: var(--color-warn-bg); color: var(--color-warn-text); }
+.badge.human { background: var(--color-surface); }
+.tag { margin-left: var(--space-1); font-size: var(--font-size-small); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 0 var(--space-1); }
+ul.notdone li { margin-bottom: var(--space-1); }

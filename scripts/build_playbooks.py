@@ -32,6 +32,7 @@ import svgmap  # noqa: E402
 from fetch_data import COUNTIES  # noqa: E402
 from fetch_flood_zones import CACHE as FLOOD_CACHE, LAYER_URL as FLOOD_URL  # noqa: E402
 from match import load_languages, select_languages  # noqa: E402
+import ai_work  # noqa: E402
 from build_tract_labels import load_labels  # noqa: E402
 from hawaii_time import hst_date  # noqa: E402
 from model_needs import HAZARDS, site_status  # noqa: E402
@@ -141,6 +142,15 @@ def partner_text(ids: str, names: dict) -> str:
     return ", ".join(names.get(i.strip(), i.strip()) for i in ids.split(";") if i.strip())
 
 
+PROV_NUMBERS = "Calculated by open code from public data · see Sources"
+PROV_SHELTERS = "Compiled with AI from official county releases · verified by team"
+APP_URL = "https://shelters.kahuola.org"
+
+
+def prov(text: str, where: str = "") -> str:
+    return f'<p class="prov">{escape(text)}{escape(where)}</p>'
+
+
 def community_cell(main: str, sub: str) -> str:
     """Community name first, Census area ID as a smaller second line."""
     return f'{escape(main)}<br><small>{escape(sub)}</small>' 
@@ -183,6 +193,7 @@ def load_inputs() -> dict:
         "partners": load_json(CONFIG / "partners.json"),
         "languages": load_languages(),
         "labels": load_labels(),
+        "ai": ai_work.summary(),
         "data_as_of": hst_date(needs.get("built_at")),
     }
 
@@ -278,6 +289,8 @@ ol.sitekey li { margin: 0 0 3pt; }
 .guide h3 { margin-top: 8pt; }
 .guide p, .guide li { font-size: 11pt; }
 .example td { background: #f2f2f2; }
+.prov { font-size: 9.5pt; font-weight: bold; margin: 2pt 0 6pt; }
+ul.notdone li { margin-bottom: 4pt; }
 tr { break-inside: avoid; }
 .page { break-before: page; }
 .map { border: 1px solid #000; }
@@ -322,7 +335,7 @@ def summary_html(sc: dict, hazard: str) -> str:
         kpis.append(("People in the extreme tsunami zone (worst case)",
                      n(sc.get("at_risk_pop_extreme_zone"))))
     cells = "".join(f'<div class="kpi">{escape(k)}<b>{v}</b></div>' for k, v in kpis)
-    return (f'<h2>1. Summary</h2><div class="kpis">{cells}</div>'
+    return (f'<h2>1. Summary</h2>{prov(PROV_NUMBERS, " (section 8)")}<div class="kpis">{cells}</div>'
             f'<p class="src">{escape(SOURCE["summary"])}</p>'
             f'<p>Share of people in the risk area who may need a public shelter: low '
             f'{sc["rate_low"]:.0%}, likely {sc["rate_central"]:.0%}, high {sc["rate_high"]:.1%}. '
@@ -433,6 +446,7 @@ def sites_html(sites: list, sc: dict) -> str:
              escape(s["name"]), escape(s["address"]), escape(plain_reason(s["reason"])),
              str(s["times_opened_2026"])] for s in sites]
     return ('<h2 class="page">4. Known sites (opened in 2026 events)</h2>'
+            + prov(PROV_SHELTERS)
             + table(["#", "Status for this hazard", "Site", "Address", "Why",
                      "Times opened in 2026"], rows, num_cols=(0, 5))
             + f'<p class="src">{escape(SOURCE["sites"])}</p>'
@@ -492,6 +506,28 @@ def outreach_html(ms: dict, langs: list, county: str) -> str:
             + f'<p class="src">{escape(SOURCE["languages"])}</p>'
             + '<p>Pre-approved message templates: none yet; no machine translation without '
               'human review.</p>')
+
+
+def ai_html(ai: dict) -> str:
+    """Section 9: what AI did, what people checked, evidence; computed at build time."""
+    def evidence(items):
+        return "<br>".join(f"{escape(name)}: {escape(APP_URL + '/' + url if url.startswith('#') else url)}"
+                           for name, url in items)
+    rows = [[f'<b>{escape(x["task"])}</b>', escape(x["ai"]), escape(x["people"]),
+             f'<small>{evidence(x["evidence"])}</small>'] for x in ai["tasks"]]
+    counts = [[escape(ai_work.LANG_LABEL.get(c["language"], c["language"])), n(c["rows"]),
+               n(c["drafts"]), n(c["placeholders"]), n(c["approved"])]
+              for c in ai["message_counts"]]
+    nd = "".join(f"<li><b>{escape(k)}.</b> {escape(v)}</li>" for k, v in ai["not_done"])
+    return ('<h2 class="page">9. How AI built this plan</h2>'
+            + table(["Task", "What AI did", "What people checked", "Evidence"], rows)
+            + '<h3>What AI does NOT do</h3>'
+            + f'<ul class="notdone">{nd}</ul>'
+            + '<h3>Message drafts by language</h3>'
+            + table(["Language", "Messages", "AI drafts", "Need a human translator", "Approved"],
+                    counts, num_cols=(1, 2, 3, 4))
+            + f'<p class="src">{escape(ai["counted_note"])} Every message, with its status, '
+              f'is in the Messages tab of the web app ({escape(APP_URL)}/#messages).</p>')
 
 
 def sources_html(inp: dict) -> str:
@@ -577,6 +613,7 @@ def playbook_html(inp: dict, county: str, hazard: str) -> str:
 {decisions_html(inp["match"], hazard)}
 {outreach_html(ms, langs, county)}
 {sources_html(inp)}
+{ai_html(inp["ai"])}
 </main>
 <footer class="footer">Data as of {escape(inp["data_as_of"])} · {escape(DISCLAIMER)}</footer>
 </body></html>
