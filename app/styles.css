@@ -24,8 +24,14 @@
   --ramp-3: #6baed6;
   --ramp-4: #3182bd;
   --ramp-5: #08519c;
-  /* stage 6 (dark mode) needs dark versions of the paper (--color-bg, --color-surface) and of
-     the kapa band (.site-header::after uses --color-accent on --color-surface) */
+  --kapa-ink: #24584a;             /* stripes of the kapa band (decoration) */
+  /* the map, its legend and their black/white symbols stay on light paper in both themes
+     (the SVG draws black outlines, hatches and markers) */
+  --map-paper: transparent;
+  --map-paper-pad: 0;
+  --map-ink: inherit;
+  --map-ink-muted: #5b5246;        /* 7.4:1 on bg */
+  color-scheme: light;
   /* type and space: system fonts only (nothing downloaded); serif for headings only */
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-heading: Georgia, "Times New Roman", serif;
@@ -41,6 +47,33 @@
   --radius-lg: 14px;
   --kapa-height: 8px;              /* decorative band under the header (at most ~12 px) */
   --max-width: 1140px;
+}
+
+/* dark mode: the same "Kapa" look at night – only the tokens change (ratios are WCAG 2.1).
+   The map ramp is not redefined: the map stays on its light paper, as in the PDFs. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1b1915;             /* night paper */
+    --color-surface: #28241e;
+    --color-text: #f1ebe0;           /* 14.8:1 on bg, 13.0:1 on surface */
+    --color-muted: #c4baa9;          /* 9.2:1 on bg, 8.0:1 on surface */
+    --color-accent: #8fd1b5;         /* ʻōhiʻa leaf, 10.0:1 on bg, 8.8:1 on surface */
+    --color-accent-text: #10231c;    /* 9.4:1 on accent */
+    --color-warm: #f0a27a;           /* sunset, 8.5:1 on bg, 7.5:1 on surface */
+    --color-border: #958a78;         /* 5.2:1 on bg, 4.5:1 on surface (UI edges need 3:1) */
+    --color-focus: #f0a27a;          /* focus ring, 8.5:1 on bg */
+    --color-warn-bg: #3b2d10;
+    --color-warn-text: #ffe0a3;      /* 10.5:1 on warn-bg */
+    --color-offline-bg: #f1ebe0;
+    --color-offline-text: #1b1915;   /* 14.8:1 on offline-bg */
+    --shadow-edge: rgba(241, 235, 224, 0.4);   /* not text: a light edge reads on dark */
+    --kapa-ink: #4f8f78;             /* softer stripes at night (decoration) */
+    --map-paper: #fdfbf6;            /* legend on light paper so the black symbols stay visible */
+    --map-paper-pad: 8px;
+    --map-ink: #29241d;              /* 14.9:1 on map-paper */
+    --map-ink-muted: #5b5246;        /* 7.4:1 on map-paper */
+    color-scheme: dark;
+  }
 }
 
 * { box-sizing: border-box; }
@@ -69,7 +102,7 @@ a { color: var(--color-accent); }
 }
 .site-header::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: calc(-1 * var(--kapa-height)); height: var(--kapa-height);
-  background: repeating-linear-gradient(135deg, var(--color-accent) 0 6px, transparent 6px 12px), var(--color-surface);
+  background: repeating-linear-gradient(135deg, var(--kapa-ink) 0 6px, transparent 6px 12px), var(--color-surface);
 }
 .site-header h1 { font-size: var(--font-size-h1); margin: 0 0 var(--space-2); color: var(--color-accent); line-height: 1.2; }
 .disclaimer {
@@ -122,7 +155,7 @@ td.num { text-align: right; white-space: nowrap; }
 
 .map { border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: #ffffff; overflow: hidden; }
 .map svg { display: block; width: 100%; height: auto; }
-.legend { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-1) var(--space-3); font-size: var(--font-size-small); }
+.legend { list-style: none; padding: var(--map-paper-pad); border-radius: var(--radius); background: var(--map-paper); color: var(--map-ink); display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-1) var(--space-3); font-size: var(--font-size-small); }
 .legend li { display: flex; align-items: center; gap: var(--space-2); }
 
 .button {
@@ -142,6 +175,7 @@ td.num { text-align: right; white-space: nowrap; }
 .banner.update { background: var(--color-accent); color: var(--color-accent-text); }
 .banner.update .button { margin-left: var(--space-1); background: var(--color-bg); color: var(--color-accent); }
 td small, .src, .legend small { font-size: var(--font-size-small); color: var(--color-muted); }
+.legend small { color: var(--map-ink-muted); }
 .src { margin: 0 0 var(--space-3); }
 .mapwrap { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--space-3); align-items: start; }
 @media (max-width: 720px) { .mapwrap { grid-template-columns: 1fr; } }
