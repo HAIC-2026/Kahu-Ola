@@ -71,7 +71,8 @@ class Playbooks(unittest.TestCase):
     def test_no_network_resources_in_playbooks(self):
         for f in list(PLAY.glob("*.html")):
             t = f.read_text(encoding="utf-8")
-            self.assertNotRegex(t, r"(src|href)=\"https?://")
+            # clickable source links (<a href>) are fine; nothing may load from the network
+            self.assertNotRegex(t, r"src=\"https?://|<link[^>]*href=\"https?://")
             self.assertNotIn("@import", t)
             self.assertNotRegex(t, r"url\(\s*['\"]?https?:")
             self.assertNotIn("<script", t)

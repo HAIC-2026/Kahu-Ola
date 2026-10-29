@@ -191,8 +191,8 @@ class PlanNumbers(unittest.TestCase):
         pages = {int(re.search(r"Pages:\s+(\d+)", subprocess.run(
             ["pdfinfo", str(p)], capture_output=True, text=True, check=True).stdout).group(1))
             for p in PLAY.glob("*.pdf")}
-        self.assertEqual(len(pages), 1)
-        self.assertIn(f"{pages.pop()} pages each", self.PLAN)
+        # true size (text >= 9 pt): length varies with county and hazard; PLAN states the range
+        self.assertIn(f"{min(pages)}–{max(pages)} pages each", self.PLAN)
 
     def test_bundle_size(self):
         kb = round((APP / "data" / "bundle.json").stat().st_size / 1024)

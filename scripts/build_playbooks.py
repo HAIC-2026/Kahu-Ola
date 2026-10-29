@@ -442,6 +442,15 @@ p, li { margin: 3pt 0; }
 .kpi { border: 1px solid #000; padding: 5pt 7pt; }
 .kpi b { display: block; font-size: 16pt; }
 table { width: 100%; border-collapse: collapse; margin: 6pt 0; font-size: 10.5pt; }
+table.sources-table { table-layout: fixed; font-size: 9.5pt; }
+.sources-table th, .sources-table td { padding: 2pt 3pt; }
+.sources-table td:nth-child(2) { white-space: nowrap; }
+.sources-table col.c-src { width: 24%; } .sources-table col.c-date { width: 11%; }
+.sources-table col.c-url { width: 65%; }
+td.url { overflow-wrap: anywhere; }                  /* prose in this column wraps at spaces */
+td.url a { word-break: break-all; }                  /* long URLs wrap onto several lines */
+a { color: #000; text-decoration: underline; }
+small { font-size: max(9pt, 0.83em); }          /* print: never below 9 pt */
 th, td { border: 1px solid #000; padding: 3pt 5pt; text-align: left; vertical-align: top; }
 th { background: #e6e6e6; }
 td.num, th.num { text-align: right; }
@@ -480,13 +489,55 @@ def css(data_as_of: str) -> str:
     return CSS.replace("var(--footer)", f'"{text}"')
 
 
-def table(headers: list, rows: list, num_cols: tuple = (), caption: str = "") -> str:
+def table(headers: list, rows: list, num_cols: tuple = (), caption: str = "",
+          cls: str = "", cols: tuple = (), cell_cls: dict | None = None) -> str:
+    """cls: table class; cols: one class per <col> (fixed column widths in CSS);
+    cell_cls: {column index: td class}."""
+    cell_cls = cell_cls or {}
     th = "".join(f'<th scope="col"{" class=num" if i in num_cols else ""}>{escape(h)}</th>'
                  for i, h in enumerate(headers))
-    body = "".join("<tr>" + "".join(f'<td{" class=num" if i in num_cols else ""}>{c}</td>'
-                                    for i, c in enumerate(r)) + "</tr>" for r in rows)
+    def td(i, c):
+        k = " ".join(x for x in ("num" if i in num_cols else "", cell_cls.get(i, "")) if x)
+        return f'<td class="{k}">{c}</td>' if k else f"<td>{c}</td>"
+    body = "".join("<tr>" + "".join(td(i, c) for i, c in enumerate(r)) + "</tr>" for r in rows)
     cap = f"<caption>{escape(caption)}</caption>" if caption else ""
-    return f"<table>{cap}<thead><tr>{th}</tr></thead><tbody>{body}</tbody></table>"
+    colgroup = ("<colgroup>" + "".join(f'<col class="{c}">' for c in cols) + "</colgroup>"
+                if cols else "")
+    return (f'<table{f" class={chr(34)}{cls}{chr(34)}" if cls else ""}>{cap}{colgroup}'
+            f"<thead><tr>{th}</tr></thead><tbody>{body}</tbody></table>")
+
+
+URL_RE = re.compile(r"https?://[^\s<>\"']+")
+
+
+def link(text: str) -> str:
+    """An escaped cell that is a URL becomes a link that also shows the full URL (paper)."""
+    return f'<a href="{text}">{text}</a>' if text.startswith(("http://", "https://")) else text
+
+
+def linkify(html: str) -> str:
+    """Every URL in visible text becomes a clickable link (full URL kept visible); text
+    inside tags, <a>, <style> and <svg> is left alone. Trailing punctuation stays outside."""
+    out, skip = [], 0
+    for part in re.split(r"(<[^>]+>)", html):
+        if part.startswith("<"):
+            tag = re.match(r"</?\s*([a-zA-Z]+)", part)
+            name = tag.group(1).lower() if tag else ""
+            if name in ("a", "style", "svg", "title"):
+                skip += -1 if part.startswith("</") else (0 if part.endswith("/>") else 1)
+            out.append(part)
+            continue
+        if skip:
+            out.append(part)
+            continue
+        def sub(m):
+            u = m.group(0)
+            tail = ""
+            while u and u[-1] in ".,;:)":
+                tail, u = u[-1] + tail, u[:-1]
+            return f'<a href="{u}">{u}</a>{tail}'
+        out.append(URL_RE.sub(sub, part))
+    return "".join(out)
 
 
 def summary_html(sc: dict, hazard: str) -> str:
@@ -851,7 +902,24 @@ def facilities_html(inp: dict, county: str, hazard: str) -> str:
             + zone_d_html)
 
 
+def data_sources(inp: dict) -> list:
+    """Data sources table rows [source, fetched, URL or file] (escaped HTML text)."""
+    return _sources(inp)[1]
+
+
 def sources_html(inp: dict) -> str:
+    rows, data = _sources(inp)
+    return ('<h2 class="page">8. Sources and assumptions</h2>'
+            '<h3>Planning factors</h3>'
+            + table(["Factor", "Value", "Source or team assumption"], rows)
+            + '<h3>Data sources</h3>'
+            + table(["Source", "Fetched", "URL / file"], [[a, b, link(c)] for a, b, c in data],
+                    cls="sources-table", cols=("c-src", "c-date", "c-url"), cell_cls={2: "url"})
+            + '<p>Privacy: aggregate census-tract and county data only. No individual '
+              'records. Public facility names and addresses only.</p>')
+
+
+def _sources(inp: dict) -> tuple[list, list]:
     pf = inp["needs"]["planning_factors"]
     rows = []
     for hz, r in pf["shelter_seeking_rate"].items():
@@ -917,16 +985,15 @@ def sources_html(inp: dict) -> str:
         data += [["Esri ArcGIS World Geocoder (site check, care facilities) and ArcGIS "
                   "routing (drive and walk times, normal traffic). Powered by Esri.", "",
                   "https://developers.arcgis.com/rest/"]]
-    return ('<h2 class="page">8. Sources and assumptions</h2>'
-            '<h3>Planning factors</h3>'
-            + table(["Factor", "Value", "Source or team assumption"], rows)
-            + '<h3>Data sources</h3>'
-            + table(["Source", "Fetched", "URL / file"], data)
-            + '<p>Privacy: aggregate census-tract and county data only. No individual '
-              'records. Public facility names and addresses only.</p>')
+    return rows, data
 
 
 def playbook_html(inp: dict, county: str, hazard: str) -> str:
+    """One playbook page; every URL in its text is a clickable link (full URL visible)."""
+    return linkify(_playbook_html(inp, county, hazard))
+
+
+def _playbook_html(inp: dict, county: str, hazard: str) -> str:
     sc = scenario(inp, county, hazard)
     ms = match_scenario(inp, county, hazard)
     sites = sites_for(inp, county, hazard)

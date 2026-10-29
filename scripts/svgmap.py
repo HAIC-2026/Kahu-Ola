@@ -167,8 +167,9 @@ def render(tracts: list, values: dict, at_risk: set, sites: list, title: str,
         x, y = proj(s["lon"], s["lat"])
         shape = MARKERS.get(s["status"], ("circle", ""))[0]
         out.append(marker(shape, x, y))
-        out.append(f'<text x="{x + 10}" y="{y + 4}" font-family="Arial, Helvetica, sans-serif" '
-                   f'font-size="13" font-weight="bold" stroke="#ffffff" stroke-width="3" '
+        # 20 units: the map prints about 344 pt wide (48% of 720), so labels are ~9.5 pt
+        out.append(f'<text x="{x + 12}" y="{y + 7}" font-family="Arial, Helvetica, sans-serif" '
+                   f'font-size="20" font-weight="bold" stroke="#ffffff" stroke-width="4" '
                    f'paint-order="stroke">{s["n"]}</text>')
     out.append("</svg>")
     return "\n".join(out), bounds

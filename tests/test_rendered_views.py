@@ -80,13 +80,26 @@ class RenderedViews(unittest.TestCase):
             self.assertEqual(hits, [], url)
 
 
+def _source_urls() -> list:
+    import html as _html
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import build_playbooks as _bp
+    return [_html.unescape(c) for _a, _b, c in _bp.data_sources(_bp.load_inputs())
+            if c.startswith(("http://", "https://"))]
+
+
+SOURCE_URLS = _source_urls()
+
+
 @unittest.skipUnless(shutil.which("pdftotext"), "pdftotext not installed")
 class PdfText(unittest.TestCase):
     def test_no_file_paths_or_code_words(self):
         for pdf in sorted((ROOT / "playbooks").glob("*.pdf")):
             text = subprocess.run(["pdftotext", str(pdf), "-"], capture_output=True, text=True,
                                   check=True).stdout
-            text = re.sub(r"https?://\S+", " ", text)                  # source links are fine
+            for u in SOURCE_URLS:                    # source links are fine, also when wrapped
+                text = re.sub(r"\s*".join(map(re.escape, u)), " ", text)
+            text = re.sub(r"https?://\S+", " ", text)
             hits = sorted(set(CODE_WORDS.findall(text)))
             self.assertEqual(hits, [], pdf.name)
 

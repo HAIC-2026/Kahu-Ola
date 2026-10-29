@@ -308,7 +308,11 @@ def build(inp: dict) -> dict:
                        "sources_url": message_library.SOURCES_URL},
     }
     body = json.dumps(bundle, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
-    bundle["meta"]["version"] = hashlib.sha256(body.encode()).hexdigest()[:12]
+    h = hashlib.sha256(body.encode())
+    for page in sorted(PLAYBOOKS.glob("*.html")):     # printable playbooks are planning data too
+        h.update(page.name.encode())                   # (HTML: the PDFs carry a creation date)
+        h.update(page.read_bytes())
+    bundle["meta"]["version"] = h.hexdigest()[:12]
     return bundle
 
 
