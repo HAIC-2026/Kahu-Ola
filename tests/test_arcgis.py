@@ -168,6 +168,7 @@ class SchoolScenario(unittest.TestCase):
         self.assertEqual(sorted(ids), sorted(["s1", "s3", "s5", "s7", "s9", "s0", "s2", "s4", "s6", "s8"]))
         self.assertLessEqual(len(os_), 50)
 
+    @unittest.skipUnless((ROOT / "data" / "raw" / "coastline.geojson").exists(), "needs data/raw/ (gitignored)")
     def test_candidate_usable_rule_matches_model(self):
         from geo import ZoneIndex as Z
         from build_islands import island_of
@@ -275,6 +276,7 @@ class SiteRules(unittest.TestCase):
         self.assertIn("**Follow-up:** Visual check on the State tsunami evacuation map", resolved)
         self.assertIn("tsunami: excluded (tsunami zone) → usable", resolved)
 
+    @unittest.skipUnless((ROOT / "data" / "raw" / "arcgis" / "od_drive_refresh.json").exists(), "needs data/raw/ (gitignored)")
     def test_moved_site_times_come_from_refresh(self):
         key = "Lahaina Civic Center Gym|Maui"
         fresh = ba.parse_od(ba.RAW / "od_drive_refresh.json")
@@ -313,6 +315,7 @@ class FacilityZones(unittest.TestCase):
         z = ba.hazard_zones({"in_tsunami_zone": False, "fld_zone": "D", "in_sfha": False})
         self.assertFalse(any(z.values()))                  # zone D: not mapped, not a zone
 
+    @unittest.skipUnless((ROOT / "data" / "raw" / "tsunami_zone.geojson").exists(), "needs data/raw/ (gitignored)")
     def test_flags_match_tsunami_zone_layer(self):
         idx = ZoneIndex(json.loads(ba.TSUNAMI.read_text(encoding="utf-8")))
         fac = SUMMARY["facilities"]

@@ -1106,6 +1106,8 @@ def index_html(data_as_of: str) -> str:
 # ---------------------------------------------------------------- pdf
 
 def find_browser() -> str | None:
+    if os.environ.get("KAHUOLA_NO_BROWSER"):      # CI fast tests: browser tests skip
+        return None
     cands = [os.environ.get("CHROME_BIN", "")]
     cands += sorted(glob.glob(str(Path.home() / "Library/Caches/ms-playwright/chromium-*/"
                                   "chrome-mac*/*.app/Contents/MacOS/*")), reverse=True)

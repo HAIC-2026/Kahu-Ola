@@ -83,7 +83,8 @@ class Blocks(unittest.TestCase):
 class Labels(unittest.TestCase):
     def test_method_recorded_and_labels_say_people(self):
         method = AFN["metadata"]["method"]["share_method"]
-        self.assertEqual(method, "population" if BLOCKS else "area")
+        if BLOCKS:                     # without data/raw/ the committed method is checked only
+            self.assertEqual(method, "population")
         self.assertEqual(STATE["meta"]["share_method"], method)
         self.assertEqual(bp.SHARE_METHOD, method)
         self.assertEqual(BUNDLE["state"]["share_word"], block_shares.WORD[method])

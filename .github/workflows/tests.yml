@@ -1,0 +1,42 @@
+# Fast tests on every pull request to main (both repos: the workflow file is in the code).
+# Runs without data/raw/ (gitignored) and without a browser: tests that need either skip.
+# Fails when app/sw.js VERSION is stale, so a PR that changes app/ shows it before merge.
+# No secrets needed.
+name: Tests
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fast-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONUTF8: "1"
+      KAHUOLA_NO_BROWSER: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pdftotext (PDF text tests)
+        run: sudo apt-get update -q && sudo apt-get install -y -q poppler-utils
+
+      - name: Service worker VERSION is up to date
+        run: |
+          python scripts/build_app_data.py --copy-only --allow-missing-raw
+          if ! git diff --quiet -- app/sw.js; then
+            git diff -- app/sw.js
+            echo "::error file=app/sw.js::VERSION in app/sw.js is stale. Run 'python3 scripts/build_app_data.py --copy-only' and commit app/sw.js."
+            exit 1
+          fi
+
+      - name: Tests (fast, no data/raw)
+        run: python -m unittest discover tests

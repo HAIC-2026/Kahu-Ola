@@ -29,7 +29,9 @@ cd app && python -m http.server 8000           # then open http://localhost:8000
 python -m unittest discover tests
 ```
 
-Run the full suite before calling any code change done. Tests that need cached raw data
+Run the full suite before calling any code change done. Every pull request to `main` also runs
+the fast tests on GitHub Actions (`.github/workflows/tests.yml`: no `data/raw/`, no browser;
+tests that need either skip) and checks that the `sw.js` `VERSION` is current. Tests that need cached raw data
 (`data/raw/`, gitignored) skip or fail on a fresh clone; see "Running on Windows" and ask
 Long before treating a data test failure as your own.
 
@@ -59,8 +61,15 @@ Long before treating a data test failure as your own.
    official shelter list." is always clearly visible, including in print.
 6. **Offline and private.** The app works offline; it calls no outside service, has no
    tracking and never asks for location. Hawaiʻi place names keep their ʻokina and kahakō.
-7. **Adding or renaming a file in `app/`:** the service worker precache list in `app/sw.js` is
-   generated. Ask Long to re-run `python scripts/build_app_data.py`; never edit `sw.js` by hand.
+7. **After any change in `app/`** (even only `styles.css` or `app.js`, or adding/renaming a
+   file), run `python3 scripts/build_app_data.py --copy-only` and commit the updated
+   `app/sw.js`. It refreshes the service worker `VERSION` and precache list from the
+   committed bundle, needs no `data/raw/` and never regenerates data. Without a new `VERSION`
+   browsers keep the old version. Or let CI tell you: the Tests check on every pull request
+   fails when `VERSION` is stale. Never edit `sw.js` by hand.
+   The full `python3 scripts/build_app_data.py` (no `--copy-only`) is Long's: it needs
+   `data/raw/` and stops with an error if an input is missing. Do not commit
+   `app/data/bundle.json` or `app/data/version.json`.
 8. **Helper tools stay outside the repo.** Playwright, screenshots and similar go in a temp
    folder outside the repo. Do not commit them and do not add a `package.json`.
 9. **Run the tests** (`python -m unittest discover tests`) before reporting a code change done.
@@ -78,7 +87,10 @@ setx CHROME_BIN "C:\Program Files\Google\Chrome\Application\chrome.exe"
   non-ASCII text (`UnicodeEncodeError`/`UnicodeDecodeError`, empty pages from Chrome).
 - `CHROME_BIN`: `find_browser()` in `scripts/build_playbooks.py` does not look in the
   Windows install folders; the browser tests and PDF builds need this variable.
-- Use `python` or `py`, not `python3` (on Windows that is the Microsoft Store stub).
+- Use `python` or `py`, not `python3` (on Windows that is the Microsoft Store stub); e.g.
+  `py scripts/build_app_data.py --copy-only`.
+- Line endings: `.gitattributes` keeps LF in the repo (PDFs and images are binary), and the
+  `sw.js` `VERSION` hash ignores CRLF, so Windows gives the same `VERSION` as macOS.
 
 Known Windows-only test failures (environment, not app bugs):
 

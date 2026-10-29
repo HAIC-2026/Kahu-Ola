@@ -51,6 +51,7 @@ class Childcare(unittest.TestCase):
         keys = {k for c in S["childcare"] for k in c}
         self.assertFalse(keys & {"phone", "owner", "notes", "licensed_capacity"})
 
+    @unittest.skipUnless((ROOT / "data" / "raw" / "tsunami_zone.geojson").exists(), "needs data/raw/ (gitignored)")
     def test_island_and_zones(self):
         tsunami = ZoneIndex(json.loads((ROOT / "data" / "raw" / "tsunami_zone.geojson").read_text(encoding="utf-8")))
         for c in S["childcare"]:
@@ -98,6 +99,7 @@ class Sirens(unittest.TestCase):
                 self.assertFalse({"Dash_Stat", "Poll_Date"} & set(f["properties"]))
         self.assertFalse({"status", "Dash_Stat"} & {k for s in S["sirens"] for k in s})
 
+    @unittest.skipUnless((ROOT / "data" / "raw" / "blocks").exists(), "needs data/raw/ (gitignored)")
     def test_rated_range_recomputed(self):
         """Nearest siren from the land point and the share of people (2020 blocks) within
         3,400 ft, recomputed by brute force (every siren on the island, no bounding box)."""

@@ -52,6 +52,18 @@ To preview the app: `cd app && python3 -m http.server 8000`.
 python3 -m unittest discover tests
 ```
 
+Tests that need `data/raw/` (gitignored) or a browser skip when it is missing. Pull requests
+to `main` run the fast tests on GitHub Actions (`.github/workflows/tests.yml`) and fail if
+the service worker `VERSION` in `app/sw.js` is stale.
+
+The full build fails closed: a missing or empty input in `data/raw/` stops it with a message
+(`scripts/raw_inputs.py`). After a change in `app/` only, refresh the service worker
+`VERSION` without `data/raw/`:
+
+```sh
+python3 scripts/build_app_data.py --copy-only
+```
+
 ## Repository map
 
 | Path | Contents |
