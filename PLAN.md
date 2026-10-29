@@ -65,6 +65,7 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 | DBEDT State of Hawaiʻi Data Book 2025, Table 7.06 (average daily visitor census, 2025) | Visitors on island (separate county line) | `data/sources/county_lines.csv` (fetched 2026-10-27) |
 | Esri ArcGIS World Geocoder (`forStorage=true`), build time only | Second check of the 30 site points; locates Pukalani; locates 107 care facilities | `data/sources/arcgis_summary.json` (run 2026-10-28) |
 | Esri ArcGIS routing: origin-destination cost matrix, driving and walking time (normal traffic) | Drive minutes, road km and walk minutes from each populated Census area to every known site on the same island | `data/sources/arcgis_summary.json` (run 2026-10-28) |
+| U.S. Census Geocoder on the DOE street address of each school site | Third source for the school sites (DOE + Census) | `data/sources/doe_school_checks.csv` (queried 2026-10-28) |
 | CMS Provider Data Catalog: Dialysis Facility – Listing by Facility (23ew-n7w9), Nursing Homes – Provider Information (4pq5-n9py), Hospital General Information (xubh-q36u) | Care facilities in Hawaiʻi (41 dialysis, 43 nursing homes, 23 hospitals; facility addresses only) | `data/sources/arcgis_summary.json` (fetched 2026-10-28) |
 
 ## 4. Privacy model
@@ -80,7 +81,7 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 - **CMIST data for 436 of 436 Census areas (100%)** in all four counties. FEMA NRI joined for **435 of 436** (one Honolulu Census area has no NRI record). Source: `data/processed/coverage.json`.
 
 ### 5.2 Shelters: no standing public list
-- Counties announce sites when they open them. The challenge PDF lists "recompiling shelter and refuge lists" as repetitive work (p. 4). We compiled **30 sites opened in 2026 events** (Kauaʻi 5, Honolulu 7, Maui 8, Hawaiʻi 10). The events were April 2026 severe weather, Hurricane Lala, Hurricane Lowell, Tropical Storm Nolo, and the Olowalu brush fire. All **30 of 30 sites have an official county source** (kauai.gov, honolulu.gov, mauicounty.gov, hawaiicounty.gov); 0 rely on news media only. Sixteen sites were first found in news reports; we then matched each to the county release and kept the news URL in the notes. Names and addresses matched the county releases. Two naming variants are recorded in the notes rather than changed: "Yano Memorial Hall" and "Hisaoka Gym" appear in one Hawaiʻi County release. The Maui County and Hawaiʻi County pages block automated downloads (HTTP 403); their shelter names and addresses were confirmed by a team member reading the county page on 2026-10-27. All 30 are located. Every site point was checked against the Esri ArcGIS World Geocoder (§5.7): 22 are **confirmed (2 sources, ≤ 300 m apart)**, 7 **need review** (> 300 m apart; the Census or address-point location is kept), and the Mayor Hannibal Tavares Community Center (Pukalani), which the Census Geocoder could not find, is **located (ArcGIS)** (score 100, point address, Maui County, Maui island). Source: `data/processed/shelters_2026.geojson`, `data/sources/arcgis_summary.json`.
+- Counties announce sites when they open them. The challenge PDF lists "recompiling shelter and refuge lists" as repetitive work (p. 4). We compiled **30 sites opened in 2026 events** (Kauaʻi 5, Honolulu 7, Maui 8, Hawaiʻi 10). The events were April 2026 severe weather, Hurricane Lala, Hurricane Lowell, Tropical Storm Nolo, and the Olowalu brush fire. All **30 of 30 sites have an official county source** (kauai.gov, honolulu.gov, mauicounty.gov, hawaiicounty.gov); 0 rely on news media only. Sixteen sites were first found in news reports; we then matched each to the county release and kept the news URL in the notes. Names and addresses matched the county releases. Two naming variants are recorded in the notes rather than changed: "Yano Memorial Hall" and "Hisaoka Gym" appear in one Hawaiʻi County release. The Maui County and Hawaiʻi County pages block automated downloads (HTTP 403); their shelter names and addresses were confirmed by a team member reading the county page on 2026-10-27. All 30 are located. Every site point was checked against the Esri ArcGIS World Geocoder (§5.7). 15 are **confirmed (2 sources, ≤ 300 m apart)**. The 9 school sites use the official DOE schools-layer point, checked against a third source: 7 are **confirmed (DOE + ArcGIS)**, and 2 are **confirmed (DOE + Census)** (Kahuku Elementary and Nānākuli High and Intermediate, where the county release gave no street address). 5 **need review** (> 300 m apart; the current point is kept; see `docs/site_review.md`). The Mayor Hannibal Tavares Community Center (Pukalani), which the Census Geocoder could not find, is **located (ArcGIS)** (score 100, point address, Maui County, Maui island). Source: `data/processed/shelters_2026.geojson`, `data/sources/arcgis_summary.json`.
 
 ### 5.3 Sites unsuitable by hazard
 - **Lahaina Civic Center Gym** (opened twice in 2026): inside the tsunami evacuation zone, so it is excluded for tsunami. Its FEMA flood zone is X.
@@ -176,14 +177,24 @@ Esri ArcGIS Online was called **once, at build time, on a team laptop** (`script
 | Drive-time matrix, same island only | 2,981 pairs | 1.49 |
 | Walk-time matrix, first run (returned no times, see below) | 2,981 pairs | 1.49 |
 | Walk-time matrix, per site, areas within 12 km | 479 pairs | 0.24 |
+| Drive-time matrix to DOE candidate schools: per Census area, the 5 nearest (straight line) usable for each hazard on the same island | 2,757 pairs | 1.38 |
 | 15-minute drive polygons | skipped (30 × 0.5 = 15 credits would pass the budget) | 0 |
-| **Total** | | **8.70** |
+| **Total** | | **10.08** |
 
 The first Oʻahu drive and walk requests sent 100 origins and the service rejected them (maximum 50). They returned no matrix and were re-run in requests of 50. The 2,100 rejected pairs per mode are not counted; check the ArcGIS Online credit report. The first walking run returned no times: walking mode rejects any request whose inputs are more than 27 miles (43 km) apart. That run is counted as billed, to be conservative. Walk times were re-run per site, for Census areas within 12 km in a straight line; farther areas show "no walk time: over 12 km".
 
-**Site check** (needs review, distance between the Census or address-point location and the ArcGIS point): Keaʻau Armory 546 m; Puʻuʻeo Community Center 518 m; Pāpaʻaloa Park Annex 8,655 m; Kahuku Elementary School 26,174 m; Nānākuli High and Intermediate School 20,275 m; Lahaina Civic Center Gym 2,308 m; South Maui Community Park Gym 455 m. Kahuku Elementary School has no street address in the county release and the Nānākuli match was poor, so ArcGIS matched a general location; the team should confirm these points by hand.
+**Site check.** The 2 school sites first flagged for review (Kahuku Elementary, Nānākuli High and Intermediate) have no street address in the county release, so ArcGIS was only sent "HI" and its point is meaningless. Their map point is the official DOE schools-layer point. The U.S. Census Geocoder (free) located each school's DOE street address 125 m and 74 m from the DOE point: **confirmed (DOE + Census)**, and the DOE point is kept. The 7 other school sites agree with ArcGIS within 300 m: **confirmed (DOE + ArcGIS)**. Cache: `data/sources/doe_school_checks.csv`. The 5 non-school sites that still need review are in `docs/site_review.md`: both candidate points, matched addresses, the ArcGIS score, the distance, and the hazard statuses that would change between them. The current point is kept until the team confirms. Keaʻau Armory 546 m, Puʻuʻeo Community Center 518 m, Pāpaʻaloa Park Annex 8,655 m and South Maui Community Park Gym 455 m: no status would change. **Lahaina Civic Center Gym, 2,308 m: its current (Census) point is inside the tsunami evacuation zone, so it is excluded for tsunami. At the ArcGIS point it would be usable for tsunami.** It stays excluded until the point is confirmed. No site point changed in this step, so no hazard status changed.
 
-**Census areas with no known site within a 15-minute drive** (any hazard status; drive-time matrix, normal traffic): Hawaiʻi 32 of 43 populated areas; Honolulu 169 of 322; Maui 18 of 45 (Molokaʻi and Lānaʻi included); Kauaʻi 6 of 17 (Niʻihau included: it has no known site). The 15-minute drive polygons were skipped (budget), so this map layer uses the drive-time matrix from each area's land point. Areas are hatched on the map.
+**Census areas with no 2026 activated site within a 15-minute drive (normal traffic).** Per hazard, only sites usable for that hazard count: (1) 2026 activated sites; (2) the same plus DOE candidate schools usable for that hazard. Drive-time matrix from each area's land point; the 15-minute polygons were skipped (budget). This is **not** a statement that an area has no shelter: counties designate and open shelters for each event. Populated areas: Hawaiʻi 43, Honolulu 322, Maui 45 (Molokaʻi and Lānaʻi included), Kauaʻi 17 (Niʻihau included: it has no site or school).
+
+| County | Hurricane, wildfire: (1) → (2) | Tsunami: (1) → (2) | Inland flooding: (1) → (2) | Coastal flooding: (1) → (2) |
+|---|---|---|---|---|
+| Hawaiʻi | 32 → 15 | 32 → 15 | 32 → 15 | 32 → 15 |
+| Honolulu | 169 → 8 | 174 → 17 | 169 → 14 | 169 → 14 |
+| Maui | 18 → 13 | 20 → 13 | 18 → 14 | 18 → 14 |
+| Kauaʻi | 6 → 5 | 6 → 5 | 6 → 5 | 6 → 5 |
+
+The app hatches scenario (1) on the map and prints scenario (2) next to it; every PDF states both numbers.
 
 **Care facilities in hazard zones** (107 facilities: Honolulu 64, Hawaiʻi 19, Maui 14, Kauaʻi 10). Zones: the State tsunami evacuation zone, and FEMA flood zones A/AE/V/VE (State DFIRM), the same screens as for shelter sites. There is no facility-level screen for hurricane or wildfire.
 
@@ -214,7 +225,7 @@ Result: Lahaina wildfire, 2023-08-11. Observed 1,418 people in shelters (Maui No
 The challenge PDF gives no baseline number ("Teams may propose their own baseline and target time", p. 7).
 - **Baseline (team assumption, to be confirmed with DHS):** at least **2 working days per county per event**, about 8 working days statewide. Reasoning: the manual steps DHS describes (p. 3–4): pull program and provider reports, cross-reference lists with hazard zones, recompile shelter lists, and call partners to confirm capacity "for each planning cycle and each event". These steps are done by hand, often "only after an event begins" (p. 4).
 - **Target:** same day, under 1 working day statewide.
-- **Measured:** a full rebuild from local data (all 13 build steps, 20 scenarios, 20 PDFs, app bundle) takes **71.4 seconds** on an Apple M4 laptop (measured 2026-10-28 with `scripts/time_rebuild.py`; result in `data/processed/rebuild_timing.json`). The test suite (274 automated tests, including headless-browser checks of every view, deep links, keyboard map layers and offline use) takes about 50 s. A full data refresh from the internet adds downloads plus the flood-zone queries, which are paced at 1 s per point for 311 points (at least 5.2 minutes). That refresh is not timed end to end.
+- **Measured:** a full rebuild from local data (all 13 build steps, 20 scenarios, 20 PDFs, app bundle) takes **70.6 seconds** on an Apple M4 laptop (measured 2026-10-28 with `scripts/time_rebuild.py`; result in `data/processed/rebuild_timing.json`). The test suite (281 automated tests, including headless-browser checks of every view, deep links, keyboard map layers and offline use) takes about 50 s. A full data refresh from the internet adds downloads plus the flood-zone queries, which are paced at 1 s per point for 311 points (at least 5.2 minutes). That refresh is not timed end to end.
 - **Plus human review (team assumption):** one review session per county to confirm sites, roles and pledges. The pipeline removes the compiling and arithmetic; it does not remove the partner calls. It turns them into filling in blank capacity fields.
 - **Measurement plan.** The baseline above stays a team assumption until it is measured. We propose a timed tabletop exercise with DHS and one county. The same planners produce a needs-and-resources draft for one county × hazard scenario twice: once with their current manual process (baseline) and once with this tool (tool-assisted). **Start** = hazard selected; **stop** = needs-and-resources draft approved by the county or DHS lead. We report both times in minutes (baseline vs tool-assisted), with the number of partner calls and corrections made during review.
 
@@ -246,7 +257,7 @@ The challenge PDF requires usability "during high-stress, low-connectivity condi
 | Tier | Conditions | What works |
 |---|---|---|
 | 1. Online | Normal internet | Web app (https://shelters.kahuola.org, also https://haic2026-shelters.pages.dev) |
-| 2. Weak | Slow or intermittent | The app loads from its local cache. The only data is one 843 KB bundle, and every PDF is already cached |
+| 2. Weak | Slow or intermittent | The app loads from its local cache. The only data is one 859 KB bundle, and every PDF is already cached |
 | 3. Offline | No internet (after one earlier visit) | Installed web app (PWA). The service worker pre-caches the app, the data and all 20 PDFs, and the app shows "Offline – data as of <date>". Tested in airplane mode in Chrome. |
 | 4. Paper | No power or devices | 20 printed playbooks (`playbooks/*.pdf`): US Letter, black-and-white safe, 13 pages each, with the disclaimer and "Data as of" on every page |
 
@@ -276,7 +287,7 @@ AI is **not** used at run time: the model, the matching, the playbooks and the a
 5. **Validation:** see §6(2). We need 2026 shelter counts from the counties.
 6. **Upper bounds:** county totals assume all at-risk Census areas are hit at once. Use the largest-single-community rows for realistic planning.
 7. **Data gaps:**
-   - 7 shelter points need review against ArcGIS (§5.7);
+   - 5 shelter points need review (`docs/site_review.md`), including Lahaina Civic Center Gym, whose tsunami status depends on which point is right;
    - travel times are for normal traffic, not disaster conditions; walk times only for areas within 12 km of a site;
    - one Census area has no NRI record;
    - 22 Honolulu candidate schools are in flood zone D (undetermined);

@@ -52,7 +52,7 @@ class Budget(unittest.TestCase):
     def test_ledger_logged_and_within_budget(self):
         led = json.loads(fa.CREDITS.read_text(encoding="utf-8"))
         for step in ("geocode_sites", "geocode_facilities", "od_drive", "od_walk_near",
-                     "service_areas"):
+                     "od_schools", "service_areas"):
             self.assertIn(step, led["steps"])
             self.assertIn("credits_actual", led["steps"][step])
         self.assertLessEqual(fa.spent(led), fa.BUDGET)
@@ -155,6 +155,45 @@ class SameIsland(unittest.TestCase):
         self.assertEqual(fa.OD_CHUNK, 50)
 
 
+class SchoolScenario(unittest.TestCase):
+    def test_school_jobs_same_island_5_per_hazard(self):
+        o = [{"id": "a", "island": "Maui", "lon": -156.47, "lat": 20.88}]
+        schools = [{"id": f"s{i}", "island": "Maui", "lon": -156.47 + i * 0.01, "lat": 20.88,
+                    "usable": ["tsunami"] if i % 2 else ["hurricane"]} for i in range(20)]
+        schools.append({"id": "lanai", "island": "Lānaʻi", "lon": -156.471, "lat": 20.88,
+                        "usable": ["tsunami", "hurricane"]})
+        (_k, os_, ds), = fa.school_jobs(o, schools)
+        ids = [d["id"] for d in ds]
+        self.assertNotIn("lanai", ids)
+        self.assertEqual(sorted(ids), sorted(["s1", "s3", "s5", "s7", "s9", "s0", "s2", "s4", "s6", "s8"]))
+        self.assertLessEqual(len(os_), 50)
+
+    def test_candidate_usable_rule_matches_model(self):
+        from geo import ZoneIndex as Z
+        from build_islands import island_of
+        coast = Z(fa.load_json(fa.COAST, None))
+        schools = fa.candidate_schools(lambda x, y: island_of(coast, x, y))
+        self.assertEqual(len(schools), 292)
+        by = {f["properties"]["id"]: f["properties"] for f in
+              fa.load_json(fa.CANDIDATES, {})["features"]}
+        for s in schools:
+            self.assertEqual("tsunami" in s["usable"], not by[s["id"]]["hazard_excluded"], s["id"])
+            self.assertTrue(s["island"], s["id"])
+
+    def test_wording_never_implies_no_shelters(self):
+        js = (APP / "app.js").read_text(encoding="utf-8")
+        self.assertIn("DATA.access.no_activated", js)
+        self.assertEqual(ba.NO_ACTIVATED, "No 2026 activated site within a 15-minute drive (normal traffic)")
+        for p in sorted((ROOT / "playbooks").glob("*_*.html")):
+            t = text(p.read_text(encoding="utf-8"))
+            self.assertIn(ba.NO_ACTIVATED, t, p.name)
+            self.assertIn("With DOE candidate schools usable for this hazard:", t, p.name)
+            self.assertIn("not a statement that the area has no shelter", t, p.name)
+            rest = t.replace(ba.NOT_NO_SHELTER, "").lower()     # the disclaimer itself
+            rest = rest.replace("privately owned island, no public shelter", "")   # Niʻihau fact
+            self.assertNotRegex(rest, r"\bno (public )?shelters?\b", p.name)
+
+
 class SiteRules(unittest.TestCase):
     site = {"key": "X|Maui", "name": "X", "county": "Maui", "point": [-156.47, 20.88]}
 
@@ -179,6 +218,42 @@ class SiteRules(unittest.TestCase):
             self.assertEqual(fa.classify_site(s, bad, isl)["status"], "not_located")
         self.assertEqual(fa.classify_site(s, self.esri(), lambda x, y: "Oʻahu")["status"],
                          "not_located")
+
+    def test_doe_third_source(self):
+        site = {"address": "", "name": "S", "county": "Honolulu"}
+        doe = {"doe_school": "S", "doe_address": "1 A St", "doe_lon": "-158.0", "doe_lat": "21.5",
+               "census_status": "match", "census_lon": "-158.0", "census_lat": "21.5018"}   # ~200 m
+        self.assertEqual(ba.doe_status(site, {"distance_m": 26000}, doe)["status"], "confirmed_doe_census")
+        self.assertFalse(ba.doe_status(site, {"distance_m": 26000}, doe)["arcgis_query_valid"])
+        far = {**doe, "census_lat": "21.51"}                                                 # ~1.1 km
+        self.assertNotIn("status", ba.doe_status(site, {"distance_m": 26000}, far))
+        with_addr = {**site, "address": "1 A St"}
+        self.assertEqual(ba.doe_status(with_addr, {"distance_m": 120}, far)["status"], "confirmed_doe_arcgis")
+
+    def test_needs_review_resolution(self):
+        st = {k: v["status"] for k, v in SUMMARY["sites"].items()}
+        self.assertEqual(st["Kahuku Elementary School|Honolulu"], "confirmed_doe_census")
+        self.assertEqual(st["Nānākuli High and Intermediate School|Honolulu"], "confirmed_doe_census")
+        review = {k for k, v in st.items() if v == "needs_review"}
+        self.assertEqual(review, set(SUMMARY["site_reviews"]))
+        self.assertEqual(review, {"Keaʻau Armory|Hawaii", "Puʻuʻeo Community Center|Hawaii",
+                                  "Pāpaʻaloa Park Annex|Hawaii", "Lahaina Civic Center Gym|Maui",
+                                  "South Maui Community Park Gym|Maui"})
+
+    def test_review_keeps_current_point_and_lists_changes(self):
+        sh = {f["properties"]["name"] + "|" + f["properties"]["county"]: f
+              for f in fa.load_json(fa.SHELTERS, {})["features"]}
+        for k, r in SUMMARY["site_reviews"].items():
+            self.assertEqual([round(c, 6) for c in sh[k]["geometry"]["coordinates"][:2]],
+                             [r["current"]["lon"], r["current"]["lat"]], k)
+        lah = SUMMARY["site_reviews"]["Lahaina Civic Center Gym|Maui"]
+        self.assertTrue(lah["current"]["in_tsunami_zone"])
+        self.assertEqual(lah["status_changes"].get("tsunami"), ["exclude", "ok"])
+        doc = ba.REVIEW_DOC.read_text(encoding="utf-8")
+        for k in SUMMARY["site_reviews"]:
+            self.assertIn(f"## {k.split('|')[0]}", doc)
+        self.assertIn("tsunami: excluded (tsunami zone) → usable", doc)
+        self.assertIn("The current point is kept", doc)
 
     def test_summary_rules_hold(self):
         for key, v in SUMMARY["sites"].items():
@@ -243,14 +318,27 @@ class PanelData(unittest.TestCase):
             got = {r[0]: r[1:] for r in TRACTS[fips].get("a", [])}
             want = {ids[k]: v for k, v in a["sites"].items()}
             self.assertEqual(got, want, fips)
-            self.assertEqual(TRACTS[fips].get("o"), int(a["outside_15"]), fips)
+            want_o = {h: ba.outside(d1) + ba.outside(d2)
+                      for h, (d1, d2) in a["drive_by_hazard"].items() if ba.outside(d1)}
+            self.assertEqual(TRACTS[fips].get("o", {}), want_o, fips)
             n += 1
         self.assertGreater(n, 400)
 
-    def test_outside_15_matches_drive_times(self):
+    def test_scenario_1_uses_usable_activated_sites_only(self):
+        usable = ba.site_usable()
         for fips, a in SUMMARY["areas"].items():
-            drives = [v[0] for v in a["sites"].values() if v[0] is not None]
-            self.assertEqual(a["outside_15"], not drives or min(drives) > 15, fips)
+            for h, (d1, d2) in a["drive_by_hazard"].items():
+                drives = [v[0] for k, v in a["sites"].items() if v[0] is not None and h in usable[k]]
+                self.assertEqual(d1, min(drives) if drives else None, (fips, h))
+                if d1 is not None:
+                    self.assertLessEqual(d2, d1, (fips, h))      # schools can only add options
+
+    def test_scenario_2_never_worse_and_counts_in_bundle(self):
+        counts = ba.outside_counts(SUMMARY)
+        self.assertEqual(len(counts), 20)
+        for (c, h), (n1, n2, total) in counts.items():
+            self.assertLessEqual(n2, n1, (c, h))
+            self.assertEqual(BUNDLE["access"]["outside_counts"][f"{c}|{h}"], [n1, n2, total])
 
     def test_facilities_in_bundle_match_summary(self):
         self.assertEqual(len(BUNDLE["facilities"]), len(SUMMARY["facilities"]))
@@ -315,7 +403,7 @@ class Browser(unittest.TestCase):
             self.assertTrue(r[name]["reached"], name)               # reachable with Tab
             self.assertEqual(r[name]["before"], [True, None], name)
             self.assertEqual(r[name]["after"], [False, "none"], name)   # Space hides the layer
-        self.assertIn("Outside 15-minute drive of any known site", r["outside"]["label"])
+        self.assertIn("No 2026 activated site within a 15-minute drive (normal traffic)", r["outside"]["label"])
         self.assertIn("Care facilities", r["care"]["label"])
 
     def test_panel_minutes_and_facilities_match_data(self):

@@ -23,6 +23,7 @@ Usage:  python3 scripts/build_access.py             (queries FEMA flood zones fo
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import sys
 from pathlib import Path
@@ -30,7 +31,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import fetch_arcgis as fa  # noqa: E402
 from fetch_flood_zones import is_sfha, query_point  # noqa: E402
-from geo import ZoneIndex  # noqa: E402
+from geo import ZoneIndex, haversine_km  # noqa: E402
+from hawaii_time import now_hst  # noqa: E402
 from model_needs import FLOOD, HAZARDS, site_status  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -42,6 +44,8 @@ DRIVE_LIMIT = 15                       # minutes
 TYPE_LABEL = {"dialysis": "Dialysis facility", "nursing_home": "Nursing home",
               "hospital": "Hospital"}
 SITE_STATUS_LABEL = {"confirmed": "Confirmed (2 sources)", "needs_review": "Needs review",
+                     "confirmed_doe_arcgis": "Confirmed (DOE + ArcGIS)",
+                     "confirmed_doe_census": "Confirmed (DOE + Census)",
                      "located_arcgis": "Located (ArcGIS)", "single_source": "1 source",
                      "not_located": "Not located"}
 SOURCE_TEXT = ("Site locations: U.S. Census Geocoder, checked against Esri ArcGIS World "
@@ -50,7 +54,18 @@ ATTRIBUTION = "Powered by Esri. Geocoding and routing: Esri ArcGIS Location Serv
 TIMES_NOTE = "normal traffic, not disaster conditions"
 NO_WALK = "no walk time: over 12 km"
 REQUIRED = ("geocode_sites.json", "geocode_facilities.json", "od_drive.json",
-            "od_walk_near.json", "cms_facilities.json")
+            "od_walk_near.json", "od_schools.json", "cms_facilities.json")
+DOE_CHECKS = ROOT / "data" / "sources" / "doe_school_checks.csv"
+DOE_FIELDS = ["site_key", "doe_school", "doe_address", "doe_lon", "doe_lat", "census_status",
+              "census_lon", "census_lat", "census_matched_address", "queried_at"]
+SCHOOLS_RAW = ROOT / "data" / "raw" / "schools.geojson"
+SITE_FLOOD_CACHE = RAW / "site_flood.json"
+REVIEW_DOC = ROOT / "docs" / "site_review.md"
+CONFIRM_M = fa.CONFIRM_M
+NO_ACTIVATED = "No 2026 activated site within a 15-minute drive (normal traffic)"
+NOT_NO_SHELTER = ("This is not a statement that the area has no shelter: counties designate "
+                  "and open shelters for each event, and many public buildings are not on "
+                  "the 2026 list.")
 WALK_KM = fa.WALK_KM
 
 
@@ -69,25 +84,151 @@ def r1(v) -> float | None:
 
 # ---------------------------------------------------------------- sites
 
-def site_checks(island_of) -> dict:
+def load_doe_checks(path: Path = DOE_CHECKS) -> dict:
+    if not path.exists():
+        return {}
+    with open(path, newline="", encoding="utf-8") as fh:
+        return {r["site_key"]: r for r in csv.DictReader(fh)}
+
+
+def doe_checks(offline: bool = False) -> dict:
+    """School sites (point from the DOE schools layer): the DOE street address, geocoded
+    with the free U.S. Census Geocoder, as an independent check of the DOE point. Cached in
+    data/sources/doe_school_checks.csv; offline runs read the cache only."""
+    from build_shelters import match_school
+    from geocode_shelters import census_lookup, to_query
+    cache = load_doe_checks()
+    schools = fa.load_json(SCHOOLS_RAW, {"features": []})["features"]
+    changed = False
+    for s in fa.load_sites():
+        if s["method"] != "doe_school_match" or s["key"] in cache or offline:
+            continue
+        f = match_school({"name": s["name"], "county": s["county"]}, schools)
+        if not f:
+            continue
+        p = f["properties"]
+        addr = f"{p['address']}, {p['city']}, HI {p['zip']}"
+        res = census_lookup(to_query(addr))
+        lon, lat = f["geometry"]["coordinates"][:2]
+        cache[s["key"]] = {"site_key": s["key"], "doe_school": p["sch_name"], "doe_address": addr,
+                           "doe_lon": round(lon, 6), "doe_lat": round(lat, 6),
+                           "census_status": res["status"], "census_lon": res.get("lon", ""),
+                           "census_lat": res.get("lat", ""),
+                           "census_matched_address": res.get("matched_address", ""),
+                           "queried_at": now_hst()}
+        changed = True
+    if changed:
+        with open(DOE_CHECKS, "w", newline="", encoding="utf-8") as fh:
+            w = csv.DictWriter(fh, fieldnames=DOE_FIELDS)
+            w.writeheader()
+            w.writerows(cache[k] for k in sorted(cache))
+    return cache
+
+
+def doe_status(site: dict, p: dict, doe: dict | None) -> dict:
+    """Third source for school sites. The site point IS the DOE point; it is confirmed by
+    ArcGIS (when the county release gave a street address, so ArcGIS had a real query) or
+    by the Census geocode of the DOE street address, whichever agrees within 300 m."""
+    if not doe:
+        return {}
+    d_arc = p.get("distance_m") if site["address"].strip() else None
+    d_cen = None
+    if doe.get("census_status") == "match":
+        d_cen = round(haversine_km(float(doe["doe_lon"]), float(doe["doe_lat"]),
+                                   float(doe["census_lon"]), float(doe["census_lat"])) * 1000)
+    out = {"doe_school": doe["doe_school"], "doe_address": doe["doe_address"],
+           "doe_census_distance_m": d_cen, "arcgis_query_valid": d_arc is not None}
+    if d_arc is not None and d_arc <= CONFIRM_M:
+        out["status"] = "confirmed_doe_arcgis"
+    elif d_cen is not None and d_cen <= CONFIRM_M:
+        out["status"] = "confirmed_doe_census"
+    return out
+
+
+def site_checks(island_of, offline: bool = False) -> dict:
     """Per site key: location check. A point placed earlier by ArcGIS itself is not a
     second source, so it is classified as if the Census point were missing."""
     sites = fa.load_sites()
     for s in sites:
         if s["method"] == "arcgis_world_geocoder":
             s["point"] = None
+    by_key = {s["key"]: s for s in sites}
     esri = fa.load_json(RAW / "geocode_sites.json", {})
+    doe = doe_checks(offline)
     out = {}
     for p in fa.site_points(sites, esri, island_of):
         e = p.get("esri") or {}
-        row = {"status": p["status"], "label": SITE_STATUS_LABEL[p["status"]],
-               "distance_m": p.get("distance_m"), "address": p["address"],
+        row = {"status": p["status"], "distance_m": p.get("distance_m"), "address": p["address"],
                "esri_score": e.get("score"), "esri_match_type": e.get("addr_type", "")}
+        if by_key[p["key"]]["method"] == "doe_school_match":
+            row.update(doe_status(by_key[p["key"]], p, doe.get(p["key"])))
+        row["label"] = SITE_STATUS_LABEL[row["status"]]
         if p["status"] == "located_arcgis":
             row.update(lon=round(p["lon"], 4), lat=round(p["lat"], 4), island=p["island"])
         if p.get("reason"):
             row["reason"] = p["reason"]
         out[p["key"]] = row
+    return out
+
+
+def footprints() -> dict:
+    """(county, hazard) -> Census areas in the hazard footprint (model_needs.py)."""
+    foot = {}
+    with open(fa.NEEDS_BY_TRACT, newline="", encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            foot.setdefault((r["county"], r["hazard"]), set()).add(r["tract_fips"])
+    return foot
+
+
+def site_reviews(checks: dict, offline: bool) -> dict:
+    """Non-school sites that need review: both candidate points and the hazard statuses
+    that would change between them. The current (Census or manual) point is kept."""
+    tsunami = ZoneIndex(fa.load_json(TSUNAMI, None))
+    tracts = ZoneIndex(fa.load_json(fa.AFN, None))
+    foot = footprints()
+    esri = fa.load_json(RAW / "geocode_sites.json", {})
+    geocodes = {}
+    with open(ROOT / "data" / "sources" / "geocodes.csv", newline="", encoding="utf-8") as fh:
+        geocodes = {r["address"].strip(): r for r in csv.DictReader(fh)}
+    shelters = {f["properties"]["name"] + "|" + f["properties"]["county"]: f
+                for f in fa.load_json(fa.SHELTERS, {"features": []})["features"]}
+    cache = fa.load_json(SITE_FLOOD_CACHE, {})
+    out = {}
+    try:
+        for key, c in checks.items():
+            if c["status"] != "needs_review":
+                continue
+            f = shelters[key]
+            prop, (lon, lat) = f["properties"], f["geometry"]["coordinates"][:2]
+            e = esri[key]
+            here = {**prop}
+            there = {"in_tsunami_zone": tsunami.contains(e["lon"], e["lat"]),
+                     "fld_zone": flood_zone(e["lon"], e["lat"], cache, offline),
+                     "tract_fips": ((tracts.find(e["lon"], e["lat"]) or {}).get("properties")
+                                    or {}).get("tract_fips", "")}
+            there["in_sfha"] = is_sfha(there["fld_zone"])
+            g = geocodes.get(prop["address"].strip(), {})
+            changes = {}
+            for h in HAZARDS:
+                fp = foot.get((prop["county"], h), set())
+                a, b = site_status(here, h, fp), site_status(there, h, fp)
+                if a[0] != b[0]:
+                    changes[h] = [a[0], b[0]]
+            out[key] = {
+                "distance_m": c["distance_m"],
+                "current": {"lon": round(lon, 6), "lat": round(lat, 6),
+                            "method": prop["location_method"],
+                            "matched_address": g.get("matched_address", ""),
+                            "in_tsunami_zone": bool(prop.get("in_tsunami_zone")),
+                            "fld_zone": prop.get("fld_zone")},
+                "arcgis": {"lon": round(e["lon"], 6), "lat": round(e["lat"], 6),
+                           "matched_address": e.get("match_addr", ""), "score": e.get("score"),
+                           "match_type": e.get("addr_type", ""),
+                           "in_tsunami_zone": there["in_tsunami_zone"],
+                           "fld_zone": there["fld_zone"]},
+                "status_changes": changes}
+    finally:
+        fa.save_json(SITE_FLOOD_CACHE, cache)
     return out
 
 
@@ -111,17 +252,45 @@ def parse_od(path: Path) -> dict:
     return out
 
 
-def area_times(origins: list) -> dict:
+def site_usable() -> dict:
+    """site key -> hazards the 2026 activated site is usable for (model_needs.site_status)."""
+    foot = footprints()
+    out = {}
+    for f in fa.load_json(fa.SHELTERS, {"features": []})["features"]:
+        p = f["properties"]
+        if f.get("geometry"):
+            out[f"{p['name']}|{p['county']}"] = [
+                h for h in HAZARDS if site_status(p, h, foot.get((p["county"], h), set()))[0] == "ok"]
+    return out
+
+
+def area_times(origins: list, island_of) -> dict:
+    """Per area: times to every activated site on the island, and per hazard the shortest
+    drive to (1) a 2026 activated site usable for it and (2) that or a DOE candidate school
+    usable for it (the 5 nearest per hazard by straight line)."""
     drive, walk = parse_od(RAW / "od_drive.json"), parse_od(RAW / "od_walk_near.json")
+    school_drive = parse_od(RAW / "od_schools.json")
+    usable = site_usable()
+    school_ok = {s["id"]: s["usable"] for s in fa.candidate_schools(island_of)}
     out = {}
     for o in origins:
         d = drive.get(o["id"], {})
         sites = {k: [r1(v[0]), r1(v[1]), r1(walk.get(o["id"], {}).get(k, [None])[0])]
                  for k, v in sorted(d.items())}
-        best = min((v[0] for v in sites.values() if v[0] is not None), default=None)
-        out[o["id"]] = {"island": o["island"], "sites": sites, "min_drive": best,
-                        "outside_15": best is None or best > DRIVE_LIMIT}
+        hz = {}
+        for h in HAZARDS:
+            a = min((v[0] for k, v in sites.items() if v[0] is not None and h in usable.get(k, [])),
+                    default=None)
+            b = min((v[0] for k, v in school_drive.get(o["id"], {}).items()
+                     if v[0] is not None and h in school_ok.get(k, [])), default=None)
+            both = min((x for x in (a, b) if x is not None), default=None)
+            hz[h] = [a, r1(both)]
+        out[o["id"]] = {"island": o["island"], "sites": sites, "drive_by_hazard": hz}
     return out
+
+
+def outside(v: float | None) -> bool:
+    return v is None or v > DRIVE_LIMIT
 
 
 # ---------------------------------------------------------------- care facilities
@@ -195,12 +364,16 @@ def summarize(offline: bool = False) -> dict | None:
                  "times_note": TIMES_NOTE, "no_walk": NO_WALK, "drive_limit_min": DRIVE_LIMIT,
                  "credits_total": fa.spent(led) if led["steps"] else None,
                  "service_areas": sa.get("note", ""),
-                 "outside_15_method": "Drive-time matrix: no known site within "
-                                      f"{DRIVE_LIMIT} minutes' drive on the same island.",
+                 "no_activated": NO_ACTIVATED, "not_no_shelter": NOT_NO_SHELTER,
+                 "outside_15_method": "Drive-time matrix, per hazard: shortest drive from "
+                                      "the area's land point to a 2026 activated site usable "
+                                      "for that hazard on the same island; scenario 2 adds "
+                                      "the 5 nearest DOE candidate schools usable for it.",
                  "redistribution": "Raw ArcGIS answers are not committed; this file holds "
                                    "rounded, derived summaries only."},
-        "sites": site_checks(island_of),
-        "areas": area_times(fa.populated_origins()),
+        "sites": (checks := site_checks(island_of, offline)),
+        "site_reviews": site_reviews(checks, offline),
+        "areas": area_times(fa.populated_origins(), island_of),
         "facilities": facilities(island_of, offline),
     }
 
@@ -217,24 +390,83 @@ def located_points(path: Path = OUT) -> dict:
             for v in s.get("sites", {}).values() if v["status"] == "located_arcgis"}
 
 
+def area_counties() -> dict:
+    with open(fa.ISLANDS, newline="", encoding="utf-8") as fh:
+        return {r["id"]: r["county"] for r in csv.DictReader(fh) if r["kind"] == "area"}
+
+
+def outside_counts(s: dict, counties: dict | None = None) -> dict:
+    """(county, hazard) -> [areas outside scenario 1, outside scenario 2, populated areas]."""
+    counties = counties or area_counties()
+    out = {}
+    for a, v in s["areas"].items():
+        for h, (d1, d2) in v["drive_by_hazard"].items():
+            row = out.setdefault((counties.get(a, "?"), h), [0, 0, 0])
+            row[0] += outside(d1)
+            row[1] += outside(d2)
+            row[2] += 1
+    return out
+
+
 def report(s: dict) -> str:
     from collections import Counter
     st = Counter(v["status"] for v in s["sites"].values())
     out = [f"sites: {dict(st)}"]
     for k, v in s["sites"].items():
-        if v["status"] == "needs_review":
-            out.append(f"  needs review: {k} ({v['distance_m']} m apart)")
-    by = Counter()
-    county = {r["id"]: r["county"] for r in __import__("csv").DictReader(
-        open(fa.ISLANDS, encoding="utf-8")) if r["kind"] == "area"}
-    for a, v in s["areas"].items():
-        if v["outside_15"]:
-            by[county.get(a, "?")] += 1
-    out.append(f"areas outside a {DRIVE_LIMIT}-minute drive: {dict(by)} of {len(s['areas'])}")
+        if v["status"] in ("needs_review", "confirmed_doe_census"):
+            out.append(f"  {v['label']}: {k} (ArcGIS {v['distance_m']} m"
+                       + (f"; DOE vs Census {v['doe_census_distance_m']} m" if "doe_school" in v else "")
+                       + ")")
+    for k, r in s["site_reviews"].items():
+        out.append(f"  review {k}: status changes if moved to ArcGIS point: {r['status_changes'] or 'none'}")
+    out.append(f"areas outside a {DRIVE_LIMIT}-minute drive (activated / + candidate schools / areas):")
+    for (c, h), v in sorted(outside_counts(s).items()):
+        out.append(f"  {c:<9} {h:<14} {v[0]:>4} / {v[1]:>4} / {v[2]:>4}")
     fz = Counter((f["county"], h) for f in s["facilities"] for h, z in f["zones"].items() if z)
     out.append(f"facilities: {len(s['facilities'])}; in hazard zones: "
                + ", ".join(f"{c} {h} {n}" for (c, h), n in sorted(fz.items())))
     return "\n".join(out)
+
+
+STATUS_WORDS = {"ok": "usable", "exclude": "excluded (tsunami zone)", "check": "check flood zone",
+                "check (tract-level)": "check flood zone (tract level)",
+                "undetermined": "flood risk not mapped (zone D)"}
+
+
+def review_doc(s: dict) -> str:
+    """docs/site_review.md: the non-school sites whose two points are > 300 m apart."""
+    def zone(p):
+        return (("inside" if p["in_tsunami_zone"] else "outside") + " tsunami evacuation zone; "
+                f"FEMA flood zone {p['fld_zone'] or 'not available'}")
+    lines = ["# Shelter sites to review: two candidate points", "",
+             "Generated by `scripts/build_access.py` from `data/sources/arcgis_summary.json`. "
+             "For each site the county address was located twice: by the U.S. Census Geocoder "
+             "(or by hand, where noted) and by the Esri ArcGIS World Geocoder. The two points "
+             "are more than 300 m apart. **The current point is kept until the team confirms "
+             "the right one.** Hazard statuses use the same rules as the plan (tsunami "
+             "evacuation zone; FEMA flood zone, State DFIRM).", ""]
+    method = {"census_onelineaddress": "U.S. Census Geocoder", "manual": "entered by hand",
+              "doe_school_match": "DOE schools layer"}
+    for key, r in sorted(s["site_reviews"].items()):
+        cur, arc = r["current"], r["arcgis"]
+        name, county = key.split("|")
+        lines += [f"## {name} ({county})", "",
+                  f"Address in the county release: {s['sites'][key]['address']}. "
+                  f"Distance between the two points: **{r['distance_m']:,} m**.", "",
+                  "| | Current point (kept) | ArcGIS point |", "|---|---|---|",
+                  f"| Source | {method.get(cur['method'], cur['method'])} | Esri ArcGIS World Geocoder |",
+                  f"| Latitude, longitude | {cur['lat']}, {cur['lon']} | {arc['lat']}, {arc['lon']} |",
+                  f"| Matched address | {cur['matched_address'] or '–'} | {arc['matched_address']} |",
+                  f"| Score / match type | – (Census Geocoder gives no score) | {arc['score']} / {arc['match_type']} |",
+                  f"| Zones | {zone(cur)} | {zone(arc)} |", ""]
+        if r["status_changes"]:
+            lines.append("**Hazard statuses that would change if the ArcGIS point were used:**")
+            lines += [f"- {h.replace('_', ' ')}: {STATUS_WORDS.get(a, a)} → {STATUS_WORDS.get(b, b)}"
+                      for h, (a, b) in r["status_changes"].items()]
+        else:
+            lines.append("No hazard status would change between the two points.")
+        lines.append("")
+    return "\n".join(lines)
 
 
 def main(argv=None) -> int:
@@ -247,6 +479,7 @@ def main(argv=None) -> int:
               + (f"keeping {OUT.relative_to(ROOT)}" if OUT.exists() else
                  "no summary; app and PDFs use straight-line distances"))
         return 0
+    REVIEW_DOC.write_text(review_doc(s), encoding="utf-8")
     OUT.write_text(json.dumps(s, ensure_ascii=False, indent=1, sort_keys=True) + "\n",
                    encoding="utf-8")
     print(f"Wrote {OUT.relative_to(ROOT)} ({OUT.stat().st_size / 1024:.0f} KB)")

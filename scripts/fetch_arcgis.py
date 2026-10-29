@@ -13,6 +13,8 @@ Steps (paid steps print an estimate first and stop if the run would pass the bud
   3  od_walk_near        walking time, per site, for areas within 12 km (straight line); the
                          first island-wide walk run (od_walk) returned no times: walking mode
                          rejects inputs more than 27 miles apart
+  3b od_schools          driving time, per Census area, to the 5 nearest DOE candidate schools
+                         usable for each hazard on the same island (straight-line pre-filter)
   4  service_areas       15-minute drive polygon per located site, only if the budget allows
 
 Token: environment variable ARCGIS_TOKEN only (a temporary OAuth app token). It is sent in
@@ -83,7 +85,11 @@ OD_CHUNK = 50                     # origins per request: the service allows at m
                                   # (pairs, and credits, are unchanged by chunking)
 WALK_KM = 12                      # walk times only for areas within 12 km (straight line) of a
                                   # site; walking mode rejects inputs > 27 miles (43 km) apart
-STEPS = ["geocode_sites", "geocode_facilities", "od_drive", "od_walk_near", "service_areas"]
+SCHOOLS_K = 5                     # nearest candidate schools per hazard (straight line)
+CANDIDATES = ROOT / "data" / "processed" / "candidates.geojson"
+NEEDS_BY_TRACT = ROOT / "data" / "processed" / "needs_by_tract.csv"
+STEPS = ["geocode_sites", "geocode_facilities", "od_drive", "od_walk_near", "od_schools",
+         "service_areas"]
 
 
 class TokenExpired(Exception):
@@ -403,11 +409,53 @@ def walk_jobs(origins: list, dests: dict) -> list:
     return jobs
 
 
+def candidate_schools(island_of) -> list:
+    """DOE candidate schools with island and the hazards each is usable for (the same
+    rule as model_needs.usable_sites: tsunami -> outside the evacuation zone; others ->
+    site_status 'ok' with the county's footprint)."""
+    from model_needs import HAZARDS, site_status
+    foot = {}
+    with open(NEEDS_BY_TRACT, newline="", encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            foot.setdefault((r["county"], r["hazard"]), set()).add(r["tract_fips"])
+    out = []
+    for f in load_json(CANDIDATES, {"features": []})["features"]:
+        g, p = f.get("geometry"), f["properties"]
+        if not g:
+            continue
+        lon, lat = g["coordinates"][:2]
+        ok = [h for h in HAZARDS if (not p.get("hazard_excluded") if h == "tsunami" else
+              site_status(p, h, foot.get((p["county"], h), set()))[0] == "ok")]
+        out.append({"id": p["id"], "name": p["name"], "county": p["county"], "lon": lon,
+                    "lat": lat, "island": island_of(lon, lat), "usable": ok})
+    return out
+
+
+def school_jobs(origins: list, schools: list) -> list:
+    """[(area id, [area], schools)]: per area, the SCHOOLS_K nearest (straight line)
+    candidate schools usable for each hazard on the same island, as one set."""
+    from model_needs import HAZARDS
+    jobs = []
+    for o in origins:
+        same = [s for s in schools if s["island"] == o["island"]]
+        pick = {}
+        for h in HAZARDS:
+            ranked = sorted((s for s in same if h in s["usable"]),
+                            key=lambda s: (haversine_km(o["lon"], o["lat"], s["lon"], s["lat"]), s["id"]))
+            for s in ranked[:SCHOOLS_K]:
+                pick[s["id"]] = s
+        if pick:
+            jobs.append((o["id"], [o], [pick[k] for k in sorted(pick)]))
+    return jobs
+
+
 def run_od(step: str, mode_name: str, time_attr: str, origins: list, dests: dict,
            token: str, led: dict) -> dict:
     path = RAW / f"{step}.json"
     out = load_json(path, {"mode": mode_name, "results": {}})
-    plan = walk_jobs(origins, dests) if step == "od_walk_near" else od_pairs(origins, dests)
+    plan = (walk_jobs(origins, dests) if step == "od_walk_near" else
+            school_jobs(origins, dests["_schools"]) if step == "od_schools" else
+            od_pairs(origins, dests))
     jobs = [j for j in plan if f"{j[0]}|{j[1][0]['id']}" not in out["results"]]
     if not jobs:
         print(f"[skip] {step}: all requests already done")
@@ -489,14 +537,17 @@ def site_points(sites: list, esri_cache: dict, island_of) -> list:
     return out
 
 
-def plan_counts(sites: list, facilities: list, origins: list, located: list) -> dict:
+def plan_counts(sites: list, facilities: list, origins: list, located: list,
+                island_of=lambda x, y: "") -> dict:
     dests = {}
     for s in located:
         dests.setdefault(s["island"], []).append(s)
     pairs = sum(len(o) * len(d) for _i, o, d in od_pairs(origins, dests))
     walk = sum(len(o) for _i, o, _d in walk_jobs(origins, dests))
+    schools = sum(len(d) for _i, _o, d in school_jobs(origins, candidate_schools(island_of)))
     return {"geocode_sites": len(sites), "geocode_facilities": len(facilities),
-            "od_drive": pairs, "od_walk_near": walk, "service_areas": len(located)}
+            "od_drive": pairs, "od_walk_near": walk, "od_schools": schools,
+            "service_areas": len(located)}
 
 
 def main(argv=None) -> int:
@@ -516,11 +567,11 @@ def main(argv=None) -> int:
     # Before step 1a, plan with existing points + Pukalani if it gets located
     located = [{"id": p["key"], "lon": p["lon"], "lat": p["lat"], "island": p["island"]}
                for p in pts if p["lon"] is not None and p["island"]]
-    counts = plan_counts(sites, facilities, origins, located)
+    counts = plan_counts(sites, facilities, origins, located, island_of)
     led = ledger()
     print("Planned units:", json.dumps(counts))
     total = (counts["geocode_sites"] + counts["geocode_facilities"]) * RATE["geocode"] \
-        + (counts["od_drive"] + counts["od_walk_near"]) * RATE["od_pair"] + counts["service_areas"] * RATE["service_area"]
+        + (counts["od_drive"] + counts["od_walk_near"] + counts["od_schools"]) * RATE["od_pair"] + counts["service_areas"] * RATE["service_area"]
     print(f"Full plan estimate: {round(total, 3)} credits (budget {BUDGET}); "
           f"already spent {spent(led)}")
     if args.estimate:
@@ -551,6 +602,9 @@ def main(argv=None) -> int:
             run_od("od_drive", "Driving Time", "TravelTime", origins, dests, token, led)
         if "od_walk_near" in steps:
             run_od("od_walk_near", "Walking Time", "WalkTime", origins, dests, token, led)
+        if "od_schools" in steps:
+            run_od("od_schools", "Driving Time", "TravelTime", origins,
+                   {"_schools": candidate_schools(island_of)}, token, led)
         if "service_areas" in steps:
             need = len([s for s in located
                         if s["id"] not in load_json(RAW / "service_areas.json",

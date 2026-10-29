@@ -41,6 +41,16 @@
    "units_billed": 2981,
    "updated": "2026-10-29T07:14:59Z"
   },
+  "od_schools": {
+   "actual_method": "billed units returned by the service x published rate",
+   "credits_actual": 1.3785,
+   "credits_estimate": 1.3785,
+   "note": "",
+   "rate": 0.0005,
+   "unit": "OD pairs",
+   "units_billed": 2757,
+   "updated": "2026-10-29T07:41:35Z"
+  },
   "od_walk": {
    "actual_method": "billed units returned by the service x published rate",
    "credits_actual": 1.4905,
@@ -71,5 +81,5 @@
    "updated": "2026-10-29T07:09:35Z"
   }
  },
- "total_credits_actual": 8.7005
+ "total_credits_actual": 10.079
 }

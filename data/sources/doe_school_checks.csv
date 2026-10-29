@@ -1,0 +1,10 @@
+site_key,doe_school,doe_address,doe_lon,doe_lat,census_status,census_lon,census_lat,census_matched_address,queried_at
+Baldwin High School|Maui,Baldwin High,"1650 Kaahumanu Avenue, Wailuku, HI 96793",-156.491261,20.888912,no_match,,,,2026-10-28T21:43:11-10:00
+Hāna High & Elementary School Cafeteria|Maui,Hana High and Elementary,"4111 Hana Highway, Hana, HI 96713",-156.0005,20.775614,match,-156.001525,20.776889,"4111 HANA HWY, HANA, HI, 96713",2026-10-28T21:43:12-10:00
+Kahuku Elementary School|Honolulu,Kahuku Elementary,"56-170 Pualalea Street, Kahuku, HI 96731",-157.95174,21.674808,match,-157.95185,21.67593,"56-170 PUALALEA ST, KAHUKU, HI, 96731",2026-10-28T21:43:07-10:00
+Kapaʻa Middle School|Kauai,Kapaa Middle,"4867 Olohena Road, Kapaa, HI 96746",-159.327731,22.079339,match,-159.32991,22.080608,"4867 OLOHENA RD, KAPAA, HI, 96746",2026-10-28T21:43:09-10:00
+Kauaʻi High School Gym|Kauai,Kauai High,"3577 Lala Road, Lihue, HI 96766",-159.358553,21.959662,match,-159.358308,21.959822,"3577 LALA RD, LIHUE, HI, 96766",2026-10-28T21:43:10-10:00
+Nānākuli Elementary School|Honolulu,Nanakuli Elementary,"89-778 Haleakala Avenue, Waianae, HI 96792",-158.13662,21.387288,match,-158.136085,21.388269,"89-778 HALEAKALA AVE, WAIANAE, HI, 96792",2026-10-28T21:43:08-10:00
+Nānākuli High and Intermediate School|Honolulu,Nanakuli High and Intermediate,"89-980 Nanakuli Avenue, Waianae, HI 96792",-158.131021,21.386522,match,-158.131542,21.386073,"89-980 NANAKULI AVE, WAIANAE, HI, 96792",2026-10-28T21:43:08-10:00
+Nāʻālehu Elementary School Gym|Hawaii,Naalehu Elementary,"95-5545 Mamalahoa Highway, Naalehu, HI 96772",-155.579922,19.062117,match,-155.58102,19.061735,"95-5545 MAMALAHOA HWY, NAALEHU, HI, 96772",2026-10-28T21:43:06-10:00
+Waimea Canyon Middle School|Kauai,Waimea Canyon Middle,"9555 Huakai Road, Waimea, HI 96796",-159.672494,21.960129,match,-159.671562,21.959708,"9555 HUAKAI RD, WAIMEA, HI, 96796",2026-10-28T21:43:11-10:00

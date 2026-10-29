@@ -191,3 +191,4 @@ button.linklike { min-height: 44px; padding: var(--space-1) 0; border: 0; backgr
 .layers .check { display: inline-flex; align-items: center; gap: var(--space-1); min-height: 44px; }
 .layers input[type="checkbox"] { width: 24px; height: 24px; margin: 0; }
 .legend-glyph { display: inline-block; width: 28px; text-align: center; font-weight: 700; }
+.layer-note { flex-basis: 100%; margin: 0 0 var(--space-1); font-size: var(--font-size-small); }

@@ -530,6 +530,16 @@ def map_html(inp: dict, county: str, hazard: str, sites: list) -> str:
     key = "".join(f'<li><b>{s["n"]}</b> = {escape(s["name"])} '
                   f'({escape(SITE_KEY_STATUS.get(s["status"], s["status"]))})</li>'
                   for s in sites)
+    access = inp.get("access")
+    drive = ""
+    if access:
+        n1, n2, total = build_access.outside_counts(access).get((county, hazard), [0, 0, 0])
+        drive = (f'<p><b>{escape(build_access.NO_ACTIVATED)}</b>, for sites usable for '
+                 f'{escape(HAZARD_LABEL[hazard].lower())}: {n1} of {total} populated Census areas. '
+                 f'With DOE candidate schools usable for this hazard: {n2} of {total}. '
+                 f'{escape(build_access.NOT_NO_SHELTER)}</p>'
+                 f'<p class="src">{escape(access["meta"]["outside_15_method"])} '
+                 f'{escape(src_text("access"))}</p>')
     return (f'<h2 class="page">3. Map: people with needs and known sites</h2>'
             f'<div class="mapwrap"><div class="map">{svg}</div>'
             f'<div><h3>Site key</h3><ol class="sitekey">{key}</ol></div></div>'
@@ -538,7 +548,7 @@ def map_html(inp: dict, county: str, hazard: str, sites: list) -> str:
             'power-dependent medical equipment, have a disability, or live without a car '
             '(a person can be counted more than once). No street map: Census area outlines '
             'only.</p>'
-            f'<p class="src">{escape(src_text("people"))}</p>')
+            f'<p class="src">{escape(src_text("people"))}</p>' + drive)
 
 
 def sites_html(sites: list, sc: dict, access: dict | None = None) -> str:

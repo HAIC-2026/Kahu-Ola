@@ -232,7 +232,9 @@ function renderMap(county, sc, sites, title, hazard) {
   }
   // Census areas with no known site within a 15-minute drive (ArcGIS drive-time matrix)
   const access = hasAccess();
-  const outside = access ? tracts.filter((tr) => tr.o === 1) : [];
+  const outside = access ? tracts.filter((tr) => tr.o && tr.o[hazard]) : [];
+  const hzLow = (Object.fromEntries(DATA.hazards)[hazard] || hazard).toLowerCase();
+  const counts = access ? (DATA.access.outside_counts[`${county}|${hazard}`] || [0, 0, 0]) : [0, 0, 0];
   const outsideLayer = svg("path", { d: outside.map((tr) => tr.g.map(ringPath).join(" ")).join(" "),
     fill: "url(#outside-hatch)", "fill-opacity": "0.7", stroke: "none", "pointer-events": "none", class: "layer-outside" });
   if (outside.length) root.append(outsideLayer);
@@ -295,7 +297,7 @@ function renderMap(county, sc, sites, title, hazard) {
     const sw = svg("svg", { width: 28, height: 16, "aria-hidden": "true" });
     const p3 = svg("defs"); const pat = hatch2.cloneNode(true); pat.setAttribute("id", "outside-hatch-key"); p3.append(pat); sw.append(p3);
     sw.append(svg("rect", { width: 28, height: 16, fill: "url(#outside-hatch-key)", stroke: "#000" }));
-    legend.append(el("li", null, sw, `Horizontal lines: outside a ${DATA.access.limit}-minute drive of any known site`));
+    legend.append(el("li", null, sw, `Horizontal lines: ${DATA.access.no_activated.toLowerCase()} – sites usable for ${hzLow}`));
   }
   for (const [shape, label] of Object.values(FACILITY)) {
     if (!facilities.length) break;
@@ -337,7 +339,8 @@ function renderMap(county, sc, sites, title, hazard) {
     return el("label", { for: id, class: "check" }, box, ` ${label} (${fmt(count)})`);
   };
   const layers = access ? el("fieldset", { class: "layers" }, el("legend", null, "Map layers"),
-    layerBox("outside", `Outside ${DATA.access.limit}-minute drive of any known site`, outsideLayer, outside.length),
+    layerBox("outside", `${DATA.access.no_activated} – sites usable for ${hzLow}`, outsideLayer, outside.length),
+    el("p", { class: "layer-note", id: "scenario-note" }, `With DOE candidate schools usable for ${hzLow}: ${fmt(counts[1])} of ${fmt(counts[2])} areas (2026 activated sites only: ${fmt(counts[0])}). ${DATA.access.not_no_shelter}`),
     layerBox("care", "Care facilities", careLayer, facilities.length)) : null;
   return [el("p", null, official), layers,
     el("div", { class: "mapwrap" }, el("div", { class: "map" }, root),
@@ -499,7 +502,8 @@ function openArea(f, opener) {
           ? table(`Same island only; straight-line distance from the area's center`, ["#", "Site", "Distance"],
             near.map(({ s, km }) => [s.n, s.name, `${km.toFixed(1)} km straight-line, same island`]), [0, 2])
           : el("p", { class: "note", id: "nearest-none" }, DATA.meta.no_island_site),
-    tr.o === 1 && tr.i !== "Niʻihau" ? el("p", { class: "note", id: "outside-drive" }, `No known site within a ${DATA.access.limit}-minute drive of this area (any hazard status).`) : null,
+    tr.o && tr.o[hazard] && tr.i !== "Niʻihau" ? el("p", { class: "note", id: "outside-drive" },
+      `${DATA.access.no_activated}, for ${hz.toLowerCase()}. With DOE candidate schools: ${tr.o[hazard] === 1 ? `a candidate school usable for ${hz.toLowerCase()} is within ${DATA.access.limit} minutes` : `still none within ${DATA.access.limit} minutes`}. ${DATA.access.not_no_shelter}`) : null,
     near.length && near[0].drive !== undefined ? el("p", { class: "src" }, `${DATA.access.source} ${DATA.access.attribution}`) : null,
     careInArea(f, hazard),
     el("p", null, el("strong", null, "Proposed partners: "), `lead – ${[...lead].join(", ") || "—"}; support – ${[...support].join(", ") || "—"}. `, DATA.meta.role_status),

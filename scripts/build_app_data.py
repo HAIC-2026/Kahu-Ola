@@ -119,14 +119,17 @@ ACCESS = build_access.load()          # data/sources/arcgis_summary.json, or Non
 
 def area_access(fips: str, site_ids: dict, access: dict | None) -> dict:
     """Per Census area: "a" = [[site id, drive min, drive km, walk min]] to every known site
-    on the same island, nearest drive first; "o" = 1 when no known site is within a
-    15-minute drive. Empty without the ArcGIS summary (straight-line fallback)."""
+    on the same island, nearest drive first; "o" = {hazard: 1 or 2} when no 2026 activated
+    site usable for that hazard is within a 15-minute drive (2: no DOE candidate school
+    either). Empty without the ArcGIS summary (straight-line fallback)."""
     a = (access or {}).get("areas", {}).get(fips)
     if not a:
         return {}
     rows = sorted(([site_ids[k], *v] for k, v in a["sites"].items() if k in site_ids),
                   key=lambda r: (r[1] is None, r[1] or 0, r[0]))
-    return {"a": rows, "o": int(a["outside_15"])}
+    o = {h: build_access.outside(d1) + build_access.outside(d2)
+         for h, (d1, d2) in a["drive_by_hazard"].items() if build_access.outside(d1)}
+    return {"a": rows, **({"o": o} if o else {})}
 
 
 def facilities_bundle(access: dict | None) -> list:
@@ -144,6 +147,9 @@ def access_meta(access: dict | None) -> dict:
     return {"source": m["source_text"], "attribution": m["attribution"],
             "times_note": m["times_note"], "no_walk": m["no_walk"], "limit": m["drive_limit_min"],
             "outside_method": m["outside_15_method"], "types": build_access.TYPE_LABEL,
+            "no_activated": m["no_activated"], "not_no_shelter": m["not_no_shelter"],
+            "outside_counts": {f"{c}|{h}": v for (c, h), v in
+                               sorted(build_access.outside_counts(access).items())},
             "no_screen": NO_FACILITY_SCREEN, "zone_d": FACILITY_ZONE_D}
 
 
