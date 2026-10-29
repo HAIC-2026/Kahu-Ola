@@ -300,7 +300,7 @@ def build(inp: dict) -> dict:
         "reach": reach(inp),
         "county_lines": [{**r, "label": COUNTY_LINE_LABEL.get(r["line"], r["line"]),
                           "value": int(r["value"])} for r in inp["county_lines"]],
-        "results": results_data(),
+        "results": app_results(),
         "tsunami_zone": tsunami_overlay(),
         "area_fields": [k for k, _s in AREA_FIELDS],
         "official_map": OFFICIAL_MAP,
@@ -310,6 +310,15 @@ def build(inp: dict) -> dict:
     body = json.dumps(bundle, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
     bundle["meta"]["version"] = hashlib.sha256(body.encode()).hexdigest()[:12]
     return bundle
+
+
+def app_results() -> dict:
+    """Results shown in the app: Coverage and Backtest. The rebuild time and its baseline
+    are quoted in PLAN.md §6 only, so they are not shipped in the bundle."""
+    r = results_data()
+    r = {k: v for k, v in r.items() if k not in ("rebuild", "baseline")}
+    r["sources"] = {k: v for k, v in r["sources"].items() if k not in ("rebuild", "baseline")}
+    return r
 
 
 def reach(inp: dict) -> dict:

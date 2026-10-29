@@ -3,10 +3,10 @@
 HAIC 2026 – Team Kahu Ola – time a full rebuild from local data (metric 3).
 
 Runs every offline build step in order, times the whole run, and writes
-data/processed/rebuild_timing.json (seconds, steps, machine, Hawaiʻi date). The app's
-Results section, the PDF playbooks and PLAN.md read the number from that file. Then
-rebuilds the playbooks and the app bundle once more (not timed), so the PDFs and the app
-show the same, newly recorded value.
+data/processed/rebuild_timing.json (seconds, steps, machine, Hawaiʻi date). PLAN.md §6
+(metric 3) quotes the number; the app and the PDFs no longer show it. Then rebuilds the
+playbooks and the app bundle once more (not timed), so the bundle's results data match the
+newly recorded file.
 
 Usage:  python3 scripts/time_rebuild.py
 """
@@ -58,7 +58,7 @@ def main() -> int:
         "machine": machine(), "measured_at": now_hst(),
         "note": "Full rebuild from local data (no downloads), all build steps in order.",
     }, indent=1) + "\n", encoding="utf-8")
-    for script in ("build_playbooks.py", "build_app_data.py"):     # same value in PDFs and app
+    for script in ("build_playbooks.py", "build_app_data.py"):     # bundle results match the file
         subprocess.run([sys.executable, str(ROOT / "scripts" / script)], check=True,
                        stdout=subprocess.DEVNULL)
     print(f"Full rebuild: {secs} s, {len(STEPS)} steps, on {machine()} -> {OUT.relative_to(ROOT)}")

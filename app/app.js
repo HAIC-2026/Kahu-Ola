@@ -870,7 +870,7 @@ function renderPlan() {
 
 /* ---------- results: every number read from data files at build time ---------- */
 function resultsSection() {
-  const r = DATA.results, b = r.backtest[0], t = r.rebuild, base = r.baseline;
+  const r = DATA.results, b = r.backtest[0];
   const items = [
     el("li", null, el("strong", null, "Coverage: "),
       `${fmt(r.with_cmist)} of ${fmt(r.tracts)} Census areas have needs data (FEMA risk data joined for ${fmt(r.with_nri)} of ${fmt(r.tracts)}). `,
@@ -879,9 +879,6 @@ function resultsSection() {
       `observed ${fmt(+b.observed)} people in shelters; model ${fmt(+b.model_low)} / ${fmt(+b.model_central)} / ${fmt(+b.model_high)} (low / likely / high). `,
       b.calibration_event === "True" ? "This is a calibration event, not validation: the high rate was set from it. " : "",
       el("small", null, `Source: ${r.sources.backtest}`)) : null,
-    t ? el("li", null, el("strong", null, "Time: "),
-      `a full rebuild from local data (${fmt(t.steps)} steps, ${fmt(t.scenarios)} scenarios, ${fmt(t.playbooks)} playbooks) took ${t.seconds} seconds on ${t.machine} (${t.measured_at.slice(0, 10)}). Team-assumed baseline without this tool: ${base.value} ${base.unit}. `,
-      el("small", null, `Sources: ${r.sources.rebuild}; ${r.sources.baseline} (${base.source})`)) : null,
   ];
   return [el("h2", { id: "results" }, "Results"), el("ul", { class: "results" }, items)];
 }

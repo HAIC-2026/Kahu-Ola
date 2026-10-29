@@ -175,12 +175,10 @@ class Results(unittest.TestCase):
         with open(PROC / "backtest.csv", newline="", encoding="utf-8") as fh:
             bt = next(csv.DictReader(fh))
         self.assertEqual(r["backtest"][0]["observed"], bt["observed"])
-        timing = json.loads((PROC / "rebuild_timing.json").read_text(encoding="utf-8"))
-        self.assertEqual(r["rebuild"]["seconds"], timing["seconds"])
-        base = json.loads((ROOT / "config" / "results.json").read_text(encoding="utf-8"))
-        self.assertEqual((r["baseline"]["value"], r["baseline"]["unit"]),
-                         (base["time_baseline"]["value"], base["time_baseline"]["unit"]))
-        self.assertNotIn("PLAN.md", r["baseline"]["source"])
+        # the rebuild time and its baseline are quoted in PLAN.md §6, not shipped in the app
+        self.assertNotIn("rebuild", r)
+        self.assertNotIn("baseline", r)
+        self.assertEqual(set(r["sources"]), {"coverage", "backtest"})
         self.assertIn("function resultsSection()", JS)
         self.assertIn("calibration event, not validation", JS)
 

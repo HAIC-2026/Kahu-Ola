@@ -800,14 +800,6 @@ def results_html(r: dict) -> str:
             + ("This is a calibration event, not validation: the high rate was set from it. "
                if b["calibration_event"] == "True" else "")
             + f'<small>Source: {escape(r["sources"]["backtest"])}.</small></li>')
-    t, base = r["rebuild"], r["baseline"]
-    if t:
-        items.append(
-            f'<li><b>Time:</b> a full rebuild from local data ({n(t["steps"])} steps, '
-            f'{n(t["scenarios"])} scenarios, {n(t["playbooks"])} playbooks) took {t["seconds"]} '
-            f'seconds on {escape(t["machine"])} ({escape(t["measured_at"][:10])}). Team-assumed '
-            f'baseline without this tool: {base["value"]} {escape(base["unit"])}. '
-            f'<small>Sources: {escape(r["sources"]["rebuild"])}; {escape(base["source"])}.</small></li>')
     return '<h2 class="page">9. Results</h2><ul class="results">' + "".join(items) + "</ul>"
 
 

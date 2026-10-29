@@ -127,24 +127,27 @@ class DecisionRows(unittest.TestCase):
             self.assertIn("calibration event, not validation", text, pdf.name)
 
 
-class SameRebuildTime(unittest.TestCase):
+class ResultsWithoutTime(unittest.TestCase):
     @unittest.skipUnless(shutil.which("pdftotext"), "pdftotext not installed")
-    def test_app_and_every_pdf_show_the_same_rebuild_time(self):
-        import json
-        bundle = json.loads((APP / "data" / "bundle.json").read_text(encoding="utf-8"))
-        timing = json.loads((ROOT / "data" / "processed" / "rebuild_timing.json")
-                            .read_text(encoding="utf-8"))
-        r = bundle["results"]["rebuild"]
-        self.assertEqual((r["seconds"], r["measured_at"]), (timing["seconds"], timing["measured_at"]))
-        want = f"took {r['seconds']} seconds on {r['machine']} ({r['measured_at'][:10]})"
+    def test_results_show_coverage_and_backtest_not_time(self):
+        """Results: Coverage and Backtest only. The rebuild time stays in PLAN.md §6."""
         pdfs = sorted((ROOT / "playbooks").glob("*.pdf"))
         self.assertEqual(len(pdfs), 20)
         for pdf in pdfs:
             text = " ".join(subprocess.run(["pdftotext", str(pdf), "-"], capture_output=True,
                                            text=True, check=True).stdout.split())
-            self.assertIn(want, text, pdf.name)
-        self.assertIn("took ${t.seconds} seconds on ${t.machine} (${t.measured_at.slice(0, 10)})",
-                      (APP / "app.js").read_text(encoding="utf-8"))
+            results = text.split("9. Results", 1)[1]
+            self.assertIn("Coverage:", results, pdf.name)
+            self.assertIn("Backtest –", results, pdf.name)
+            self.assertNotIn("Time:", results, pdf.name)
+            self.assertNotIn("full rebuild from local data", results, pdf.name)
+            self.assertNotIn("Team-assumed baseline", results, pdf.name)
+        js = (APP / "app.js").read_text(encoding="utf-8")
+        section = js.split("function resultsSection()", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn('"Coverage: "', section)
+        self.assertIn("Backtest", section)
+        self.assertNotIn("Time", section)
+        self.assertNotIn("r.rebuild", section)
 
 
 class CssMobile(unittest.TestCase):
