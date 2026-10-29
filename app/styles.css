@@ -207,5 +207,5 @@ button.linklike { min-height: 44px; padding: var(--space-1) 0; border: 0; backgr
 @media (max-width: 480px) {
   .controls { display: grid; grid-template-columns: max-content minmax(0, 1fr); }
   .controls select { width: 100%; }
-  .controls .hint { grid-column: 1 / -1; }
+  .controls .hint, .controls .check { grid-column: 1 / -1; }   /* full-width rows (Messages filters too) */
 }
