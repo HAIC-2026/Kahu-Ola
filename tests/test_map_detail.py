@@ -174,7 +174,7 @@ class Overlay(unittest.TestCase):
         self.assertEqual(set(zone), {"Honolulu", "Hawaii", "Maui", "Kauai"})
         size = len(json.dumps(zone, separators=(",", ":")))
         self.assertLess(size, 150_000)
-        self.assertLess((APP / "data" / "bundle.json").stat().st_size, 782_422 + 150 * 1024)
+        self.assertLess((APP / "data" / "bundle.json").stat().st_size, 782_422 + 150 * 1024 + 100 * 1024)
         self.assertIn('hazard === "tsunami" ? (DATA.tsunami_zone[county] || []) : []', JS)
 
     def test_official_map_is_a_plain_link(self):

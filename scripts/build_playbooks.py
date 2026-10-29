@@ -37,6 +37,7 @@ from message_library import LANG_LABEL  # noqa: E402
 from hawaii_time import hst_date  # noqa: E402
 from model_needs import FLOOD, HAZARDS, site_status  # noqa: E402
 import build_access  # noqa: E402
+import build_state_layers as bsl  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 PROC = ROOT / "data" / "processed"
@@ -91,7 +92,8 @@ WHO_ELSE = [
      "The county publishes who may use shelters; trusted community messengers share it."),
 ]
 COUNTY_LINE_LABEL = {"homelessness": "People experiencing homelessness (Point-in-Time count)",
-                     "visitors": "Visitors on island (average per day)"}
+                     "visitors": "Visitors on island (average per day)",
+                     "dam_zones": bsl.DAM_LINE}
 FOOTPRINT_TEXT = {
     "all tracts": "every Census area in the county",
     "share inside tsunami zone": "the people living inside the tsunami evacuation zone",
@@ -134,6 +136,18 @@ SOURCE = {
                   "hospitals; facility addresses only), located with Esri ArcGIS World Geocoder; "
                   "zones: State tsunami evacuation zone and FEMA flood zones (Hawaiʻi Statewide "
                   "GIS, State DFIRM).",
+    "childcare": "Source: Ready Keiki Locator, all pre-K sites (Office of the Lieutenant "
+                 "Governor, published through Hawaiʻi Statewide GIS): licensed group child care, "
+                 "public pre-K and charter pre-K sites only – no family child care homes; zones: "
+                 "State tsunami evacuation zone and FEMA flood zones (Hawaiʻi Statewide GIS, "
+                 "State DFIRM).",
+    "sirens": "Source: Hawaiʻi Emergency Management Agency public siren map (locations of "
+              "permanent outdoor warning sirens; no live status). Audible radius: 3,400 feet, "
+              "the manufacturer rating published by the Hawaiʻi Emergency Management Agency; "
+              "the real range varies with terrain, buildings and weather.",
+    "dams": "Source: State of Hawaiʻi dam evacuation zones (published through Hawaiʻi Statewide "
+            "GIS). People = share of each Census area inside a zone × its population, the same "
+            "method as for the tsunami zone.",
     "reach": "Source: proposed channels and formats in the plan's communication pathways – "
              "supports, does not replace, county and State public-information plans.",
 }
@@ -285,7 +299,15 @@ def load_inputs() -> dict:
         "labels": load_labels(),
         "data_as_of": hst_date(needs.get("built_at")),
         "access": build_access.load(),      # None: no ArcGIS summary, straight-line only
-    }
+        "state": (state := bsl.load()),     # childcare, sirens, dam zones; None: left out
+    } | ({"county_lines": load_county_lines() + dam_lines(state)} if state else {})
+
+
+def dam_lines(state: dict) -> list:
+    """"Also plan for" rows: people in State dam evacuation zones, per county."""
+    when = state["meta"]["sources"]["dams"]["fetched_at"][:10]
+    return [{"county": c, "line": "dam_zones", "value": str(n), "detail": bsl.DAM_DETAIL,
+             "period": f"zones fetched {when}"} for c, n in state["dam_people_by_county"].items()]
 
 
 def load_county_lines(path: Path = ROOT / "data" / "sources" / "county_lines.csv") -> list:
@@ -326,6 +348,8 @@ def sites_for(inp: dict, county: str, hazard: str) -> list:
                     "site_type": p.get("site_type", ""),
                     "times_opened_2026": p.get("times_opened_2026", 0),
                     "status": status, "reason": reason,
+                    "dam": ((inp.get("state") or {}).get("site_dam_zones") or {}).get(
+                        f"{p['name']}|{county}", []),
                     "lon": geom["coordinates"][0] if geom else None,
                     "lat": geom["coordinates"][1] if geom else None})
     order = {s: i for i, s in enumerate(STATUS_ORDER + ["unlocated"])}
@@ -390,6 +414,9 @@ ol.sitekey li { margin: 0 0 3pt; }
 .prov { font-size: 9.5pt; font-weight: bold; margin: 2pt 0 6pt; }
 tr { break-inside: avoid; }
 .page { break-before: page; }
+.compact table { font-size: 9pt; margin: 3pt 0; } .compact th, .compact td { padding: 1pt 4pt; }
+.compact p { font-size: 9pt; }
+.compact ul.cols2 { columns: 2; font-size: 9pt; margin: 2pt 0; padding-left: 14pt; }
 .map { border: 1px solid #000; }
 ul.legend { list-style: none; padding: 0; columns: 2; font-size: 10.5pt; }
 ul.legend li { display: flex; align-items: center; gap: 6pt; break-inside: avoid; }
@@ -552,7 +579,8 @@ def map_html(inp: dict, county: str, hazard: str, sites: list) -> str:
 
 
 def sites_html(sites: list, sc: dict, access: dict | None = None) -> str:
-    rows = [[str(s["n"]), f'<span class="status">{escape(STATUS_LABEL.get(s["status"], "Not located"))}</span>',
+    rows = [[str(s["n"]), f'<span class="status">{escape(STATUS_LABEL.get(s["status"], "Not located"))}</span>'
+             + (f'<br>⚠ {escape(bsl.CHECK_DAM)}' if s.get("dam") else ""),
              escape(s["name"]), escape(s["address"]), escape(plain_reason(s["reason"])),
              str(s["times_opened_2026"])] for s in sites]
     return ('<h2 class="page">4. Known sites (opened in 2026 events)</h2>'
@@ -577,7 +605,9 @@ def county_lines_html(lines: list, county: str) -> str:
         return ""
     return ('<h3>Also plan for (county counts, not included in the totals above)</h3>'
             + table(["Group", "People", "Detail", "Date"], rows, num_cols=(1,))
-            + f'<p class="src">{escape(src_text("county_lines"))}</p>')
+            + f'<p class="src">{escape(src_text("county_lines"))}</p>'
+            + (f'<p class="src">{escape(src_text("dams"))}</p>'
+               if any(r["line"] == "dam_zones" and r["county"] == county for r in lines) else ""))
 
 
 def who_else_html() -> str:
@@ -586,7 +616,24 @@ def who_else_html() -> str:
     return f'<div class="note"><b>Who else to plan for</b><ul>{items}</ul></div>'
 
 
-def reach_html(comm: dict, partners: dict) -> str:
+def zero_siren_html(state: dict | None, county: str, labels: dict) -> str:
+    """Populated Census areas with no permanent outdoor siren, grouped by community."""
+    if not state:
+        return ""
+    fips = [f for f in state["zero_siren_areas"] if state["areas"][f]["county"] == county]
+    if not fips:
+        return ""
+    groups = {}
+    for f in fips:
+        main = labels.get(f, f).split(" · ")[0]
+        groups.setdefault(main, []).append(f[5:9].lstrip("0") + ("." + f[9:] if f[9:] != "00" else ""))
+    items = "; ".join(f"{escape(k)} ({', '.join(v)})" for k, v in sorted(groups.items()))
+    return (f'<p><b>Populated Census areas with 0 outdoor sirens ({len(fips)}): '
+            f'{escape(bsl.NO_SIRENS)}.</b> <small>{items}</small></p>'
+            f'<p class="src">{escape(src_text("sirens"))}</p>')
+
+
+def reach_html(comm: dict, partners: dict, zero: str = "") -> str:
     rows = [[escape(c["description"]), escape(partners.get(c["owner"], c["owner"])
                                              if c["owner"] != "county_em" else
                                              "County Emergency Management (each county)"),
@@ -595,7 +642,7 @@ def reach_html(comm: dict, partners: dict) -> str:
                    for k, v in comm.get("accessible_formats", {}).get("formats", []))
     return ('<h3>How to reach residents</h3>'
             + table(["Channel", "Owner (proposed)", "Support (proposed)"], rows)
-            + f'<p class="src">{escape(src_text("reach"))}</p>'
+            + f'<p class="src">{escape(src_text("reach"))}</p>' + zero
             + f'<p><b>Accessible formats for every message:</b></p><ul>{fmts}</ul>')
 
 
@@ -638,7 +685,7 @@ def decisions_html(match: dict, hazard: str, partners: dict) -> str:
 
 
 def outreach_html(ms: dict, langs: list, county: str, comms: list | None = None,
-                  comm: dict | None = None, partners: dict | None = None) -> str:
+                  comm: dict | None = None, partners: dict | None = None, zero: str = "") -> str:
     rows = [[str(t["rank"]), community_cell(t.get("label_main") or t.get("tract_label", ""),
                                             t.get("label_sub", "")),
              n(t["at_risk_pop"]), n(t["power_dependent"]), n(t["disability"]),
@@ -655,7 +702,7 @@ def outreach_html(ms: dict, langs: list, county: str, comms: list | None = None,
                     num_cols=(0, 2, 3, 4, 5, 6, 7))
             + f'<p class="src">{escape(src_text("people"))}</p>'
             + (more_needs_html(comms) if comms else "")
-            + (reach_html(comm, partners or {}) if comm else "")
+            + (reach_html(comm, partners or {}, zero) if comm else "")
             + f'<h3>Languages: people age 5 and older who speak English less than "very well" '
               f'({escape(area_label(area))})</h3>'
             + note
@@ -718,19 +765,28 @@ NO_FACILITY_SCREEN = ("No facility-level zone screen for this hazard (the same a
                       "sites).")
 
 
-def facility_rows(access: dict | None, county: str, hazard: str) -> tuple[list, int]:
-    """(care facilities in this hazard's zone, all care facilities) for one county."""
-    fac = [f for f in (access or {}).get("facilities", []) if f["county"] == county]
+def facility_rows(access: dict | None, county: str, hazard: str,
+                  state: dict | None = None) -> tuple[list, int]:
+    """(care facilities in this hazard's zone, all care facilities) for one county,
+    including childcare centres from the State layers."""
+    fac = [f for f in (access or {}).get("facilities", []) + (state or {}).get("childcare", [])
+           if f["county"] == county]
     return [f for f in fac if f["zones"].get(hazard)], len(fac)
 
 
 def facilities_html(inp: dict, county: str, hazard: str) -> str:
     if not inp.get("access"):
         return ""
-    rows, total = facility_rows(inp["access"], county, hazard)
+    rows, total = facility_rows(inp["access"], county, hazard, inp.get("state"))
     head = "<h3>Care facilities in hazard zones</h3>"
     if hazard not in ("tsunami", *FLOOD):
         body = f"<p>{escape(NO_FACILITY_SCREEN)} Care facilities in this county: {total}.</p>"
+    elif rows and len({f["zones"][hazard] for f in rows}) == 1:     # one zone: say it once
+        body = (f'<p><b>Care facilities in hazard zones – {escape(COUNTY_LABEL[county])}, '
+                f'{escape(HAZARD_LABEL[hazard])} ({len(rows)} of {total}), all in: '
+                f'{escape(rows[0]["zones"][hazard])}</b></p><ul class="cols2">'
+                + "".join(f'<li>{escape(f["name"])} <small>({escape(f["type_label"])})</small></li>'
+                          for f in rows) + "</ul>")
     elif rows:
         body = table(["Name", "Type", "Zone"],
                      [[escape(f["name"]), escape(f["type_label"]), escape(f["zones"][hazard])]
@@ -740,12 +796,16 @@ def facilities_html(inp: dict, county: str, hazard: str) -> str:
     else:
         body = (f"<p>None of the {total} care facilities in this county is inside the "
                 f"{escape(HAZARD_LABEL[hazard].lower())} zone.</p>")
-    zone_d = [f for f in inp["access"]["facilities"]
+    zone_d = [f for f in inp["access"]["facilities"] + (inp.get("state") or {}).get("childcare", [])
               if f["county"] == county and (f["fld_zone"] or "").upper() == "D"]
+    zone_d_html = ""
     if hazard in FLOOD and zone_d:
-        body += (f"<p>{FACILITY_ZONE_D.format(n=len(zone_d))} "
-                 + escape(", ".join(f["name"] for f in zone_d)) + ".</p>")
-    return head + body + f'<p class="src">{escape(src_text("facilities"))}</p>'
+        zone_d_html = (f'<div class="compact"><p>{FACILITY_ZONE_D.format(n=len(zone_d))} '
+                       + escape(", ".join(f["name"] for f in zone_d)) + ".</p></div>")
+    return (head + '<div class="compact">' + body + "</div>"
+            + f'<p class="src">{escape(src_text("facilities"))}</p>'
+            + (f'<p class="src">{escape(src_text("childcare"))}</p>' if inp.get("state") else "")
+            + zone_d_html)
 
 
 def sources_html(inp: dict) -> str:
@@ -797,6 +857,14 @@ def sources_html(inp: dict) -> str:
     ]
     data += [[escape(k.replace("_", " ")), "", escape(u)]
              for k, u in inp["match"]["sources"]["triggers"].items()]
+    for key in ("childcare", "sirens", "dams"):
+        src = ((inp.get("state") or {}).get("meta") or {}).get("sources", {}).get(key)
+        if src:
+            data.append([escape(src["title"]), escape(src["fetched_at"][:10]), escape(src["layer_url"])])
+    if inp.get("state"):
+        r = inp["state"]["meta"]["siren_radius"]
+        data.append(["Hawaiʻi Emergency Management Agency – siren audible radius (3,400 feet, "
+                     "manufacturer rating)", "2026-10-28", escape(r["url"])])
     if inp.get("access"):
         data += [[escape(f"CMS Provider Data Catalog – {t}"), "", escape(
                      f"https://data.cms.gov/provider-data/dataset/{ds}")]
@@ -841,7 +909,9 @@ def playbook_html(inp: dict, county: str, hazard: str) -> str:
 {facilities_html(inp, county, hazard)}
 {needs_html(ms, partner_names(inp["partners"]), county, inp["county_lines"])}
 {decisions_html(inp["match"], hazard, partner_names(inp["partners"]))}
-{outreach_html(ms, langs, county, comms, inp["comm"], partner_names(inp["partners"]))}
+{outreach_html(ms, langs, county, comms, inp["comm"], partner_names(inp["partners"]),
+               zero_siren_html(inp.get("state"), county,
+                               {f: v["tract_label"] for f, v in inp.get("labels", {}).items()}))}
 {sources_html(inp)}
 {results_html(inp["results"])}
 </main>

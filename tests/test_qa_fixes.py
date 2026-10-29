@@ -39,6 +39,7 @@ class PartnerNames(unittest.TestCase):
     IDS = sorted({p["id"] for p in PARTNERS} | {p["partner_type"] for p in PARTNERS})
 
     def find_ids(self, text):
+        text = re.sub(r"https?://\S+", " ", text)          # a web address is not a partner ID
         return [i for i in self.IDS if re.search(rf"(?<![\w-]){re.escape(i)}(?![\w-])", text)]
 
     def test_no_partner_id_in_app_output(self):

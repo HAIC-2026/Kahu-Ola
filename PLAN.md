@@ -65,6 +65,9 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 | DBEDT State of Hawaiʻi Data Book 2025, Table 7.06 (average daily visitor census, 2025) | Visitors on island (separate county line) | `data/sources/county_lines.csv` (fetched 2026-10-27) |
 | Esri ArcGIS World Geocoder (`forStorage=true`), build time only | Second check of the 30 site points; locates Pukalani; locates 107 care facilities | `data/sources/arcgis_summary.json` (run 2026-10-28) |
 | Esri ArcGIS routing: origin-destination cost matrix, driving and walking time (normal traffic) | Drive minutes, road km and walk minutes from each populated Census area to every known site on the same island | `data/sources/arcgis_summary.json` (run 2026-10-28) |
+| Ready Keiki Locator, "All Pre-K Sites" (Office of the Lieutenant Governor, hosted by Hawaiʻi Statewide GIS; item 5486617da05241cc93e5a33c1f1b5133, service https://services.arcgis.com/HQ0xoN0EzDPBOEci/arcgis/rest/services/Ready_Keiki_GIS/FeatureServer/0) | Childcare centres: licensed group child care (PATCH), public pre-K (EOEL) and charter pre-K; no family child care homes | fetched 2026-10-28 (layer updated 2024-06-28) |
+| Hawaiʻi Emergency Management Agency public siren layer (item 912539122be443b9a4a9781644e6a4f0, service https://services9.arcgis.com/aKxrz4vDVjfUwBWJ/arcgis/rest/services/public_siren_status_layer_view/FeatureServer/0); audible radius from the HI-EMA siren system page (https://dod.hawaii.gov/hiema/all-hazard-statewide-outdoor-warning-siren-system/) | Permanent outdoor warning siren locations (no live status); rated audible radius 3,400 feet | fetched 2026-10-28 (layer updated 2025-08-21) |
+| State of Hawaiʻi dam evacuation zones (hosted by Hawaiʻi Statewide GIS; item fd89058573f4409cacb6f5c58bbb5165, service https://services.arcgis.com/HQ0xoN0EzDPBOEci/arcgis/rest/services/DamEvacZones_joined/FeatureServer/0) | People in dam evacuation zones per Census area; shelter sites in a dam zone | fetched 2026-10-28 (layer updated 2026-03-26) |
 | U.S. Census Geocoder on the DOE street address of each school site | Third source for the school sites (DOE + Census) | `data/sources/doe_school_checks.csv` (queried 2026-10-28) |
 | CMS Provider Data Catalog: Dialysis Facility – Listing by Facility (23ew-n7w9), Nursing Homes – Provider Information (4pq5-n9py), Hospital General Information (xubh-q36u) | Care facilities in Hawaiʻi (41 dialysis, 43 nursing homes, 23 hospitals; facility addresses only) | `data/sources/arcgis_summary.json` (fetched 2026-10-28) |
 
@@ -210,6 +213,24 @@ Three more Honolulu dialysis facilities are in FEMA zone D (flood risk not mappe
 
 **Esri terms and this public repository.** Esri's Product-Specific Terms of Use (E300, footnote 66) allow customers with a paid subscription to store World Geocoding results. The terms do not clearly allow redistributing raw results. So the raw ArcGIS answers stay in `data/raw/arcgis/` (gitignored) and are **not committed**. The repo and the app hold only rounded, derived summaries in `data/sources/arcgis_summary.json`: per-area drive and walk minutes and road km; site check labels and distances; and care-facility display points rounded to 4 decimals like the site points, with island, Census area and zone flags. App and PDFs credit "Powered by Esri". Without that file the build still works, with straight-line distances and no new layers.
 
+### 5.8 Childcare centres, outdoor sirens and dam evacuation zones (public State layers, build time only)
+Three free public layers were downloaded once, at build time (`scripts/fetch_state_layers.py`, then `build_state_layers.py`). No ArcGIS credits were used. Only the listed fields were requested: no phone numbers, dam owners, parcel numbers or live siren status. The app makes no request to these services. **Finding the layers:** the geoportal search returns no item named "Ready Keiki Locator", siren or dam evacuation zone. The Ready Keiki Locator is the Lieutenant Governor's "Ready Keiki" web map, and its "All Pre-K Sites" feature service is hosted in the Hawaiʻi Statewide GIS ArcGIS organization; the dam evacuation zones are hosted there too. Statewide GIS hosts no siren layer, so the siren locations come from the Hawaiʻi Emergency Management Agency's public siren layer (the layer behind its public siren map).
+
+**Childcare centres.** 422 centre-based sites: 377 licensed group child care centres (PATCH), 30 public pre-K classrooms (EOEL) and 15 charter pre-K sites. Honolulu has 263, Hawaiʻi 71, Maui 62 and Kauaʻi 26. The layer lists no family child care homes; a rule also drops any name that marks a home-based provider. 13 placeholder rows with no site type were dropped. Each centre is assigned an island and a Census area and flagged with the same zone screens as shelter sites. Centres are added to "Care facilities in hazard zones" as "Childcare centre" (app and PDFs) and shown as a star marker.
+
+| County | Tsunami | Inland flooding | Coastal flooding |
+|---|---|---|---|
+| Honolulu | 29 | 19 | 19 |
+| Maui | 15 | 4 | 4 |
+| Kauaʻi | 8 | 6 | 6 |
+| Hawaiʻi | 6 | 4 | 4 |
+
+21 more centres are in FEMA zone D (flood risk not mapped), listed separately: Honolulu 20 and Hawaiʻi 1.
+
+**Outdoor sirens.** 413 permanent sirens: Honolulu 180, Hawaiʻi 94, Maui 85 and Kauaʻi 54. The one mobile siren is not counted. Coverage circles use the official radius: HI-EMA says the sirens "propagate with a manufacture radius of 3,400 feet. This range may vary due to environmental and surrounding physical conditions." The app draws that radius as a dashed circle around each siren (a map layer that is off by default), and says it is a manufacturer rating. The area panel reads "Outdoor sirens in this area: N". **Populated Census areas with 0 sirens** (listed in "How to reach residents": *prioritise WEA, radio and trusted messengers*): Honolulu 206 of 322, Hawaiʻi 10 of 43, Maui 9 of 45, Kauaʻi 2 of 17. A siren in a neighbouring area may still be heard, and indoors sirens are often not heard at all.
+
+**Dam evacuation zones.** Share of each Census area inside any State dam evacuation zone (100 grid points, the same method as the tsunami share) × its population. **People in dam evacuation zones:** Honolulu 31,172; Maui 26,251; Kauaʻi 10,819; Hawaiʻi 1,360. These appear under "Also plan for" for each county. They are not a sixth hazard scenario. **Shelter sites inside a dam evacuation zone ("Check dam zone"):** Kahilu Town Hall (Hawaiʻi; Puʻukapu watershed dam and Waikoloa reservoirs 1–3) and Molokaʻi Baptist Church (Maui County; Kualapuʻu reservoir).
+
 ## 6. The three DHS metrics
 
 The challenge PDF (p. 7) sets three measurable goals.
@@ -226,7 +247,7 @@ Result: Lahaina wildfire, 2023-08-11. Observed 1,418 people in shelters (Maui No
 The challenge PDF gives no baseline number ("Teams may propose their own baseline and target time", p. 7).
 - **Baseline (team assumption, to be confirmed with DHS):** at least **2 working days per county per event**, about 8 working days statewide. Reasoning: the manual steps DHS describes (p. 3–4): pull program and provider reports, cross-reference lists with hazard zones, recompile shelter lists, and call partners to confirm capacity "for each planning cycle and each event". These steps are done by hand, often "only after an event begins" (p. 4).
 - **Target:** same day, under 1 working day statewide.
-- **Measured:** a full rebuild from local data (all 13 build steps, 20 scenarios, 20 PDFs, app bundle) takes **71.3 seconds** on an Apple M4 laptop (measured 2026-10-28 with `scripts/time_rebuild.py`; result in `data/processed/rebuild_timing.json`). The test suite (283 automated tests, including headless-browser checks of every view, deep links, keyboard map layers and offline use) takes about 50 s. A full data refresh from the internet adds downloads plus the flood-zone queries, which are paced at 1 s per point for 311 points (at least 5.2 minutes). That refresh is not timed end to end.
+- **Measured:** a full rebuild from local data (all 14 build steps, 20 scenarios, 20 PDFs, app bundle) takes **71.7 seconds** on an Apple M4 laptop (measured 2026-10-28 with `scripts/time_rebuild.py`; result in `data/processed/rebuild_timing.json`). The test suite (301 automated tests, including headless-browser checks of every view, deep links, keyboard map layers and offline use) takes about 50 s. A full data refresh from the internet adds downloads plus the flood-zone queries, which are paced at 1 s per point for 311 points (at least 5.2 minutes). That refresh is not timed end to end.
 - **Plus human review (team assumption):** one review session per county to confirm sites, roles and pledges. The pipeline removes the compiling and arithmetic; it does not remove the partner calls. It turns them into filling in blank capacity fields.
 - **Measurement plan.** The baseline above stays a team assumption until it is measured. We propose a timed tabletop exercise with DHS and one county. The same planners produce a needs-and-resources draft for one county × hazard scenario twice: once with their current manual process (baseline) and once with this tool (tool-assisted). **Start** = hazard selected; **stop** = needs-and-resources draft approved by the county or DHS lead. We report both times in minutes (baseline vs tool-assisted), with the number of partner calls and corrections made during review.
 
@@ -258,9 +279,9 @@ The challenge PDF requires usability "during high-stress, low-connectivity condi
 | Tier | Conditions | What works |
 |---|---|---|
 | 1. Online | Normal internet | Web app (https://shelters.kahuola.org, also https://haic2026-shelters.pages.dev) |
-| 2. Weak | Slow or intermittent | The app loads from its local cache. The only data is one 859 KB bundle, and every PDF is already cached |
+| 2. Weak | Slow or intermittent | The app loads from its local cache. The only data is one 933 KB bundle, and every PDF is already cached |
 | 3. Offline | No internet (after one earlier visit) | Installed web app (PWA). The service worker pre-caches the app, the data and all 20 PDFs, and the app shows "Offline – data as of <date>". Tested in airplane mode in Chrome. |
-| 4. Paper | No power or devices | 20 printed playbooks (`playbooks/*.pdf`): US Letter, black-and-white safe, 13 pages each, with the disclaimer and "Data as of" on every page |
+| 4. Paper | No power or devices | 20 printed playbooks (`playbooks/*.pdf`): US Letter, black-and-white safe, 14 pages each, with the disclaimer and "Data as of" on every page |
 
 ## 9. How AI was used
 

@@ -91,7 +91,7 @@ class Playbooks(unittest.TestCase):
 class Bundle(unittest.TestCase):
     def test_small(self):
         # ~130 KB of this is the full text of every message draft (Messages tab, offline)
-        self.assertLess((APP / "data" / "bundle.json").stat().st_size, 782_422 + 150 * 1024)   # before ArcGIS (a1ccb82) + 150 KB
+        self.assertLess((APP / "data" / "bundle.json").stat().st_size, 782_422 + 150 * 1024 + 100 * 1024)   # before ArcGIS (a1ccb82) + 150 KB
 
     def test_no_person_fields(self):
         b = bundle()

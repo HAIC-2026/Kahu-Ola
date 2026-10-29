@@ -21,8 +21,9 @@ const FACILITY = {
   "dialysis": ["hexagon", "Dialysis facility"],
   "nursing_home": ["house", "Nursing home"],
   "hospital": ["cross", "Hospital"],
+  "childcare": ["star", "Childcare centre"],
 };
-const LAYERS = { outside: true, care: true };     // map layer checkboxes (kept across views)
+const LAYERS = { outside: true, care: true, sirens: false };     // map layer checkboxes (kept across views)
 const STATUS_ORDER = ["ok", "check", "check (tract-level)", "undetermined", "exclude", "unlocated"];
 const MAIN_ISLANDS_WEST = -160.6;
 
@@ -164,6 +165,12 @@ function facilityShape(shape, x, y, r = 5) {
     g.append(svg("polygon", { points: pts.join(" "), ...st }));
   } else if (shape === "house") {
     g.append(svg("polygon", { points: `${x},${y - r * 1.3} ${x + r * 1.1},${y - r * 0.2} ${x + r * 1.1},${y + r} ${x - r * 1.1},${y + r} ${x - r * 1.1},${y - r * 0.2}`, ...st }));
+  } else if (shape === "star") {
+    const pts = Array.from({ length: 10 }, (_, i) => {
+      const a = -Math.PI / 2 + Math.PI / 5 * i, k = i % 2 ? r * 0.6 : r * 1.4;
+      return `${(x + k * Math.cos(a)).toFixed(1)},${(y + k * Math.sin(a)).toFixed(1)}`;
+    });
+    g.append(svg("polygon", { points: pts.join(" "), ...st }));
   } else {
     const a = r * 0.45, b = r * 1.2;
     g.append(svg("polygon", { points: `${x - a},${y - b} ${x + a},${y - b} ${x + a},${y - a} ${x + b},${y - a} ${x + b},${y + a} ${x + a},${y + a} ${x + a},${y + b} ${x - a},${y + b} ${x - a},${y + a} ${x - b},${y + a} ${x - b},${y - a} ${x - a},${y - a}`, ...st }));
@@ -175,6 +182,7 @@ function facilityShape(shape, x, y, r = 5) {
 const ZONE_HAZARDS = ["tsunami", "inland_flood", "coastal_flood"];
 const facilityZone = (f, hazard) => (ZONE_HAZARDS.includes(hazard) ? (f.z[hazard] || "") : null);
 const hasAccess = () => Boolean(DATA.access && DATA.access.source);
+const hasState = () => Boolean(DATA.state && DATA.state.sirens);
 
 /* ---------- map: Census areas, sites, tsunami zone; click or Enter opens an area ---------- */
 const MAP = {};                       // state of the map on screen (one at a time)
@@ -258,6 +266,23 @@ function renderMap(county, sc, sites, title, hazard) {
     marks.push(g); careLayer.append(g);
   }
   if (facilities.length) root.append(careLayer);
+  // permanent outdoor sirens and the official rated audible radius (dashed circles)
+  const sirenLayer = svg("g", { class: "layer-sirens" });
+  const sirens = hasState() ? (DATA.state.sirens[county] || []) : [];
+  for (const [lon, lat] of sirens) {
+    const [x, y] = proj(lon, lat);
+    const r = Math.abs(proj(lon, lat + DATA.state.radius_m / 111320)[1] - y);
+    sirenLayer.append(svg("circle", { cx: x, cy: y, r: r.toFixed(1), fill: "#000000", "fill-opacity": "0.06",
+      stroke: "#000000", "stroke-width": "0.8", "stroke-dasharray": "3,2", "vector-effect": "non-scaling-stroke", "pointer-events": "none" }));
+  }
+  for (const [lon, lat] of sirens) {
+    const [x, y] = proj(lon, lat);
+    const g = svg("g", { class: "siren", transform: `translate(${x} ${y}) scale(1)` });
+    g.dataset.x = x; g.dataset.y = y;
+    g.append(svg("circle", { cx: 0, cy: 0, r: 2.5, fill: "#000000", stroke: "#ffffff", "stroke-width": "1" }));
+    marks.push(g); sirenLayer.append(g);
+  }
+  if (sirens.length) root.append(sirenLayer);
   for (const s of sites) {
     if (s.lon === null) continue;
     const [x, y] = proj(s.lon, s.lat);
@@ -305,6 +330,12 @@ function renderMap(county, sc, sites, title, hazard) {
     sw.append(facilityShape(shape, 14, 11, 6));
     legend.append(el("li", null, sw, `${label} (care facility)`));
   }
+  if (sirens.length) {
+    const sw = svg("svg", { width: 28, height: 22, "aria-hidden": "true" });
+    sw.append(svg("circle", { cx: 14, cy: 11, r: 9, fill: "#000", "fill-opacity": "0.06", stroke: "#000", "stroke-dasharray": "3,2" }));
+    sw.append(svg("circle", { cx: 14, cy: 11, r: 2.5, fill: "#000" }));
+    legend.append(el("li", null, sw, `Outdoor siren (dot) and its rated audible radius, ${fmt(DATA.state.radius_ft)} feet (dashed circle; real range varies)`));
+  }
   if (facilities.some((f) => facilityZone(f, hazard))) legend.append(el("li", null, el("span", { class: "legend-glyph", "aria-hidden": "true" }, "⚠"), "Care facility inside this hazard's zone"));
   const seen = new Set();
   for (const [shape, label] of Object.values(MARKERS)) {
@@ -341,7 +372,8 @@ function renderMap(county, sc, sites, title, hazard) {
   const layers = access ? el("fieldset", { class: "layers" }, el("legend", null, "Map layers"),
     layerBox("outside", `${DATA.access.no_activated} – sites usable for ${hzLow}`, outsideLayer, outside.length),
     el("p", { class: "layer-note", id: "scenario-note" }, `With DOE candidate schools usable for ${hzLow}: ${fmt(counts[1])} of ${fmt(counts[2])} areas (2026 activated sites only: ${fmt(counts[0])}). ${DATA.access.not_no_shelter}`),
-    layerBox("care", "Care facilities", careLayer, facilities.length)) : null;
+    layerBox("care", "Care facilities", careLayer, facilities.length),
+    sirens.length ? layerBox("sirens", `Outdoor sirens and rated audible radius (${fmt(DATA.state.radius_ft)} ft)`, sirenLayer, sirens.length) : null) : null;
   return [el("p", null, official), layers,
     el("div", { class: "mapwrap" }, el("div", { class: "map" }, root),
       el("div", null, el("h3", null, "Site key"), key)),
@@ -414,6 +446,17 @@ function nearestSites(tr, sites, k = 3) {
     .sort((a, b) => a.km - b.km || a.s.name.localeCompare(b.s.name)).slice(0, k);
 }
 
+/* populated Census areas with no permanent outdoor siren ("How to reach residents") */
+function zeroSirens(county) {
+  if (!hasState()) return [];
+  const label = Object.fromEntries(DATA.tracts.map((t) => [t.f, t.l || t.f]));
+  const zero = DATA.state.zero[county] || [];
+  if (!zero.length) return [];
+  return [el("details", { class: "areas", id: "zero-sirens" },
+    el("summary", null, `Populated Census areas with 0 outdoor sirens (${zero.length}): ${DATA.state.no_sirens}`),
+    el("ul", null, zero.map((f) => el("li", null, label[f] || f)))), source("sirens")];
+}
+
 /* care facilities inside this Census area, and whether each is in the hazard's zone */
 function careInArea(f, hazard) {
   if (!hasAccess()) return null;
@@ -443,6 +486,7 @@ function careTable(county, hazard, cLabel, hLabel) {
     out.push(el("p", null, `${DATA.access.zone_d.replace("{n}", zoneD.length)} ${zoneD.map((x) => x.n).join(", ")}.`));
   }
   out.push(source("facilities"));
+  if (hasState()) out.push(source("childcare"));
   return out;
 }
 
@@ -505,6 +549,8 @@ function openArea(f, opener) {
     tr.o && tr.o[hazard] && tr.i !== "Niʻihau" ? el("p", { class: "note", id: "outside-drive" },
       `${DATA.access.no_activated}, for ${hz.toLowerCase()}. With DOE candidate schools: ${tr.o[hazard] === 1 ? `a candidate school usable for ${hz.toLowerCase()} is within ${DATA.access.limit} minutes` : `still none within ${DATA.access.limit} minutes`}. ${DATA.access.not_no_shelter}`) : null,
     near.length && near[0].drive !== undefined ? el("p", { class: "src" }, `${DATA.access.source} ${DATA.access.attribution}`) : null,
+    hasState() ? el("p", { id: "area-sirens" }, el("strong", null, `Outdoor sirens in this area: ${fmt(tr.s || 0)}`),
+      tr.s ? "" : ` – ${DATA.state.no_sirens}.`) : null,
     careInArea(f, hazard),
     el("p", null, el("strong", null, "Proposed partners: "), `lead – ${[...lead].join(", ") || "—"}; support – ${[...support].join(", ") || "—"}. `, DATA.meta.role_status),
     el("p", null, el("strong", null, `Top languages (${L.area}): `), langs.map((r) => `${r[0]} ${fmt(r[1])}`).join("; ") || "—"),
@@ -759,7 +805,8 @@ function renderPlan() {
     el("h2", null, "Known sites (opened in 2026 events)"),
     provLabel(DATA.provenance.shelters),
     table("Sites with status for this hazard", ["#", "Status for this hazard", "Site", "Address", "Why", "Times opened in 2026", ...(hasAccess() ? ["Location check"] : [])],
-      sites.map((x) => [x.n, el("span", { class: "status" }, DATA.status_labels[x.st] || "Not located"), x.name, x.address, x.why, x.times_opened_2026, ...(hasAccess() ? [x.loc || "–"] : [])]), [0, 5]),
+      sites.map((x) => [x.n, el("span", { class: "status" }, DATA.status_labels[x.st] || "Not located",
+        x.dam ? [el("br"), `⚠ ${DATA.state.check_dam}`] : null), x.name, x.address, x.why, x.times_opened_2026, ...(hasAccess() ? [x.loc || "–"] : [])]), [0, 5]),
     source("sites"),
     hasAccess() ? source("access") : null,
     ...careTable(county, hazard, cLabel, hLabel),
@@ -774,6 +821,7 @@ function renderPlan() {
     lines.length ? table("Also plan for (county counts, not included in the totals above)", ["Group", "People", "Detail", "Date"],
       lines.map((r) => [r.label, fmt(r.value), r.detail, r.period]), [1]) : null,
     lines.length ? source("county_lines") : null,
+    lines.some((r) => r.line === "dam_zones") ? source("dams") : null,
     county === "Maui" ? el("p", null, DATA.meta.kalawao_note) : null,
     el("div", { class: "note" }, el("strong", null, "Who else to plan for"),
       el("ul", null, DATA.meta.who_else.map(([k, v]) => el("li", null, el("strong", null, `${k}: `), linkSources(v))))),
@@ -793,6 +841,7 @@ function renderPlan() {
     el("h3", null, "How to reach residents"),
     table("Channels", ["Channel", "Owner (proposed)", "Support (proposed)"], DATA.reach.channels),
     source("reach"),
+    ...zeroSirens(county),
     el("p", null, el("strong", null, "Accessible formats for every message:")),
     el("ul", null, DATA.reach.formats.map(([k, v]) => el("li", null, el("strong", null, `${k}: `), v))),
     L.note ? el("p", null, L.note) : null,

@@ -368,8 +368,9 @@ class PanelData(unittest.TestCase):
             self.assertEqual(BUNDLE["access"]["outside_counts"][f"{c}|{h}"], [n1, n2, total])
 
     def test_facilities_in_bundle_match_summary(self):
-        self.assertEqual(len(BUNDLE["facilities"]), len(SUMMARY["facilities"]))
-        for b, s in zip(BUNDLE["facilities"], SUMMARY["facilities"]):
+        cms = [f for f in BUNDLE["facilities"] if f["t"] != "childcare"]
+        self.assertEqual(len(cms), len(SUMMARY["facilities"]))
+        for b, s in zip(cms, SUMMARY["facilities"]):
             self.assertEqual((b["n"], b["x"], b["y"], b["f"]), (s["name"], s["lon"], s["lat"], s["tract"]))
             self.assertEqual(b["z"], {h: z for h, z in s["zones"].items() if z})
             self.assertEqual(b.get("d"), 1 if s["fld_zone"] == "D" else None)
@@ -389,7 +390,7 @@ class Playbooks(unittest.TestCase):
     def test_table_rows_match_data(self):
         inp = bp.load_inputs()
         for county in ("Honolulu", "Maui"):
-            rows, total = bp.facility_rows(inp["access"], county, "tsunami")
+            rows, total = bp.facility_rows(inp["access"], county, "tsunami", inp["state"])
             h = bp.facilities_html(inp, county, "tsunami")
             self.assertIn(f"({len(rows)} of {total})", h)
             for f in rows:
@@ -483,7 +484,9 @@ class Browser(unittest.TestCase):
 class Size(unittest.TestCase):
     def test_bundle_growth_under_150_kb(self):
         before_arcgis = 782_422            # bundle.json at commit a1ccb82
-        self.assertLess((APP / "data" / "bundle.json").stat().st_size, before_arcgis + 150 * 1024)
+        state_layers = 100 * 1024          # State layers: own limit (test_state_layers.py)
+        self.assertLess((APP / "data" / "bundle.json").stat().st_size,
+                        before_arcgis + 150 * 1024 + state_layers)
 
     def test_app_makes_no_arcgis_requests(self):
         js = (APP / "app.js").read_text(encoding="utf-8")
