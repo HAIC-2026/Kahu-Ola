@@ -209,7 +209,7 @@ function renderMap(county, sc, sites, title, hazard) {
     return "M" + pts.join(" L") + " Z";
   };
 
-  const root = svg("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-labelledby": "map-title" });
+  const root = svg("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-labelledby": "map-title", tabindex: "-1" });
   const t = svg("title", { id: "map-title" }); t.textContent = title; root.append(t);
   const defs = svg("defs");
   const hatch = svg("pattern", { id: "tsunami-hatch", width: 8, height: 8, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
@@ -576,10 +576,18 @@ function closeArea() {
   if (MAP.root) zoomTo([0, 0, MAP.W, MAP.H]);
   const q = new URLSearchParams(location.search); q.delete("area");
   history.replaceState(null, "", `?${q.toString()}${location.hash}`);
-  const back = OPENER && document.contains(OPENER) ? OPENER : document.getElementById("map-title");
+  const back = OPENER && document.contains(OPENER) ? OPENER : MAP.root;
   if (back && back.focus) back.focus();
+  // a map area cannot take focus: return to the map itself (tabindex -1, not in the Tab order)
+  if (document.activeElement !== back && MAP.root && document.contains(MAP.root)) MAP.root.focus();
   OPENER = null;
 }
+
+/* Esc inside the open panel works like "Back to county" (focus returns to the opener) */
+document.addEventListener("keydown", (e) => {
+  const panel = document.getElementById("area-panel");
+  if (e.key === "Escape" && panel && !panel.hidden && panel.contains(document.activeElement)) closeArea();
+});
 
 window.addEventListener("afterprint", () => document.body.classList.remove("print-area"));
 
@@ -673,12 +681,15 @@ function msgSelect(label, key, pairs) {
   return [el("label", { for: id }, label), s];
 }
 
-function copyButton(text) {
-  if (!text) return el("button", { type: "button", class: "button", disabled: "" }, "No text yet");
-  const b = el("button", { type: "button", class: "button" }, "Copy");
+/* name = the visible word + which message, e.g. "Copy Vietnamese – Wildfire, before"
+   (starts with the visible word so voice control can still say "click Copy") */
+function copyButton(text, which) {
+  if (!text) return el("button", { type: "button", class: "button", disabled: "", "aria-label": `No text yet: ${which}` }, "No text yet");
+  const b = el("button", { type: "button", class: "button", "aria-label": `Copy ${which}` }, "Copy");
+  const say = (word) => { b.textContent = word; b.setAttribute("aria-label", `${word} ${which}`); };
   b.addEventListener("click", async () => {
-    try { await navigator.clipboard.writeText(text); b.textContent = "Copied"; }
-    catch (err) { b.textContent = "Select the text to copy"; }
+    try { await navigator.clipboard.writeText(text); say("Copied"); }
+    catch (err) { say("Select the text to copy"); }
   });
   return b;
 }
@@ -733,7 +744,7 @@ function renderMessages() {
       el("dt", null, "Review date"), el("dd", null, m.review_date || "—"),
       el("dt", null, "Approved"), el("dd", null, m.approved || "—"),
       m.notes ? [el("dt", null, "Notes"), el("dd", null, m.notes)] : null),
-    copyButton(m.text)));
+    copyButton(m.text, `${m.language_label} – ${hz[m.hazard] || m.hazard}, ${m.phase.toLowerCase()}`)));
 
   app.replaceChildren();
   append(app,

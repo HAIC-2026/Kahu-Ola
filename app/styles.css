@@ -151,10 +151,18 @@ details > summary { min-height: 44px; padding: var(--space-2) 0; }
 .msg-filters .check { min-height: 44px; padding: var(--space-1) var(--space-2); }
 .footer-title { font-size: 1rem; margin: var(--space-3) 0 var(--space-1); }
 details.areas ul { columns: 2; font-size: var(--font-size-small); }
+/* map labels: the viewBox is 720 wide, so on-screen size = font-size × map width / 720.
+   Each step keeps labels at 14 px or more at the narrowest width it covers
+   (one column up to 720 px, map = 2/3 of the content above). The PDF maps are separate. */
+.map svg text { font-size: 18px; }                                   /* map ≥ 560 px wide */
+@media (max-width: 900px) { .map svg text { font-size: 23px; } }     /* two columns, map ≥ 440 px */
+@media (max-width: 720px) { .map svg text { font-size: 18px; } }     /* one column, map ≥ 565 px */
+@media (max-width: 600px) { .map svg text { font-size: 23px; } }     /* map ≥ 440 px */
 @media (max-width: 480px) {
-  .map svg text { font-size: 28px; }   /* viewBox is 720 wide: about 14 px on a 390 px screen */
+  .map svg text { font-size: 28px; }                                 /* map ≥ 365 px */
   details.areas ul { columns: 1; }
 }
+@media (max-width: 400px) { .map svg text { font-size: 36px; } }     /* map ≥ 285 px (320 px screen) */
 
 /* no layout jump while the data loads: reserve the lines that change, skeleton first view */
 .dataver { min-height: calc(2 * 1.5 * var(--font-size-small)); }
@@ -190,6 +198,14 @@ button.linklike { min-height: 44px; padding: var(--space-1) 0; border: 0; backgr
 .layers legend { font-weight: 700; padding: 0 var(--space-1); }
 .layers .check { display: inline-flex; align-items: center; gap: var(--space-1); min-height: 44px; }
 .layers input[type="checkbox"] { width: 24px; height: 24px; margin: 0; }
+.layers input[type="checkbox"], .msg-filters input[type="checkbox"] { flex-shrink: 0; }   /* stay square when the label wraps */
 .legend-glyph { display: inline-block; width: 28px; text-align: center; font-weight: 700; }
 .layer-note { flex-basis: 100%; margin: 0 0 var(--space-1); font-size: var(--font-size-small); }
-.lahaina-note { font-style: italic; }
+.lahaina-note { font-style: italic; font-size: var(--font-size-small); }   /* a <small>: never below 14 px */
+
+/* narrow screens: each label sits beside its own select (no "Hazard" orphaned on the first line) */
+@media (max-width: 480px) {
+  .controls { display: grid; grid-template-columns: max-content minmax(0, 1fr); }
+  .controls select { width: 100%; }
+  .controls .hint { grid-column: 1 / -1; }
+}
