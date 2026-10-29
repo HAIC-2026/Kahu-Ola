@@ -55,6 +55,7 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 | NWS / NHC / CPHC / PTWC product definitions | Decision-point triggers | URLs in `config/decision_points.json` |
 | USGS GNIS Domestic Names, Hawaii (Board on Geographic Names spellings) | Hawaiian spelling (ʻokina, kahakō) of every community name people read | `data/sources/place_display_names.csv` |
 | Census Bureau Population Estimates, Vintage 2025 (`co-est2025-alldata`, `cc-est2025-alldata-15`) | County totals July 1, 2025; broad race groups | released 2026-06-25; `data/sources/county_population_2020_2025.csv` |
+| ACS 2025 1-year (released 2026-10-29): B01003, B02001, B02008–B02012, B03002 for Honolulu, Hawaiʻi, Maui and Kauaʻi counties | County totals and broad race/ethnicity with 90% MOE | `data/sources/county_population_2020_2025.csv`, `race_ethnicity_by_county.csv` (fetched 2026-10-29) |
 | ACS 2020-2024 5-year: B01003 (places, counties), B02001, B02008–B02012, B03002, B02015, B02016, B02018, B02019 | Communities by island; detailed race/ethnicity by county | `data/sources/communities_by_island.csv`, `race_ethnicity_by_county.csv` |
 | 2020 Census PL 94-171 (P1) and DHC-A (T01001 by POPGROUP) | 2020 baseline and cross-check | same files, one table ID and URL per row |
 | 2020 Census Block Assignment File (place/CDP) and 2020 PL 94-171 block population (P1_001N) | Community name for every Census area, weighted by where its people live ("Waikapū / Waiheʻe-Waiehu", Census area 308); TIGERweb CDP polygons only for the 4 Census areas with no 2020 population | `data/sources/tract_communities.csv`, `tract_cdp_population_2020.csv` |
@@ -139,6 +140,20 @@ Census publishes detailed race only down to county. **Honolulu County is Oʻahu 
 
 **County population, 2020 Census → July 1, 2025 (Vintage 2025):** Honolulu 1,016,508 → 988,703 (−2.7%); Hawaiʻi 200,629 → 210,043 (+4.7%); Maui 164,754 → 160,592 (−2.5%); Kauaʻi 73,298 → 73,400 (+0.1%); Kalawao 82 → 82.
 
+**County figures, ACS 2025 1-year (released 2026-10-29).** Honolulu, Hawaiʻi, Maui and Kauaʻi counties now use the ACS 2025 1-year. Every figure in `data/sources/race_ethnicity_by_county.csv` carries its vintage and its 90% margin of error. Kalawao (fewer than 65,000 people, so not in the 1-year) and the State rows keep the ACS 2020-2024 5-year. The 1-year county totals are controlled to the Census Bureau's population estimates, so they match Vintage 2025 and have no margin of error, except Maui (±19).
+
+| County | ACS 2020-2024 5-year (earlier) | ACS 2025 1-year (now) |
+|---|---|---|
+| Honolulu | 1,001,146 | 988,703 (controlled, no MOE) |
+| Hawaiʻi | 205,769 | 210,043 (controlled, no MOE) |
+| Maui | 164,522 ±25 | **160,642 ±19** |
+| Kauaʻi | 73,731 | 73,400 (controlled, no MOE) |
+| Kalawao | 67 ±25 | not in the 1-year; 5-year kept |
+
+**Maui after the August 2023 fire:** the 5-year averages 2020–2024, so most of its months predate the fire. The 2025 1-year is the first full post-fire year: 160,642, down 3,880 (2.4%) from the 5-year figure and 4,112 (2.5%) below the 2020 Census count. The county total cannot show how many Lahaina residents moved within Maui; use County of Maui figures for Lahaina.
+
+**Not yet available as 1-year:** the detailed race tables B02015, B02016, B02018 and B02019 (Native Hawaiian, Filipino, Japanese, Chuukese, Marshallese and other detailed groups) are not published in the ACS 1-year for these counties: data.census.gov returns no content, and the 2024 1-year had none either. Those rows keep the 2020-2024 5-year figure, and each says so in its note. The broad groups (B02001, B02008–B02012) and Hispanic or Latino (B03002) are the 2025 1-year.
+
 **Largest communities (Census Designated Places), ACS 2020-2024 5-year.** Island totals and the place-to-island assignment are from DBEDT Data Book 2025 Table 01.12.
 
 | Island (ACS total) | Largest communities (population ± 90% MOE) | Outside any CDP |
@@ -151,7 +166,7 @@ Census publishes detailed race only down to county. **Honolulu County is Oʻahu 
 | Kauaʻi (73,731) | Kapaʻa 11,094 ±1,301; Līhuʻe 7,901 ±872; Wailua Homesteads 5,431 ±920; Hanamāʻulu 4,972 ±832; Kalāheo 4,435 ±676 | Kauaʻi County, both islands: 2,722 (3.7%) |
 | Niʻihau | No Census Designated Places (DBEDT note) | (in Kauaʻi County figure) |
 
-**Largest detailed groups by county, ACS 2020-2024 5-year, alone or in any combination (% of county).** "Alone" counts are much smaller because about a quarter of residents report two or more races (27.0% statewide, B02001).
+**Largest detailed groups by county, ACS 2020-2024 5-year (detailed tables are not published in the 1-year), alone or in any combination (% of county).** "Alone" counts are much smaller because about a quarter of residents report two or more races (27.0% statewide, B02001).
 
 | County | #1 | #2 | #3 | #4 |
 |---|---|---|---|---|
@@ -276,7 +291,7 @@ Result: Lahaina wildfire, 2023-08-11. Observed 1,418 people in shelters (Maui No
 The challenge PDF gives no baseline number ("Teams may propose their own baseline and target time", p. 7).
 - **Baseline (team assumption, to be confirmed with DHS):** at least **2 working days per county per event**, about 8 working days statewide. Reasoning: the manual steps DHS describes (p. 3–4): pull program and provider reports, cross-reference lists with hazard zones, recompile shelter lists, and call partners to confirm capacity "for each planning cycle and each event". These steps are done by hand, often "only after an event begins" (p. 4).
 - **Target:** same day, under 1 working day statewide.
-- **Measured:** a full rebuild from local data (all 14 build steps, 20 scenarios, 20 PDFs, app bundle) takes **44.0 seconds** on an Apple M4 laptop (measured 2026-10-28 with `scripts/time_rebuild.py`; result in `data/processed/rebuild_timing.json`). The test suite (334 automated tests, including headless-browser checks of every view, deep links, keyboard map layers and offline use) takes about 50 s. A full data refresh from the internet adds downloads plus the flood-zone queries, which are paced at 1 s per point for 311 points (at least 5.2 minutes). That refresh is not timed end to end.
+- **Measured:** a full rebuild from local data (all 14 build steps, 20 scenarios, 20 PDFs, app bundle) takes **44.0 seconds** on an Apple M4 laptop (measured 2026-10-28 with `scripts/time_rebuild.py`; result in `data/processed/rebuild_timing.json`). The test suite (336 automated tests, including headless-browser checks of every view, deep links, keyboard map layers and offline use) takes about 50 s. A full data refresh from the internet adds downloads plus the flood-zone queries, which are paced at 1 s per point for 311 points (at least 5.2 minutes). That refresh is not timed end to end.
 - **Plus human review (team assumption):** one review session per county to confirm sites, roles and pledges. The pipeline removes the compiling and arithmetic; it does not remove the partner calls. It turns them into filling in blank capacity fields.
 - **Measurement plan.** The baseline above stays a team assumption until it is measured. We propose a timed tabletop exercise with DHS and one county. The same planners produce a needs-and-resources draft for one county × hazard scenario twice: once with their current manual process (baseline) and once with this tool (tool-assisted). **Start** = hazard selected; **stop** = needs-and-resources draft approved by the county or DHS lead. We report both times in minutes (baseline vs tool-assisted), with the number of partner calls and corrections made during review.
 
@@ -347,7 +362,7 @@ AI is **not** used at run time: the model, the matching, the playbooks and the a
 8. **Not yet modeled:** earthquake, sheltering in place (including high-rise power loss), and shelter-in-place support, all named in the challenge PDF (pp. 4, 8).
 9. **Messages:** all drafts need native-speaker and county review. **Chuukese and Marshallese need human translators.** Next: request translators through the Hawaiʻi State Office of Language Access (Department of Health; it keeps an interpreter roster and publishes materials in Chuukese and Marshallese: https://health.hawaii.gov/ola/), or through community partners such as We Are Oceania, a Micronesian-led organization whose helpline offers help in Chuukese and Marshallese (Civil Beat resource guide: https://www.civilbeat.org/covid-19-resources/). Confirm availability with each organization; the helpline listing dates from the COVID-19 response.
 10. **Population figures predate the Lahaina fire.** CDC SVI 2022 (ACS 2018-2022) and the 2020 Census mostly predate the **August 8, 2023 Lahaina fire**, so West Maui Census-area populations in the AFN layer may be overstated. ACS 2020-2024 shows Lahaina CDP at 10,162 ±1,143 against 12,702 in the 2020 Census, and part of that 5-year window is before the fire. Planners should use current County of Maui figures for Lahaina. The app and every PDF now say so next to each Lahaina-area Census area wherever it is named (Census areas 314.02, 314.04 and 314.05, identified from their community labels). The note reads: "Population is from the 2020 Census, before the August 2023 Lahaina fire, which destroyed much of the town. Use current County of Maui figures for Lahaina." The Maui summary in the app and in the Maui PDFs carries the same line.
-11. **TODO – ACS 2025 1-year (released October 29, 2026):** refresh county figures for Honolulu, Hawaiʻi, Maui and Kauaʻi counties (`scripts/build_demographics.py`). Kalawao is too small for 1-year data and keeps the 5-year figures.
+11. **Done – ACS 2025 1-year (released October 29, 2026):** county figures for Honolulu, Hawaiʻi, Maui and Kauaʻi counties refreshed (§5.6); the detailed race tables are not published in the 1-year and keep the 5-year. Kalawao keeps the 5-year. Census-area (tract) data and the model are unchanged; they use ACS 5-year and SVI, as before.
 12. **County lines and high-rise homes.** The Partners In Care 2026 Point-in-Time report PDF for Oʻahu could not be found; the Oʻahu total (4,539) comes from the City and County of Honolulu release of 2026-05-21, which gives the total only. The neighbor-island Continuum of Care is Bridging the Gap (BTG). Homelessness and visitor counts are county lines, never added to Census-area totals. "Homes in buildings with 10+ units" (CDC SVI E_MUNIT) counts housing units, not people.
 13. **More CMIST detail uses a newer ACS release.** Hearing, vision and cognitive difficulty and age 65+ living alone come from ACS 2020-2024; the other CMIST counts come from CDC SVI 2022 (ACS 2018-2022). Both use 2020 Census tracts.
 

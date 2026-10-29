@@ -94,13 +94,47 @@ class CountyTotals(unittest.TestCase):
 
 class Race(unittest.TestCase):
     def test_broad_alone_groups_sum_to_total(self):
-        for source in (bd.ACS_VINTAGE, bd.PEP_VINTAGE):
+        for kind in ("acs", bd.PEP_VINTAGE):
             for county in ("State",) + bd.COUNTY_ORDER:
+                # ACS: the 2025 1-year for the four large counties, else the 5-year
+                source = kind if kind != "acs" else (
+                    bd.ACS1_VINTAGE if county in bd.ACS1_COUNTIES else bd.ACS_VINTAGE)
                 rows = [r for r in RACE if r["source"] == source and r["county"] == county
                         and r["group_type"] == "broad" and r["measure"] == "alone"]
                 self.assertTrue(rows, (source, county))
                 self.assertEqual(sum(int(r["count"]) for r in rows), int(rows[0]["county_total"]),
                                  (source, county))
+
+    def test_acs_2025_1yr_for_four_counties_only(self):
+        """Honolulu, Hawaiʻi, Maui, Kauaʻi: ACS 2025 1-year where published, otherwise the
+        5-year figure with a note saying the 1-year is not published. Kalawao and State
+        keep the 5-year. Every ACS figure carries its vintage and MOE column."""
+        acs = [r for r in RACE if r["source"].startswith("ACS")]
+        for r in acs:
+            self.assertIn(r["vintage"], (bd.ACS_VINTAGE, bd.ACS1_VINTAGE))
+            self.assertIn("moe_90", r)
+            if r["county"] in bd.ACS1_COUNTIES:
+                if r["vintage"] == bd.ACS_VINTAGE:
+                    self.assertIn("ACS 2025 1-year not published", r["note"], r)
+                else:
+                    self.assertTrue(r["table_id"].startswith("ACSDT1Y2025."), r)
+            else:
+                self.assertEqual(r["vintage"], bd.ACS_VINTAGE, r)
+        for c in bd.ACS1_COUNTIES:
+            broad = [r for r in acs if r["county"] == c and r["group_type"] == "broad"]
+            self.assertTrue(broad and all(r["vintage"] == bd.ACS1_VINTAGE for r in broad), c)
+
+    def test_population_1yr_columns(self):
+        rows = {r["county"]: r for r in POP}
+        for c in bd.ACS1_COUNTIES:
+            self.assertTrue(rows[c]["pop_acs_2025_1yr"], c)
+            # 1-year county totals are controlled to the Vintage 2025 estimates (+/- rounding
+            # where a small MOE is published, e.g. Maui)
+            self.assertLess(abs(int(rows[c]["pop_acs_2025_1yr"]) - int(rows[c]["pop_2025_v2025"])), 100, c)
+            if not rows[c]["moe_acs_2025_1yr"]:
+                self.assertIn("controlled", rows[c]["acs_2025_1yr_note"], c)
+        self.assertEqual(rows["Kalawao"]["pop_acs_2025_1yr"], "")
+        self.assertIn("fewer than 65,000", rows["Kalawao"]["acs_2025_1yr_note"])
 
     def test_every_group_has_alone_and_combination(self):
         for source in (bd.ACS_VINTAGE, "2020 Census"):

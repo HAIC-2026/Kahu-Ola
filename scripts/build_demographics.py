@@ -9,10 +9,13 @@ Newest published data first; the 2020 Census is the baseline and cross-check.
   * Communities: ACS 2020-2024 5-year total population for every Census Designated
     Place (CDP), with the 2020 Census count; each CDP is assigned to an island using
     DBEDT State Data Book 2025 table 01.12 (island and CDP).
-  * Race/ethnicity by county: ACS 2020-2024 5-year detailed tables (B02015/B02016
-    alone, B02018/B02019 alone or in any combination), broad groups (B02001,
-    B02008-B02012, B03002) and Vintage 2025 broad groups; 2020 Census DHC-A
-    (table T01001, one POPGROUP per group) as the 2020 baseline.
+  * Race/ethnicity by county: ACS detailed tables (B02015/B02016 alone, B02018/B02019
+    alone or in any combination), broad groups (B02001, B02008-B02012, B03002) and
+    Vintage 2025 broad groups; 2020 Census DHC-A (table T01001, one POPGROUP per group) as
+    the 2020 baseline. Honolulu, Hawaiʻi, Maui and Kauaʻi counties use the ACS 2025
+    1-year (released 2026-10-29) wherever the table and cell are published; otherwise
+    the ACS 2020-2024 5-year figure is kept and the row says so. Kalawao (too small for
+    1-year estimates) and the State rows keep the 5-year.
 
 Census publishes detailed race down to county only. Honolulu County = Oʻahu and
 Hawaiʻi County = Hawaiʻi Island; Maui County and Kauaʻi County are multi-island and
@@ -84,6 +87,13 @@ G_STATE = "0400000US15"
 G_PLACE = "040XX00US15%241600000"
 ACS_YEAR = 2024                                  # ACS 2020-2024 5-year (newest, checked 2026-10-27)
 ACS_VINTAGE = "ACS 2020-2024 5-year"
+ACS1_YEAR = 2025                                 # ACS 2025 1-year, released 2026-10-29
+ACS1_VINTAGE = "ACS 2025 1-year"
+ACS1_COUNTIES = ("Honolulu", "Hawaii", "Maui", "Kauai")      # 65,000+ people; not Kalawao
+ACS1_KEPT = ("ACS 2025 1-year not published for this {what}; ACS 2020-2024 5-year figure "
+             "kept.")
+CONTROLLED = ("No margin of error: the 1-year county total is controlled to the Census "
+              "Bureau's population estimates.")
 PL_VINTAGE = "2020 Census (PL 94-171), April 1, 2020"
 DHCA_VINTAGE = "2020 Census DHC-A, April 1, 2020"
 PEP_VINTAGE = "Census Bureau Population Estimates, Vintage 2025 (July 1, 2025)"
@@ -104,6 +114,10 @@ def dc_url(table_id: str, g: str, popgroup: str = "") -> str:
 
 def acs_id(table: str) -> str:
     return f"ACSDT5Y{ACS_YEAR}.{table}"
+
+
+def acs1_id(table: str) -> str:
+    return f"ACSDT1Y{ACS1_YEAR}.{table}"
 
 
 ACS_TABLES = ("B01003", "B02001", "B02008", "B02009", "B02010", "B02011", "B02012",
@@ -174,6 +188,10 @@ def raw_jobs() -> dict:
         jobs[f"acs_{t}_state.json"] = dc_url(acs_id(t), G_STATE)
     for t in ("B02001", "B02015", "B02016", "B02018", "B02019"):
         jobs[f"acs_{t}_labels.json"] = f"https://api.census.gov/data/{ACS_YEAR}/acs/acs5/groups/{t}.json"
+    for t in ACS_TABLES:
+        jobs[f"acs1_{t}_county.json"] = dc_url(acs1_id(t), G_COUNTY)
+    for t in ("B02001", "B02015", "B02016", "B02018", "B02019"):
+        jobs[f"acs1_{t}_labels.json"] = f"https://api.census.gov/data/{ACS1_YEAR}/acs/acs1/groups/{t}.json"
     jobs["acs_B01003_place.json"] = dc_url(acs_id("B01003"), G_PLACE)
     for t in PL_TABLES:
         jobs[f"pl_{t}_county.json"] = dc_url(f"DECENNIALPL2020.{t}", G_COUNTY)
@@ -193,12 +211,19 @@ def download_all(pause: float = 1.0) -> None:
     RAW.mkdir(parents=True, exist_ok=True)
     for name, url in raw_jobs().items():
         path = RAW / name
-        if url.startswith(DC):
-            path.write_text(json.dumps(fetch_table(url)), encoding="utf-8")
-        elif name.endswith(".json"):
-            path.write_text(json.dumps(fetch_json(url)), encoding="utf-8")
-        else:
-            path.write_bytes(fetch_bytes(url))
+        try:
+            if url.startswith(DC):
+                path.write_text(json.dumps(fetch_table(url)), encoding="utf-8")
+            elif name.endswith(".json"):
+                path.write_text(json.dumps(fetch_json(url)), encoding="utf-8")
+            else:
+                path.write_bytes(fetch_bytes(url))
+        except (OSError, RuntimeError, ValueError) as e:
+            if not name.startswith("acs1_"):
+                raise
+            # ACS 1-year table not published (yet): recorded, the 5-year figure is kept
+            path.write_text(json.dumps({"response": {"data": [], "unavailable": str(e)[:200]}}),
+                            encoding="utf-8")
         print(f"  {name}")
         time.sleep(pause)
 
@@ -206,7 +231,10 @@ def download_all(pause: float = 1.0) -> None:
 # ---------------------------------------------------------------- parsing helpers
 
 def dc_rows(name: str) -> tuple:
-    """data.census.gov response -> (rows as dicts, equivalent api.census.gov URL)."""
+    """data.census.gov response -> (rows as dicts, equivalent api.census.gov URL).
+    A missing ACS 1-year file counts as not published."""
+    if name.startswith("acs1_") and not (RAW / name).exists():
+        return [], ""
     resp = json.loads((RAW / name).read_text(encoding="utf-8"))["response"]
     data = resp["data"]
     if not data:
@@ -320,18 +348,34 @@ def county_totals() -> list:
     pl_by = {county_of(r["GEO_ID"]): num(r["P1_001N"]) for r in pl + pl_state}
     pep = {("State" if r["COUNTY"] == "000" else COUNTY_FIPS["15" + r["COUNTY"]]): r
            for r in pep_rows()}
+    acs5 = acs_values("B01003")[0]
+    acs1 = acs1_values("B01003")
     out = []
     for c in ("State",) + COUNTY_ORDER:
         r = pep[c]
         p20, p25 = pl_by[c], num(r["POPESTIMATE2025"])
+        a5, a1 = acs5.get(c, {}), acs1.get(c) if c in ACS1_COUNTIES else None
+        est1 = num((a1 or {}).get("B01003_001E"))
+        moe1 = num((a1 or {}).get("B01003_001M"))
+        acs1_note = (
+            "Not in the ACS 1-year (fewer than 65,000 people); ACS 2020-2024 5-year kept."
+            if c == "Kalawao" else "State figure not refreshed (county figures only)."
+            if c == "State" else ACS1_KEPT.format(what="table")
+            if est1 is None else "" if moe1 is not None else CONTROLLED)
         out.append({
             "county": c, "area_label": AREA_LABEL[c],
             "pop_2020_census": fmt(p20), "estimates_base_2020": r["ESTIMATESBASE2020"],
             "pop_2025_v2025": fmt(p25),
+            "pop_acs_2020_2024": fmt(num(a5.get("B01003_001E"))),
+            "moe_acs_2020_2024": fmt(num(a5.get("B01003_001M"))),
+            "pop_acs_2025_1yr": fmt(est1), "moe_acs_2025_1yr": fmt(moe1),
+            "acs_2025_1yr_note": acs1_note,
             "change_2020_2025": fmt(p25 - p20), "pct_change": pct(p25 - p20, p20),
-            "table_ids": "DECENNIALPL2020.P1 (P1_001N); CO-EST2025-ALLDATA (POPESTIMATE2025)",
+            "table_ids": "DECENNIALPL2020.P1 (P1_001N); CO-EST2025-ALLDATA (POPESTIMATE2025); "
+                         f"{acs_id('B01003')}; " + (acs1_id("B01003") if est1 is not None else ""),
             "source_urls": f"{dc_url('DECENNIALPL2020.P1', G_COUNTY)} ; {PEP_TOTALS_URL}",
-            "vintage": f"{PL_VINTAGE}; {PEP_VINTAGE}",
+            "vintage": f"{PL_VINTAGE}; {PEP_VINTAGE}; {ACS_VINTAGE}"
+                       + (f"; {ACS1_VINTAGE}" if est1 is not None else ""),
             "note": PEP_NOTE + ". Change = Vintage 2025 minus the 2020 Census count; "
                     "the estimates base differs slightly from the count.",
         })
@@ -444,9 +488,14 @@ def acs_values(table: str) -> tuple:
     return {county_of(r["GEO_ID"]): r for r in rows}, api
 
 
-def acs_label(var: str) -> str:
+def acs1_values(table: str) -> dict:
+    """county -> row of the ACS 2025 1-year table ({} when the table is not published)."""
+    return {county_of(r["GEO_ID"]): r for r in dc_rows(f"acs1_{table}_county.json")[0]}
+
+
+def acs_label(var: str, prefix: str = "acs") -> str:
     table = var.split("_")[0]
-    path = RAW / f"acs_{table}_labels.json"
+    path = RAW / f"{prefix}_{table}_labels.json"
     if not path.exists():
         return ""
     meta = json.loads(path.read_text(encoding="utf-8"))["variables"].get(var + "E", {})
@@ -456,6 +505,8 @@ def acs_label(var: str) -> str:
 def race_rows() -> list:
     tables = {t: acs_values(t) for t in ACS_TABLES}
     totals = {c: num(r["B01003_001E"]) for c, r in tables["B01003"][0].items()}
+    tables1 = {t: acs1_values(t) for t in ACS_TABLES}
+    totals1 = {c: num(r.get("B01003_001E")) for c, r in tables1["B01003"].items()}
     pl = {county_of(r["GEO_ID"]): num(r["P1_001N"])
           for f in ("pl_P1_county.json", "pl_P1_state.json") for r in dc_rows(f)[0]}
     pep = pep_char()
@@ -466,6 +517,24 @@ def race_rows() -> list:
 
     def acs_row(c, group, gtype, measure, var):
         table = var.split("_")[0]
+        kept = ""
+        if c in ACS1_COUNTIES:                       # ACS 2025 1-year where published
+            r1 = tables1[table].get(c)
+            est1 = num((r1 or {}).get(var + "E"))
+            if r1 is not None and est1 is not None:
+                moe1 = num(r1.get(var + "M"))
+                note = "" if moe1 is not None else \
+                    f"MOE not published (annotation {r1.get(var + 'MA') or r1.get(var + 'M')})"
+                out.append({
+                    "county": c, "area_label": AREA_LABEL[c], "group": group, "group_type": gtype,
+                    "measure": measure, "source": ACS1_VINTAGE, "vintage": ACS1_VINTAGE,
+                    "count": fmt(est1), "moe_90": fmt(moe1), "pct_of_county": pct(est1, totals1.get(c)),
+                    "county_total": fmt(totals1.get(c)), "status": "published",
+                    "table_id": acs1_id(table), "variable": var + "E",
+                    "source_url": dc_url(acs1_id(table), G_COUNTY), "note": note,
+                })
+                return
+            kept = ACS1_KEPT.format(what="table" if not tables1[table] else "cell")
         r = tables[table][0].get(c, {})
         est, moe = num(r.get(var + "E")), num(r.get(var + "M"))
         status = "published" if est is not None else "not available"
@@ -480,7 +549,7 @@ def race_rows() -> list:
             "county_total": fmt(totals.get(c)), "status": status,
             "table_id": acs_id(table), "variable": var + "E",
             "source_url": dc_url(acs_id(table), G_STATE if c == "State" else G_COUNTY),
-            "note": note,
+            "note": " ".join(x for x in (kept, note) if x),
         })
 
     def pep_row(c, group, measure, prefix):
@@ -539,14 +608,16 @@ def race_rows() -> list:
 
 
 def verify_labels() -> list:
-    """Mismatches between the expected and the published ACS variable labels."""
+    """Mismatches between the expected and the published ACS variable labels (5-year and
+    2025 1-year: the same variable must mean the same group in both)."""
     bad = []
-    for var, want in EXPECTED_LABEL.items():
-        got = acs_label(var)
-        aoic = var.replace("B02016", "B02019").replace("B02015", "B02018")
-        for v, g in ((var, got), (aoic, acs_label(aoic))):
-            if g and g != want:
-                bad.append(f"{v}: {g!r} != {want!r}")
+    for prefix in ("acs", "acs1"):
+        for var, want in EXPECTED_LABEL.items():
+            aoic = var.replace("B02016", "B02019").replace("B02015", "B02018")
+            for v in (var, aoic):
+                g = acs_label(v, prefix)
+                if g and g != want:
+                    bad.append(f"{prefix} {v}: {g!r} != {want!r}")
     for group, (a_var, *_rest) in BROAD.items():
         got = acs_label(a_var)
         if got and not got.lower().startswith(group.lower().split(" or ")[0][:5]):
