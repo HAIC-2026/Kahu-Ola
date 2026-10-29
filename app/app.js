@@ -257,7 +257,8 @@ function renderMap(county, sc, sites, title, hazard) {
     g.append(facilityShape((FACILITY[f.t] || FACILITY.hospital)[0], 0, 0));
     const zone = facilityZone(f, hazard);
     if (zone) {
-      const w = svg("text", { x: 6, y: -4, "font-size": "13", "font-weight": "bold", stroke: "#ffffff", "stroke-width": "3", "paint-order": "stroke", class: "zone-flag" });
+      const w = svg("text", { x: 6, y: -4, "font-size": "13", "font-weight": "bold", stroke: "#ffffff", "stroke-width": "3", "paint-order": "stroke", class: "zone-flag",
+        role: "img", "aria-label": `In hazard zone: ${zone}` });
       w.textContent = "⚠"; g.append(w);
     }
     const tip = svg("title");
@@ -336,7 +337,7 @@ function renderMap(county, sc, sites, title, hazard) {
     sw.append(svg("circle", { cx: 14, cy: 11, r: 2.5, fill: "#000" }));
     legend.append(el("li", null, sw, `Outdoor siren (dot) and its rated audible radius, ${fmt(DATA.state.radius_ft)} feet (dashed circle; real range varies)`));
   }
-  if (facilities.some((f) => facilityZone(f, hazard))) legend.append(el("li", null, el("span", { class: "legend-glyph", "aria-hidden": "true" }, "⚠"), "Care facility inside this hazard's zone"));
+  if (facilities.some((f) => facilityZone(f, hazard))) legend.append(el("li", null, el("span", { class: "legend-glyph", "aria-hidden": "true" }, "⚠"), "Care facility inside this hazard's zone (small ⚠ beside the facility; each area's panel lists them in words)"));
   const seen = new Set();
   for (const [shape, label] of Object.values(MARKERS)) {
     if (seen.has(label)) continue; seen.add(label);
@@ -671,7 +672,7 @@ const provLabel = (text, link) => {
 };
 
 /* ---------- Messages: every stored message row, filters only narrow ---------- */
-const MSG = { county: null, onlyCounty: false, hazard: "", phase: "", language: "" };
+const MSG = { county: null, onlyCounty: false, hazard: "", phase: "", language: "", open: new Set(["English"]) };
 
 function msgSelect(label, key, pairs) {
   const id = `msg-${key}`;
@@ -755,7 +756,28 @@ function renderMessages() {
     counts,
     filters,
     el("p", { role: "status" }, `Showing ${fmt(shown.length)} of ${fmt(all.length)} messages.`),
-    ...cards);
+    msgGroups(shown, cards, countyLangs, cLabel));
+}
+
+/* one open/close section per language (native <details>), in library order. English starts
+   open; a language picked in the filter opens; sections the user opens stay open on re-render. */
+function msgGroups(shown, cards, countyLangs, cLabel) {
+  const groups = new Map();
+  shown.forEach((m, i) => {
+    if (!groups.has(m.language)) groups.set(m.language, { label: m.language_label, cards: [], texts: 0 });
+    const g = groups.get(m.language);
+    g.cards.push(cards[i]);
+    if (m.text) g.texts += 1;
+  });
+  return [...groups].map(([lang, g]) => {
+    const d = el("details", { class: "msg-group", open: MSG.open.has(lang) || MSG.language === lang ? "" : null },
+      el("summary", null, el("h3", null, g.label),
+        el("small", null, `${fmt(g.cards.length)} ${g.cards.length === 1 ? "message" : "messages"}${g.texts < g.cards.length ? `, ${fmt(g.cards.length - g.texts)} waiting for a translator` : ""}`),
+        countyLangs.has(lang) ? el("span", { class: "tag" }, `In ${cLabel}'s list`) : null),
+      el("div", { class: "msg-list" }, g.cards));
+    d.addEventListener("toggle", () => { if (d.open) MSG.open.add(lang); else MSG.open.delete(lang); });
+    return d;
+  });
 }
 
 /* ---------- plan view ---------- */
