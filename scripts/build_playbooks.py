@@ -142,9 +142,11 @@ SOURCE = {
                  "State tsunami evacuation zone and FEMA flood zones (Hawaiʻi Statewide GIS, "
                  "State DFIRM).",
     "sirens": "Source: Hawaiʻi Emergency Management Agency public siren map (locations of "
-              "permanent outdoor warning sirens; no live status). Audible radius: 3,400 feet, "
+              "permanent outdoor warning sirens; no live status). Rated range: 3,400 feet, "
               "the manufacturer rating published by the Hawaiʻi Emergency Management Agency; "
-              "the real range varies with terrain, buildings and weather.",
+              "the real range varies with terrain, buildings and weather. Share of people in "
+              "range: share of about 100 points spread over each Census area within 3,400 feet "
+              "of a siren, the same method as for the tsunami zone.",
     "dams": "Source: State of Hawaiʻi dam evacuation zones (published through Hawaiʻi Statewide "
             "GIS). People = share of each Census area inside a zone × its population, the same "
             "method as for the tsunami zone.",
@@ -606,7 +608,7 @@ def county_lines_html(lines: list, county: str) -> str:
     return ('<h3>Also plan for (county counts, not included in the totals above)</h3>'
             + table(["Group", "People", "Detail", "Date"], rows, num_cols=(1,))
             + f'<p class="src">{escape(src_text("county_lines"))}</p>'
-            + (f'<p class="src">{escape(src_text("dams"))}</p>'
+            + (f'<p>{escape(bsl.DAM_NOTE)}</p><p class="src">{escape(src_text("dams"))}</p>'
                if any(r["line"] == "dam_zones" and r["county"] == county for r in lines) else ""))
 
 
@@ -617,18 +619,21 @@ def who_else_html() -> str:
 
 
 def zero_siren_html(state: dict | None, county: str, labels: dict) -> str:
-    """Populated Census areas with no permanent outdoor siren, grouped by community."""
+    """Rated siren range (HI-EMA 3,400 ft): areas whose land point is outside it, and
+    areas with less than half their people inside it (grouped by community)."""
     if not state:
         return ""
-    fips = [f for f in state["zero_siren_areas"] if state["areas"][f]["county"] == county]
+    n_out = sum(1 for f in state["outside_siren_range"] if state["areas"][f]["county"] == county)
+    head = f'<p>{escape(bsl.OUTSIDE_RANGE)}: <b>{n_out}</b>.</p>'
+    fips = [f for f in state["low_siren_coverage"] if state["areas"][f]["county"] == county]
     if not fips:
-        return ""
+        return head + f'<p class="src">{escape(src_text("sirens"))}</p>'
     groups = {}
     for f in fips:
         main = labels.get(f, f).split(" · ")[0]
         groups.setdefault(main, []).append(f[5:9].lstrip("0") + ("." + f[9:] if f[9:] != "00" else ""))
     items = "; ".join(f"{escape(k)} ({', '.join(v)})" for k, v in sorted(groups.items()))
-    return (f'<p><b>Populated Census areas with 0 outdoor sirens ({len(fips)}): '
+    return (head + f'<p><b>{escape(bsl.LOW_RANGE)} ({len(fips)}): '
             f'{escape(bsl.NO_SIRENS)}.</b> <small>{items}</small></p>'
             f'<p class="src">{escape(src_text("sirens"))}</p>')
 

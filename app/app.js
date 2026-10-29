@@ -450,11 +450,13 @@ function nearestSites(tr, sites, k = 3) {
 function zeroSirens(county) {
   if (!hasState()) return [];
   const label = Object.fromEntries(DATA.tracts.map((t) => [t.f, t.l || t.f]));
-  const zero = DATA.state.zero[county] || [];
-  if (!zero.length) return [];
-  return [el("details", { class: "areas", id: "zero-sirens" },
-    el("summary", null, `Populated Census areas with 0 outdoor sirens (${zero.length}): ${DATA.state.no_sirens}`),
-    el("ul", null, zero.map((f) => el("li", null, label[f] || f)))), source("sirens")];
+  const share = Object.fromEntries(DATA.tracts.map((t) => [t.f, t.sc || 0]));
+  const low = DATA.state.low[county] || [];
+  return [el("p", { id: "outside-sirens" }, `${DATA.state.outside_text}: `, el("strong", null, fmt(DATA.state.outside[county] || 0)), "."),
+    low.length ? el("details", { class: "areas", id: "zero-sirens" },
+      el("summary", null, `${DATA.state.low_text} (${low.length}): ${DATA.state.no_sirens}`),
+      el("ul", null, low.map((f) => el("li", null, `${label[f] || f} – ${Math.round(share[f] * 100)}% within rated range`)))) : null,
+    source("sirens")];
 }
 
 /* care facilities inside this Census area, and whether each is in the hazard's zone */
@@ -549,8 +551,10 @@ function openArea(f, opener) {
     tr.o && tr.o[hazard] && tr.i !== "Niʻihau" ? el("p", { class: "note", id: "outside-drive" },
       `${DATA.access.no_activated}, for ${hz.toLowerCase()}. With DOE candidate schools: ${tr.o[hazard] === 1 ? `a candidate school usable for ${hz.toLowerCase()} is within ${DATA.access.limit} minutes` : `still none within ${DATA.access.limit} minutes`}. ${DATA.access.not_no_shelter}`) : null,
     near.length && near[0].drive !== undefined ? el("p", { class: "src" }, `${DATA.access.source} ${DATA.access.attribution}`) : null,
-    hasState() ? el("p", { id: "area-sirens" }, el("strong", null, `Outdoor sirens in this area: ${fmt(tr.s || 0)}`),
-      tr.s ? "" : ` – ${DATA.state.no_sirens}.`) : null,
+    hasState() ? el("p", { id: "area-sirens" },
+      el("strong", null, `Nearest outdoor siren: ${tr.sd === null || tr.sd === undefined ? "none on this island" : `${fmt(tr.sd)} ft`} (rated range ${fmt(DATA.state.radius_ft)} ft)`), el("br"),
+      el("strong", null, `Share of people within rated siren range: ${Math.round((tr.sc || 0) * 100)}%`),
+      (tr.sc || 0) < 0.5 ? ` – ${DATA.state.no_sirens}.` : "") : null,
     careInArea(f, hazard),
     el("p", null, el("strong", null, "Proposed partners: "), `lead – ${[...lead].join(", ") || "—"}; support – ${[...support].join(", ") || "—"}. `, DATA.meta.role_status),
     el("p", null, el("strong", null, `Top languages (${L.area}): `), langs.map((r) => `${r[0]} ${fmt(r[1])}`).join("; ") || "—"),
@@ -821,6 +825,7 @@ function renderPlan() {
     lines.length ? table("Also plan for (county counts, not included in the totals above)", ["Group", "People", "Detail", "Date"],
       lines.map((r) => [r.label, fmt(r.value), r.detail, r.period]), [1]) : null,
     lines.length ? source("county_lines") : null,
+    lines.some((r) => r.line === "dam_zones") && hasState() ? el("p", { id: "dam-note" }, DATA.state.dam_note) : null,
     lines.some((r) => r.line === "dam_zones") ? source("dams") : null,
     county === "Maui" ? el("p", null, DATA.meta.kalawao_note) : null,
     el("div", { class: "note" }, el("strong", null, "Who else to plan for"),

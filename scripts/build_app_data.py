@@ -148,15 +148,19 @@ def state_bundle(state: dict | None, labels: dict) -> dict:
     with no siren per county, and the "Check dam zone" wording. Empty without the summary."""
     if not state:
         return {}
-    zero, sirens = {}, {}
-    for f in state["zero_siren_areas"]:
-        zero.setdefault(state["areas"][f]["county"], []).append(f)
+    low, outside, sirens = {}, {}, {}
+    for f in state["low_siren_coverage"]:
+        low.setdefault(state["areas"][f]["county"], []).append(f)
+    for f in state["outside_siren_range"]:
+        outside[state["areas"][f]["county"]] = outside.get(state["areas"][f]["county"], 0) + 1
     for x in state["sirens"]:
         sirens.setdefault(x["county"], []).append([x["lon"], x["lat"]])
     r = state["meta"]["siren_radius"]
     return {"sirens": sirens, "radius_m": r["metres"], "radius_ft": r["feet"],
-            "zero": {c: sorted(v, key=lambda f: labels.get(f, {}).get("tract_label", f))
-                     for c, v in zero.items()},
+            "low": {c: sorted(v, key=lambda f: labels.get(f, {}).get("tract_label", f))
+                    for c, v in low.items()},
+            "outside": outside, "outside_text": bsl.OUTSIDE_RANGE, "low_text": bsl.LOW_RANGE,
+            "dam_note": bsl.DAM_NOTE,
             "no_sirens": bsl.NO_SIRENS, "check_dam": bsl.CHECK_DAM}
 
 
@@ -195,7 +199,9 @@ def tract_geometry(afn: dict, labels: dict | None = None, site_ids: dict | None 
                         "p": [r4(cx), r4(cy)], "n": area_counts(f["properties"]),
                         "i": ISLANDS.get(("area", fips), ""),
                         **area_access(fips, site_ids or {}, access),
-                        **({"s": STATE["areas"][fips]["sirens"]} if STATE and fips in STATE["areas"] else {})})
+                        **({"sd": STATE["areas"][fips]["nearest_siren_ft"],
+                            "sc": STATE["areas"][fips]["siren_share"]}
+                           if STATE and fips in STATE["areas"] else {})})
     return out
 
 

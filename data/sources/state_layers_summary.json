@@ -5,7 +5,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 28324,
    "population": 4499.0,
+   "siren_people": 292,
+   "siren_share": 0.065,
    "sirens": 6
   },
   "15001020202": {
@@ -13,7 +16,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 40855,
    "population": 2302.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15001020300": {
@@ -21,7 +27,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 689,
    "population": 4167.0,
+   "siren_people": 2884,
+   "siren_share": 0.692,
    "sirens": 2
   },
   "15001020400": {
@@ -29,7 +38,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 2570,
    "population": 3398.0,
+   "siren_people": 3398,
+   "siren_share": 1.0,
    "sirens": 2
   },
   "15001020500": {
@@ -37,7 +49,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 4719,
    "population": 5552.0,
+   "siren_people": 3065,
+   "siren_share": 0.552,
    "sirens": 0
   },
   "15001020600": {
@@ -45,7 +60,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 9339,
    "population": 6802.0,
+   "siren_people": 2306,
+   "siren_share": 0.339,
    "sirens": 7
   },
   "15001020701": {
@@ -53,7 +71,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 1201,
    "population": 5246.0,
+   "siren_people": 2859,
+   "siren_share": 0.545,
    "sirens": 1
   },
   "15001020702": {
@@ -61,7 +82,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 5369,
    "population": 4828.0,
+   "siren_people": 1685,
+   "siren_share": 0.349,
    "sirens": 0
   },
   "15001020801": {
@@ -69,7 +93,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 2210,
    "population": 5274.0,
+   "siren_people": 1413,
+   "siren_share": 0.268,
    "sirens": 1
   },
   "15001020802": {
@@ -77,7 +104,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 2369,
    "population": 7010.0,
+   "siren_people": 4711,
+   "siren_share": 0.672,
    "sirens": 3
   },
   "15001020900": {
@@ -85,7 +115,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 4518,
    "population": 5280.0,
+   "siren_people": 528,
+   "siren_share": 0.1,
    "sirens": 1
   },
   "15001021003": {
@@ -93,7 +126,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 11082,
    "population": 7009.0,
+   "siren_people": 371,
+   "siren_share": 0.053,
    "sirens": 1
   },
   "15001021011": {
@@ -101,7 +137,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 27908,
    "population": 4540.0,
+   "siren_people": 186,
+   "siren_share": 0.041,
    "sirens": 1
   },
   "15001021013": {
@@ -109,7 +148,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 2319,
    "population": 5059.0,
+   "siren_people": 142,
+   "siren_share": 0.028,
    "sirens": 1
   },
   "15001021014": {
@@ -117,7 +159,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 7641,
    "population": 8135.0,
+   "siren_people": 2384,
+   "siren_share": 0.293,
    "sirens": 2
   },
   "15001021015": {
@@ -125,7 +170,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 7250,
    "population": 4598.0,
+   "siren_people": 1177,
+   "siren_share": 0.256,
    "sirens": 1
   },
   "15001021016": {
@@ -133,7 +181,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 17658,
    "population": 5088.0,
+   "siren_people": 204,
+   "siren_share": 0.04,
    "sirens": 1
   },
   "15001021017": {
@@ -141,7 +192,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 29515,
    "population": 3566.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15001021101": {
@@ -149,7 +203,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 8670,
    "population": 2996.0,
+   "siren_people": 428,
+   "siren_share": 0.143,
    "sirens": 4
   },
   "15001021107": {
@@ -157,7 +214,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 39875,
    "population": 1003.0,
+   "siren_people": 19,
+   "siren_share": 0.019,
    "sirens": 2
   },
   "15001021108": {
@@ -165,7 +225,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 7070,
    "population": 6155.0,
+   "siren_people": 708,
+   "siren_share": 0.115,
    "sirens": 5
   },
   "15001021203": {
@@ -173,7 +236,10 @@
    "dam_people": 134,
    "dam_share": 0.024,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 35367,
    "population": 5591.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 6
   },
   "15001021204": {
@@ -181,7 +247,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 28359,
    "population": 2639.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 2
   },
   "15001021300": {
@@ -189,7 +258,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 34384,
    "population": 7384.0,
+   "siren_people": 288,
+   "siren_share": 0.039,
    "sirens": 6
   },
   "15001021402": {
@@ -197,7 +269,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 3710,
    "population": 3858.0,
+   "siren_people": 864,
+   "siren_share": 0.224,
    "sirens": 4
   },
   "15001021502": {
@@ -205,7 +280,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 52522,
    "population": 5103.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15001021504": {
@@ -213,7 +291,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 5280,
    "population": 6416.0,
+   "siren_people": 1373,
+   "siren_share": 0.214,
    "sirens": 3
   },
   "15001021510": {
@@ -221,7 +302,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 5379,
    "population": 5020.0,
+   "siren_people": 1672,
+   "siren_share": 0.333,
    "sirens": 2
   },
   "15001021511": {
@@ -229,7 +313,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 6321,
    "population": 2204.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15001021512": {
@@ -237,7 +324,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 15362,
    "population": 4594.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15001021513": {
@@ -245,7 +335,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 46350,
    "population": 5579.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 1
   },
   "15001021605": {
@@ -253,7 +346,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 6000,
    "population": 4240.0,
+   "siren_people": 1124,
+   "siren_share": 0.265,
    "sirens": 2
   },
   "15001021606": {
@@ -261,7 +357,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 5609,
    "population": 4118.0,
+   "siren_people": 1083,
+   "siren_share": 0.263,
    "sirens": 0
   },
   "15001021607": {
@@ -269,7 +368,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 5280,
    "population": 4731.0,
+   "siren_people": 497,
+   "siren_share": 0.105,
    "sirens": 0
   },
   "15001021608": {
@@ -277,7 +379,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 1414,
    "population": 4381.0,
+   "siren_people": 4271,
+   "siren_share": 0.975,
    "sirens": 2
   },
   "15001021705": {
@@ -285,7 +390,10 @@
    "dam_people": 618,
    "dam_share": 0.095,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 11854,
    "population": 6507.0,
+   "siren_people": 462,
+   "siren_share": 0.071,
    "sirens": 2
   },
   "15001021706": {
@@ -293,7 +401,10 @@
    "dam_people": 96,
    "dam_share": 0.023,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 46773,
    "population": 4153.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15001021707": {
@@ -301,7 +412,10 @@
    "dam_people": 140,
    "dam_share": 0.031,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 14502,
    "population": 4521.0,
+   "siren_people": 140,
+   "siren_share": 0.031,
    "sirens": 2
   },
   "15001021708": {
@@ -309,7 +423,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 7858,
    "population": 4450.0,
+   "siren_people": 601,
+   "siren_share": 0.135,
    "sirens": 9
   },
   "15001021800": {
@@ -317,7 +434,10 @@
    "dam_people": 187,
    "dam_share": 0.029,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 26459,
    "population": 6435.0,
+   "siren_people": 380,
+   "siren_share": 0.059,
    "sirens": 4
   },
   "15001021902": {
@@ -325,7 +445,10 @@
    "dam_people": 185,
    "dam_share": 0.051,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 14722,
    "population": 3619.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 3
   },
   "15001022000": {
@@ -333,7 +456,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 90134,
    "population": 2654.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 1
   },
   "15001022102": {
@@ -341,7 +467,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Hawaiʻi",
+   "nearest_siren_ft": 85855,
    "population": 1459.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 4
   },
   "15003000107": {
@@ -349,7 +478,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2352,
    "population": 2805.0,
+   "siren_people": 1585,
+   "siren_share": 0.565,
    "sirens": 0
   },
   "15003000108": {
@@ -357,7 +489,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1991,
    "population": 3280.0,
+   "siren_people": 2939,
+   "siren_share": 0.896,
    "sirens": 1
   },
   "15003000110": {
@@ -365,7 +500,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2413,
    "population": 4290.0,
+   "siren_people": 3548,
+   "siren_share": 0.827,
    "sirens": 2
   },
   "15003000114": {
@@ -373,7 +511,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2726,
    "population": 1475.0,
+   "siren_people": 1320,
+   "siren_share": 0.895,
    "sirens": 0
   },
   "15003000115": {
@@ -381,7 +522,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3581,
    "population": 2250.0,
+   "siren_people": 1188,
+   "siren_share": 0.528,
    "sirens": 1
   },
   "15003000116": {
@@ -389,7 +533,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4452,
    "population": 2405.0,
+   "siren_people": 688,
+   "siren_share": 0.286,
    "sirens": 0
   },
   "15003000117": {
@@ -397,7 +544,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2172,
    "population": 1544.0,
+   "siren_people": 940,
+   "siren_share": 0.609,
    "sirens": 0
   },
   "15003000118": {
@@ -405,7 +555,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5059,
    "population": 1875.0,
+   "siren_people": 388,
+   "siren_share": 0.207,
    "sirens": 0
   },
   "15003000119": {
@@ -413,7 +566,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2363,
    "population": 2692.0,
+   "siren_people": 2116,
+   "siren_share": 0.786,
    "sirens": 0
   },
   "15003000120": {
@@ -421,7 +577,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 787,
    "population": 2361.0,
+   "siren_people": 2241,
+   "siren_share": 0.949,
    "sirens": 2
   },
   "15003000121": {
@@ -429,7 +588,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3341,
    "population": 2388.0,
+   "siren_people": 1132,
+   "siren_share": 0.474,
    "sirens": 0
   },
   "15003000122": {
@@ -437,7 +599,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2846,
    "population": 3079.0,
+   "siren_people": 2217,
+   "siren_share": 0.72,
    "sirens": 0
   },
   "15003000200": {
@@ -445,7 +610,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3246,
    "population": 5537.0,
+   "siren_people": 2043,
+   "siren_share": 0.369,
    "sirens": 1
   },
   "15003000301": {
@@ -453,7 +621,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4363,
    "population": 3333.0,
+   "siren_people": 1097,
+   "siren_share": 0.329,
    "sirens": 1
   },
   "15003000302": {
@@ -461,7 +632,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2610,
    "population": 2818.0,
+   "siren_people": 2660,
+   "siren_share": 0.944,
    "sirens": 1
   },
   "15003000401": {
@@ -469,7 +643,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 6190,
    "population": 2726.0,
+   "siren_people": 480,
+   "siren_share": 0.176,
    "sirens": 0
   },
   "15003000402": {
@@ -477,7 +654,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3827,
    "population": 3912.0,
+   "siren_people": 2163,
+   "siren_share": 0.553,
    "sirens": 0
   },
   "15003000500": {
@@ -485,7 +665,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1315,
    "population": 3506.0,
+   "siren_people": 3404,
+   "siren_share": 0.971,
    "sirens": 2
   },
   "15003000600": {
@@ -493,7 +676,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2626,
    "population": 1169.0,
+   "siren_people": 1045,
+   "siren_share": 0.894,
    "sirens": 2
   },
   "15003000700": {
@@ -501,7 +687,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1363,
    "population": 3297.0,
+   "siren_people": 3297,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003000800": {
@@ -509,7 +698,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1976,
    "population": 3879.0,
+   "siren_people": 3879,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003000901": {
@@ -517,7 +709,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2346,
    "population": 2359.0,
+   "siren_people": 1557,
+   "siren_share": 0.66,
    "sirens": 1
   },
   "15003000903": {
@@ -525,7 +720,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3228,
    "population": 2619.0,
+   "siren_people": 1828,
+   "siren_share": 0.698,
    "sirens": 0
   },
   "15003000904": {
@@ -533,7 +731,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2994,
    "population": 2446.0,
+   "siren_people": 1485,
+   "siren_share": 0.607,
    "sirens": 0
   },
   "15003000905": {
@@ -541,7 +742,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3173,
    "population": 2441.0,
+   "siren_people": 1130,
+   "siren_share": 0.463,
    "sirens": 0
   },
   "15003001000": {
@@ -549,7 +753,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 8070,
    "population": 2869.0,
+   "siren_people": 152,
+   "siren_share": 0.053,
    "sirens": 0
   },
   "15003001101": {
@@ -557,7 +764,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1635,
    "population": 1807.0,
+   "siren_people": 1626,
+   "siren_share": 0.9,
    "sirens": 0
   },
   "15003001102": {
@@ -565,7 +775,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1554,
    "population": 2015.0,
+   "siren_people": 1763,
+   "siren_share": 0.875,
    "sirens": 1
   },
   "15003001201": {
@@ -573,7 +786,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4006,
    "population": 3197.0,
+   "siren_people": 710,
+   "siren_share": 0.222,
    "sirens": 0
   },
   "15003001202": {
@@ -581,7 +797,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2393,
    "population": 3157.0,
+   "siren_people": 2772,
+   "siren_share": 0.878,
    "sirens": 0
   },
   "15003001300": {
@@ -589,7 +808,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2527,
    "population": 4225.0,
+   "siren_people": 2958,
+   "siren_share": 0.7,
    "sirens": 0
   },
   "15003001400": {
@@ -597,7 +819,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 807,
    "population": 2617.0,
+   "siren_people": 2617,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003001501": {
@@ -605,7 +830,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2985,
    "population": 1836.0,
+   "siren_people": 1606,
+   "siren_share": 0.875,
    "sirens": 0
   },
   "15003001502": {
@@ -613,7 +841,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2355,
    "population": 2368.0,
+   "siren_people": 2368,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003001601": {
@@ -621,7 +852,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2230,
    "population": 1929.0,
+   "siren_people": 1867,
+   "siren_share": 0.968,
    "sirens": 0
   },
   "15003001602": {
@@ -629,7 +863,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2528,
    "population": 1621.0,
+   "siren_people": 1486,
+   "siren_share": 0.917,
    "sirens": 0
   },
   "15003001700": {
@@ -637,7 +874,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1579,
    "population": 2126.0,
+   "siren_people": 2041,
+   "siren_share": 0.96,
    "sirens": 1
   },
   "15003001801": {
@@ -645,7 +885,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1646,
    "population": 939.0,
+   "siren_people": 939,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003001803": {
@@ -653,7 +896,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 896,
    "population": 2627.0,
+   "siren_people": 2627,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003001804": {
@@ -661,7 +907,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 949,
    "population": 1532.0,
+   "siren_people": 1532,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003001901": {
@@ -669,7 +918,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1147,
    "population": 482.0,
+   "siren_people": 482,
+   "siren_share": 1.0,
    "sirens": 2
   },
   "15003001905": {
@@ -677,7 +929,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1708,
    "population": 1363.0,
+   "siren_people": 1363,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003001906": {
@@ -685,7 +940,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1246,
    "population": 3078.0,
+   "siren_people": 3078,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003001907": {
@@ -693,7 +951,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1612,
    "population": 2604.0,
+   "siren_people": 2604,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003002003": {
@@ -701,7 +962,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1674,
    "population": 1605.0,
+   "siren_people": 1605,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003002004": {
@@ -709,7 +973,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2254,
    "population": 1176.0,
+   "siren_people": 1176,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003002005": {
@@ -717,7 +984,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1007,
    "population": 1659.0,
+   "siren_people": 1659,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003002006": {
@@ -725,7 +995,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 959,
    "population": 2088.0,
+   "siren_people": 2088,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003002101": {
@@ -733,7 +1006,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1227,
    "population": 1795.0,
+   "siren_people": 1795,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003002102": {
@@ -741,7 +1017,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3559,
    "population": 1482.0,
+   "siren_people": 700,
+   "siren_share": 0.472,
    "sirens": 0
   },
   "15003002203": {
@@ -749,7 +1028,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1483,
    "population": 1573.0,
+   "siren_people": 1573,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003002204": {
@@ -757,7 +1039,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2403,
    "population": 1263.0,
+   "siren_people": 1263,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003002205": {
@@ -765,7 +1050,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3003,
    "population": 1879.0,
+   "siren_people": 1804,
+   "siren_share": 0.96,
    "sirens": 0
   },
   "15003002206": {
@@ -773,7 +1061,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3727,
    "population": 2233.0,
+   "siren_people": 435,
+   "siren_share": 0.195,
    "sirens": 0
   },
   "15003002301": {
@@ -781,7 +1072,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4246,
    "population": 3634.0,
+   "siren_people": 625,
+   "siren_share": 0.172,
    "sirens": 0
   },
   "15003002302": {
@@ -789,7 +1083,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2856,
    "population": 1711.0,
+   "siren_people": 1466,
+   "siren_share": 0.857,
    "sirens": 0
   },
   "15003002401": {
@@ -797,7 +1094,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1101,
    "population": 3191.0,
+   "siren_people": 3191,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003002403": {
@@ -805,7 +1105,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1663,
    "population": 1606.0,
+   "siren_people": 1606,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003002404": {
@@ -813,7 +1116,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2182,
    "population": 1471.0,
+   "siren_people": 1471,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003002500": {
@@ -821,7 +1127,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1526,
    "population": 3603.0,
+   "siren_people": 3603,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003002600": {
@@ -829,7 +1138,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2814,
    "population": 3981.0,
+   "siren_people": 3097,
+   "siren_share": 0.778,
    "sirens": 0
   },
   "15003002701": {
@@ -837,7 +1149,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5413,
    "population": 3712.0,
+   "siren_people": 223,
+   "siren_share": 0.06,
    "sirens": 0
   },
   "15003002702": {
@@ -845,7 +1160,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3462,
    "population": 5029.0,
+   "siren_people": 3264,
+   "siren_share": 0.649,
    "sirens": 0
   },
   "15003002801": {
@@ -853,7 +1171,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3330,
    "population": 1757.0,
+   "siren_people": 773,
+   "siren_share": 0.44,
    "sirens": 0
   },
   "15003002802": {
@@ -861,7 +1182,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2004,
    "population": 2458.0,
+   "siren_people": 1458,
+   "siren_share": 0.593,
    "sirens": 0
   },
   "15003002900": {
@@ -869,7 +1193,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4382,
    "population": 2502.0,
+   "siren_people": 771,
+   "siren_share": 0.308,
    "sirens": 0
   },
   "15003003000": {
@@ -877,7 +1204,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1764,
    "population": 4658.0,
+   "siren_people": 3344,
+   "siren_share": 0.718,
    "sirens": 1
   },
   "15003003102": {
@@ -885,7 +1215,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 6287,
    "population": 3328.0,
+   "siren_people": 882,
+   "siren_share": 0.265,
    "sirens": 0
   },
   "15003003103": {
@@ -893,7 +1226,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4898,
    "population": 1673.0,
+   "siren_people": 525,
+   "siren_share": 0.314,
    "sirens": 0
   },
   "15003003104": {
@@ -901,7 +1237,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1010,
    "population": 2426.0,
+   "siren_people": 2426,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003003404": {
@@ -909,7 +1248,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1817,
    "population": 4959.0,
+   "siren_people": 4959,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003408": {
@@ -917,7 +1259,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1983,
    "population": 1986.0,
+   "siren_people": 1986,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003409": {
@@ -925,7 +1270,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1310,
    "population": 1882.0,
+   "siren_people": 1882,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003410": {
@@ -933,7 +1281,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 689,
    "population": 2342.0,
+   "siren_people": 2342,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003411": {
@@ -941,7 +1292,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3110,
    "population": 1507.0,
+   "siren_people": 1264,
+   "siren_share": 0.839,
    "sirens": 0
   },
   "15003003412": {
@@ -949,7 +1303,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2959,
    "population": 2030.0,
+   "siren_people": 1797,
+   "siren_share": 0.885,
    "sirens": 0
   },
   "15003003413": {
@@ -957,7 +1314,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3010,
    "population": 2295.0,
+   "siren_people": 2295,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003414": {
@@ -965,7 +1325,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1291,
    "population": 4690.0,
+   "siren_people": 4690,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003501": {
@@ -973,7 +1336,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2441,
    "population": 2380.0,
+   "siren_people": 2380,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003503": {
@@ -981,7 +1347,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1592,
    "population": 1044.0,
+   "siren_people": 1044,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003504": {
@@ -989,7 +1358,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 992,
    "population": 2871.0,
+   "siren_people": 2871,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003603": {
@@ -997,7 +1369,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2418,
    "population": 3264.0,
+   "siren_people": 3264,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003604": {
@@ -1005,7 +1380,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2735,
    "population": 2140.0,
+   "siren_people": 2009,
+   "siren_share": 0.939,
    "sirens": 0
   },
   "15003003605": {
@@ -1013,7 +1391,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2522,
    "population": 825.0,
+   "siren_people": 825,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003606": {
@@ -1021,7 +1402,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2213,
    "population": 2868.0,
+   "siren_people": 2868,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003701": {
@@ -1029,7 +1413,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2072,
    "population": 2509.0,
+   "siren_people": 2509,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003702": {
@@ -1037,7 +1424,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1222,
    "population": 3136.0,
+   "siren_people": 3136,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003703": {
@@ -1045,7 +1435,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1072,
    "population": 2802.0,
+   "siren_people": 2802,
+   "siren_share": 1.0,
    "sirens": 2
   },
   "15003003801": {
@@ -1053,7 +1446,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 635,
    "population": 4814.0,
+   "siren_people": 4814,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003003802": {
@@ -1061,7 +1457,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1245,
    "population": 4992.0,
+   "siren_people": 4992,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003003900": {
@@ -1069,7 +1468,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2457,
    "population": 343.0,
+   "siren_people": 343,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003004000": {
@@ -1077,7 +1479,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2428,
    "population": 1468.0,
+   "siren_people": 1468,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003004101": {
@@ -1085,7 +1490,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2219,
    "population": 1447.0,
+   "siren_people": 1447,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003004102": {
@@ -1093,7 +1501,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1238,
    "population": 2577.0,
+   "siren_people": 2577,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003004201": {
@@ -1101,7 +1512,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1950,
    "population": 1528.0,
+   "siren_people": 1528,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003004202": {
@@ -1109,7 +1523,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2549,
    "population": 1544.0,
+   "siren_people": 1544,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003004301": {
@@ -1117,7 +1534,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3093,
    "population": 2536.0,
+   "siren_people": 1866,
+   "siren_share": 0.736,
    "sirens": 0
   },
   "15003004302": {
@@ -1125,7 +1545,10 @@
    "dam_people": 918,
    "dam_share": 0.333,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3295,
    "population": 2756.0,
+   "siren_people": 2084,
+   "siren_share": 0.756,
    "sirens": 0
   },
   "15003004401": {
@@ -1133,7 +1556,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 55,
    "population": 2340.0,
+   "siren_people": 2340,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003004402": {
@@ -1141,7 +1567,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4987,
    "population": 2705.0,
+   "siren_people": 541,
+   "siren_share": 0.2,
    "sirens": 0
   },
   "15003004500": {
@@ -1149,7 +1578,10 @@
    "dam_people": 1858,
    "dam_share": 0.375,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5938,
    "population": 4955.0,
+   "siren_people": 1447,
+   "siren_share": 0.292,
    "sirens": 0
   },
   "15003004600": {
@@ -1157,7 +1589,10 @@
    "dam_people": 631,
    "dam_share": 0.167,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3848,
    "population": 3780.0,
+   "siren_people": 1104,
+   "siren_share": 0.292,
    "sirens": 1
   },
   "15003004701": {
@@ -1165,7 +1600,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2971,
    "population": 2518.0,
+   "siren_people": 1594,
+   "siren_share": 0.633,
    "sirens": 0
   },
   "15003004702": {
@@ -1173,7 +1611,10 @@
    "dam_people": 1238,
    "dam_share": 0.5,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1913,
    "population": 2476.0,
+   "siren_people": 2476,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003004801": {
@@ -1181,7 +1622,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4687,
    "population": 3001.0,
+   "siren_people": 1440,
+   "siren_share": 0.48,
    "sirens": 0
   },
   "15003004802": {
@@ -1189,7 +1633,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1472,
    "population": 3508.0,
+   "siren_people": 3508,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003004900": {
@@ -1197,7 +1644,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1758,
    "population": 3776.0,
+   "siren_people": 3776,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003005000": {
@@ -1205,7 +1655,10 @@
    "dam_people": 3780,
    "dam_share": 1.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3309,
    "population": 3780.0,
+   "siren_people": 3410,
+   "siren_share": 0.902,
    "sirens": 0
   },
   "15003005100": {
@@ -1213,7 +1666,10 @@
    "dam_people": 1290,
    "dam_share": 0.432,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1495,
    "population": 2986.0,
+   "siren_people": 2986,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003005200": {
@@ -1221,7 +1677,10 @@
    "dam_people": 853,
    "dam_share": 0.317,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1218,
    "population": 2690.0,
+   "siren_people": 2690,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003005300": {
@@ -1229,7 +1688,10 @@
    "dam_people": 3277,
    "dam_share": 0.736,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1065,
    "population": 4453.0,
+   "siren_people": 4453,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003005400": {
@@ -1237,7 +1699,10 @@
    "dam_people": 30,
    "dam_share": 0.02,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1722,
    "population": 1492.0,
+   "siren_people": 1492,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003005500": {
@@ -1245,7 +1710,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2568,
    "population": 2096.0,
+   "siren_people": 2096,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003005601": {
@@ -1253,7 +1721,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2900,
    "population": 2413.0,
+   "siren_people": 2150,
+   "siren_share": 0.891,
    "sirens": 0
   },
   "15003005602": {
@@ -1261,7 +1732,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2132,
    "population": 4269.0,
+   "siren_people": 3979,
+   "siren_share": 0.932,
    "sirens": 0
   },
   "15003005700": {
@@ -1269,7 +1743,10 @@
    "dam_people": 562,
    "dam_share": 0.196,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3089,
    "population": 2869.0,
+   "siren_people": 2137,
+   "siren_share": 0.745,
    "sirens": 1
   },
   "15003005800": {
@@ -1277,7 +1754,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 744,
    "population": 2922.0,
+   "siren_people": 2922,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003005900": {
@@ -1285,7 +1765,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1981,
    "population": 2965.0,
+   "siren_people": 2571,
+   "siren_share": 0.867,
    "sirens": 2
   },
   "15003006000": {
@@ -1293,7 +1776,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2172,
    "population": 5855.0,
+   "siren_people": 5855,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003006100": {
@@ -1301,7 +1787,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 677,
    "population": 4244.0,
+   "siren_people": 4244,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003006202": {
@@ -1309,7 +1798,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2140,
    "population": 2906.0,
+   "siren_people": 2906,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003006203": {
@@ -1317,7 +1809,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2842,
    "population": 4802.0,
+   "siren_people": 3918,
+   "siren_share": 0.816,
    "sirens": 0
   },
   "15003006301": {
@@ -1325,7 +1820,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 158,
    "population": 3989.0,
+   "siren_people": 3989,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003006302": {
@@ -1333,7 +1831,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1958,
    "population": 3183.0,
+   "siren_people": 3183,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003006401": {
@@ -1341,7 +1842,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1891,
    "population": 2319.0,
+   "siren_people": 2319,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003006402": {
@@ -1349,7 +1853,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5470,
    "population": 6831.0,
+   "siren_people": 1708,
+   "siren_share": 0.25,
    "sirens": 0
   },
   "15003006500": {
@@ -1357,7 +1864,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 9016,
    "population": 4609.0,
+   "siren_people": 627,
+   "siren_share": 0.136,
    "sirens": 1
   },
   "15003006703": {
@@ -1365,7 +1875,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2277,
    "population": 1746.0,
+   "siren_people": 1152,
+   "siren_share": 0.66,
    "sirens": 0
   },
   "15003006704": {
@@ -1373,7 +1886,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 6704,
    "population": 7339.0,
+   "siren_people": 1145,
+   "siren_share": 0.156,
    "sirens": 2
   },
   "15003006806": {
@@ -1381,7 +1897,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1834,
    "population": 1736.0,
+   "siren_people": 1644,
+   "siren_share": 0.947,
    "sirens": 0
   },
   "15003006810": {
@@ -1389,7 +1908,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2702,
    "population": 3774.0,
+   "siren_people": 2721,
+   "siren_share": 0.721,
    "sirens": 0
   },
   "15003006811": {
@@ -1397,7 +1919,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5288,
    "population": 1714.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003006812": {
@@ -1405,7 +1930,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3963,
    "population": 1418.0,
+   "siren_people": 237,
+   "siren_share": 0.167,
    "sirens": 0
   },
   "15003006813": {
@@ -1413,7 +1941,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4009,
    "population": 5427.0,
+   "siren_people": 1330,
+   "siren_share": 0.245,
    "sirens": 1
   },
   "15003006814": {
@@ -1421,7 +1952,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4053,
    "population": 2436.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003006815": {
@@ -1429,7 +1963,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5465,
    "population": 2788.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003006816": {
@@ -1437,7 +1974,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1782,
    "population": 2105.0,
+   "siren_people": 2105,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003006817": {
@@ -1445,7 +1985,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1356,
    "population": 4561.0,
+   "siren_people": 4561,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003006818": {
@@ -1453,7 +1996,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3461,
    "population": 1466.0,
+   "siren_people": 644,
+   "siren_share": 0.439,
    "sirens": 0
   },
   "15003006819": {
@@ -1461,7 +2007,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5031,
    "population": 2755.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003006900": {
@@ -1469,7 +2018,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4018,
    "population": 4368.0,
+   "siren_people": 1061,
+   "siren_share": 0.243,
    "sirens": 0
   },
   "15003007001": {
@@ -1477,7 +2029,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4317,
    "population": 1612.0,
+   "siren_people": 432,
+   "siren_share": 0.268,
    "sirens": 0
   },
   "15003007002": {
@@ -1485,7 +2040,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3827,
    "population": 2620.0,
+   "siren_people": 967,
+   "siren_share": 0.369,
    "sirens": 0
   },
   "15003007100": {
@@ -1493,7 +2051,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 7395,
    "population": 3884.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003007302": {
@@ -1501,7 +2062,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 8785,
    "population": 5032.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003007400": {
@@ -1509,7 +2073,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 11125,
    "population": 6954.0,
+   "siren_people": 229,
+   "siren_share": 0.033,
    "sirens": 0
   },
   "15003007504": {
@@ -1517,7 +2084,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2206,
    "population": 2864.0,
+   "siren_people": 2159,
+   "siren_share": 0.754,
    "sirens": 1
   },
   "15003007507": {
@@ -1525,7 +2095,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 6829,
    "population": 6241.0,
+   "siren_people": 1092,
+   "siren_share": 0.175,
    "sirens": 1
   },
   "15003007508": {
@@ -1533,7 +2106,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3150,
    "population": 7233.0,
+   "siren_people": 4376,
+   "siren_share": 0.605,
    "sirens": 0
   },
   "15003007701": {
@@ -1541,7 +2117,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3300,
    "population": 4079.0,
+   "siren_people": 1913,
+   "siren_share": 0.469,
    "sirens": 0
   },
   "15003007702": {
@@ -1549,7 +2128,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4997,
    "population": 5492.0,
+   "siren_people": 2746,
+   "siren_share": 0.5,
    "sirens": 2
   },
   "15003007804": {
@@ -1557,7 +2139,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1851,
    "population": 2174.0,
+   "siren_people": 2100,
+   "siren_share": 0.966,
    "sirens": 0
   },
   "15003007807": {
@@ -1565,7 +2150,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2974,
    "population": 5334.0,
+   "siren_people": 5334,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003007808": {
@@ -1573,7 +2161,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3125,
    "population": 3527.0,
+   "siren_people": 1799,
+   "siren_share": 0.51,
    "sirens": 0
   },
   "15003007809": {
@@ -1581,7 +2172,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 6126,
    "population": 3911.0,
+   "siren_people": 473,
+   "siren_share": 0.121,
    "sirens": 0
   },
   "15003007812": {
@@ -1589,7 +2183,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2104,
    "population": 2226.0,
+   "siren_people": 1874,
+   "siren_share": 0.842,
    "sirens": 0
   },
   "15003007813": {
@@ -1597,7 +2194,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3200,
    "population": 3382.0,
+   "siren_people": 3013,
+   "siren_share": 0.891,
    "sirens": 0
   },
   "15003007814": {
@@ -1605,7 +2205,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 6026,
    "population": 3529.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003007815": {
@@ -1613,7 +2216,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 11839,
    "population": 2118.0,
+   "siren_people": 112,
+   "siren_share": 0.053,
    "sirens": 1
   },
   "15003007816": {
@@ -1621,7 +2227,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 10704,
    "population": 3456.0,
+   "siren_people": 449,
+   "siren_share": 0.13,
    "sirens": 0
   },
   "15003007817": {
@@ -1629,7 +2238,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4061,
    "population": 1615.0,
+   "siren_people": 484,
+   "siren_share": 0.3,
    "sirens": 0
   },
   "15003008001": {
@@ -1637,7 +2249,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2844,
    "population": 2873.0,
+   "siren_people": 1675,
+   "siren_share": 0.583,
    "sirens": 1
   },
   "15003008002": {
@@ -1645,7 +2260,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2951,
    "population": 3092.0,
+   "siren_people": 3092,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008005": {
@@ -1653,7 +2271,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 11006,
    "population": 6267.0,
+   "siren_people": 1460,
+   "siren_share": 0.233,
    "sirens": 1
   },
   "15003008008": {
@@ -1661,7 +2282,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3005,
    "population": 1735.0,
+   "siren_people": 942,
+   "siren_share": 0.543,
    "sirens": 0
   },
   "15003008009": {
@@ -1669,7 +2293,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2102,
    "population": 3102.0,
+   "siren_people": 2429,
+   "siren_share": 0.783,
    "sirens": 1
   },
   "15003008010": {
@@ -1677,7 +2304,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1549,
    "population": 2520.0,
+   "siren_people": 2520,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008011": {
@@ -1685,7 +2315,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3344,
    "population": 2670.0,
+   "siren_people": 1418,
+   "siren_share": 0.531,
    "sirens": 0
   },
   "15003008012": {
@@ -1693,7 +2326,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 743,
    "population": 2945.0,
+   "siren_people": 2945,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008013": {
@@ -1701,7 +2337,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1779,
    "population": 2264.0,
+   "siren_people": 2264,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008301": {
@@ -1709,7 +2348,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 7830,
    "population": 5921.0,
+   "siren_people": 1622,
+   "siren_share": 0.274,
    "sirens": 2
   },
   "15003008302": {
@@ -1717,7 +2359,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3314,
    "population": 6679.0,
+   "siren_people": 3941,
+   "siren_share": 0.59,
    "sirens": 0
   },
   "15003008405": {
@@ -1725,7 +2370,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3783,
    "population": 5287.0,
+   "siren_people": 4341,
+   "siren_share": 0.821,
    "sirens": 0
   },
   "15003008407": {
@@ -1733,7 +2381,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1438,
    "population": 4185.0,
+   "siren_people": 4185,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008408": {
@@ -1741,7 +2392,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2192,
    "population": 9678.0,
+   "siren_people": 8013,
+   "siren_share": 0.828,
    "sirens": 2
   },
   "15003008410": {
@@ -1749,7 +2403,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1887,
    "population": 6698.0,
+   "siren_people": 6437,
+   "siren_share": 0.961,
    "sirens": 1
   },
   "15003008411": {
@@ -1757,7 +2414,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1204,
    "population": 3443.0,
+   "siren_people": 3274,
+   "siren_share": 0.951,
    "sirens": 0
   },
   "15003008413": {
@@ -1765,7 +2425,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2079,
    "population": 3010.0,
+   "siren_people": 2884,
+   "siren_share": 0.958,
    "sirens": 0
   },
   "15003008414": {
@@ -1773,7 +2436,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2575,
    "population": 2483.0,
+   "siren_people": 1686,
+   "siren_share": 0.679,
    "sirens": 0
   },
   "15003008415": {
@@ -1781,7 +2447,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 674,
    "population": 4438.0,
+   "siren_people": 4438,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008416": {
@@ -1789,7 +2458,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3041,
    "population": 3216.0,
+   "siren_people": 2631,
+   "siren_share": 0.818,
    "sirens": 0
   },
   "15003008417": {
@@ -1797,7 +2469,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3597,
    "population": 3943.0,
+   "siren_people": 2386,
+   "siren_share": 0.605,
    "sirens": 0
   },
   "15003008418": {
@@ -1805,7 +2480,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2121,
    "population": 5478.0,
+   "siren_people": 5478,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008502": {
@@ -1813,7 +2491,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5936,
    "population": 2971.0,
+   "siren_people": 1515,
+   "siren_share": 0.51,
    "sirens": 2
   },
   "15003008609": {
@@ -1821,7 +2502,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2409,
    "population": 1884.0,
+   "siren_people": 1351,
+   "siren_share": 0.717,
    "sirens": 0
   },
   "15003008610": {
@@ -1829,7 +2513,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5411,
    "population": 987.0,
+   "siren_people": 237,
+   "siren_share": 0.24,
    "sirens": 0
   },
   "15003008611": {
@@ -1837,7 +2524,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 6517,
    "population": 25.0,
+   "siren_people": 6,
+   "siren_share": 0.246,
    "sirens": 2
   },
   "15003008623": {
@@ -1845,7 +2535,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1369,
    "population": 5336.0,
+   "siren_people": 4909,
+   "siren_share": 0.92,
    "sirens": 2
   },
   "15003008624": {
@@ -1853,7 +2546,10 @@
    "dam_people": 388,
    "dam_share": 0.109,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2314,
    "population": 3562.0,
+   "siren_people": 3562,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008625": {
@@ -1861,7 +2557,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1293,
    "population": 3445.0,
+   "siren_people": 3445,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008626": {
@@ -1869,7 +2568,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 976,
    "population": 3254.0,
+   "siren_people": 3254,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008627": {
@@ -1877,7 +2579,10 @@
    "dam_people": 156,
    "dam_share": 0.017,
    "island": "Oʻahu",
+   "nearest_siren_ft": 15543,
    "population": 9196.0,
+   "siren_people": 1425,
+   "siren_share": 0.155,
    "sirens": 3
   },
   "15003008628": {
@@ -1885,7 +2590,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2815,
    "population": 3782.0,
+   "siren_people": 3426,
+   "siren_share": 0.906,
    "sirens": 0
   },
   "15003008629": {
@@ -1893,7 +2601,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1545,
    "population": 2006.0,
+   "siren_people": 2006,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008630": {
@@ -1901,7 +2612,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4758,
    "population": 3700.0,
+   "siren_people": 1125,
+   "siren_share": 0.304,
    "sirens": 0
   },
   "15003008631": {
@@ -1909,7 +2623,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 10974,
    "population": 2988.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003008632": {
@@ -1917,7 +2634,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3273,
    "population": 5196.0,
+   "siren_people": 3585,
+   "siren_share": 0.69,
    "sirens": 0
   },
   "15003008633": {
@@ -1925,7 +2645,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 886,
    "population": 3130.0,
+   "siren_people": 3064,
+   "siren_share": 0.979,
    "sirens": 1
   },
   "15003008634": {
@@ -1933,7 +2656,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4484,
    "population": 3235.0,
+   "siren_people": 453,
+   "siren_share": 0.14,
    "sirens": 0
   },
   "15003008702": {
@@ -1941,7 +2667,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3928,
    "population": 5309.0,
+   "siren_people": 1932,
+   "siren_share": 0.364,
    "sirens": 0
   },
   "15003008704": {
@@ -1949,7 +2678,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2471,
    "population": 2707.0,
+   "siren_people": 1873,
+   "siren_share": 0.692,
    "sirens": 1
   },
   "15003008705": {
@@ -1957,7 +2689,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3530,
    "population": 3585.0,
+   "siren_people": 1007,
+   "siren_share": 0.281,
    "sirens": 0
   },
   "15003008706": {
@@ -1965,7 +2700,10 @@
    "dam_people": 260,
    "dam_share": 0.066,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3208,
    "population": 3940.0,
+   "siren_people": 2262,
+   "siren_share": 0.574,
    "sirens": 0
   },
   "15003008707": {
@@ -1973,7 +2711,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1057,
    "population": 6198.0,
+   "siren_people": 6198,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008801": {
@@ -1981,7 +2722,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2529,
    "population": 3452.0,
+   "siren_people": 3034,
+   "siren_share": 0.879,
    "sirens": 0
   },
   "15003008802": {
@@ -1989,7 +2733,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5203,
    "population": 4750.0,
+   "siren_people": 679,
+   "siren_share": 0.143,
    "sirens": 0
   },
   "15003008906": {
@@ -1997,7 +2744,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2003,
    "population": 3674.0,
+   "siren_people": 2972,
+   "siren_share": 0.809,
    "sirens": 0
   },
   "15003008909": {
@@ -2005,7 +2755,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2714,
    "population": 3992.0,
+   "siren_people": 3605,
+   "siren_share": 0.903,
    "sirens": 0
   },
   "15003008912": {
@@ -2013,7 +2766,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1908,
    "population": 3123.0,
+   "siren_people": 3123,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008913": {
@@ -2021,7 +2777,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1891,
    "population": 4208.0,
+   "siren_people": 4208,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008917": {
@@ -2029,7 +2788,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3013,
    "population": 4606.0,
+   "siren_people": 3800,
+   "siren_share": 0.825,
    "sirens": 0
   },
   "15003008918": {
@@ -2037,7 +2799,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4297,
    "population": 5116.0,
+   "siren_people": 2630,
+   "siren_share": 0.514,
    "sirens": 0
   },
   "15003008921": {
@@ -2045,7 +2810,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2402,
    "population": 2487.0,
+   "siren_people": 1853,
+   "siren_share": 0.745,
    "sirens": 0
   },
   "15003008926": {
@@ -2053,7 +2821,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2765,
    "population": 1769.0,
+   "siren_people": 1608,
+   "siren_share": 0.909,
    "sirens": 1
   },
   "15003008928": {
@@ -2061,7 +2832,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2292,
    "population": 3942.0,
+   "siren_people": 3682,
+   "siren_share": 0.934,
    "sirens": 0
   },
   "15003008929": {
@@ -2069,7 +2843,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2698,
    "population": 5510.0,
+   "siren_people": 5510,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008930": {
@@ -2077,7 +2854,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1715,
    "population": 2324.0,
+   "siren_people": 2324,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008931": {
@@ -2085,7 +2865,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 13087,
    "population": 3363.0,
+   "siren_people": 262,
+   "siren_share": 0.078,
    "sirens": 2
   },
   "15003008932": {
@@ -2093,7 +2876,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4021,
    "population": 2216.0,
+   "siren_people": 1190,
+   "siren_share": 0.537,
    "sirens": 0
   },
   "15003008933": {
@@ -2101,7 +2887,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2551,
    "population": 3442.0,
+   "siren_people": 1594,
+   "siren_share": 0.463,
    "sirens": 1
   },
   "15003008934": {
@@ -2109,7 +2898,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 7300,
    "population": 3844.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003008935": {
@@ -2117,7 +2909,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2153,
    "population": 3758.0,
+   "siren_people": 3495,
+   "siren_share": 0.93,
    "sirens": 0
   },
   "15003008936": {
@@ -2125,7 +2920,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 214,
    "population": 2772.0,
+   "siren_people": 2772,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008937": {
@@ -2133,7 +2931,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 237,
    "population": 2091.0,
+   "siren_people": 2091,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008938": {
@@ -2141,7 +2942,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1974,
    "population": 3832.0,
+   "siren_people": 3832,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008939": {
@@ -2149,7 +2953,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4364,
    "population": 2372.0,
+   "siren_people": 863,
+   "siren_share": 0.364,
    "sirens": 0
   },
   "15003008940": {
@@ -2157,7 +2964,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2324,
    "population": 3021.0,
+   "siren_people": 2945,
+   "siren_share": 0.975,
    "sirens": 0
   },
   "15003008941": {
@@ -2165,7 +2975,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1763,
    "population": 2089.0,
+   "siren_people": 2089,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008942": {
@@ -2173,7 +2986,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 403,
    "population": 2288.0,
+   "siren_people": 2288,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008943": {
@@ -2181,7 +2997,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1435,
    "population": 1039.0,
+   "siren_people": 1039,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008944": {
@@ -2189,7 +3008,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1511,
    "population": 3849.0,
+   "siren_people": 3849,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008945": {
@@ -2197,7 +3019,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2387,
    "population": 1754.0,
+   "siren_people": 996,
+   "siren_share": 0.568,
    "sirens": 1
   },
   "15003008946": {
@@ -2205,7 +3030,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1953,
    "population": 2812.0,
+   "siren_people": 2812,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008947": {
@@ -2213,7 +3041,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1132,
    "population": 1621.0,
+   "siren_people": 1621,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008948": {
@@ -2221,7 +3052,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1622,
    "population": 2588.0,
+   "siren_people": 2588,
+   "siren_share": 1.0,
    "sirens": 2
   },
   "15003008949": {
@@ -2229,7 +3063,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1544,
    "population": 2060.0,
+   "siren_people": 2060,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003008950": {
@@ -2237,7 +3074,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3014,
    "population": 1697.0,
+   "siren_people": 925,
+   "siren_share": 0.545,
    "sirens": 0
   },
   "15003008951": {
@@ -2245,7 +3085,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2179,
    "population": 1848.0,
+   "siren_people": 1848,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003008952": {
@@ -2253,7 +3096,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2509,
    "population": 5491.0,
+   "siren_people": 3053,
+   "siren_share": 0.556,
    "sirens": 0
   },
   "15003009000": {
@@ -2261,7 +3107,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 7152,
    "population": 2219.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003009100": {
@@ -2269,7 +3118,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5192,
    "population": 5048.0,
+   "siren_people": 515,
+   "siren_share": 0.102,
    "sirens": 1
   },
   "15003009201": {
@@ -2277,7 +3129,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1169,
    "population": 3060.0,
+   "siren_people": 3060,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003009202": {
@@ -2285,7 +3140,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3464,
    "population": 2131.0,
+   "siren_people": 1865,
+   "siren_share": 0.875,
    "sirens": 0
   },
   "15003009203": {
@@ -2293,7 +3151,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2119,
    "population": 2331.0,
+   "siren_people": 2331,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003009301": {
@@ -2301,7 +3162,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1248,
    "population": 1605.0,
+   "siren_people": 1605,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003009302": {
@@ -2309,7 +3173,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 370,
    "population": 3665.0,
+   "siren_people": 3665,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003009401": {
@@ -2317,7 +3184,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 6349,
    "population": 1276.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003009402": {
@@ -2325,7 +3195,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3714,
    "population": 3332.0,
+   "siren_people": 1389,
+   "siren_share": 0.417,
    "sirens": 0
   },
   "15003009507": {
@@ -2333,7 +3206,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 13695,
    "population": 2832.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003009508": {
@@ -2341,7 +3217,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 17079,
    "population": 1968.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003009509": {
@@ -2349,7 +3228,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 14519,
    "population": 3355.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003009510": {
@@ -2357,7 +3239,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 18623,
    "population": 1425.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003009511": {
@@ -2365,7 +3250,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 14452,
    "population": 3217.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003009512": {
@@ -2373,7 +3261,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 10382,
    "population": 5336.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003009608": {
@@ -2381,7 +3272,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 17549,
    "population": 5192.0,
+   "siren_people": 218,
+   "siren_share": 0.042,
    "sirens": 1
   },
   "15003009609": {
@@ -2389,7 +3283,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5411,
    "population": 5896.0,
+   "siren_people": 1963,
+   "siren_share": 0.333,
    "sirens": 0
   },
   "15003009610": {
@@ -2397,7 +3294,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 643,
    "population": 6914.0,
+   "siren_people": 6914,
+   "siren_share": 1.0,
    "sirens": 3
   },
   "15003009704": {
@@ -2405,7 +3305,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 8639,
    "population": 3324.0,
+   "siren_people": 276,
+   "siren_share": 0.083,
    "sirens": 0
   },
   "15003009705": {
@@ -2413,7 +3316,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1341,
    "population": 3099.0,
+   "siren_people": 3034,
+   "siren_share": 0.979,
    "sirens": 1
   },
   "15003009706": {
@@ -2421,7 +3327,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 9486,
    "population": 3590.0,
+   "siren_people": 129,
+   "siren_share": 0.036,
    "sirens": 0
   },
   "15003009707": {
@@ -2429,7 +3338,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 12437,
    "population": 6622.0,
+   "siren_people": 1285,
+   "siren_share": 0.194,
    "sirens": 2
   },
   "15003009801": {
@@ -2437,7 +3349,10 @@
    "dam_people": 84,
    "dam_share": 0.031,
    "island": "Oʻahu",
+   "nearest_siren_ft": 8852,
    "population": 2716.0,
+   "siren_people": 340,
+   "siren_share": 0.125,
    "sirens": 4
   },
   "15003009803": {
@@ -2445,7 +3360,10 @@
    "dam_people": 648,
    "dam_share": 0.205,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1131,
    "population": 3162.0,
+   "siren_people": 3162,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003009804": {
@@ -2453,7 +3371,10 @@
    "dam_people": 324,
    "dam_share": 0.093,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2911,
    "population": 3486.0,
+   "siren_people": 2970,
+   "siren_share": 0.852,
    "sirens": 1
   },
   "15003009902": {
@@ -2461,7 +3382,10 @@
    "dam_people": 3290,
    "dam_share": 0.918,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3111,
    "population": 3584.0,
+   "siren_people": 3054,
+   "siren_share": 0.852,
    "sirens": 1
   },
   "15003009905": {
@@ -2469,7 +3393,10 @@
    "dam_people": 1809,
    "dam_share": 0.614,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1536,
    "population": 2947.0,
+   "siren_people": 2791,
+   "siren_share": 0.947,
    "sirens": 2
   },
   "15003009906": {
@@ -2477,7 +3404,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 9351,
    "population": 1787.0,
+   "siren_people": 272,
+   "siren_share": 0.152,
    "sirens": 6
   },
   "15003010000": {
@@ -2485,7 +3415,10 @@
    "dam_people": 204,
    "dam_share": 0.044,
    "island": "Oʻahu",
+   "nearest_siren_ft": 23443,
    "population": 4636.0,
+   "siren_people": 408,
+   "siren_share": 0.088,
    "sirens": 5
   },
   "15003010101": {
@@ -2493,7 +3426,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 978,
    "population": 2377.0,
+   "siren_people": 1498,
+   "siren_share": 0.63,
    "sirens": 2
   },
   "15003010102": {
@@ -2501,7 +3437,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 7637,
    "population": 2858.0,
+   "siren_people": 594,
+   "siren_share": 0.208,
    "sirens": 2
   },
   "15003010103": {
@@ -2509,7 +3448,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 7647,
    "population": 2639.0,
+   "siren_people": 559,
+   "siren_share": 0.212,
    "sirens": 4
   },
   "15003010202": {
@@ -2517,7 +3459,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 7529,
    "population": 6980.0,
+   "siren_people": 1208,
+   "siren_share": 0.173,
    "sirens": 3
   },
   "15003010203": {
@@ -2525,7 +3470,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 8601,
    "population": 917.0,
+   "siren_people": 165,
+   "siren_share": 0.18,
    "sirens": 3
   },
   "15003010204": {
@@ -2533,7 +3481,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 8325,
    "population": 2446.0,
+   "siren_people": 453,
+   "siren_share": 0.185,
    "sirens": 2
   },
   "15003010205": {
@@ -2541,7 +3492,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 9481,
    "population": 1494.0,
+   "siren_people": 226,
+   "siren_share": 0.151,
    "sirens": 3
   },
   "15003010303": {
@@ -2549,7 +3503,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5808,
    "population": 4740.0,
+   "siren_people": 863,
+   "siren_share": 0.182,
    "sirens": 4
   },
   "15003010305": {
@@ -2557,7 +3514,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1639,
    "population": 5991.0,
+   "siren_people": 4355,
+   "siren_share": 0.727,
    "sirens": 1
   },
   "15003010308": {
@@ -2565,7 +3525,10 @@
    "dam_people": 118,
    "dam_share": 0.034,
    "island": "Oʻahu",
+   "nearest_siren_ft": 6112,
    "population": 3470.0,
+   "siren_people": 479,
+   "siren_share": 0.138,
    "sirens": 2
   },
   "15003010309": {
@@ -2573,7 +3536,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 7274,
    "population": 3749.0,
+   "siren_people": 487,
+   "siren_share": 0.13,
    "sirens": 1
   },
   "15003010310": {
@@ -2581,7 +3547,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3322,
    "population": 2585.0,
+   "siren_people": 1600,
+   "siren_share": 0.619,
    "sirens": 1
   },
   "15003010503": {
@@ -2589,7 +3558,10 @@
    "dam_people": 300,
    "dam_share": 0.14,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2223,
    "population": 2143.0,
+   "siren_people": 1545,
+   "siren_share": 0.721,
    "sirens": 0
   },
   "15003010505": {
@@ -2597,7 +3569,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 378,
    "population": 3280.0,
+   "siren_people": 2870,
+   "siren_share": 0.875,
    "sirens": 1
   },
   "15003010507": {
@@ -2605,7 +3580,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1739,
    "population": 5275.0,
+   "siren_people": 3745,
+   "siren_share": 0.71,
    "sirens": 1
   },
   "15003010508": {
@@ -2613,7 +3591,10 @@
    "dam_people": 298,
    "dam_share": 0.106,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4922,
    "population": 2810.0,
+   "siren_people": 478,
+   "siren_share": 0.17,
    "sirens": 0
   },
   "15003010509": {
@@ -2621,7 +3602,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4123,
    "population": 1310.0,
+   "siren_people": 328,
+   "siren_share": 0.25,
    "sirens": 0
   },
   "15003010510": {
@@ -2629,7 +3613,10 @@
    "dam_people": 3477,
    "dam_share": 0.982,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1911,
    "population": 3541.0,
+   "siren_people": 3541,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003010601": {
@@ -2637,7 +3624,10 @@
    "dam_people": 2682,
    "dam_share": 0.811,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1387,
    "population": 3307.0,
+   "siren_people": 3307,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003010602": {
@@ -2645,7 +3635,10 @@
    "dam_people": 1186,
    "dam_share": 0.22,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2106,
    "population": 5392.0,
+   "siren_people": 4389,
+   "siren_share": 0.814,
    "sirens": 1
   },
   "15003010701": {
@@ -2653,7 +3646,10 @@
    "dam_people": 436,
    "dam_share": 0.103,
    "island": "Oʻahu",
+   "nearest_siren_ft": 327,
    "population": 4236.0,
+   "siren_people": 3651,
+   "siren_share": 0.862,
    "sirens": 2
   },
   "15003010702": {
@@ -2661,7 +3657,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5106,
    "population": 4009.0,
+   "siren_people": 826,
+   "siren_share": 0.206,
    "sirens": 0
   },
   "15003010901": {
@@ -2669,7 +3668,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2416,
    "population": 3037.0,
+   "siren_people": 3037,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003010903": {
@@ -2677,7 +3679,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2183,
    "population": 3936.0,
+   "siren_people": 3814,
+   "siren_share": 0.969,
    "sirens": 0
   },
   "15003010904": {
@@ -2685,7 +3690,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1476,
    "population": 3920.0,
+   "siren_people": 3920,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003010905": {
@@ -2693,7 +3701,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2104,
    "population": 2619.0,
+   "siren_people": 2619,
+   "siren_share": 1.0,
    "sirens": 0
   },
   "15003011000": {
@@ -2701,7 +3712,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3863,
    "population": 3766.0,
+   "siren_people": 738,
+   "siren_share": 0.196,
    "sirens": 1
   },
   "15003011103": {
@@ -2709,7 +3723,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1925,
    "population": 3694.0,
+   "siren_people": 3096,
+   "siren_share": 0.838,
    "sirens": 1
   },
   "15003011104": {
@@ -2717,7 +3734,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4226,
    "population": 5322.0,
+   "siren_people": 2374,
+   "siren_share": 0.446,
    "sirens": 0
   },
   "15003011105": {
@@ -2725,7 +3745,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 968,
    "population": 3455.0,
+   "siren_people": 3455,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003011106": {
@@ -2733,7 +3756,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2485,
    "population": 6649.0,
+   "siren_people": 4588,
+   "siren_share": 0.69,
    "sirens": 1
   },
   "15003011201": {
@@ -2741,7 +3767,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 460,
    "population": 4582.0,
+   "siren_people": 4362,
+   "siren_share": 0.952,
    "sirens": 2
   },
   "15003011202": {
@@ -2749,7 +3778,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 908,
    "population": 1941.0,
+   "siren_people": 1941,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003011300": {
@@ -2757,7 +3789,10 @@
    "dam_people": 1034,
    "dam_share": 0.18,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2973,
    "population": 5743.0,
+   "siren_people": 2826,
+   "siren_share": 0.492,
    "sirens": 3
   },
   "15003011401": {
@@ -2765,7 +3800,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4593,
    "population": 1823.0,
+   "siren_people": 514,
+   "siren_share": 0.282,
    "sirens": 0
   },
   "15003011500": {
@@ -2773,7 +3811,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1642,
    "population": 11577.0,
+   "siren_people": 10628,
+   "siren_share": 0.918,
    "sirens": 3
   },
   "15003011600": {
@@ -2781,7 +3822,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4379,
    "population": 1830.0,
+   "siren_people": 571,
+   "siren_share": 0.312,
    "sirens": 0
   },
   "15003940003": {
@@ -2789,7 +3833,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2099,
    "population": 2149.0,
+   "siren_people": 1496,
+   "siren_share": 0.696,
    "sirens": 1
   },
   "15003940004": {
@@ -2797,7 +3844,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2653,
    "population": 2326.0,
+   "siren_people": 1210,
+   "siren_share": 0.52,
    "sirens": 3
   },
   "15003940005": {
@@ -2805,7 +3855,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 9486,
    "population": 2558.0,
+   "siren_people": 43,
+   "siren_share": 0.017,
    "sirens": 0
   },
   "15003940006": {
@@ -2813,7 +3866,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 1282,
    "population": 2482.0,
+   "siren_people": 2336,
+   "siren_share": 0.941,
    "sirens": 1
   },
   "15003940007": {
@@ -2821,7 +3877,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3651,
    "population": 2326.0,
+   "siren_people": 630,
+   "siren_share": 0.271,
    "sirens": 0
   },
   "15003980000": {
@@ -2829,7 +3888,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 2513,
    "population": 0,
+   "siren_people": 0,
+   "siren_share": 0.75,
    "sirens": 2
   },
   "15003980200": {
@@ -2837,7 +3899,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4945,
    "population": 341.0,
+   "siren_people": 90,
+   "siren_share": 0.264,
    "sirens": 1
   },
   "15003980300": {
@@ -2845,7 +3910,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 953,
    "population": 0,
+   "siren_people": 0,
+   "siren_share": 0.678,
    "sirens": 2
   },
   "15003980600": {
@@ -2853,7 +3921,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 25957,
    "population": 100.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003980700": {
@@ -2861,7 +3932,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 9900,
    "population": 0,
+   "siren_people": 0,
+   "siren_share": 0.229,
    "sirens": 0
   },
   "15003980800": {
@@ -2869,7 +3943,10 @@
    "dam_people": 0,
    "dam_share": 0.078,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5070,
    "population": 0,
+   "siren_people": 0,
+   "siren_share": 0.078,
    "sirens": 0
   },
   "15003981000": {
@@ -2877,7 +3954,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3775,
    "population": 0,
+   "siren_people": 0,
+   "siren_share": 0.509,
    "sirens": 1
   },
   "15003981100": {
@@ -2885,7 +3965,10 @@
    "dam_people": 41,
    "dam_share": 0.46,
    "island": "Oʻahu",
+   "nearest_siren_ft": 5218,
    "population": 89.0,
+   "siren_people": 30,
+   "siren_share": 0.34,
    "sirens": 0
   },
   "15003981200": {
@@ -2893,7 +3976,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Northwestern Hawaiian Islands",
+   "nearest_siren_ft": null,
    "population": 0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003981300": {
@@ -2901,7 +3987,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 4651,
    "population": 283.0,
+   "siren_people": 51,
+   "siren_share": 0.179,
    "sirens": 0
   },
   "15003981400": {
@@ -2909,7 +3998,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3700,
    "population": 27.0,
+   "siren_people": 13,
+   "siren_share": 0.478,
    "sirens": 1
   },
   "15003981700": {
@@ -2917,7 +4009,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 9093,
    "population": 3557.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003981801": {
@@ -2925,7 +4020,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 8041,
    "population": 3333.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003981802": {
@@ -2933,7 +4031,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 11699,
    "population": 1392.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003981803": {
@@ -2941,7 +4042,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3655,
    "population": 3401.0,
+   "siren_people": 1071,
+   "siren_share": 0.315,
    "sirens": 0
   },
   "15003981900": {
@@ -2949,7 +4053,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 10903,
    "population": 586.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15003982000": {
@@ -2957,7 +4064,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 3279,
    "population": 1054.0,
+   "siren_people": 444,
+   "siren_share": 0.421,
    "sirens": 0
   },
   "15003982100": {
@@ -2965,7 +4075,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 330,
    "population": 0,
+   "siren_people": 0,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15003982200": {
@@ -2973,7 +4086,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Oʻahu",
+   "nearest_siren_ft": 8353,
    "population": 181.0,
+   "siren_people": 13,
+   "siren_share": 0.073,
    "sirens": 0
   },
   "15005031900": {
@@ -2981,7 +4097,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Molokaʻi",
+   "nearest_siren_ft": 14466,
    "population": 50.0,
+   "siren_people": 2,
+   "siren_share": 0.04,
    "sirens": 1
   },
   "15007040104": {
@@ -2989,7 +4108,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 19328,
    "population": 1278.0,
+   "siren_people": 74,
+   "siren_share": 0.058,
    "sirens": 4
   },
   "15007040105": {
@@ -2997,7 +4119,10 @@
    "dam_people": 338,
    "dam_share": 0.075,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 10570,
    "population": 4508.0,
+   "siren_people": 225,
+   "siren_share": 0.05,
    "sirens": 5
   },
   "15007040106": {
@@ -3005,7 +4130,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 7492,
    "population": 2007.0,
+   "siren_people": 167,
+   "siren_share": 0.083,
    "sirens": 0
   },
   "15007040204": {
@@ -3013,7 +4141,10 @@
    "dam_people": 803,
    "dam_share": 0.133,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 6402,
    "population": 6039.0,
+   "siren_people": 1075,
+   "siren_share": 0.178,
    "sirens": 2
   },
   "15007040205": {
@@ -3021,7 +4152,10 @@
    "dam_people": 1783,
    "dam_share": 0.381,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 3001,
    "population": 4681.0,
+   "siren_people": 1484,
+   "siren_share": 0.317,
    "sirens": 1
   },
   "15007040301": {
@@ -3029,7 +4163,10 @@
    "dam_people": 612,
    "dam_share": 0.1,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 4986,
    "population": 6116.0,
+   "siren_people": 2324,
+   "siren_share": 0.38,
    "sirens": 0
   },
   "15007040302": {
@@ -3037,7 +4174,10 @@
    "dam_people": 685,
    "dam_share": 0.278,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 806,
    "population": 2463.0,
+   "siren_people": 2325,
+   "siren_share": 0.944,
    "sirens": 3
   },
   "15007040401": {
@@ -3045,7 +4185,10 @@
    "dam_people": 608,
    "dam_share": 0.081,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 15502,
    "population": 7505.0,
+   "siren_people": 728,
+   "siren_share": 0.097,
    "sirens": 4
   },
   "15007040402": {
@@ -3053,7 +4196,10 @@
    "dam_people": 87,
    "dam_share": 0.031,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 3677,
    "population": 2798.0,
+   "siren_people": 2012,
+   "siren_share": 0.719,
    "sirens": 1
   },
   "15007040500": {
@@ -3061,7 +4207,10 @@
    "dam_people": 774,
    "dam_share": 0.106,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 1235,
    "population": 7301.0,
+   "siren_people": 4760,
+   "siren_share": 0.652,
    "sirens": 5
   },
   "15007040603": {
@@ -3069,7 +4218,10 @@
    "dam_people": 826,
    "dam_share": 0.278,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 9187,
    "population": 2972.0,
+   "siren_people": 716,
+   "siren_share": 0.241,
    "sirens": 5
   },
   "15007040604": {
@@ -3077,7 +4229,10 @@
    "dam_people": 1554,
    "dam_share": 0.443,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 4478,
    "population": 3509.0,
+   "siren_people": 1267,
+   "siren_share": 0.361,
    "sirens": 3
   },
   "15007040701": {
@@ -3085,7 +4240,10 @@
    "dam_people": 87,
    "dam_share": 0.028,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 12774,
    "population": 3092.0,
+   "siren_people": 257,
+   "siren_share": 0.083,
    "sirens": 2
   },
   "15007040702": {
@@ -3093,7 +4251,10 @@
    "dam_people": 1511,
    "dam_share": 0.275,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 6432,
    "population": 5494.0,
+   "siren_people": 1912,
+   "siren_share": 0.348,
    "sirens": 5
   },
   "15007040800": {
@@ -3101,7 +4262,10 @@
    "dam_people": 200,
    "dam_share": 0.049,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 34103,
    "population": 4091.0,
+   "siren_people": 135,
+   "siren_share": 0.033,
    "sirens": 4
   },
   "15007040900": {
@@ -3109,7 +4273,10 @@
    "dam_people": 615,
    "dam_share": 0.119,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 30616,
    "population": 5172.0,
+   "siren_people": 155,
+   "siren_share": 0.03,
    "sirens": 4
   },
   "15007041200": {
@@ -3117,7 +4284,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Niʻihau",
+   "nearest_siren_ft": 15628,
    "population": 0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 1
   },
   "15007940000": {
@@ -3125,7 +4295,10 @@
    "dam_people": 336,
    "dam_share": 0.075,
    "island": "Kauaʻi",
+   "nearest_siren_ft": 12916,
    "population": 4485.0,
+   "siren_people": 336,
+   "siren_share": 0.075,
    "sirens": 5
   },
   "15009030100": {
@@ -3133,7 +4306,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 44303,
    "population": 1164.0,
+   "siren_people": 50,
+   "siren_share": 0.043,
    "sirens": 7
   },
   "15009030201": {
@@ -3141,7 +4317,10 @@
    "dam_people": 590,
    "dam_share": 0.208,
    "island": "Maui",
+   "nearest_siren_ft": 23245,
    "population": 2838.0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   },
   "15009030203": {
@@ -3149,7 +4328,10 @@
    "dam_people": 673,
    "dam_share": 0.147,
    "island": "Maui",
+   "nearest_siren_ft": 11507,
    "population": 4575.0,
+   "siren_people": 133,
+   "siren_share": 0.029,
    "sirens": 0
   },
   "15009030204": {
@@ -3157,7 +4339,10 @@
    "dam_people": 676,
    "dam_share": 0.175,
    "island": "Maui",
+   "nearest_siren_ft": 6500,
    "population": 3861.0,
+   "siren_people": 405,
+   "siren_share": 0.105,
    "sirens": 1
   },
   "15009030304": {
@@ -3165,7 +4350,10 @@
    "dam_people": 108,
    "dam_share": 0.03,
    "island": "Maui",
+   "nearest_siren_ft": 15381,
    "population": 3603.0,
+   "siren_people": 54,
+   "siren_share": 0.015,
    "sirens": 1
   },
   "15009030305": {
@@ -3173,7 +4361,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 19260,
    "population": 5472.0,
+   "siren_people": 126,
+   "siren_share": 0.023,
    "sirens": 1
   },
   "15009030306": {
@@ -3181,7 +4372,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 9346,
    "population": 2133.0,
+   "siren_people": 107,
+   "siren_share": 0.05,
    "sirens": 0
   },
   "15009030307": {
@@ -3189,7 +4383,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 647,
    "population": 1903.0,
+   "siren_people": 986,
+   "siren_share": 0.518,
    "sirens": 7
   },
   "15009030403": {
@@ -3197,7 +4394,10 @@
    "dam_people": 247,
    "dam_share": 0.067,
    "island": "Maui",
+   "nearest_siren_ft": 10437,
    "population": 3687.0,
+   "siren_people": 162,
+   "siren_share": 0.044,
    "sirens": 0
   },
   "15009030404": {
@@ -3205,7 +4405,10 @@
    "dam_people": 1171,
    "dam_share": 0.195,
    "island": "Maui",
+   "nearest_siren_ft": 3287,
    "population": 6005.0,
+   "siren_people": 1171,
+   "siren_share": 0.195,
    "sirens": 2
   },
   "15009030405": {
@@ -3213,7 +4416,10 @@
    "dam_people": 251,
    "dam_share": 0.105,
    "island": "Maui",
+   "nearest_siren_ft": 551,
    "population": 2395.0,
+   "siren_people": 127,
+   "siren_share": 0.053,
    "sirens": 0
   },
   "15009030406": {
@@ -3221,7 +4427,10 @@
    "dam_people": 138,
    "dam_share": 0.021,
    "island": "Maui",
+   "nearest_siren_ft": 3141,
    "population": 6552.0,
+   "siren_people": 3957,
+   "siren_share": 0.604,
    "sirens": 3
   },
   "15009030501": {
@@ -3229,7 +4438,10 @@
    "dam_people": 1086,
    "dam_share": 0.491,
    "island": "Maui",
+   "nearest_siren_ft": 4056,
    "population": 2211.0,
+   "siren_people": 752,
+   "siren_share": 0.34,
    "sirens": 3
   },
   "15009030705": {
@@ -3237,7 +4449,10 @@
    "dam_people": 1139,
    "dam_share": 0.254,
    "island": "Maui",
+   "nearest_siren_ft": 8219,
    "population": 4485.0,
+   "siren_people": 870,
+   "siren_share": 0.194,
    "sirens": 2
   },
   "15009030706": {
@@ -3245,7 +4460,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 240,
    "population": 2796.0,
+   "siren_people": 2516,
+   "siren_share": 0.9,
    "sirens": 2
   },
   "15009030708": {
@@ -3253,7 +4471,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 2817,
    "population": 2881.0,
+   "siren_people": 2423,
+   "siren_share": 0.841,
    "sirens": 1
   },
   "15009030709": {
@@ -3261,7 +4482,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 1304,
    "population": 3584.0,
+   "siren_people": 3365,
+   "siren_share": 0.939,
    "sirens": 2
   },
   "15009030710": {
@@ -3269,7 +4493,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 1543,
    "population": 2626.0,
+   "siren_people": 2626,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15009030711": {
@@ -3277,7 +4504,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 2237,
    "population": 2216.0,
+   "siren_people": 2216,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15009030712": {
@@ -3285,7 +4515,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 1711,
    "population": 2451.0,
+   "siren_people": 2385,
+   "siren_share": 0.973,
    "sirens": 0
   },
   "15009030713": {
@@ -3293,7 +4526,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 2897,
    "population": 3834.0,
+   "siren_people": 3834,
+   "siren_share": 1.0,
    "sirens": 2
   },
   "15009030800": {
@@ -3301,7 +4537,10 @@
    "dam_people": 274,
    "dam_share": 0.034,
    "island": "Maui",
+   "nearest_siren_ft": 13086,
    "population": 8062.0,
+   "siren_people": 693,
+   "siren_share": 0.086,
    "sirens": 4
   },
   "15009030901": {
@@ -3309,7 +4548,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 1472,
    "population": 2240.0,
+   "siren_people": 2240,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15009030902": {
@@ -3317,7 +4559,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 627,
    "population": 3167.0,
+   "siren_people": 3167,
+   "siren_share": 1.0,
    "sirens": 1
   },
   "15009030903": {
@@ -3325,7 +4570,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 2070,
    "population": 7636.0,
+   "siren_people": 7140,
+   "siren_share": 0.935,
    "sirens": 2
   },
   "15009031001": {
@@ -3333,7 +4581,10 @@
    "dam_people": 314,
    "dam_share": 0.045,
    "island": "Maui",
+   "nearest_siren_ft": 2744,
    "population": 6977.0,
+   "siren_people": 2219,
+   "siren_share": 0.318,
    "sirens": 0
   },
   "15009031002": {
@@ -3341,7 +4592,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 2308,
    "population": 3774.0,
+   "siren_people": 3683,
+   "siren_share": 0.976,
    "sirens": 2
   },
   "15009031102": {
@@ -3349,7 +4603,10 @@
    "dam_people": 2846,
    "dam_share": 0.481,
    "island": "Maui",
+   "nearest_siren_ft": 2728,
    "population": 5916.0,
+   "siren_people": 5478,
+   "siren_share": 0.926,
    "sirens": 0
   },
   "15009031104": {
@@ -3357,7 +4614,10 @@
    "dam_people": 2338,
    "dam_share": 0.923,
    "island": "Maui",
+   "nearest_siren_ft": 5622,
    "population": 2533.0,
+   "siren_people": 195,
+   "siren_share": 0.077,
    "sirens": 0
   },
   "15009031105": {
@@ -3365,7 +4625,10 @@
    "dam_people": 6530,
    "dam_share": 1.0,
    "island": "Maui",
+   "nearest_siren_ft": 1902,
    "population": 6530.0,
+   "siren_people": 5106,
+   "siren_share": 0.782,
    "sirens": 1
   },
   "15009031106": {
@@ -3373,7 +4636,10 @@
    "dam_people": 1172,
    "dam_share": 0.25,
    "island": "Maui",
+   "nearest_siren_ft": 2568,
    "population": 4690.0,
+   "siren_people": 2490,
+   "siren_share": 0.531,
    "sirens": 1
   },
   "15009031107": {
@@ -3381,7 +4647,10 @@
    "dam_people": 1887,
    "dam_share": 0.746,
    "island": "Maui",
+   "nearest_siren_ft": 5221,
    "population": 2530.0,
+   "siren_people": 901,
+   "siren_share": 0.356,
    "sirens": 1
   },
   "15009031402": {
@@ -3389,7 +4658,10 @@
    "dam_people": 114,
    "dam_share": 0.034,
    "island": "Maui",
+   "nearest_siren_ft": 10300,
    "population": 3364.0,
+   "siren_people": 515,
+   "siren_share": 0.153,
    "sirens": 2
   },
   "15009031404": {
@@ -3397,7 +4669,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 1295,
    "population": 3100.0,
+   "siren_people": 2362,
+   "siren_share": 0.762,
    "sirens": 1
   },
   "15009031405": {
@@ -3405,7 +4680,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Maui",
+   "nearest_siren_ft": 9967,
    "population": 6442.0,
+   "siren_people": 1263,
+   "siren_share": 0.196,
    "sirens": 1
   },
   "15009031501": {
@@ -3413,7 +4691,10 @@
    "dam_people": 187,
    "dam_share": 0.074,
    "island": "Maui",
+   "nearest_siren_ft": 2714,
    "population": 2522.0,
+   "siren_people": 2373,
+   "siren_share": 0.941,
    "sirens": 3
   },
   "15009031503": {
@@ -3421,7 +4702,10 @@
    "dam_people": 363,
    "dam_share": 0.128,
    "island": "Maui",
+   "nearest_siren_ft": 14251,
    "population": 2834.0,
+   "siren_people": 604,
+   "siren_share": 0.213,
    "sirens": 4
   },
   "15009031504": {
@@ -3429,7 +4713,10 @@
    "dam_people": 84,
    "dam_share": 0.045,
    "island": "Maui",
+   "nearest_siren_ft": 12249,
    "population": 1874.0,
+   "siren_people": 127,
+   "siren_share": 0.068,
    "sirens": 2
   },
   "15009031505": {
@@ -3437,7 +4724,10 @@
    "dam_people": 316,
    "dam_share": 0.135,
    "island": "Maui",
+   "nearest_siren_ft": 7296,
    "population": 2341.0,
+   "siren_people": 674,
+   "siren_share": 0.288,
    "sirens": 1
   },
   "15009031601": {
@@ -3445,7 +4735,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Lānaʻi",
+   "nearest_siren_ft": 5727,
    "population": 3218.0,
+   "siren_people": 100,
+   "siren_share": 0.031,
    "sirens": 2
   },
   "15009031700": {
@@ -3453,7 +4746,10 @@
    "dam_people": 92,
    "dam_share": 0.019,
    "island": "Molokaʻi",
+   "nearest_siren_ft": 22292,
    "population": 4827.0,
+   "siren_people": 270,
+   "siren_share": 0.056,
    "sirens": 9
   },
   "15009031801": {
@@ -3461,7 +4757,10 @@
    "dam_people": 150,
    "dam_share": 0.057,
    "island": "Molokaʻi",
+   "nearest_siren_ft": 20641,
    "population": 2640.0,
+   "siren_people": 100,
+   "siren_share": 0.038,
    "sirens": 3
   },
   "15009031900": {
@@ -3469,7 +4768,10 @@
    "dam_people": 3429,
    "dam_share": 0.644,
    "island": "Maui",
+   "nearest_siren_ft": 9309,
    "population": 5325.0,
+   "siren_people": 815,
+   "siren_share": 0.153,
    "sirens": 4
   },
   "15009032000": {
@@ -3477,7 +4779,10 @@
    "dam_people": 76,
    "dam_share": 0.08,
    "island": "Maui",
+   "nearest_siren_ft": 17026,
    "population": 951.0,
+   "siren_people": 76,
+   "siren_share": 0.08,
    "sirens": 3
   },
   "15009980000": {
@@ -3485,7 +4790,10 @@
    "dam_people": 0,
    "dam_share": 0.0,
    "island": "Kahoʻolawe",
+   "nearest_siren_ft": null,
    "population": 0,
+   "siren_people": 0,
+   "siren_share": 0.0,
    "sirens": 0
   }
  },
@@ -12359,6 +13667,194 @@
   "Kauai": 10819,
   "Maui": 26251
  },
+ "low_siren_coverage": [
+  "15001020100",
+  "15001020202",
+  "15001020600",
+  "15001020702",
+  "15001020801",
+  "15001020900",
+  "15001021003",
+  "15001021011",
+  "15001021013",
+  "15001021014",
+  "15001021015",
+  "15001021016",
+  "15001021017",
+  "15001021101",
+  "15001021107",
+  "15001021108",
+  "15001021203",
+  "15001021204",
+  "15001021300",
+  "15001021402",
+  "15001021502",
+  "15001021504",
+  "15001021510",
+  "15001021511",
+  "15001021512",
+  "15001021513",
+  "15001021605",
+  "15001021606",
+  "15001021607",
+  "15001021705",
+  "15001021706",
+  "15001021707",
+  "15001021708",
+  "15001021800",
+  "15001021902",
+  "15001022000",
+  "15001022102",
+  "15003000116",
+  "15003000118",
+  "15003000121",
+  "15003000200",
+  "15003000301",
+  "15003000401",
+  "15003000905",
+  "15003001000",
+  "15003001201",
+  "15003002102",
+  "15003002206",
+  "15003002301",
+  "15003002701",
+  "15003002801",
+  "15003002900",
+  "15003003102",
+  "15003003103",
+  "15003004402",
+  "15003004500",
+  "15003004600",
+  "15003004801",
+  "15003006402",
+  "15003006500",
+  "15003006704",
+  "15003006811",
+  "15003006812",
+  "15003006813",
+  "15003006814",
+  "15003006815",
+  "15003006818",
+  "15003006819",
+  "15003006900",
+  "15003007001",
+  "15003007002",
+  "15003007100",
+  "15003007302",
+  "15003007400",
+  "15003007507",
+  "15003007701",
+  "15003007809",
+  "15003007814",
+  "15003007815",
+  "15003007816",
+  "15003007817",
+  "15003008005",
+  "15003008301",
+  "15003008610",
+  "15003008611",
+  "15003008627",
+  "15003008630",
+  "15003008631",
+  "15003008634",
+  "15003008702",
+  "15003008705",
+  "15003008802",
+  "15003008931",
+  "15003008933",
+  "15003008934",
+  "15003008939",
+  "15003009000",
+  "15003009100",
+  "15003009401",
+  "15003009402",
+  "15003009507",
+  "15003009508",
+  "15003009509",
+  "15003009510",
+  "15003009511",
+  "15003009512",
+  "15003009608",
+  "15003009609",
+  "15003009704",
+  "15003009706",
+  "15003009707",
+  "15003009801",
+  "15003009906",
+  "15003010000",
+  "15003010102",
+  "15003010103",
+  "15003010202",
+  "15003010203",
+  "15003010204",
+  "15003010205",
+  "15003010303",
+  "15003010308",
+  "15003010309",
+  "15003010508",
+  "15003010509",
+  "15003010702",
+  "15003011000",
+  "15003011104",
+  "15003011300",
+  "15003011401",
+  "15003011600",
+  "15003940005",
+  "15003940007",
+  "15003980200",
+  "15003980600",
+  "15003981100",
+  "15003981300",
+  "15003981400",
+  "15003981700",
+  "15003981801",
+  "15003981802",
+  "15003981803",
+  "15003981900",
+  "15003982000",
+  "15003982200",
+  "15005031900",
+  "15007040104",
+  "15007040105",
+  "15007040106",
+  "15007040204",
+  "15007040205",
+  "15007040301",
+  "15007040401",
+  "15007040603",
+  "15007040604",
+  "15007040701",
+  "15007040702",
+  "15007040800",
+  "15007040900",
+  "15007940000",
+  "15009030100",
+  "15009030201",
+  "15009030203",
+  "15009030204",
+  "15009030304",
+  "15009030305",
+  "15009030306",
+  "15009030403",
+  "15009030404",
+  "15009030405",
+  "15009030501",
+  "15009030705",
+  "15009030800",
+  "15009031001",
+  "15009031104",
+  "15009031107",
+  "15009031402",
+  "15009031405",
+  "15009031503",
+  "15009031504",
+  "15009031505",
+  "15009031601",
+  "15009031700",
+  "15009031801",
+  "15009031900",
+  "15009032000"
+ ],
  "meta": {
   "check_dam": "Check dam zone",
   "childcare_dropped": {
@@ -12369,7 +13865,12 @@
   "dam_detail": "State dam evacuation zones",
   "dam_line": "People in dam evacuation zones",
   "dam_method": "share of 100 grid points of each Census area inside any dam evacuation zone, times the area's population (the same method as the tsunami share)",
+  "dam_note": "State dam evacuation zones show the area that could flood if a dam fails; they are planning zones, not a forecast.",
+  "low_coverage": 0.5,
+  "low_range_text": "Populated Census areas with less than 50% of people within rated siren range",
   "no_sirens_text": "prioritise WEA, radio and trusted messengers",
+  "outside_range_text": "Populated Census areas whose land point is farther than 3,400 ft from every outdoor siren (HI-EMA manufacturer rating; actual range varies)",
+  "siren_method": "share of 100 grid points of each Census area within 3,400 ft of a permanent siren on the same island (the same sample points as the tsunami share)",
   "siren_radius": {
    "feet": 3400,
    "metres": 1036,
@@ -12440,6 +13941,192 @@
    }
   }
  },
+ "outside_siren_range": [
+  "15001020100",
+  "15001020202",
+  "15001020500",
+  "15001020600",
+  "15001020702",
+  "15001020900",
+  "15001021003",
+  "15001021011",
+  "15001021014",
+  "15001021015",
+  "15001021016",
+  "15001021017",
+  "15001021101",
+  "15001021107",
+  "15001021108",
+  "15001021203",
+  "15001021204",
+  "15001021300",
+  "15001021402",
+  "15001021502",
+  "15001021504",
+  "15001021510",
+  "15001021511",
+  "15001021512",
+  "15001021513",
+  "15001021605",
+  "15001021606",
+  "15001021607",
+  "15001021705",
+  "15001021706",
+  "15001021707",
+  "15001021708",
+  "15001021800",
+  "15001021902",
+  "15001022000",
+  "15001022102",
+  "15003000115",
+  "15003000116",
+  "15003000118",
+  "15003000301",
+  "15003000401",
+  "15003000402",
+  "15003001000",
+  "15003001201",
+  "15003002102",
+  "15003002206",
+  "15003002301",
+  "15003002701",
+  "15003002702",
+  "15003002900",
+  "15003003102",
+  "15003003103",
+  "15003004402",
+  "15003004500",
+  "15003004600",
+  "15003004801",
+  "15003006402",
+  "15003006500",
+  "15003006704",
+  "15003006811",
+  "15003006812",
+  "15003006813",
+  "15003006814",
+  "15003006815",
+  "15003006818",
+  "15003006819",
+  "15003006900",
+  "15003007001",
+  "15003007002",
+  "15003007100",
+  "15003007302",
+  "15003007400",
+  "15003007507",
+  "15003007702",
+  "15003007809",
+  "15003007814",
+  "15003007815",
+  "15003007816",
+  "15003007817",
+  "15003008005",
+  "15003008301",
+  "15003008405",
+  "15003008417",
+  "15003008502",
+  "15003008610",
+  "15003008611",
+  "15003008627",
+  "15003008630",
+  "15003008631",
+  "15003008634",
+  "15003008702",
+  "15003008705",
+  "15003008802",
+  "15003008918",
+  "15003008931",
+  "15003008932",
+  "15003008934",
+  "15003008939",
+  "15003009000",
+  "15003009100",
+  "15003009202",
+  "15003009401",
+  "15003009402",
+  "15003009507",
+  "15003009508",
+  "15003009509",
+  "15003009510",
+  "15003009511",
+  "15003009512",
+  "15003009608",
+  "15003009609",
+  "15003009704",
+  "15003009706",
+  "15003009707",
+  "15003009801",
+  "15003009906",
+  "15003010000",
+  "15003010102",
+  "15003010103",
+  "15003010202",
+  "15003010203",
+  "15003010204",
+  "15003010205",
+  "15003010303",
+  "15003010308",
+  "15003010309",
+  "15003010508",
+  "15003010509",
+  "15003010702",
+  "15003011000",
+  "15003011104",
+  "15003011401",
+  "15003011600",
+  "15003940005",
+  "15003940007",
+  "15003980200",
+  "15003980600",
+  "15003981100",
+  "15003981300",
+  "15003981400",
+  "15003981700",
+  "15003981801",
+  "15003981802",
+  "15003981803",
+  "15003981900",
+  "15003982200",
+  "15005031900",
+  "15007040104",
+  "15007040105",
+  "15007040106",
+  "15007040204",
+  "15007040301",
+  "15007040401",
+  "15007040402",
+  "15007040603",
+  "15007040604",
+  "15007040701",
+  "15007040702",
+  "15007040800",
+  "15007040900",
+  "15007940000",
+  "15009030100",
+  "15009030201",
+  "15009030203",
+  "15009030204",
+  "15009030304",
+  "15009030305",
+  "15009030306",
+  "15009030403",
+  "15009030501",
+  "15009030705",
+  "15009030800",
+  "15009031104",
+  "15009031107",
+  "15009031402",
+  "15009031405",
+  "15009031503",
+  "15009031504",
+  "15009031505",
+  "15009031601",
+  "15009031700",
+  "15009031801",
+  "15009031900",
+  "15009032000"
+ ],
  "sirens": [
   {
    "county": "Hawaii",
@@ -16175,234 +17862,5 @@
   "Molokaʻi Baptist Church|Maui": [
    "KUALAPUU RESERVOIR"
   ]
- },
- "zero_siren_areas": [
-  "15001020202",
-  "15001020500",
-  "15001020702",
-  "15001021017",
-  "15001021502",
-  "15001021511",
-  "15001021512",
-  "15001021606",
-  "15001021607",
-  "15001021706",
-  "15003000107",
-  "15003000114",
-  "15003000116",
-  "15003000117",
-  "15003000118",
-  "15003000119",
-  "15003000121",
-  "15003000122",
-  "15003000401",
-  "15003000402",
-  "15003000800",
-  "15003000903",
-  "15003000904",
-  "15003000905",
-  "15003001000",
-  "15003001101",
-  "15003001201",
-  "15003001202",
-  "15003001300",
-  "15003001501",
-  "15003001502",
-  "15003001601",
-  "15003001602",
-  "15003001801",
-  "15003001803",
-  "15003001804",
-  "15003001905",
-  "15003001906",
-  "15003001907",
-  "15003002003",
-  "15003002004",
-  "15003002005",
-  "15003002006",
-  "15003002102",
-  "15003002204",
-  "15003002205",
-  "15003002206",
-  "15003002301",
-  "15003002302",
-  "15003002401",
-  "15003002403",
-  "15003002404",
-  "15003002500",
-  "15003002600",
-  "15003002701",
-  "15003002702",
-  "15003002801",
-  "15003002802",
-  "15003002900",
-  "15003003102",
-  "15003003103",
-  "15003003404",
-  "15003003408",
-  "15003003409",
-  "15003003410",
-  "15003003411",
-  "15003003412",
-  "15003003413",
-  "15003003414",
-  "15003003501",
-  "15003003503",
-  "15003003504",
-  "15003003603",
-  "15003003604",
-  "15003003605",
-  "15003003606",
-  "15003003701",
-  "15003003702",
-  "15003003802",
-  "15003004000",
-  "15003004101",
-  "15003004102",
-  "15003004201",
-  "15003004202",
-  "15003004301",
-  "15003004302",
-  "15003004402",
-  "15003004500",
-  "15003004701",
-  "15003004801",
-  "15003004802",
-  "15003004900",
-  "15003005000",
-  "15003005100",
-  "15003005200",
-  "15003005400",
-  "15003005500",
-  "15003005601",
-  "15003005602",
-  "15003006000",
-  "15003006202",
-  "15003006203",
-  "15003006302",
-  "15003006401",
-  "15003006402",
-  "15003006703",
-  "15003006806",
-  "15003006810",
-  "15003006811",
-  "15003006812",
-  "15003006814",
-  "15003006815",
-  "15003006816",
-  "15003006817",
-  "15003006818",
-  "15003006819",
-  "15003006900",
-  "15003007001",
-  "15003007002",
-  "15003007100",
-  "15003007302",
-  "15003007400",
-  "15003007508",
-  "15003007701",
-  "15003007804",
-  "15003007807",
-  "15003007808",
-  "15003007809",
-  "15003007812",
-  "15003007813",
-  "15003007814",
-  "15003007816",
-  "15003007817",
-  "15003008008",
-  "15003008010",
-  "15003008011",
-  "15003008013",
-  "15003008302",
-  "15003008405",
-  "15003008411",
-  "15003008413",
-  "15003008414",
-  "15003008416",
-  "15003008417",
-  "15003008418",
-  "15003008609",
-  "15003008610",
-  "15003008624",
-  "15003008628",
-  "15003008629",
-  "15003008630",
-  "15003008631",
-  "15003008632",
-  "15003008634",
-  "15003008702",
-  "15003008705",
-  "15003008706",
-  "15003008707",
-  "15003008801",
-  "15003008802",
-  "15003008906",
-  "15003008909",
-  "15003008912",
-  "15003008913",
-  "15003008917",
-  "15003008918",
-  "15003008921",
-  "15003008928",
-  "15003008932",
-  "15003008934",
-  "15003008935",
-  "15003008938",
-  "15003008939",
-  "15003008940",
-  "15003008944",
-  "15003008946",
-  "15003008947",
-  "15003008950",
-  "15003008951",
-  "15003008952",
-  "15003009000",
-  "15003009202",
-  "15003009301",
-  "15003009401",
-  "15003009402",
-  "15003009507",
-  "15003009508",
-  "15003009509",
-  "15003009510",
-  "15003009511",
-  "15003009512",
-  "15003009609",
-  "15003009704",
-  "15003009706",
-  "15003010503",
-  "15003010508",
-  "15003010509",
-  "15003010510",
-  "15003010702",
-  "15003010903",
-  "15003010905",
-  "15003011104",
-  "15003011401",
-  "15003011600",
-  "15003940005",
-  "15003940007",
-  "15003980600",
-  "15003981100",
-  "15003981300",
-  "15003981700",
-  "15003981801",
-  "15003981802",
-  "15003981803",
-  "15003981900",
-  "15003982000",
-  "15003982200",
-  "15007040106",
-  "15007040301",
-  "15009030201",
-  "15009030203",
-  "15009030306",
-  "15009030403",
-  "15009030405",
-  "15009030712",
-  "15009031001",
-  "15009031102",
-  "15009031104"
- ]
+ }
 }

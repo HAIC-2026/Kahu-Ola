@@ -32,7 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_access as ba  # noqa: E402
 import fetch_arcgis as fa  # noqa: E402
 from fetch_flood_zones import is_sfha  # noqa: E402
-from geo import ZoneIndex, haversine_km, point_in_geometry  # noqa: E402
+from geo import ZoneIndex, area_centroid, bbox_of, haversine_km, point_in_geometry, sample_points  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw" / "state_layers"
@@ -46,6 +46,13 @@ CENTRE_TYPES = {"Licensed Group Child Care (Preschools) - PATCH": "Licensed grou
 HOME_BASED = re.compile(r"family\s+child\s*care|\bfcc\b|in-home|home-based|\bhome\b", re.I)
 CHILDCARE_LABEL = "Childcare centre"
 NO_SIRENS = "prioritise WEA, radio and trusted messengers"
+FT_PER_M = 3.28084
+LOW_COVERAGE = 0.5               # areas below this share of people in rated range: prioritise
+OUTSIDE_RANGE = ("Populated Census areas whose land point is farther than 3,400 ft from every "
+                 "outdoor siren (HI-EMA manufacturer rating; actual range varies)")
+LOW_RANGE = "Populated Census areas with less than 50% of people within rated siren range"
+DAM_NOTE = ("State dam evacuation zones show the area that could flood if a dam fails; they "
+            "are planning zones, not a forecast.")
 DAM_LINE = "People in dam evacuation zones"
 DAM_DETAIL = "State dam evacuation zones"
 CHECK_DAM = "Check dam zone"
@@ -126,6 +133,22 @@ def sirens(feats: list, island_of, tracts) -> list:
     return sorted(out, key=lambda x: (x["county"], x["id"]))
 
 
+def siren_reach(geom: dict, land: tuple, sirens: list, radius_m: float) -> tuple[int, float]:
+    """(feet from the area's land point to the nearest siren, share of the area's sample
+    points within the rated radius of any siren). Same sample points as the tsunami share
+    (geo.sample_points, about SAMPLES per area), so the share stands for people evenly
+    spread over the area, as in model_needs.py."""
+    km = radius_m / 1000
+    nearest = min((haversine_km(land[0], land[1], s["lon"], s["lat"]) for s in sirens),
+                  default=None)
+    pts = sample_points(geom, SAMPLES)
+    x0, y0, x1, y1 = bbox_of(geom)
+    pad = radius_m / 111320 * 1.5                     # degrees; generous at Hawaiʻi latitudes
+    near = [s for s in sirens if x0 - pad <= s["lon"] <= x1 + pad and y0 - pad <= s["lat"] <= y1 + pad]
+    hit = sum(1 for x, y in pts if any(haversine_km(x, y, s["lon"], s["lat"]) <= km for s in near))
+    return (None if nearest is None else round(nearest * 1000 * FT_PER_M)), round(hit / len(pts), 3)
+
+
 def summarize(offline: bool = False) -> dict | None:
     need = ["childcare.geojson", "sirens.geojson", "dams.geojson", "meta.json"]
     if not all((RAW / n).exists() for n in need):
@@ -140,7 +163,10 @@ def summarize(offline: bool = False) -> dict | None:
     tsunami = ZoneIndex(fa.load_json(ba.TSUNAMI, None))
     dams = ZoneIndex(load("dams.geojson"))
     with open(fa.ISLANDS, newline="", encoding="utf-8") as fh:
-        island = {r["id"]: r["island"] for r in csv.DictReader(fh) if r["kind"] == "area"}
+        rows = [r for r in csv.DictReader(fh) if r["kind"] == "area"]
+    island = {r["id"]: r["island"] for r in rows}
+    land = {r["id"]: (float(r["lon"]), float(r["lat"])) for r in rows}
+    radius_m = meta["siren_radius"]["metres"]
 
     cc, dropped = childcare(load("childcare.geojson")["features"], island_of, tracts, tsunami, offline)
     sv = sirens(load("sirens.geojson")["features"], island_of, tracts)
@@ -154,8 +180,13 @@ def summarize(offline: bool = False) -> dict | None:
         fips, pop = p["tract_fips"], p.get("population") or 0
         share = round(dams.share_inside(f["geometry"], SAMPLES), 3)
         people = round(pop * share)
+        same = [s for s in sv if s["island"] == island.get(fips)]
+        ft, cover = siren_reach(f["geometry"], land.get(fips) or area_centroid(f["geometry"]),
+                                same, radius_m)
         areas[fips] = {"county": p["county"], "island": island.get(fips, ""), "population": pop,
-                       "sirens": per_tract.get(fips, 0), "dam_share": share, "dam_people": people}
+                       "sirens": per_tract.get(fips, 0), "nearest_siren_ft": ft,
+                       "siren_share": cover, "siren_people": round(pop * cover),
+                       "dam_share": share, "dam_people": people}
         county_dam[p["county"]] = county_dam.get(p["county"], 0) + people
 
     site_dam = {}                    # shelter site -> dam evacuation zones it is inside
@@ -173,12 +204,20 @@ def summarize(offline: bool = False) -> dict | None:
     sirens_county = {}
     for s in sv:
         sirens_county[s["county"]] = sirens_county.get(s["county"], 0) + 1
-    zero = {fips: a for fips, a in areas.items()
-            if a["population"] > 0 and a["sirens"] == 0 and a["island"] in fa.ISLE_COUNTY}
+    populated = {fips: a for fips, a in areas.items()
+                 if a["population"] > 0 and a["island"] in fa.ISLE_COUNTY}
+    outside = [f for f, a in populated.items()
+               if a["nearest_siren_ft"] is None or a["nearest_siren_ft"] > meta["siren_radius"]["feet"]]
+    low = [f for f, a in populated.items() if a["siren_share"] < LOW_COVERAGE]
     return {
         "meta": {"sources": {k: meta[k] for k in ("childcare", "sirens", "dams")},
                  "siren_radius": meta["siren_radius"], "childcare_dropped": dropped,
                  "childcare_label": CHILDCARE_LABEL, "no_sirens_text": NO_SIRENS,
+                 "outside_range_text": OUTSIDE_RANGE, "low_range_text": LOW_RANGE,
+                 "low_coverage": LOW_COVERAGE, "dam_note": DAM_NOTE,
+                 "siren_method": f"share of {SAMPLES} grid points of each Census area within "
+                                 f"{meta['siren_radius']['feet']:,} ft of a permanent siren on "
+                                 "the same island (the same sample points as the tsunami share)",
                  "dam_line": DAM_LINE, "dam_detail": DAM_DETAIL, "check_dam": CHECK_DAM,
                  "dam_method": f"share of {SAMPLES} grid points of each Census area inside any "
                                "dam evacuation zone, times the area's population (the same "
@@ -187,7 +226,8 @@ def summarize(offline: bool = False) -> dict | None:
         "sirens": sv,
         "sirens_by_county": dict(sorted(sirens_county.items())),
         "areas": areas,
-        "zero_siren_areas": sorted(zero),
+        "outside_siren_range": sorted(outside),
+        "low_siren_coverage": sorted(low),
         "dam_people_by_county": dict(sorted(county_dam.items())),
         "site_dam_zones": site_dam,
     }
@@ -205,12 +245,14 @@ def report(s: dict) -> str:
     zd = Counter(f["county"] for f in s["childcare"] if (f["fld_zone"] or "").upper() == "D")
     out.append(f"  FEMA zone D: {dict(zd)}")
     out.append(f"sirens (permanent): {s['sirens_by_county']}")
-    zc = Counter(s["areas"][f]["county"] for f in s["zero_siren_areas"])
     pop = Counter()
     for f, a in s["areas"].items():
         if a["population"] > 0 and a["island"] in fa.ISLE_COUNTY:
             pop[a["county"]] += 1
-    out.append("populated areas with 0 sirens: " + ", ".join(f"{c} {zc[c]} of {pop[c]}" for c in sorted(pop)))
+    oc = Counter(s["areas"][f]["county"] for f in s["outside_siren_range"])
+    lc = Counter(s["areas"][f]["county"] for f in s["low_siren_coverage"])
+    out.append("land point outside rated range: " + ", ".join(f"{c} {oc[c]} of {pop[c]}" for c in sorted(pop)))
+    out.append("under 50% of people in rated range: " + ", ".join(f"{c} {lc[c]} of {pop[c]}" for c in sorted(pop)))
     out.append(f"people in dam evacuation zones: {s['dam_people_by_county']}")
     out.append(f"shelter sites in a dam zone: {s['site_dam_zones'] or 'none'}")
     return "\n".join(out)

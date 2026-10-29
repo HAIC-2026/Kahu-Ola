@@ -2,6 +2,7 @@
 dam evacuation zone shares, shelter sites in a dam zone, tables and sources in the app and
 every PDF, panel numbers in the browser, bundle size."""
 import json
+import math
 import re
 import sys
 import tempfile
@@ -78,7 +79,8 @@ class Sirens(unittest.TestCase):
         for f, a in S["areas"].items():
             self.assertEqual(a["sirens"], per.get(f, 0), f)
             if f in TRACTS:
-                self.assertEqual(TRACTS[f].get("s"), a["sirens"], f)
+                self.assertEqual(TRACTS[f].get("sd"), a["nearest_siren_ft"], f)
+                self.assertEqual(TRACTS[f].get("sc"), a["siren_share"], f)
         by = {}
         for s in S["sirens"]:
             by[s["county"]] = by.get(s["county"], 0) + 1
@@ -94,13 +96,54 @@ class Sirens(unittest.TestCase):
                 self.assertFalse({"Dash_Stat", "Poll_Date"} & set(f["properties"]))
         self.assertFalse({"status", "Dash_Stat"} & {k for s in S["sirens"] for k in s})
 
-    def test_zero_siren_areas(self):
-        for f in S["zero_siren_areas"]:
-            a = S["areas"][f]
-            self.assertEqual(a["sirens"], 0)
-            self.assertGreater(a["population"], 0)
-        flat = sorted(f for v in BUNDLE["state"]["zero"].values() for f in v)
-        self.assertEqual(flat, sorted(S["zero_siren_areas"]))
+    def test_rated_range_recomputed(self):
+        """Nearest siren from the land point and the share of sample points within 3,400 ft,
+        recomputed by brute force (every siren on the island, no bounding-box filter)."""
+        import csv
+        from geo import haversine_km, sample_points
+        afn = {f["properties"]["tract_fips"]: f for f in json.loads(
+            (ROOT / "data" / "processed" / "afn_tracts.geojson").read_text(encoding="utf-8"))["features"]}
+        with open(ROOT / "data" / "sources" / "islands.csv", newline="", encoding="utf-8") as fh:
+            land = {r["id"]: (float(r["lon"]), float(r["lat"])) for r in csv.DictReader(fh) if r["kind"] == "area"}
+        km = 3400 / 3.28084 / 1000
+        checked = 0
+        for i, (f, a) in enumerate(sorted(S["areas"].items())):
+            if i % 4 or f not in land:
+                continue
+            same = [x for x in S["sirens"] if x["island"] == a["island"]]
+            if same:
+                d = min(haversine_km(*land[f], x["lon"], x["lat"]) for x in same)
+                self.assertAlmostEqual(a["nearest_siren_ft"], d * 1000 * 3.28084, delta=1, msg=f)
+            pts = sample_points(afn[f]["geometry"], 100)
+            hit = sum(1 for x, y in pts if any(haversine_km(x, y, z["lon"], z["lat"]) <= km for z in same))
+            self.assertAlmostEqual(a["siren_share"], hit / len(pts), places=3, msg=f)
+            checked += 1
+        self.assertGreater(checked, 100)
+
+    def test_outside_and_low_lists(self):
+        populated = {f: a for f, a in S["areas"].items() if a["population"] > 0 and a["island"] in
+                     {"Oʻahu", "Hawaiʻi", "Maui", "Molokaʻi", "Lānaʻi", "Kahoʻolawe", "Kauaʻi", "Niʻihau"}}
+        self.assertEqual(sorted(S["outside_siren_range"]),
+                         sorted(f for f, a in populated.items()
+                                if a["nearest_siren_ft"] is None or a["nearest_siren_ft"] > 3400))
+        self.assertEqual(sorted(S["low_siren_coverage"]),
+                         sorted(f for f, a in populated.items() if a["siren_share"] < 0.5))
+        for f, a in S["areas"].items():
+            self.assertTrue(0 <= a["siren_share"] <= 1, f)
+            self.assertEqual(a["siren_people"], round(a["population"] * a["siren_share"]), f)
+        flat = sorted(f for v in BUNDLE["state"]["low"].values() for f in v)
+        self.assertEqual(flat, sorted(S["low_siren_coverage"]))
+        out = {}
+        for f in S["outside_siren_range"]:
+            out[S["areas"][f]["county"]] = out.get(S["areas"][f]["county"], 0) + 1
+        self.assertEqual(BUNDLE["state"]["outside"], out)
+
+    def test_never_says_no_warning(self):
+        pat = re.compile(r"no (outdoor )?warning|without (any )?warning|not warned|no siren coverage", re.I)
+        self.assertNotRegex((APP / "app.js").read_text(encoding="utf-8"), pat)
+        self.assertNotRegex(json.dumps(BUNDLE["state"], ensure_ascii=False), pat)
+        for p in PLAYBOOKS:
+            self.assertNotRegex(text(p.read_text(encoding="utf-8")), pat, p.name)
 
     def test_coverage_only_with_official_radius(self):
         r = S["meta"]["siren_radius"]
@@ -164,7 +207,8 @@ class SourcesAndPdfs(unittest.TestCase):
             t = text(p.read_text(encoding="utf-8"))
             for word in ("Ready Keiki Locator", "Hawaiʻi Emergency Management Agency public siren map",
                          "State of Hawaiʻi dam evacuation zones", "People in dam evacuation zones",
-                         "prioritise WEA, radio and trusted messengers"):
+                         "prioritise WEA, radio and trusted messengers", bsl.DAM_NOTE,
+                         "farther than 3,400 ft from every outdoor siren"):
                 self.assertIn(word, t, (p.name, word))
 
     def test_fetch_dates_recorded(self):
@@ -188,19 +232,26 @@ class Browser(unittest.TestCase):
         server = Serve(port)
         try:
             f = next(f for f, a in S["areas"].items() if a["county"] == "Hawaii" and a["sirens"] >= 2)
-            z = next(x for x in S["zero_siren_areas"] if S["areas"][x]["county"] == "Hawaii")
+            z = next(x for x in S["low_siren_coverage"] if S["areas"][x]["county"] == "Hawaii")
             with tempfile.TemporaryDirectory() as prof:
                 dom = chrome(f"http://127.0.0.1:{port}/?county=Hawaii&hazard=tsunami&area={f}", prof)
             with tempfile.TemporaryDirectory() as prof:
                 dom0 = chrome(f"http://127.0.0.1:{port}/?county=Hawaii&hazard=tsunami&area={z}", prof)
         finally:
             server.stop()
-        self.assertIn(f"Outdoor sirens in this area: {S['areas'][f]['sirens']}", text(panel(dom)))
-        self.assertIn("Outdoor sirens in this area: 0 – prioritise WEA, radio and trusted messengers",
-                      text(panel(dom0)))
+        a, a0 = S["areas"][f], S["areas"][z]
+        p = text(panel(dom))
+        self.assertIn(f"Nearest outdoor siren: {a['nearest_siren_ft']:,} ft (rated range 3,400 ft)", p)
+        pct = lambda x: math.floor(x * 100 + 0.5)          # half up, as Math.round in the app  # noqa: E731
+        self.assertIn(f"Share of people within rated siren range: {pct(a['siren_share'])}%", p)
+        self.assertIn(f"Share of people within rated siren range: {pct(a0['siren_share'])}% – "
+                      "prioritise WEA, radio and trusted messengers", text(panel(dom0)))
         t = text(dom)
-        n0 = sum(1 for x in S["zero_siren_areas"] if S["areas"][x]["county"] == "Hawaii")
-        self.assertIn(f"Populated Census areas with 0 outdoor sirens ({n0}): prioritise WEA", t)
+        n0 = sum(1 for x in S["low_siren_coverage"] if S["areas"][x]["county"] == "Hawaii")
+        self.assertIn(f"{bsl.LOW_RANGE} ({n0}): prioritise WEA", t)
+        n1 = sum(1 for x in S["outside_siren_range"] if S["areas"][x]["county"] == "Hawaii")
+        self.assertRegex(t, re.escape(f"{bsl.OUTSIDE_RANGE}: {n1}") + r" ?\.")
+        self.assertIn(bsl.DAM_NOTE, t)
         self.assertIn(f"People in dam evacuation zones {S['dam_people_by_county']['Hawaii']:,} State dam evacuation zones", t)
         self.assertIn("Check dam zone", t)
         self.assertIn('id="layer-sirens"', dom)
