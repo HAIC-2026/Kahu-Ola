@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT / "tests"))
 import build_playbooks as bp  # noqa: E402
+import block_shares  # noqa: E402
 import build_state_layers as bsl  # noqa: E402
 from geo import ZoneIndex  # noqa: E402
 from test_map_detail import Serve, chrome, free_port, panel, text  # noqa: E402
@@ -22,6 +23,7 @@ S = bsl.load()
 BUNDLE = json.loads((APP / "data" / "bundle.json").read_text(encoding="utf-8"))
 TRACTS = {t["f"]: t for t in BUNDLE["tracts"]}
 RAW = bsl.RAW
+BLOCKS = block_shares.load()
 PLAYBOOKS = [p for p in sorted((ROOT / "playbooks").glob("*_*.html"))]
 
 
@@ -97,8 +99,8 @@ class Sirens(unittest.TestCase):
         self.assertFalse({"status", "Dash_Stat"} & {k for s in S["sirens"] for k in s})
 
     def test_rated_range_recomputed(self):
-        """Nearest siren from the land point and the share of sample points within 3,400 ft,
-        recomputed by brute force (every siren on the island, no bounding-box filter)."""
+        """Nearest siren from the land point and the share of people (2020 blocks) within
+        3,400 ft, recomputed by brute force (every siren on the island, no bounding box)."""
         import csv
         from geo import haversine_km, sample_points
         afn = {f["properties"]["tract_fips"]: f for f in json.loads(
@@ -114,9 +116,15 @@ class Sirens(unittest.TestCase):
             if same:
                 d = min(haversine_km(*land[f], x["lon"], x["lat"]) for x in same)
                 self.assertAlmostEqual(a["nearest_siren_ft"], d * 1000 * 3.28084, delta=1, msg=f)
-            pts = sample_points(afn[f]["geometry"], 100)
-            hit = sum(1 for x, y in pts if any(haversine_km(x, y, z["lon"], z["lat"]) <= km for z in same))
-            self.assertAlmostEqual(a["siren_share"], hit / len(pts), places=3, msg=f)
+            rows = (BLOCKS or {}).get("blocks", {}).get(f)
+            if rows:                                       # population-weighted (2020 blocks)
+                tot = sum(p for *_xy, p in rows)
+                hit = sum(p for x, y, p in rows if any(haversine_km(x, y, z["lon"], z["lat"]) <= km for z in same))
+                want = hit / tot
+            else:                                          # no populated blocks: area method
+                pts = sample_points(afn[f]["geometry"], 100)
+                want = sum(1 for x, y in pts if any(haversine_km(x, y, z["lon"], z["lat"]) <= km for z in same)) / len(pts)
+            self.assertAlmostEqual(a["siren_share"], want, places=3, msg=f)
             checked += 1
         self.assertGreater(checked, 100)
 

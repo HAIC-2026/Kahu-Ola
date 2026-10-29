@@ -553,7 +553,7 @@ function openArea(f, opener) {
     near.length && near[0].drive !== undefined ? el("p", { class: "src" }, `${DATA.access.source} ${DATA.access.attribution}`) : null,
     hasState() ? el("p", { id: "area-sirens" },
       el("strong", null, `Nearest outdoor siren: ${tr.sd === null || tr.sd === undefined ? "none on this island" : `${fmt(tr.sd)} ft`} (rated range ${fmt(DATA.state.radius_ft)} ft)`), el("br"),
-      el("strong", null, `Share of people within rated siren range: ${Math.round((tr.sc || 0) * 100)}%`),
+      el("strong", null, `Share ${DATA.state.share_word} within rated siren range: ${Math.round((tr.sc || 0) * 100)}%`),
       (tr.sc || 0) < 0.5 ? ` – ${DATA.state.no_sirens}.` : "") : null,
     careInArea(f, hazard),
     el("p", null, el("strong", null, "Proposed partners: "), `lead – ${[...lead].join(", ") || "—"}; support – ${[...support].join(", ") || "—"}. `, DATA.meta.role_status),

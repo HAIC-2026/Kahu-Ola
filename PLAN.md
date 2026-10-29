@@ -43,6 +43,7 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 | CDC/ATSDR Social Vulnerability Index 2022, by Census area | CMIST proxies (limited English, disability, 65+, under 18, no vehicle, group quarters) | SVI 2022; fetched 2026-10-27 |
 | FEMA National Risk Index v1.20, by Census area (hurricane, wildfire, tsunami, inland and coastal flooding) | Hazard footprint (NRI risk score) | v1.20; fetched 2026-10-27 |
 | Hawaiʻi Statewide GIS: tsunami evacuation zones and extreme tsunami evacuation zones | Tsunami footprint; site exclusion | fetched 2026-10-27 |
+| TIGERweb 2020 Census Blocks (internal points of populated blocks), https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/10 | Population-weighted shares in a zone (§5.9), with 2020 PL 94-171 block population | fetched 2026-10-28 |
 | Hawaiʻi Statewide GIS "State DFIRM" (FEMA flood hazard areas, downloaded from FEMA 6/15/26) | Site-level flood zone for 311 site points | queried 2026-10-27 (`data/sources/site_flood_zones.csv`) |
 | HHS emPOWER, county level (`Power_Dependent_Devices_DME`) | Power-dependent residents, allocated to Census areas by 65+ share (estimate) | fetched 2026-10-27 |
 | Hawaiʻi DOE public schools (Statewide GIS) | Candidate sites (292 schools) | fetched 2026-10-27 |
@@ -110,22 +111,22 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 |---|---|---|---|
 | Kauaʻi | Hurricane | 1,470 / **2,205** / 3,676 | Hanamāʻulu / Puhi (Census area 404.01): 225 |
 | Kauaʻi | Wildfire | 433 / **1,082** / 2,423 | Wailua Homesteads / Kapaʻa (Census area 402.04): 302 |
-| Kauaʻi | Tsunami | 123 / **308** / 678 | Kapaʻa (Census area 403.02): 68 |
+| Kauaʻi | Tsunami | 181 / **452** / 994 | Kekaha / Waimea (Census area 409): 207 |
 | Kauaʻi | Inland flooding | 428 / **1,070** / 2,354 | Līhuʻe (Census area 405): 365 |
 | Kauaʻi | Coastal flooding | 384 / **959** / 2,110 | Līhuʻe (Census area 405): 365 |
 | Honolulu | Hurricane | 20,202 / **30,303** / 50,505 | Kapolei (Census area 115): 347 |
 | Honolulu | Wildfire | 6,285 / **15,713** / 35,197 | Kapolei (Census area 115): 579 |
-| Honolulu | Tsunami | 1,644 / **4,110** / 9,042 | Māʻili (Census area 96.10): 302 |
+| Honolulu | Tsunami | 1,607 / **4,017** / 8,838 | Māʻili (Census area 96.10): 308 |
 | Honolulu | Inland flooding | 7,389 / **18,473** / 40,641 | Kapolei (Census area 115): 579 |
 | Honolulu | Coastal flooding | 4,868 / **12,170** / 26,775 | Lāʻie (Census area 102.02): 349 |
 | Maui | Hurricane | 3,296 / **4,944** / 8,241 | Waikapū / Waiheʻe-Waiehu (Census area 308): 242 |
 | Maui | Wildfire | 977 / **2,442** / 5,469 | Wailuku (Census area 310.01): 349 |
-| Maui | Tsunami | 365 / **912** / 2,006 | Kīhei (Census area 307.13): 128 |
+| Maui | Tsunami | 523 / **1,308** / 2,877 | Lahaina (Census area 314.04): 154 |
 | Maui | Inland flooding | 1,053 / **2,633** / 5,792 | Waikapū / Waiheʻe-Waiehu (Census area 308): 403 |
 | Maui | Coastal flooding | 734 / **1,834** / 4,035 | Kahului (Census area 319): 266 |
 | Hawaiʻi | Hurricane | 4,043 / **6,065** / 10,108 | Hawaiian Paradise Park (Census area 210.14): 244 |
 | Hawaiʻi | Wildfire | 1,151 / **2,878** / 6,446 | Hawaiian Paradise Park (Census area 210.14): 407 |
-| Hawaiʻi | Tsunami | 249 / **623** / 1,371 | Kailua (Census area 216.08): 99 |
+| Hawaiʻi | Tsunami | 242 / **605** / 1,331 | Hilo (Census area 206): 146 |
 | Hawaiʻi | Inland flooding | 1,310 / **3,276** / 7,207 | Hawaiian Paradise Park (Census area 210.14): 407 |
 | Hawaiʻi | Coastal flooding | 1,079 / **2,698** / 5,937 | Hōnaunau-Nāpōʻopoʻo (Census area 213): 369 |
 
@@ -229,20 +230,34 @@ Three free public layers were downloaded once, at build time (`scripts/fetch_sta
 
 **Outdoor sirens.** 413 permanent sirens: Honolulu 180, Hawaiʻi 94, Maui 85 and Kauaʻi 54. The one mobile siren is not counted. Rated range: HI-EMA says the sirens "propagate with a manufacture radius of 3,400 feet. This range may vary due to environmental and surrounding physical conditions." Two measures per Census area:
 - the distance from the area's land point to the nearest siren on the same island;
-- the share of its people within 3,400 ft of a siren (the share of about 100 grid points spread over the area, the same method as the tsunami share).
+- the share of its people within 3,400 ft of a siren (2020 Census block population by block internal point, the same method as the tsunami share, §5.9).
 
 The area panel shows "Nearest outdoor siren: X ft (rated range 3,400 ft)" and "Share of people within rated siren range: Y%". The map draws the rated radius as dashed circles (a layer that is off by default). An earlier version counted sirens inside each area's boundary. That missed sirens just across a boundary and treated a large rural area with one siren as covered, so it was replaced.
 
-| County (populated areas) | Areas with 0 sirens inside (earlier measure) | Land point farther than 3,400 ft from every siren | Less than 50% of people within rated range |
+| County (populated areas) | Areas with 0 sirens inside (first measure) | Land point farther than 3,400 ft from every siren | Less than 50% within rated range: share of the area (second measure) → **share of people** (current) |
 |---|---|---|---|
-| Honolulu (322) | 206 | 110 | 108 |
-| Hawaiʻi (43) | 10 | 36 | 37 |
-| Maui (45) | 9 | 24 | 27 |
-| Kauaʻi (17) | 2 | 14 | 17 |
+| Honolulu (322) | 206 | 110 | 108 → **74** |
+| Hawaiʻi (43) | 10 | 36 | 37 → **31** |
+| Maui (45) | 9 | 24 | 27 → **13** |
+| Kauaʻi (17) | 2 | 14 | 17 → **4** |
 
 "How to reach residents" lists the areas with less than 50% of people within rated range: *prioritise WEA, radio and trusted messengers*. The rating is for outdoors; people indoors often cannot hear a siren, and WEA, radio and TV alerts reach every area.
 
-**Dam evacuation zones.** Share of each Census area inside any State dam evacuation zone (100 grid points, the same method as the tsunami share) × its population. **People in dam evacuation zones:** Honolulu 31,172; Maui 26,251; Kauaʻi 10,819; Hawaiʻi 1,360. These appear under "Also plan for" for each county, with the note: "State dam evacuation zones show the area that could flood if a dam fails; they are planning zones, not a forecast." They are not a sixth hazard scenario. **Shelter sites inside a dam evacuation zone ("Check dam zone"):** Kahilu Town Hall (Hawaiʻi; Puʻukapu watershed dam and Waikoloa reservoirs 1–3) and Molokaʻi Baptist Church (Maui County; Kualapuʻu reservoir).
+**Dam evacuation zones.** Share of each Census area's people inside any State dam evacuation zone (2020 Census block population by block internal point, the same method as the tsunami share, §5.9) × its population. **People in dam evacuation zones:** Honolulu 37,250; Maui 25,567; Kauaʻi 8,369; Hawaiʻi 4,545 (area-weighted before: 31,172; 26,251; 10,819; 1,360). These appear under "Also plan for" for each county, with the note: "State dam evacuation zones show the area that could flood if a dam fails; they are planning zones, not a forecast." They are not a sixth hazard scenario. **Shelter sites inside a dam evacuation zone ("Check dam zone"):** Kahilu Town Hall (Hawaiʻi; Puʻukapu watershed dam and Waikoloa reservoirs 1–3) and Molokaʻi Baptist Church (Maui County; Kualapuʻu reservoir).
+
+### 5.9 How "share of people in a zone" is computed
+Tsunami (standard and extreme zones), dam evacuation zones and siren rated range all use **population-weighted** shares. Each share is the 2020 Census block population (PL 94-171, P1_001N) whose block internal point is inside the zone, divided by the Census area's 2020 block population. Blocks with no people are ignored. The share is then applied to the Census area's population, as before (`scripts/block_shares.py`). Block internal points come from TIGERweb (2020 Census Blocks layer), fetched at build time: all 10,169 populated blocks, with populations equal to the PL file. Block totals equal the 2020 tract populations exactly. For 279 blocks (2.7%) TIGERweb's internal point differs from the one in the 2020 PL geographic header, by up to about 2 km; TIGERweb is used. If block points cannot be loaded, the build falls back to the earlier method (about 100 grid points spread over each area). Every such figure is then labelled "share of the area", never "of people". The method is recorded in the data and the labels follow it (tests).
+
+Effect (earlier area-weighted → population-weighted):
+
+| County | People in the tsunami standard zone | Extreme tsunami zone (worst case) | People in dam evacuation zones | Areas with < 50% of people within siren range |
+|---|---|---|---|---|
+| Honolulu | 82,204 → **80,344** | 177,475 → **208,201** | 31,172 → **37,250** | 108 → **74** |
+| Maui | 18,239 → **26,158** | 24,391 → **38,773** | 26,251 → **25,567** | 27 → **13** |
+| Kauaʻi | 6,161 → **9,034** | 6,903 → **9,862** | 10,819 → **8,369** | 17 → **4** |
+| Hawaiʻi | 12,462 → **12,102** | 14,008 → **13,808** | 1,360 → **4,545** | 37 → **31** |
+
+Tsunami shelter demand (likely) changed with it: Honolulu 4,110 → 4,017; Maui 912 → 1,308; Kauaʻi 308 → 452; Hawaiʻi 623 → 605. The other hazards do not use these shares and did not change. The Lahaina 2023 wildfire backtest is unchanged (observed 1,418; model 254 / 635 / 1,423) and is still a **calibration event, not validation**.
 
 ## 6. The three DHS metrics
 
@@ -260,7 +275,7 @@ Result: Lahaina wildfire, 2023-08-11. Observed 1,418 people in shelters (Maui No
 The challenge PDF gives no baseline number ("Teams may propose their own baseline and target time", p. 7).
 - **Baseline (team assumption, to be confirmed with DHS):** at least **2 working days per county per event**, about 8 working days statewide. Reasoning: the manual steps DHS describes (p. 3–4): pull program and provider reports, cross-reference lists with hazard zones, recompile shelter lists, and call partners to confirm capacity "for each planning cycle and each event". These steps are done by hand, often "only after an event begins" (p. 4).
 - **Target:** same day, under 1 working day statewide.
-- **Measured:** a full rebuild from local data (all 14 build steps, 20 scenarios, 20 PDFs, app bundle) takes **77.6 seconds** on an Apple M4 laptop (measured 2026-10-28 with `scripts/time_rebuild.py`; result in `data/processed/rebuild_timing.json`). The test suite (303 automated tests, including headless-browser checks of every view, deep links, keyboard map layers and offline use) takes about 50 s. A full data refresh from the internet adds downloads plus the flood-zone queries, which are paced at 1 s per point for 311 points (at least 5.2 minutes). That refresh is not timed end to end.
+- **Measured:** a full rebuild from local data (all 14 build steps, 20 scenarios, 20 PDFs, app bundle) takes **44.2 seconds** on an Apple M4 laptop (measured 2026-10-28 with `scripts/time_rebuild.py`; result in `data/processed/rebuild_timing.json`). The test suite (313 automated tests, including headless-browser checks of every view, deep links, keyboard map layers and offline use) takes about 50 s. A full data refresh from the internet adds downloads plus the flood-zone queries, which are paced at 1 s per point for 311 points (at least 5.2 minutes). That refresh is not timed end to end.
 - **Plus human review (team assumption):** one review session per county to confirm sites, roles and pledges. The pipeline removes the compiling and arithmetic; it does not remove the partner calls. It turns them into filling in blank capacity fields.
 - **Measurement plan.** The baseline above stays a team assumption until it is measured. We propose a timed tabletop exercise with DHS and one county. The same planners produce a needs-and-resources draft for one county × hazard scenario twice: once with their current manual process (baseline) and once with this tool (tool-assisted). **Start** = hazard selected; **stop** = needs-and-resources draft approved by the county or DHS lead. We report both times in minutes (baseline vs tool-assisted), with the number of partner calls and corrections made during review.
 
@@ -292,7 +307,7 @@ The challenge PDF requires usability "during high-stress, low-connectivity condi
 | Tier | Conditions | What works |
 |---|---|---|
 | 1. Online | Normal internet | Web app (https://shelters.kahuola.org, also https://haic2026-shelters.pages.dev) |
-| 2. Weak | Slow or intermittent | The app loads from its local cache. The only data is one 939 KB bundle, and every PDF is already cached |
+| 2. Weak | Slow or intermittent | The app loads from its local cache. The only data is one 938 KB bundle, and every PDF is already cached |
 | 3. Offline | No internet (after one earlier visit) | Installed web app (PWA). The service worker pre-caches the app, the data and all 20 PDFs, and the app shows "Offline – data as of <date>". Tested in airplane mode in Chrome. |
 | 4. Paper | No power or devices | 20 printed playbooks (`playbooks/*.pdf`): US Letter, black-and-white safe, 14 pages each, with the disclaimer and "Data as of" on every page |
 

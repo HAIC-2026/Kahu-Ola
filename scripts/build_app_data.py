@@ -159,7 +159,9 @@ def state_bundle(state: dict | None, labels: dict) -> dict:
     return {"sirens": sirens, "radius_m": r["metres"], "radius_ft": r["feet"],
             "low": {c: sorted(v, key=lambda f: labels.get(f, {}).get("tract_label", f))
                     for c, v in low.items()},
-            "outside": outside, "outside_text": bsl.OUTSIDE_RANGE, "low_text": bsl.LOW_RANGE,
+            "outside": outside, "outside_text": bsl.OUTSIDE_RANGE,
+            "low_text": state["meta"].get("low_range_text", bsl.LOW_RANGE),
+            "share_word": state["meta"].get("share_word", "of people"),
             "dam_note": bsl.DAM_NOTE,
             "no_sirens": bsl.NO_SIRENS, "check_dam": bsl.CHECK_DAM}
 

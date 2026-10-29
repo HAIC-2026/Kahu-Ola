@@ -29,6 +29,7 @@ from hawaii_time import now_hst  # noqa: E402
 from geo import ZoneIndex, representative_point  # noqa: E402
 from fetch_data import COUNTIES, NRI_HAZARD_LAYERS, county_from_fips  # noqa: E402
 import fetch_cmist_detail  # noqa: E402
+import block_shares  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
@@ -110,9 +111,11 @@ def percentile_ranks(values: list) -> list:
 
 
 def build(svi, nri: dict | None, tsunami, extreme, empower, samples: int = 100,
-          detail: dict | None = None) -> dict:
+          detail: dict | None = None, blocks: dict | None = None) -> dict:
     """nri = {hazard_key: FeatureCollection} from the NRI v1.20 per-hazard layers;
-    detail = {tract_fips: row} from data/sources/cmist_detail_by_tract.csv."""
+    detail = {tract_fips: row} from data/sources/cmist_detail_by_tract.csv;
+    blocks = block_shares.load() (2020 block population and internal points): tsunami shares
+    are population-weighted; without blocks they are the share of the area (grid points)."""
     detail = fetch_cmist_detail.load() if detail is None else detail
     nri = {k: v for k, v in (nri or {}).items() if v}
     # tract FIPS -> {hazard: properties}
@@ -164,8 +167,9 @@ def build(svi, nri: dict | None, tsunami, extreme, empower, samples: int = 100,
                                  if p.get("NRI_VER")), "")
         r["nri_match"] = match
 
-        r["tsunami_zone_share"] = round(t_index.share_inside(g, samples), 3)
-        r["tsunami_extreme_share"] = round(x_index.share_inside(g, samples), 3)
+        for key, idx in (("tsunami_zone_share", t_index), ("tsunami_extreme_share", x_index)):
+            pw = block_shares.share(blocks, fips, idx.contains) if idx else None
+            r[key] = round(pw if pw is not None else idx.share_inside(g, samples), 3)
         # Standard evacuation zone = planning number (used in warnings).
         # Extreme zone reported separately as the worst case.
         r["tsunami_exposed_pop_est"] = round(pop * r["tsunami_zone_share"])
@@ -204,6 +208,7 @@ def build(svi, nri: dict | None, tsunami, extreme, empower, samples: int = 100,
             r[f"pctl_{k}"] = None if ranks[k][i] is None else round(ranks[k][i], 3)
         r["afn_index"] = round(sum(vals) / len(vals), 3) if vals else None
 
+    method = "population" if blocks else "area"
     features = [{"type": "Feature", "properties": r, "geometry": _round_geom(g)}
                 for r, g in rows]
     meta = {
@@ -215,9 +220,12 @@ def build(svi, nri: dict | None, tsunami, extreme, empower, samples: int = 100,
             "power_dependent": "HHS emPOWER county total allocated to tracts by share "
                                "of county 65+ population (Medicare proxy). Estimate.",
             "empower_field_used": power_field,
-            "tsunami_share": f"share of {samples} grid points inside the zone; "
-                             "exposed pop assumes even spread within the tract. "
-                             "tsunami_exposed_pop_est = standard evacuation zone; "
+            "share_method": method,
+            "tsunami_share": (block_shares.METHOD[method] if method == "population" else
+                              f"share of the area: {samples} grid points inside the zone; "
+                              "exposed pop assumes even spread within the tract") + ". "
+                             + (f"Blocks: {blocks['source']}. " if blocks else "")
+                             + "tsunami_exposed_pop_est = standard evacuation zone; "
                              "tsunami_extreme_exposed_pop_est = extreme zone (worst case)",
             "nri_join": "NRI v1.20 per-hazard layers joined on tract FIPS (2020 tracts); spatial fallback",
             "afn_index": "mean statewide percentile of C, M, I, S, T per-capita rates",
@@ -266,7 +274,7 @@ def main() -> int:
         return 1
     nri = {hz: load(f"nri_{hz}") for hz in NRI_HAZARD_LAYERS}
     fc = build(svi, nri, load("tsunami_zone"), load("tsunami_extreme"),
-               load("empower_county"))
+               load("empower_county"), blocks=block_shares.load())
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "afn_tracts.geojson").write_text(json.dumps(fc), encoding="utf-8")
     props = [f["properties"] for f in fc["features"]]

@@ -144,12 +144,12 @@ SOURCE = {
     "sirens": "Source: Hawaiʻi Emergency Management Agency public siren map (locations of "
               "permanent outdoor warning sirens; no live status). Rated range: 3,400 feet, "
               "the manufacturer rating published by the Hawaiʻi Emergency Management Agency; "
-              "the real range varies with terrain, buildings and weather. Share of people in "
-              "range: share of about 100 points spread over each Census area within 3,400 feet "
-              "of a siren, the same method as for the tsunami zone.",
+              "the real range varies with terrain, buildings and weather. In range: within "
+              "3,400 feet of a siren, the same method as for the tsunami zone.",
     "dams": "Source: State of Hawaiʻi dam evacuation zones (published through Hawaiʻi Statewide "
             "GIS). People = share of each Census area inside a zone × its population, the same "
             "method as for the tsunami zone.",
+    "shares": "",                              # filled below: how in-zone shares are computed
     "reach": "Source: proposed channels and formats in the plan's communication pathways – "
              "supports, does not replace, county and State public-information plans.",
 }
@@ -180,6 +180,34 @@ RULE_TEXT = {"all": "Every Census area",
              "nri_top_share_by_county": "Top {share} of Census areas by FEMA risk score",
              "nri_top_share": "Top {share} of Census areas statewide by FEMA risk score",
              "nri_rating": "Census areas with a high FEMA risk rating"}
+
+
+def share_method(path: Path = ROOT / "data" / "processed" / "afn_tracts.geojson") -> str:
+    """How in-zone shares were computed by build_map.py: "population" (2020 blocks) or
+    "area" (grid points, when block internal points were not available)."""
+    if not path.exists():
+        return "population"
+    meta = json.loads(path.read_text(encoding="utf-8")).get("metadata", {})
+    return meta.get("method", {}).get("share_method", "area")
+
+
+SHARE_METHOD = share_method()
+SHARE_SENTENCE = {
+    "population": "Shares of people are 2020 Census block populations whose block internal "
+                  "point is inside (Census TIGER internal points), divided by the Census area's "
+                  "2020 block population; the share is then applied to the area's population.",
+    "area": "Shares are shares of the area (about 100 grid points spread over each Census "
+            "area), not of people.",
+}[SHARE_METHOD]
+if SHARE_METHOD == "area":                     # never call an area share a share "of people"
+    FOOTPRINT_TEXT["share inside tsunami zone"] = (
+        "the share of each Census area inside the tsunami evacuation zone (share of the area, "
+        "not weighted by where people live)")
+    RULE_TEXT["tsunami_zone_share"] = "Share of the area inside the tsunami evacuation zone"
+SOURCE["shares"] = f"Method: {SHARE_SENTENCE}"
+for _k in ("sirens", "dams"):
+    SOURCE[_k] += " " + SHARE_SENTENCE
+
 
 
 def plain(text: str) -> str:
@@ -625,6 +653,7 @@ def zero_siren_html(state: dict | None, county: str, labels: dict) -> str:
         return ""
     n_out = sum(1 for f in state["outside_siren_range"] if state["areas"][f]["county"] == county)
     head = f'<p>{escape(bsl.OUTSIDE_RANGE)}: <b>{n_out}</b>.</p>'
+    low_text = state["meta"].get("low_range_text", bsl.LOW_RANGE)
     fips = [f for f in state["low_siren_coverage"] if state["areas"][f]["county"] == county]
     if not fips:
         return head + f'<p class="src">{escape(src_text("sirens"))}</p>'
@@ -633,7 +662,7 @@ def zero_siren_html(state: dict | None, county: str, labels: dict) -> str:
         main = labels.get(f, f).split(" · ")[0]
         groups.setdefault(main, []).append(f[5:9].lstrip("0") + ("." + f[9:] if f[9:] != "00" else ""))
     items = "; ".join(f"{escape(k)} ({', '.join(v)})" for k, v in sorted(groups.items()))
-    return (head + f'<p><b>{escape(bsl.LOW_RANGE)} ({len(fips)}): '
+    return (head + f'<p><b>{escape(low_text)} ({len(fips)}): '
             f'{escape(bsl.NO_SIRENS)}.</b> <small>{items}</small></p>'
             f'<p class="src">{escape(src_text("sirens"))}</p>')
 
@@ -845,6 +874,8 @@ def sources_html(inp: dict) -> str:
         with open(FLOOD_CACHE, newline="", encoding="utf-8") as fh:
             flood_dates = sorted(r["queried_at"][:10] for r in csv.DictReader(fh))
     data += [
+        ["Share of people in a zone (tsunami, dam evacuation zones, siren range)", "",
+         escape(SHARE_SENTENCE)],
         ["Hawaiʻi Statewide GIS – State DFIRM (FEMA flood hazard areas, 6/15/26)",
          escape(flood_dates[-1] if flood_dates else ""), escape(FLOOD_URL)],
         ["County shelter activations 2026 (official county releases)", "2026-10-27",
