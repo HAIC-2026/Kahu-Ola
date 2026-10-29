@@ -63,7 +63,7 @@ Long before treating a data test failure as your own.
    tracking and never asks for location. Hawaiʻi place names keep their ʻokina and kahakō.
 7. **After any change in `app/`** (even only `styles.css` or `app.js`, or adding/renaming a
    file), run `python3 scripts/build_app_data.py --copy-only` and commit the updated
-   `app/sw.js`. It refreshes the service worker `VERSION` and precache list from the
+   `app/sw.js` in the same pull request. It refreshes the service worker `VERSION` and precache list from the
    committed bundle, needs no `data/raw/` and never regenerates data. Without a new `VERSION`
    browsers keep the old version. Or let CI tell you: the Tests check on every pull request
    fails when `VERSION` is stale. Never edit `sw.js` by hand.
