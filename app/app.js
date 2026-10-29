@@ -863,6 +863,14 @@ function renderPlan() {
     table(`Languages: people age 5 and older who speak English less than “very well” (${L.area})`, ["Language", "People", "Margin of error (90%)"],
       L.rows.map((r) => [r[0], fmt(r[1]), `±${fmt(r[2])}`]), [1, 2]),
     source("languages"),
+    el("p", { id: "messages-line" }, DATA.meta.messages_line),
+    L.all && L.all.length ? el("details", { class: "all-languages", id: "all-languages" },
+      el("summary", null, `All languages (${L.all.length}) – ${L.area}`),
+      table(`All languages in the survey for ${L.area}: people age 5 and older who speak English less than “very well”`,
+        ["Language", "People", "Margin of error (90%)", "Reliability"],
+        L.all.map(([name, people, moe, low]) => [name, people === null ? DATA.meta.too_few : fmt(people),
+          moe === null ? "" : `±${fmt(moe)}`, low ? DATA.meta.low_reliability : ""]), [1, 2]),
+      el("p", null, `Low reliability: margin of error large compared with the estimate (coefficient of variation above ${Math.round(DATA.meta.cv_limit * 100)}%), or ${DATA.meta.too_few} (fewer than 100 people or 10 survey responses).`)) : null,
     ...resultsSection(),
   );
   showVersion();

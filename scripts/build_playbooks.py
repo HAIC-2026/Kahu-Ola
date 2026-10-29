@@ -786,6 +786,56 @@ def decisions_html(match: dict, hazard: str, partners: dict) -> str:
             + f'<p class="src">{escape(src_text("decisions"))}</p>')
 
 
+LANG_CSV = ROOT / "data" / "sources" / "languages_by_county.csv"
+CV_LIMIT = 0.40                       # coefficient of variation above this: low reliability
+Z90 = 1.645                           # MOE (90%) = 1.645 x standard error
+TOO_FEW = "too few to estimate"
+LOW_RELIABILITY = "low reliability"
+MESSAGES_LINE = ("Draft messages are available statewide in Chinese, Hawaiian, Ilocano, Japanese, "
+                 "Korean, Pidgin, Spanish, Tagalog and Vietnamese; Chuukese and Marshallese need "
+                 "translators.")
+
+
+def all_languages(area: str, path: Path = LANG_CSV) -> list:
+    """Every language in the PUMS summary for one area, in the file's order (limited-English
+    speakers, largest first): [{"language", "people" (None = suppressed), "moe",
+    "cv", "low"}]. Suppressed cells (fewer than 100 weighted people or 10 sample persons,
+    build_languages_pums.py) are "too few to estimate" and always low reliability."""
+    if not path.exists():
+        return []
+    out = []
+    with open(path, newline="", encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            if r["area"] != area:
+                continue
+            sup = r["suppressed"] == "True"
+            people = None if sup else int(r["speak_english_less_than_very_well"])
+            moe = None if sup else int(r["moe_90"])
+            cv = None if sup or not people else moe / Z90 / people
+            out.append({"language": r["language"], "people": people, "moe": moe,
+                        "cv": None if cv is None else round(cv, 3),
+                        "low": sup or cv > CV_LIMIT})
+    return out
+
+
+def all_languages_html(area: str) -> str:
+    rows = [[escape(lang_label(l["language"])),
+             TOO_FEW if l["people"] is None else n(l["people"]),
+             "" if l["moe"] is None else "±" + n(l["moe"]),
+             LOW_RELIABILITY if l["low"] else ""] for l in all_languages(area)]
+    if not rows:
+        return ""
+    return ('<h3>All languages</h3><div class="compact">'
+            + table(["Language", "People", "Margin of error (90%)", "Reliability"], rows,
+                    num_cols=(1, 2),
+                    caption=f'All languages in the survey for {area_label(area)}: people age 5 '
+                            f'and older who speak English less than "very well"')
+            + f'<p class="src">{escape(src_text("languages"))}</p>'
+            + f'<p>Low reliability: margin of error large compared with the estimate '
+              f'(coefficient of variation above {int(CV_LIMIT * 100)}%), or {TOO_FEW} '
+              f'(fewer than 100 people or 10 survey responses).</p></div>')
+
+
 def outreach_html(ms: dict, langs: list, county: str, comms: list | None = None,
                   comm: dict | None = None, partners: dict | None = None, zero: str = "") -> str:
     rows = [[str(t["rank"]), community_cell(t.get("label_main") or t.get("tract_label", ""),
@@ -810,6 +860,8 @@ def outreach_html(ms: dict, langs: list, county: str, comms: list | None = None,
             + note
             + table(["Language", "People", "Margin of error (90%)"], lrows, num_cols=(1, 2))
             + f'<p class="src">{escape(src_text("languages"))}</p>'
+            + f'<p>{escape(MESSAGES_LINE)}</p>'
+            + all_languages_html(area)
             + '<p>Pre-approved message templates: none yet; no machine translation without '
               'human review.</p>')
 

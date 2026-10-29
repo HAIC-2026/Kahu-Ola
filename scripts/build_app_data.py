@@ -39,6 +39,7 @@ import build_state_layers as bsl  # noqa: E402
 from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, COUNTY_LINE_LABEL,  # noqa: E402
                              DETAIL_KEYS, DISCLAIMER, KALAWAO_NOTE, SERVICE_ANIMALS, WHO_ELSE,
                              results_data, NO_FACILITY_SCREEN, FACILITY_ZONE_D, LAHAINA_NOTE, LAHAINA_SUMMARY,
+                             all_languages, MESSAGES_LINE, TOO_FEW, LOW_RELIABILITY, CV_LIMIT,
                              FOOTPRINT_TEXT, HAZARD_LABEL, HURRICANE_SCOPE_NOTE, PROV_NUMBERS,
                              PROV_SHELTERS, RATE_NOTE,
                              SITE_KEY_STATUS, SOURCE, area_label, lang_label, partner_names,
@@ -258,6 +259,10 @@ def build(inp: dict) -> dict:
     for c in COUNTIES:
         sel = select_languages(inp["languages"].get(c, []), inp["comm"])
         languages[c] = {"area": area_label(sel[0]["area"]) if sel else "",
+                        # every language in the PUMS summary: [label, people or null
+                        # (too few to estimate), MOE or null, 1 = low reliability]
+                        "all": [[lang_label(l["language"]), l["people"], l["moe"], int(l["low"])]
+                                for l in all_languages(sel[0]["area"])] if sel else [],
                         "note": KAUAI_MAUI_NOTE if c in ("Kauai", "Maui") else "",
                         "rows": [[lang_label(l["language"]), l["speak_english_less_than_very_well"],
                                   l["moe_90"]] for l in sel]}
@@ -275,6 +280,8 @@ def build(inp: dict) -> dict:
                  "detail_keys": DETAIL_KEYS, "service_animals": SERVICE_ANIMALS,
                  "kalawao_note": KALAWAO_NOTE, "who_else": WHO_ELSE,
                  "lahaina_note": LAHAINA_NOTE, "lahaina_summary": LAHAINA_SUMMARY,
+                 "messages_line": MESSAGES_LINE, "too_few": TOO_FEW,
+                 "low_reliability": LOW_RELIABILITY, "cv_limit": CV_LIMIT,
                  "no_island_site": "No known usable site on this island for this hazard. The "
                                    "county designates shelters; follow county announcements.",
                  "niihau_note": dict(WHO_ELSE)["Niʻihau"],
