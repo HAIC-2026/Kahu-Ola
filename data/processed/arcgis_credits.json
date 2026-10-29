@@ -41,6 +41,16 @@
    "units_billed": 2981,
    "updated": "2026-10-29T07:14:59Z"
   },
+  "od_drive_refresh": {
+   "actual_method": "billed units returned by the service x published rate",
+   "credits_actual": 0.0205,
+   "credits_estimate": 0.0205,
+   "note": "",
+   "rate": 0.0005,
+   "unit": "OD pairs",
+   "units_billed": 41,
+   "updated": "2026-10-29T07:55:39Z"
+  },
   "od_schools": {
    "actual_method": "billed units returned by the service x published rate",
    "credits_actual": 1.3785,
@@ -71,6 +81,16 @@
    "units_billed": 479,
    "updated": "2026-10-29T07:19:17Z"
   },
+  "od_walk_refresh": {
+   "actual_method": "billed units returned by the service x published rate",
+   "credits_actual": 0.0035,
+   "credits_estimate": 0.0035,
+   "note": "",
+   "rate": 0.0005,
+   "unit": "OD pairs",
+   "units_billed": 7,
+   "updated": "2026-10-29T07:55:39Z"
+  },
   "service_areas": {
    "credits_actual": 0,
    "credits_estimate": 15.0,
@@ -81,5 +101,5 @@
    "updated": "2026-10-29T07:09:35Z"
   }
  },
- "total_credits_actual": 10.079
+ "total_credits_actual": 10.103
 }

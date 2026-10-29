@@ -55,16 +55,18 @@ class Playbooks(unittest.TestCase):
         self.assertIn("<svg", t)
         self.assertIn('role="img"', t)
 
-    def test_maui_tsunami_excludes_lahaina_and_kilohana(self):
+    def test_maui_tsunami_excludes_kilohana_not_lahaina(self):
+        # Lahaina Civic Center: point verified by address 2026-10-28 (Wahikuli), outside the
+        # tsunami evacuation zone; the earlier Census point in Lahaina town was inside it
         inp = bp.load_inputs()
         sites = {s["name"]: s for s in bp.sites_for(inp, "Maui", "tsunami")}
-        for name in ("Lahaina Civic Center Gym", "Kilohana Recreation Center"):
-            self.assertEqual(sites[name]["status"], "exclude")
-            self.assertIn("tsunami", sites[name]["reason"])
+        self.assertEqual(sites["Kilohana Recreation Center"]["status"], "exclude")
+        self.assertIn("tsunami", sites["Kilohana Recreation Center"]["reason"])
+        self.assertEqual(sites["Lahaina Civic Center Gym"]["status"], "ok")
         t = (PLAY / "maui_tsunami.html").read_text(encoding="utf-8")
-        for name in ("Lahaina Civic Center Gym", "Kilohana Recreation Center"):
-            row = re.search(r"<tr>(?:(?!</tr>).)*" + re.escape(name) + r"(?:(?!</tr>).)*</tr>", t, re.S)
-            self.assertIn("✕ Not for this hazard", row.group(0))
+        row = lambda name: re.search(r"<tr>(?:(?!</tr>).)*" + re.escape(name) + r"(?:(?!</tr>).)*</tr>", t, re.S).group(0)  # noqa: E731
+        self.assertIn("✕ Not for this hazard", row("Kilohana Recreation Center"))
+        self.assertIn("✓ Usable", row("Lahaina Civic Center Gym"))
 
     def test_no_network_resources_in_playbooks(self):
         for f in list(PLAY.glob("*.html")):
@@ -116,7 +118,7 @@ class Bundle(unittest.TestCase):
                          b["meta"]["version"])
         st = {s["name"]: s["status"]["tsunami"][0] for s in b["sites"]
               if s["county"] == "Maui" and "tsunami" in s["status"]}
-        self.assertEqual(st["Lahaina Civic Center Gym"], "exclude")
+        self.assertEqual(st["Lahaina Civic Center Gym"], "ok")          # verified point
         self.assertEqual(st["Kilohana Recreation Center"], "exclude")
         for key, sc in b["scenarios"].items():
             self.assertTrue((ROOT / sc["playbook"]).exists(), key)       # copied in at build

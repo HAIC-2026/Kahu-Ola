@@ -16,21 +16,6 @@ Address in the county release: 16-512 Volcano Road, Keaʻau. Distance between th
 
 No hazard status would change between the two points.
 
-## Lahaina Civic Center Gym (Maui)
-
-Address in the county release: 1840 Honoapiʻilani Highway, Lahaina. Distance between the two points: **2,308 m**.
-
-| | Current point (kept) | ArcGIS point |
-|---|---|---|
-| Source | U.S. Census Geocoder | Esri ArcGIS World Geocoder |
-| Latitude, longitude | 20.884315, -156.682052 | 20.905011, -156.683794 |
-| Matched address | 1840 HONOAPIILANI HWY, LAHAINA, HI, 96761 | 1840 Honoapiilani Hwy, Lahaina, Hawaii, 96761 |
-| Score / match type | – (Census Geocoder gives no score) | 100 / PointAddress |
-| Zones | inside tsunami evacuation zone; FEMA flood zone X | outside tsunami evacuation zone; FEMA flood zone X |
-
-**Hazard statuses that would change if the ArcGIS point were used:**
-- tsunami: excluded (tsunami zone) → usable
-
 ## Puʻuʻeo Community Center (Hawaii)
 
 Address in the county release: 145 Wainaku St., Hilo. Distance between the two points: **518 m**.
@@ -72,3 +57,26 @@ Address in the county release: 1501 Liloa Drive, Kīhei. Distance between the tw
 | Zones | outside tsunami evacuation zone; FEMA flood zone X | outside tsunami evacuation zone; FEMA flood zone X |
 
 No hazard status would change between the two points.
+
+# Resolved
+
+Sites whose point the team has verified. The chosen point is now the site's point, and every hazard status was re-run.
+
+## Lahaina Civic Center Gym (Maui)
+
+**Resolved: the ArcGIS point is correct – verified manually (verified by address, 2026-10-28).** Maui County facility page lists Lahaina Civic Center at Kaʻaʻahi St & Honoapiʻilani Hwy (Wahikuli); the Census point is about 2 km south in Lahaina town. The site now uses the ArcGIS point.
+
+**Follow-up:** Visual check on the State tsunami evacuation map.
+
+Address in the county release: 1840 Honoapiʻilani Highway, Lahaina. Distance between the two points: **2,308 m**.
+
+| | Census point (not used) | ArcGIS point (used) |
+|---|---|---|
+| Source | U.S. Census Geocoder | Esri ArcGIS World Geocoder |
+| Latitude, longitude | 20.884315, -156.682052 | 20.905011, -156.683794 |
+| Matched address | 1840 HONOAPIILANI HWY, LAHAINA, HI, 96761 | 1840 Honoapiilani Hwy, Lahaina, Hawaii, 96761 |
+| Score / match type | – (Census Geocoder gives no score) | 100 / PointAddress |
+| Zones | inside tsunami evacuation zone; FEMA flood zone X | outside tsunami evacuation zone; FEMA flood zone X |
+
+**Hazard statuses that changed (Census point → ArcGIS point):**
+- tsunami: excluded (tsunami zone) → usable

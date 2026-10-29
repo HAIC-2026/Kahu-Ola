@@ -88,8 +88,9 @@ WALK_KM = 12                      # walk times only for areas within 12 km (stra
 SCHOOLS_K = 5                     # nearest candidate schools per hazard (straight line)
 CANDIDATES = ROOT / "data" / "processed" / "candidates.geojson"
 NEEDS_BY_TRACT = ROOT / "data" / "processed" / "needs_by_tract.csv"
+OVERRIDES = ROOT / "data" / "sources" / "site_point_overrides.csv"
 STEPS = ["geocode_sites", "geocode_facilities", "od_drive", "od_walk_near", "od_schools",
-         "service_areas"]
+         "od_drive_refresh", "od_walk_refresh", "service_areas"]
 
 
 class TokenExpired(Exception):
@@ -449,12 +450,30 @@ def school_jobs(origins: list, schools: list) -> list:
     return jobs
 
 
+def refreshed_sites() -> set:
+    """Site keys whose point was corrected after the first matrices (verified by hand)."""
+    if not OVERRIDES.exists():
+        return set()
+    with open(OVERRIDES, newline="", encoding="utf-8") as fh:
+        return {r["site_key"] for r in csv.DictReader(fh)}
+
+
+def refresh_jobs(origins: list, dests: dict, walk: bool) -> list:
+    """Drive (all same-island areas) or walk (areas within WALK_KM) jobs for the
+    corrected sites only (saved in their own files, read after the first run)."""
+    keys = refreshed_sites()
+    moved = {isl: [d for d in ds if d["id"] in keys] for isl, ds in dests.items()}
+    moved = {isl: ds for isl, ds in moved.items() if ds}
+    return walk_jobs(origins, moved) if walk else od_pairs(origins, moved)
+
+
 def run_od(step: str, mode_name: str, time_attr: str, origins: list, dests: dict,
            token: str, led: dict) -> dict:
     path = RAW / f"{step}.json"
     out = load_json(path, {"mode": mode_name, "results": {}})
     plan = (walk_jobs(origins, dests) if step == "od_walk_near" else
             school_jobs(origins, dests["_schools"]) if step == "od_schools" else
+            refresh_jobs(origins, dests, step == "od_walk_refresh") if step.endswith("_refresh") else
             od_pairs(origins, dests))
     jobs = [j for j in plan if f"{j[0]}|{j[1][0]['id']}" not in out["results"]]
     if not jobs:
@@ -602,6 +621,10 @@ def main(argv=None) -> int:
             run_od("od_drive", "Driving Time", "TravelTime", origins, dests, token, led)
         if "od_walk_near" in steps:
             run_od("od_walk_near", "Walking Time", "WalkTime", origins, dests, token, led)
+        if "od_drive_refresh" in steps:
+            run_od("od_drive_refresh", "Driving Time", "TravelTime", origins, dests, token, led)
+        if "od_walk_refresh" in steps:
+            run_od("od_walk_refresh", "Walking Time", "WalkTime", origins, dests, token, led)
         if "od_schools" in steps:
             run_od("od_schools", "Driving Time", "TravelTime", origins,
                    {"_schools": candidate_schools(island_of)}, token, led)

@@ -776,8 +776,8 @@
    "geometry": {
     "type": "Point",
     "coordinates": [
-     -156.682052,
-     20.884315
+     -156.683794,
+     20.905011
     ]
    },
    "properties": {
@@ -794,17 +794,18 @@
      "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289",
      "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19526"
     ],
-    "location_method": "census_onelineaddress",
+    "location_method": "verified_manually",
     "needs_geocode": false,
     "capacity": null,
     "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
     "fld_zone": "X",
     "in_sfha": false,
-    "in_tsunami_zone": true,
+    "in_tsunami_zone": false,
     "tract_fips": "15009031402",
     "nri_inland_flood_rating": "Relatively Moderate",
     "nri_coastal_flood_rating": "Relatively Low",
-    "nri_hurricane_rating": "Very Low"
+    "nri_hurricane_rating": "Very Low",
+    "location_note": "Esri ArcGIS World Geocoder (score 100; PointAddress); verified by address, 2026-10-28 (Maui County facility page lists Lahaina Civic Center at Kaʻaʻahi St & Honoapiʻilani Hwy (Wahikuli); the Census point is about 2 km south in Lahaina town.) Follow-up: Visual check on the State tsunami evacuation map."
    }
   },
   {
@@ -1056,7 +1057,7 @@
  ],
  "metadata": {
   "title": "Hawaiʻi shelters and refuge areas opened in 2026 events",
-  "built_at": "2026-10-28T21:47:17-10:00",
+  "built_at": "2026-10-28T21:57:56-10:00",
   "source_table": "data/sources/county_shelter_activations.csv",
   "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
   "note": "Site types are kept as each county names them; counties define sheltering differently (DHS challenge pain point)."

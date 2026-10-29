@@ -30,7 +30,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import fetch_arcgis as fa  # noqa: E402
-from fetch_flood_zones import is_sfha, query_point  # noqa: E402
+from fetch_flood_zones import is_sfha, load_cache, lookup, query_point  # noqa: E402
 from geo import ZoneIndex, haversine_km  # noqa: E402
 from hawaii_time import now_hst  # noqa: E402
 from model_needs import FLOOD, HAZARDS, site_status  # noqa: E402
@@ -46,6 +46,7 @@ TYPE_LABEL = {"dialysis": "Dialysis facility", "nursing_home": "Nursing home",
 SITE_STATUS_LABEL = {"confirmed": "Confirmed (2 sources)", "needs_review": "Needs review",
                      "confirmed_doe_arcgis": "Confirmed (DOE + ArcGIS)",
                      "confirmed_doe_census": "Confirmed (DOE + Census)",
+                     "verified_manually": "Verified manually",
                      "located_arcgis": "Located (ArcGIS)", "single_source": "1 source",
                      "not_located": "Not located"}
 SOURCE_TEXT = ("Site locations: U.S. Census Geocoder, checked against Esri ArcGIS World "
@@ -145,6 +146,19 @@ def doe_status(site: dict, p: dict, doe: dict | None) -> dict:
     return out
 
 
+def census_point(address: str) -> tuple | None:
+    with open(ROOT / "data" / "sources" / "geocodes.csv", newline="", encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            if r["address"].strip() == address.strip() and r["status"] == "match":
+                return float(r["lon"]), float(r["lat"]), r["matched_address"], r["method"]
+    return None
+
+
+def review_distance(o: dict) -> int | None:
+    c = census_point(o["address"])
+    return round(haversine_km(c[0], c[1], float(o["lon"]), float(o["lat"])) * 1000) if c else None
+
+
 def site_checks(island_of, offline: bool = False) -> dict:
     """Per site key: location check. A point placed earlier by ArcGIS itself is not a
     second source, so it is classified as if the Census point were missing."""
@@ -155,6 +169,8 @@ def site_checks(island_of, offline: bool = False) -> dict:
     by_key = {s["key"]: s for s in sites}
     esri = fa.load_json(RAW / "geocode_sites.json", {})
     doe = doe_checks(offline)
+    from build_shelters import load_overrides
+    overrides = load_overrides()
     out = {}
     for p in fa.site_points(sites, esri, island_of):
         e = p.get("esri") or {}
@@ -162,7 +178,14 @@ def site_checks(island_of, offline: bool = False) -> dict:
                "esri_score": e.get("score"), "esri_match_type": e.get("addr_type", "")}
         if by_key[p["key"]]["method"] == "doe_school_match":
             row.update(doe_status(by_key[p["key"]], p, doe.get(p["key"])))
-        row["label"] = SITE_STATUS_LABEL[row["status"]]
+        o = overrides.get(p["key"])
+        if o:           # the point is the one the team verified; distance is to the Census point
+            row.update(status="verified_manually", verified=o["verified"], evidence=o["evidence"],
+                       follow_up=o["follow_up"], point_source=o["point_source"],
+                       distance_m=review_distance(o))
+        row["label"] = SITE_STATUS_LABEL[row["status"]] + (
+            f" ({row['verified'].removeprefix('verified ')})"
+            if row["status"] == "verified_manually" else "")
         if p["status"] == "located_arcgis":
             row.update(lon=round(p["lon"], 4), lat=round(p["lat"], 4), island=p["island"])
         if p.get("reason"):
@@ -196,12 +219,20 @@ def site_reviews(checks: dict, offline: bool) -> dict:
     out = {}
     try:
         for key, c in checks.items():
-            if c["status"] != "needs_review":
+            if c["status"] not in ("needs_review", "verified_manually"):
                 continue
             f = shelters[key]
             prop, (lon, lat) = f["properties"], f["geometry"]["coordinates"][:2]
             e = esri[key]
             here = {**prop}
+            method = prop["location_method"]
+            if c["status"] == "verified_manually":      # candidate 1 is the Census point
+                lon, lat, _m, method = census_point(prop["address"])
+                here = {"in_tsunami_zone": tsunami.contains(lon, lat),
+                        "fld_zone": lookup(load_cache(), lon, lat)["fld_zone"],
+                        "tract_fips": ((tracts.find(lon, lat) or {}).get("properties")
+                                       or {}).get("tract_fips", "")}
+                here["in_sfha"] = is_sfha(here["fld_zone"])
             there = {"in_tsunami_zone": tsunami.contains(e["lon"], e["lat"]),
                      "fld_zone": flood_zone(e["lon"], e["lat"], cache, offline),
                      "tract_fips": ((tracts.find(e["lon"], e["lat"]) or {}).get("properties")
@@ -217,10 +248,13 @@ def site_reviews(checks: dict, offline: bool) -> dict:
             out[key] = {
                 "distance_m": c["distance_m"],
                 "current": {"lon": round(lon, 6), "lat": round(lat, 6),
-                            "method": prop["location_method"],
+                            "method": method,
                             "matched_address": g.get("matched_address", ""),
-                            "in_tsunami_zone": bool(prop.get("in_tsunami_zone")),
-                            "fld_zone": prop.get("fld_zone")},
+                            "in_tsunami_zone": bool(here.get("in_tsunami_zone")),
+                            "fld_zone": here.get("fld_zone")},
+                **({"resolution": {"chosen": "arcgis", "verified": c["verified"],
+                                   "evidence": c["evidence"], "follow_up": c["follow_up"]}}
+                   if c["status"] == "verified_manually" else {}),
                 "arcgis": {"lon": round(e["lon"], 6), "lat": round(e["lat"], 6),
                            "matched_address": e.get("match_addr", ""), "score": e.get("score"),
                            "match_type": e.get("addr_type", ""),
@@ -269,6 +303,13 @@ def area_times(origins: list, island_of) -> dict:
     drive to (1) a 2026 activated site usable for it and (2) that or a DOE candidate school
     usable for it (the 5 nearest per hazard by straight line)."""
     drive, walk = parse_od(RAW / "od_drive.json"), parse_od(RAW / "od_walk_near.json")
+    moved = fa.refreshed_sites()            # corrected points: times from the refresh runs only
+    for table, path in ((drive, "od_drive_refresh.json"), (walk, "od_walk_refresh.json")):
+        for row in table.values():
+            for k in moved:
+                row.pop(k, None)
+        for area, row in parse_od(RAW / path).items():
+            table.setdefault(area, {}).update(row)
     school_drive = parse_od(RAW / "od_schools.json")
     usable = site_usable()
     school_ok = {s["id"]: s["usable"] for s in fa.candidate_schools(island_of)}
@@ -413,7 +454,7 @@ def report(s: dict) -> str:
     st = Counter(v["status"] for v in s["sites"].values())
     out = [f"sites: {dict(st)}"]
     for k, v in s["sites"].items():
-        if v["status"] in ("needs_review", "confirmed_doe_census"):
+        if v["status"] in ("needs_review", "confirmed_doe_census", "verified_manually"):
             out.append(f"  {v['label']}: {k} (ArcGIS {v['distance_m']} m"
                        + (f"; DOE vs Census {v['doe_census_distance_m']} m" if "doe_school" in v else "")
                        + ")")
@@ -447,19 +488,38 @@ def review_doc(s: dict) -> str:
              "evacuation zone; FEMA flood zone, State DFIRM).", ""]
     method = {"census_onelineaddress": "U.S. Census Geocoder", "manual": "entered by hand",
               "doe_school_match": "DOE schools layer"}
-    for key, r in sorted(s["site_reviews"].items()):
+    reviews = sorted(s["site_reviews"].items(), key=lambda kv: ("resolution" in kv[1], kv[0]))
+    resolved_header = False
+    for key, r in reviews:
         cur, arc = r["current"], r["arcgis"]
         name, county = key.split("|")
-        lines += [f"## {name} ({county})", "",
+        if "resolution" in r and not resolved_header:
+            lines += ["# Resolved", "", "Sites whose point the team has verified. The chosen "
+                      "point is now the site's point, and every hazard status was re-run.", ""]
+            resolved_header = True
+        title = f"## {name} ({county})"
+        if "resolution" in r:
+            res = r["resolution"]
+            lines += [title, "",
+                      f"**Resolved: the ArcGIS point is correct – verified manually ({res['verified']}).** "
+                      f"{res['evidence']} The site now uses the ArcGIS point.", "",
+                      f"**Follow-up:** {res['follow_up']}.", ""]
+            title = None
+        lines += ([title, ""] if title else []) + [
                   f"Address in the county release: {s['sites'][key]['address']}. "
                   f"Distance between the two points: **{r['distance_m']:,} m**.", "",
-                  "| | Current point (kept) | ArcGIS point |", "|---|---|---|",
+                  ("| | Census point (not used) | ArcGIS point (used) |" if "resolution" in r
+                   else "| | Current point (kept) | ArcGIS point |"), "|---|---|---|",
                   f"| Source | {method.get(cur['method'], cur['method'])} | Esri ArcGIS World Geocoder |",
                   f"| Latitude, longitude | {cur['lat']}, {cur['lon']} | {arc['lat']}, {arc['lon']} |",
                   f"| Matched address | {cur['matched_address'] or '–'} | {arc['matched_address']} |",
                   f"| Score / match type | – (Census Geocoder gives no score) | {arc['score']} / {arc['match_type']} |",
                   f"| Zones | {zone(cur)} | {zone(arc)} |", ""]
-        if r["status_changes"]:
+        if r["status_changes"] and "resolution" in r:
+            lines.append("**Hazard statuses that changed (Census point → ArcGIS point):**")
+            lines += [f"- {h.replace('_', ' ')}: {STATUS_WORDS.get(a, a)} → {STATUS_WORDS.get(b, b)}"
+                      for h, (a, b) in r["status_changes"].items()]
+        elif r["status_changes"]:
             lines.append("**Hazard statuses that would change if the ArcGIS point were used:**")
             lines += [f"- {h.replace('_', ' ')}: {STATUS_WORDS.get(a, a)} → {STATUS_WORDS.get(b, b)}"
                       for h, (a, b) in r["status_changes"].items()]

@@ -1,6 +1,6 @@
 {
- "built_at": "2026-10-28T21:47:24-10:00",
- "data_as_of": "2026-10-28T21:47:17-10:00",
+ "built_at": "2026-10-28T21:58:04-10:00",
+ "data_as_of": "2026-10-28T21:57:56-10:00",
  "runtime_seconds": 0.01,
  "privacy": "Aggregate tract estimates only. No individual records.",
  "planning_factors": {
@@ -647,13 +647,13 @@
    "dog_households": 144,
    "cat_households": 84,
    "staff_per_shift": 65,
-   "known_sites_usable": 6,
+   "known_sites_usable": 7,
    "known_sites_check_flood": 0,
    "known_sites_check_tract_level": 0,
    "known_sites_flood_undetermined": 0,
    "candidate_schools_usable": 31,
    "candidate_schools_flood_undetermined": 0,
-   "known_sites_excluded": "Lahaina Civic Center Gym; Kilohana Recreation Center",
+   "known_sites_excluded": "Kilohana Recreation Center",
    "known_sites_flood_check": ""
   },
   {

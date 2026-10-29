@@ -36,6 +36,8 @@ from fetch_flood_zones import load_cache, lookup  # noqa: E402
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "data" / "sources" / "county_shelter_activations.csv"
 GEOCODES = ROOT / "data" / "sources" / "geocodes.csv"
+OVERRIDES = ROOT / "data" / "sources" / "site_point_overrides.csv"
+VERIFIED = "verified_manually"
 RAW = ROOT / "data" / "raw"
 OUT = ROOT / "data" / "processed"
 
@@ -99,6 +101,19 @@ def match_school(site: dict, schools: list):
         if len(toks) > best_len:
             best, best_len = f, len(toks)
     return best
+
+
+def load_overrides(path: Path = OVERRIDES) -> dict:
+    """site key -> row: points the team verified by hand (they win over every geocode)."""
+    if not path.exists():
+        return {}
+    with open(path, newline="", encoding="utf-8") as fh:
+        return {r["site_key"]: r for r in csv.DictReader(fh)}
+
+
+def location_note(o: dict) -> str:
+    return (f"{o['point_source']}; {o['verified']} ({o['evidence']}) "
+            f"Follow-up: {o['follow_up']}.")
 
 
 def load_geocodes(path: Path = GEOCODES) -> dict:
@@ -195,8 +210,15 @@ def main() -> int:
     import build_access   # lazy: build_access -> fetch_arcgis -> geocode_shelters -> here
     # Census geocodes first; a site the Census could not locate may be located by ArcGIS
     geocodes = {**build_access.located_points(), **load_geocodes()}
+    overrides = load_overrides()
+    geocodes.update({o["address"].strip(): (float(o["lon"]), float(o["lat"]), VERIFIED)
+                     for o in overrides.values()})
     fc = build(load_activations(), schools, _load(OUT / "afn_tracts.geojson"),
                _load(RAW / "tsunami_zone.geojson"), geocodes, load_cache())
+    for f in fc["features"]:
+        o = overrides.get(f"{f['properties']['name']}|{f['properties']['county']}")
+        if o:
+            f["properties"]["location_note"] = location_note(o)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "shelters_2026.geojson").write_text(json.dumps(fc, indent=1, ensure_ascii=False),
                                                encoding="utf-8")

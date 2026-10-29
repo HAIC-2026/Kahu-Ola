@@ -235,25 +235,52 @@ class SiteRules(unittest.TestCase):
         self.assertEqual(st["Kahuku Elementary School|Honolulu"], "confirmed_doe_census")
         self.assertEqual(st["Nānākuli High and Intermediate School|Honolulu"], "confirmed_doe_census")
         review = {k for k, v in st.items() if v == "needs_review"}
-        self.assertEqual(review, set(SUMMARY["site_reviews"]))
         self.assertEqual(review, {"Keaʻau Armory|Hawaii", "Puʻuʻeo Community Center|Hawaii",
-                                  "Pāpaʻaloa Park Annex|Hawaii", "Lahaina Civic Center Gym|Maui",
-                                  "South Maui Community Park Gym|Maui"})
+                                  "Pāpaʻaloa Park Annex|Hawaii", "South Maui Community Park Gym|Maui"})
+        self.assertEqual(st["Lahaina Civic Center Gym|Maui"], "verified_manually")
+        self.assertEqual(set(SUMMARY["site_reviews"]), review | {"Lahaina Civic Center Gym|Maui"})
 
     def test_review_keeps_current_point_and_lists_changes(self):
         sh = {f["properties"]["name"] + "|" + f["properties"]["county"]: f
               for f in fa.load_json(fa.SHELTERS, {})["features"]}
         for k, r in SUMMARY["site_reviews"].items():
+            used = r["arcgis"] if "resolution" in r else r["current"]
             self.assertEqual([round(c, 6) for c in sh[k]["geometry"]["coordinates"][:2]],
-                             [r["current"]["lon"], r["current"]["lat"]], k)
-        lah = SUMMARY["site_reviews"]["Lahaina Civic Center Gym|Maui"]
-        self.assertTrue(lah["current"]["in_tsunami_zone"])
-        self.assertEqual(lah["status_changes"].get("tsunami"), ["exclude", "ok"])
+                             [used["lon"], used["lat"]], k)
         doc = ba.REVIEW_DOC.read_text(encoding="utf-8")
         for k in SUMMARY["site_reviews"]:
             self.assertIn(f"## {k.split('|')[0]}", doc)
-        self.assertIn("tsunami: excluded (tsunami zone) → usable", doc)
         self.assertIn("The current point is kept", doc)
+
+    def test_lahaina_verified_point_applied(self):
+        lah = SUMMARY["site_reviews"]["Lahaina Civic Center Gym|Maui"]
+        self.assertTrue(lah["current"]["in_tsunami_zone"])          # Census point (not used)
+        self.assertFalse(lah["arcgis"]["in_tsunami_zone"])          # verified point (used)
+        self.assertEqual(lah["status_changes"], {"tsunami": ["exclude", "ok"]})
+        self.assertEqual(lah["resolution"]["verified"], "verified by address, 2026-10-28")
+        sh = {f["properties"]["name"]: f for f in fa.load_json(fa.SHELTERS, {})["features"]}
+        p = sh["Lahaina Civic Center Gym"]["properties"]
+        self.assertEqual(p["location_method"], "verified_manually")
+        self.assertFalse(p["in_tsunami_zone"])
+        self.assertIn("verified by address, 2026-10-28", p["location_note"])
+        self.assertIn("Visual check on the State tsunami evacuation map", p["location_note"])
+        b = next(s for s in BUNDLE["sites"] if s["name"] == "Lahaina Civic Center Gym")
+        self.assertEqual(b["status"]["tsunami"][0], "ok")
+        self.assertEqual(b["loc"], "Verified manually (by address, 2026-10-28)")
+        self.assertEqual([b["lon"], b["lat"]], [round(lah["arcgis"]["lon"], 4), round(lah["arcgis"]["lat"], 4)])
+        doc = ba.REVIEW_DOC.read_text(encoding="utf-8")
+        resolved = doc.split("# Resolved", 1)[1]
+        self.assertIn("Lahaina Civic Center Gym", resolved)
+        self.assertIn("verified manually (verified by address, 2026-10-28)", resolved)
+        self.assertIn("**Follow-up:** Visual check on the State tsunami evacuation map", resolved)
+        self.assertIn("tsunami: excluded (tsunami zone) → usable", resolved)
+
+    def test_moved_site_times_come_from_refresh(self):
+        key = "Lahaina Civic Center Gym|Maui"
+        fresh = ba.parse_od(ba.RAW / "od_drive_refresh.json")
+        self.assertTrue(fresh)
+        for area, row in fresh.items():
+            self.assertEqual(SUMMARY["areas"][area]["sites"][key][:2], [ba.r1(row[key][0]), ba.r1(row[key][1])])
 
     def test_summary_rules_hold(self):
         for key, v in SUMMARY["sites"].items():
