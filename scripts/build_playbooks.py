@@ -283,9 +283,24 @@ def prov(text: str, where: str = "") -> str:
     return f'<p class="prov">{escape(text)}{escape(where)}</p>'
 
 
+LAHAINA_NOTE = ("Population is from the 2020 Census, before the August 2023 Lahaina fire, which "
+                "destroyed much of the town. Use current County of Maui figures for Lahaina.")
+LAHAINA_SUMMARY = f"Lahaina: {LAHAINA_NOTE}"
+
+
+def is_lahaina(label: str) -> bool:
+    """A Lahaina-area Census area: its community label (build_tract_labels.py) names
+    Lahaina. Site or facility names are never passed here."""
+    return bool(re.search(r"\bLahaina\b", label or ""))
+
+
+def lahaina_note(label: str) -> str:
+    return f'<br><small class="lahaina-note">{escape(LAHAINA_NOTE)}</small>' if is_lahaina(label) else ""
+
+
 def community_cell(main: str, sub: str) -> str:
-    """Community name first, Census area ID as a smaller second line."""
-    return f'{escape(main)}<br><small>{escape(sub)}</small>' 
+    """Community name first, Census area ID as a smaller second line (and the Lahaina note)."""
+    return f'{escape(main)}<br><small>{escape(sub)}</small>{lahaina_note(main)}' 
 STATUS_ORDER = ["ok", "check", "check (tract-level)", "undetermined", "exclude"]
 AFN_PARTS = ("M_power_dependent_at_risk", "I_disability_at_risk", "C_lep_at_risk",
              "T_no_vehicle_persons_at_risk")
@@ -537,7 +552,7 @@ def guide_html(sc: dict, comms: list, hazard: str) -> str:
                              f'{n(ex["low"])} – <b>{n(ex["central"])}</b> – {n(ex["high"])}']],
                            num_cols=(1, 2)).replace("<tr><td", '<tr class="example"><td', 1)
                    + f'<p>Read it as: about {n(ex["at_risk_pop"])} people live in the risk area '
-                     f'of {escape(ex["label_main"])}. If this hazard hits, between '
+                     f'of {escape(ex["label_main"])}{lahaina_note(ex["label_main"]).replace("<br>", " ")}. If this hazard hits, between '
                      f'{n(ex["low"])} and {n(ex["high"])} of them may need a public shelter; '
                      f'{n(ex["central"])} is the likely number.</p>')
     area = FOOTPRINT_TEXT.get(sc.get("footprint_rule", ""), sc.get("footprint_rule", ""))
@@ -578,7 +593,8 @@ def map_html(inp: dict, county: str, hazard: str, sites: list) -> str:
     tracts = [f for f in inp["afn"]["features"] if f["properties"]["county"] == county]
     rows = tract_rows(inp, county, hazard)
     values = {r["tract_fips"]: sum(float(r[k]) for k in AFN_PARTS) for r in rows}
-    labels = {fips: r["tract_label"] for fips, r in inp.get("labels", {}).items()}
+    labels = {fips: r["tract_label"] + (f" – {LAHAINA_NOTE}" if is_lahaina(r["label_main"]) else "")
+              for fips, r in inp.get("labels", {}).items()}
     svg, bounds = svgmap.render(
         tracts, values, set(values),
         [s for s in sites if s["lon"] is not None],
@@ -661,7 +677,8 @@ def zero_siren_html(state: dict | None, county: str, labels: dict) -> str:
     for f in fips:
         main = labels.get(f, f).split(" · ")[0]
         groups.setdefault(main, []).append(f[5:9].lstrip("0") + ("." + f[9:] if f[9:] != "00" else ""))
-    items = "; ".join(f"{escape(k)} ({', '.join(v)})" for k, v in sorted(groups.items()))
+    items = "; ".join(f"{escape(k)} ({', '.join(v)}){lahaina_note(k).replace('<br>', ' ')}"
+                      for k, v in sorted(groups.items()))
     return (head + f'<p><b>{escape(low_text)} ({len(fips)}): '
             f'{escape(bsl.NO_SIRENS)}.</b> <small>{items}</small></p>'
             f'<p class="src">{escape(src_text("sirens"))}</p>')
@@ -938,6 +955,7 @@ def playbook_html(inp: dict, county: str, hazard: str) -> str:
 </header>
 <main>
 {summary_html(sc, hazard)}
+{f'<p class="note lahaina-note">{escape(LAHAINA_SUMMARY)}</p>' if county == "Maui" else ""}
 {scope_html(sc, comms, hazard)}
 {guide_html(sc, comms, hazard)}
 {map_html(inp, county, hazard, sites)}

@@ -226,7 +226,7 @@ function renderMap(county, sc, sites, title, hazard) {
     const path = svg("path", risk
       ? { d, fill, stroke: "#000000", "stroke-width": "1.4", "vector-effect": "non-scaling-stroke", class: "area" }
       : { d, fill, stroke: "#9a9a9a", "stroke-width": "0.5", "stroke-dasharray": "2,2", "vector-effect": "non-scaling-stroke", class: "area" });
-    const tip = svg("title"); tip.textContent = `${tr.l || tr.f} – ${level(tr.f)}`; path.append(tip);
+    const tip = svg("title"); tip.textContent = `${tr.l || tr.f} – ${level(tr.f)}${isLahaina(tr.l) ? ` – ${DATA.meta.lahaina_note}` : ""}`; path.append(tip);
     path.addEventListener("click", () => openArea(tr.f, null));
     paths[tr.f] = path;
     root.append(path);
@@ -355,7 +355,7 @@ function renderMap(county, sc, sites, title, hazard) {
     el("ul", null, risk.map((tr) => {
       const b = el("button", { type: "button", class: "linklike" }, `${tr.l || tr.f}: ${fmt(afn[tr.f])} people with needs (${level(tr.f)})`);
       b.addEventListener("click", () => openArea(tr.f, b));
-      return el("li", null, b);
+      return el("li", null, b, lahainaNote(tr.l, true));
     })));
   const official = el("a", { class: "button", href: DATA.official_map.url, target: "_blank", rel: "noopener noreferrer" },
     `${DATA.official_map.label} (${DATA.official_map.source}, opens in a new tab)`);
@@ -455,7 +455,7 @@ function zeroSirens(county) {
   return [el("p", { id: "outside-sirens" }, `${DATA.state.outside_text}: `, el("strong", null, fmt(DATA.state.outside[county] || 0)), "."),
     low.length ? el("details", { class: "areas", id: "zero-sirens" },
       el("summary", null, `${DATA.state.low_text} (${low.length}): ${DATA.state.no_sirens}`),
-      el("ul", null, low.map((f) => el("li", null, `${label[f] || f} – ${Math.round(share[f] * 100)}% within rated range`)))) : null,
+      el("ul", null, low.map((f) => el("li", null, `${label[f] || f} – ${Math.round(share[f] * 100)}% within rated range`, lahainaNote(label[f], true))))) : null,
     source("sirens")];
 }
 
@@ -529,6 +529,7 @@ function openArea(f, opener) {
   panel.replaceChildren();
   append(panel,
     el("h3", { id: "area-title", tabindex: "-1" }, main, " ", el("small", null, sub || "")),
+    isLahaina(main) ? el("p", { class: "note lahaina-note", id: "lahaina-note" }, DATA.meta.lahaina_note) : null,
     el("p", null, el("strong", null, inRisk ? `Inside the ${hz.toLowerCase()} risk area` : `Outside the ${hz.toLowerCase()} risk area`),
       ` · Need level: ${MAP.level(f)}`),
     el("dl", { class: "area-facts" },
@@ -590,7 +591,15 @@ function needNames(k) {
 
 /* community name first, Census area ID as a smaller second line */
 function community(main, sub) {
-  return [el("span", null, main), el("br"), el("small", null, sub || "")];
+  return [el("span", null, main), el("br"), el("small", null, sub || ""), ...(lahainaNote(main) || [])];
+}
+/* Lahaina-area Census areas (community label names Lahaina): 2020 population predates the
+   August 2023 fire. Only Census-area labels are passed here, never site names. */
+const isLahaina = (label) => /\bLahaina\b/.test(label || "");
+function lahainaNote(label, inline) {
+  if (!isLahaina(label)) return null;
+  const note = el("small", { class: "lahaina-note" }, DATA.meta.lahaina_note);
+  return inline ? [" ", note] : [el("br"), note];
 }
 /* "{SOURCES}" becomes a "see Sources" link (the PDFs say "section 8") */
 const linkSources = (text) => text.split("{SOURCES}").flatMap((part, i) => (i
@@ -607,7 +616,7 @@ function helpPanel(sc, hazard) {
     body.push(el("h3", null, "Example row"),
       table("One row from the “Largest single community” table", [C.area, C.at_risk, C.shelter],
         [[community(ex.label_main, ex.label_sub), fmt(ex.at_risk_pop), `${fmt(ex.low)} – ${fmt(ex.central)} – ${fmt(ex.high)}`]], [1, 2]),
-      el("p", null, `Read it as: about ${fmt(ex.at_risk_pop)} people live in the risk area of ${ex.label_main}. If this hazard hits, between ${fmt(ex.low)} and ${fmt(ex.high)} of them may need a public shelter; ${fmt(ex.central)} is the likely number.`));
+      el("p", null, `Read it as: about ${fmt(ex.at_risk_pop)} people live in the risk area of ${ex.label_main}.${isLahaina(ex.label_main) ? ` ${DATA.meta.lahaina_note}` : ""} If this hazard hits, between ${fmt(ex.low)} and ${fmt(ex.high)} of them may need a public shelter; ${fmt(ex.central)} is the likely number.`));
   }
   body.push(
     el("h3", null, "Census area"),
@@ -781,6 +790,7 @@ function renderPlan() {
     provLabel(DATA.provenance.numbers, DATA.provenance.sources_url),
     el("p", null, el("a", { class: "button", href: sc.playbook }, `⬇ Printable playbook (PDF): ${cLabel} – ${hLabel}`)),
     el("ul", { class: "kpis" }, kpis.map(([k, v]) => el("li", null, k, el("b", null, v)))),
+    county === "Maui" ? el("p", { class: "note lahaina-note", id: "lahaina-summary" }, DATA.meta.lahaina_summary) : null,
     source("summary"),
     el("p", null, `Share of people in the risk area who may need a public shelter: low ${pct(s.rate_low)}, likely ${pct(s.rate_central)}, high ${pct(s.rate_high)}. One person can be counted in more than one need. Open “How to read this page” for an explanation.`),
 

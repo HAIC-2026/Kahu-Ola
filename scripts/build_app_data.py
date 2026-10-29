@@ -38,7 +38,7 @@ import build_access  # noqa: E402
 import build_state_layers as bsl  # noqa: E402
 from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, COUNTY_LINE_LABEL,  # noqa: E402
                              DETAIL_KEYS, DISCLAIMER, KALAWAO_NOTE, SERVICE_ANIMALS, WHO_ELSE,
-                             results_data, NO_FACILITY_SCREEN, FACILITY_ZONE_D,
+                             results_data, NO_FACILITY_SCREEN, FACILITY_ZONE_D, LAHAINA_NOTE, LAHAINA_SUMMARY,
                              FOOTPRINT_TEXT, HAZARD_LABEL, HURRICANE_SCOPE_NOTE, PROV_NUMBERS,
                              PROV_SHELTERS, RATE_NOTE,
                              SITE_KEY_STATUS, SOURCE, area_label, lang_label, partner_names,
@@ -274,6 +274,7 @@ def build(inp: dict) -> dict:
                  "site_key_status": SITE_KEY_STATUS, "need_names": svgmap.need_names(5),
                  "detail_keys": DETAIL_KEYS, "service_animals": SERVICE_ANIMALS,
                  "kalawao_note": KALAWAO_NOTE, "who_else": WHO_ELSE,
+                 "lahaina_note": LAHAINA_NOTE, "lahaina_summary": LAHAINA_SUMMARY,
                  "no_island_site": "No known usable site on this island for this hazard. The "
                                    "county designates shelters; follow county announcements.",
                  "niihau_note": dict(WHO_ELSE)["Niʻihau"],
