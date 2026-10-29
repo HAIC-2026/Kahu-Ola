@@ -33,6 +33,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import block_shares  # noqa: E402
 import build_access as ba  # noqa: E402
 import fetch_arcgis as fa  # noqa: E402
+from raw_inputs import MissingInput, rel, load_geojson, load_json, require, require_all_or_none  # noqa: E402
 from fetch_flood_zones import is_sfha  # noqa: E402
 from geo import ZoneIndex, area_centroid, bbox_of, haversine_km, point_in_geometry, sample_points  # noqa: E402
 
@@ -91,6 +92,8 @@ def is_centre(p: dict) -> bool:
 
 
 def childcare(feats: list, island_of, tracts, tsunami, offline: bool) -> tuple[list, dict]:
+    if offline:          # offline runs read flood zones from the cache only
+        require(FLOOD_CACHE, "cached FEMA flood zones for childcare centres")
     cache = fa.load_json(FLOOD_CACHE, {})
     land = land_points()
     out, dropped = [], {"not a centre type": 0, "home-based": 0}
@@ -156,17 +159,22 @@ def siren_reach(geom: dict, land: tuple, sirens: list, radius_m: float,
 
 
 def summarize(offline: bool = False) -> dict | None:
+    """None when data/raw/state_layers/ is absent (documented fallback: the committed summary
+    is kept, see main). A partial or empty download (no childcare centres, sirens or dam
+    zones), or a missing coastline or tsunami layer, raises MissingInput."""
     need = ["childcare.geojson", "sirens.geojson", "dams.geojson", "meta.json"]
-    if not all((RAW / n).exists() for n in need):
+    if not require_all_or_none(RAW, need, "raw State layers"):
         return None
-    load = lambda n: json.loads((RAW / n).read_text(encoding="utf-8"))  # noqa: E731
-    meta = load("meta.json")
-    coast = ZoneIndex(fa.load_json(fa.COAST, None))
+    what = {"childcare.geojson": "Ready Keiki childcare sites", "sirens.geojson": "HI-EMA sirens",
+            "dams.geojson": "State dam evacuation zones"}
+    load = lambda n: load_geojson(RAW / n, what[n])  # noqa: E731
+    meta = load_json(RAW / "meta.json", "State layer sources")
+    coast = ZoneIndex(load_geojson(fa.COAST, "State coastline (island outlines)"))
     from build_islands import island_of as _island_of
     island_of = lambda x, y: _island_of(coast, x, y)  # noqa: E731
-    afn = fa.load_json(fa.AFN, {"features": []})
+    afn = load_geojson(fa.AFN, "Census areas (build_map.py)")
     tracts = ZoneIndex(afn)
-    tsunami = ZoneIndex(fa.load_json(ba.TSUNAMI, None))
+    tsunami = ZoneIndex(load_geojson(ba.TSUNAMI, "State tsunami evacuation zones"))
     dams = ZoneIndex(load("dams.geojson"))
     with open(fa.ISLANDS, newline="", encoding="utf-8") as fh:
         rows = [r for r in csv.DictReader(fh) if r["kind"] == "area"]
@@ -274,10 +282,18 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Summaries of three public State layers")
     ap.add_argument("--offline", action="store_true", help="cached flood zones only")
     args = ap.parse_args(argv)
-    s = summarize(args.offline)
-    if s is None:
-        print(f"No raw State layers in {RAW.relative_to(ROOT)}: "
-              + (f"keeping {OUT.relative_to(ROOT)}" if OUT.exists() else "no summary"))
+    try:
+        s = summarize(args.offline)
+    except MissingInput as e:
+        print(e, file=sys.stderr)
+        return 1
+    if s is None:      # documented fallback: keep the committed summary
+        if not load(OUT):
+            print(f"Build stopped: no raw State layers in {rel(RAW)} and no "
+                  f"committed {rel(OUT)}.", file=sys.stderr)
+            return 1
+        print(f"No raw State layers in {rel(RAW)}: "
+              f"keeping the committed {rel(OUT)}")
         return 0
     OUT.write_text(json.dumps(s, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     print(f"Wrote {OUT.relative_to(ROOT)} ({OUT.stat().st_size / 1024:.0f} KB)")

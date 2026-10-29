@@ -28,6 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from hawaii_time import now_hst  # noqa: E402
 from geo import ZoneIndex  # noqa: E402
 from fetch_flood_zones import load_cache, lookup  # noqa: E402
+from raw_inputs import MissingInput, load_geojson  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
@@ -71,6 +72,8 @@ SOURCES = {
         "where": "State_FIPS_Code='15'",
     },
 }
+
+MAY_BE_EMPTY = {"fema_open_shelters"}     # no open shelters outside an event
 
 # FEMA National Risk Index v1.20 (Dec 2025, 2020 tract boundaries): one layer per hazard.
 # Field names per hazard code: {CODE}_RISKR (rating), _RISKS (score), _RISKV (value).
@@ -176,11 +179,10 @@ def load_layers(keys, offline: bool) -> dict:
                 print(f"[ok]   {key}: {fc['metadata']['count']} features")
             except Exception as e:
                 print(f"[warn] {key}: download failed ({e})", file=sys.stderr)
-        if path.exists():
-            layers[key] = json.loads(path.read_text(encoding="utf-8"))
-        else:
-            layers[key] = None
-            print(f"[warn] {key}: no data available", file=sys.stderr)
+        # fail closed: a layer that is neither downloaded nor cached stops the build. Only
+        # FEMA open shelters may be empty (none are open outside an event).
+        layers[key] = load_geojson(path, src.get("label", key),
+                                   allow_empty=key in MAY_BE_EMPTY)
     return layers
 
 
@@ -311,11 +313,12 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
 
     keys = args.only or list(SOURCES)
-    layers = load_layers(keys, args.offline)
-    for k in SOURCES:
-        if k not in layers:
-            p = RAW / f"{k}.geojson"
-            layers[k] = json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
+    try:
+        layers = load_layers(keys, args.offline)
+        layers.update(load_layers([k for k in SOURCES if k not in layers], offline=True))
+    except MissingInput as e:
+        print(e, file=sys.stderr)
+        return 1
 
     OUT.mkdir(parents=True, exist_ok=True)
     tracts = ZoneIndex(layers.get("svi"))

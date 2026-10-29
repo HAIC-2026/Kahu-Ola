@@ -34,6 +34,7 @@ from fetch_flood_zones import is_sfha, load_cache, lookup, query_point  # noqa: 
 from geo import ZoneIndex, haversine_km  # noqa: E402
 from hawaii_time import now_hst  # noqa: E402
 from model_needs import FLOOD, HAZARDS, site_status  # noqa: E402
+from raw_inputs import MissingInput, rel, load_geojson, require, require_all_or_none  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = fa.RAW
@@ -99,7 +100,7 @@ def doe_checks(offline: bool = False) -> dict:
     from build_shelters import match_school
     from geocode_shelters import census_lookup, to_query
     cache = load_doe_checks()
-    schools = fa.load_json(SCHOOLS_RAW, {"features": []})["features"]
+    schools = load_geojson(SCHOOLS_RAW, "Hawaiʻi DOE schools")["features"]
     changed = False
     for s in fa.load_sites():
         if s["method"] != "doe_school_match" or s["key"] in cache or offline:
@@ -360,8 +361,10 @@ def hazard_zones(p: dict) -> dict:
 
 
 def facilities(island_of, offline: bool) -> list:
-    tsunami = ZoneIndex(fa.load_json(TSUNAMI, None))
-    tracts = ZoneIndex(fa.load_json(fa.AFN, None))
+    tsunami = ZoneIndex(load_geojson(TSUNAMI, "State tsunami evacuation zones"))
+    tracts = ZoneIndex(load_geojson(fa.AFN, "Census areas (build_map.py)"))
+    if offline:          # offline runs read flood zones from the cache only
+        require(FLOOD_CACHE, "cached FEMA flood zones for care facilities")
     geo = fa.load_json(RAW / "geocode_facilities.json", {})
     cache = fa.load_json(FLOOD_CACHE, {})
     out = []
@@ -393,11 +396,14 @@ def facilities(island_of, offline: bool) -> list:
 # ---------------------------------------------------------------- summary
 
 def summarize(offline: bool = False) -> dict | None:
-    if not all((RAW / f).exists() for f in REQUIRED):
+    """None when data/raw/arcgis/ is absent (documented fallback: the committed summary is
+    kept, see main). A partial or empty download, or a missing coastline, tsunami or
+    schools layer, raises MissingInput."""
+    if not require_all_or_none(RAW, REQUIRED, "raw ArcGIS answers"):
         return None
-    coast = ZoneIndex(fa.load_json(fa.COAST, None))
+    coast = ZoneIndex(load_geojson(fa.COAST, "State coastline (island outlines)"))
     from build_islands import island_of as _island_of
-    island_of = (lambda x, y: _island_of(coast, x, y)) if coast else (lambda x, y: "")
+    island_of = lambda x, y: _island_of(coast, x, y)  # noqa: E731
     led = fa.load_json(fa.CREDITS, {"steps": {}})
     sa = led["steps"].get("service_areas", {})
     return {
@@ -533,11 +539,18 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Summaries of the build-time ArcGIS answers")
     ap.add_argument("--offline", action="store_true", help="cached flood zones only")
     args = ap.parse_args(argv)
-    s = summarize(args.offline)
-    if s is None:
-        print(f"No raw ArcGIS answers in {RAW.relative_to(ROOT)}: "
-              + (f"keeping {OUT.relative_to(ROOT)}" if OUT.exists() else
-                 "no summary; app and PDFs use straight-line distances"))
+    try:
+        s = summarize(args.offline)
+    except MissingInput as e:
+        print(e, file=sys.stderr)
+        return 1
+    if s is None:      # paid answers are not re-fetched: the committed summary is the fallback
+        if not load(OUT):
+            print(f"Build stopped: no raw ArcGIS answers in {rel(RAW)} and no "
+                  f"committed {rel(OUT)}.", file=sys.stderr)
+            return 1
+        print(f"No raw ArcGIS answers in {rel(RAW)}: "
+              f"keeping the committed {rel(OUT)}")
         return 0
     REVIEW_DOC.write_text(review_doc(s), encoding="utf-8")
     OUT.write_text(json.dumps(s, ensure_ascii=False, indent=1, sort_keys=True) + "\n",

@@ -32,6 +32,7 @@ from hawaii_time import now_hst  # noqa: E402
 from geo import ZoneIndex  # noqa: E402
 from fetch_data import COUNTIES, county_of  # noqa: E402
 from fetch_flood_zones import load_cache, lookup  # noqa: E402
+from raw_inputs import MissingInput, load_geojson  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "data" / "sources" / "county_shelter_activations.csv"
@@ -206,7 +207,12 @@ def main() -> int:
     if not SRC.exists():
         print(f"Missing {SRC.relative_to(ROOT)}", file=sys.stderr)
         return 1
-    schools = (_load(RAW / "schools.geojson") or {}).get("features", [])
+    try:       # both required: without them school matches and tsunami checks are lost
+        schools = load_geojson(RAW / "schools.geojson", "Hawaiʻi DOE schools")["features"]
+        tsunami = load_geojson(RAW / "tsunami_zone.geojson", "State tsunami evacuation zones")
+    except MissingInput as e:
+        print(e, file=sys.stderr)
+        return 1
     import build_access   # lazy: build_access -> fetch_arcgis -> geocode_shelters -> here
     # Census geocodes first; a site the Census could not locate may be located by ArcGIS
     geocodes = {**build_access.located_points(), **load_geocodes()}
@@ -214,7 +220,7 @@ def main() -> int:
     geocodes.update({o["address"].strip(): (float(o["lon"]), float(o["lat"]), VERIFIED)
                      for o in overrides.values()})
     fc = build(load_activations(), schools, _load(OUT / "afn_tracts.geojson"),
-               _load(RAW / "tsunami_zone.geojson"), geocodes, load_cache())
+               tsunami, geocodes, load_cache())
     for f in fc["features"]:
         o = overrides.get(f"{f['properties']['name']}|{f['properties']['county']}")
         if o:

@@ -13,9 +13,15 @@ records. Offline: reads local files only.
 
 app/playbooks/ is a build artifact (gitignored): the PDFs are committed once, in playbooks/.
 
-Usage:  python3 scripts/build_app_data.py    (after build_playbooks.py)
-        python3 scripts/build_app_data.py --copy-only
-            (deploy step, e.g. Cloudflare Pages: only copy playbooks/*.pdf into app/playbooks/)
+Usage:  python3 scripts/build_app_data.py    (after build_playbooks.py; needs data/raw/)
+        python3 scripts/build_app_data.py --copy-only [--allow-missing-raw]
+            (app-only step, e.g. after a change in app/ or before deploying: copies
+            playbooks/*.pdf into app/playbooks/ and refreshes the service worker VERSION and
+            precache list from the committed bundle. Never regenerates data.)
+
+The full build fails closed: a missing or empty input in data/raw/ (tsunami zones, ...) or
+a missing committed summary stops it with a message (scripts/raw_inputs.py) instead of
+writing a bundle without that layer. --allow-missing-raw is accepted only with --copy-only.
 """
 from __future__ import annotations
 
@@ -36,6 +42,7 @@ from geo import area_centroid  # noqa: E402
 import build_islands  # noqa: E402
 import build_access  # noqa: E402
 import build_state_layers as bsl  # noqa: E402
+from raw_inputs import MissingInput, load_geojson  # noqa: E402
 from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, COUNTY_LINE_LABEL,  # noqa: E402
                              DETAIL_KEYS, DISCLAIMER, KALAWAO_NOTE, SERVICE_ANIMALS, WHO_ELSE,
                              results_data, NO_FACILITY_SCREEN, FACILITY_ZONE_D, LAHAINA_NOTE, LAHAINA_SUMMARY,
@@ -95,12 +102,14 @@ def area_counts(p: dict) -> list:
     return [pop] + [round(vals.get(src) or 0, 1) for _k, src in AREA_FIELDS]
 
 
+TSUNAMI_COUNTIES = ("Honolulu", "Hawaii", "Maui", "Kauai")     # Kalawao has no State zone
+
+
 def tsunami_overlay(path: Path = ROOT / "data" / "raw" / "tsunami_zone.geojson") -> dict:
-    """State tsunami evacuation zone outline, simplified, by county (build time only)."""
-    if not path.exists():
-        return {}
+    """State tsunami evacuation zone outline, simplified, by county (build time only).
+    Fails closed: a missing or empty file, or a county without any zone, stops the build."""
     out = {}
-    for f in json.loads(path.read_text(encoding="utf-8"))["features"]:
+    for f in load_geojson(path, "State tsunami evacuation zones")["features"]:
         county = ISLAND_COUNTY.get(str(f["properties"].get("island", "")).upper())
         if not county:
             continue
@@ -112,7 +121,28 @@ def tsunami_overlay(path: Path = ROOT / "data" / "raw" / "tsunami_zone.geojson")
             for x, y in pts:
                 flat += [r4(x), r4(y)]
             out.setdefault(county, []).append(flat)
+    missing = [c for c in TSUNAMI_COUNTIES if not out.get(c)]
+    if missing:
+        raise MissingInput(f"Build stopped: no tsunami evacuation zone for {', '.join(missing)} "
+                           f"in {path.name}; the download looks incomplete.")
     return out
+
+
+def require_summaries() -> None:
+    """The committed summaries the full build reads (data/sources/). Missing = error: without
+    them the app would quietly drop islands, travel times, care facilities and sirens."""
+    for name, value, script in (("islands.csv", ISLANDS, "build_islands.py"),
+                                ("arcgis_summary.json", ACCESS, "build_access.py"),
+                                ("state_layers_summary.json", STATE, "build_state_layers.py")):
+        if not value:
+            raise MissingInput(f"Build stopped: data/sources/{name} is missing or empty. "
+                               f"Run python3 scripts/{script} first.")
+    if not STATE.get("sirens") or not STATE.get("areas"):
+        raise MissingInput("Build stopped: data/sources/state_layers_summary.json has no "
+                           "sirens or Census areas.")
+    if not ACCESS.get("facilities") or not ACCESS.get("areas"):
+        raise MissingInput("Build stopped: data/sources/arcgis_summary.json has no care "
+                           "facilities or travel times.")
 
 
 ISLANDS = build_islands.load()        # data/sources/islands.csv (build_islands.py)
@@ -217,6 +247,7 @@ def site_check(key: str) -> str:
 
 
 def build(inp: dict) -> dict:
+    require_summaries()
     match = {(s["county"], s["hazard"]): s for s in inp["match"]["scenarios"]}
     partners = partner_names(inp["partners"])
     sites, scenarios = {}, {}
@@ -318,7 +349,7 @@ def build(inp: dict) -> dict:
     h = hashlib.sha256(body.encode())
     for page in sorted(PLAYBOOKS.glob("*.html")):     # printable playbooks are planning data too
         h.update(page.name.encode())                   # (HTML: the PDFs carry a creation date)
-        h.update(page.read_bytes())
+        h.update(page.read_bytes().replace(b"\r\n", b"\n"))
     bundle["meta"]["version"] = h.hexdigest()[:12]
     return bundle
 
@@ -350,15 +381,57 @@ def replace_block(text: str, start: str, end: str, new: str) -> str:
     return pat.sub(lambda _: f"{start}\n{new}\n{end}", text)
 
 
-def cache_version(precache: list) -> str:
+BINARY = (".pdf", ".png", ".ico")      # hashed as is; text files are hashed with LF endings
+
+
+def precache_file(rel: str, app: Path = APP, playbooks: Path = PLAYBOOKS) -> Path:
+    """The file behind a precache entry. PDFs are hashed from playbooks/ (the committed
+    originals; app/playbooks/ holds identical copies and is gitignored)."""
+    if rel == "./":
+        return app / "index.html"
+    if rel.startswith("playbooks/"):
+        return playbooks / rel.split("/", 1)[1]
+    return app / rel
+
+
+def cache_version(precache: list, app: Path = APP, playbooks: Path = PLAYBOOKS) -> str:
     """Hash of every pre-cached file, so any change (data, PDF, app shell) gives the
-    service worker a new cache. The generated index.html block is part of the hash."""
+    service worker a new cache. The generated index.html block is part of the hash.
+    Text files are hashed with CRLF -> LF, so a Windows checkout gives the same VERSION
+    as macOS and Linux (.gitattributes keeps LF in the repo)."""
     h = hashlib.sha256()
     for rel in precache:
-        f = APP / ("index.html" if rel == "./" else rel)
+        data = precache_file(rel, app, playbooks).read_bytes()
+        if not rel.lower().endswith(BINARY):
+            data = data.replace(b"\r\n", b"\n")
         h.update(rel.encode())
-        h.update(f.read_bytes())
+        h.update(data)
     return h.hexdigest()[:12]
+
+
+def precache_list(app: Path = APP, playbooks: Path = PLAYBOOKS) -> list:
+    """App shell + app/data/* + one entry per committed PDF playbook."""
+    data_files = sorted(f"data/{p.name}" for p in (app / "data").iterdir() if p.is_file())
+    return SHELL + data_files + [f"playbooks/{p.name}" for p in sorted(playbooks.glob("*.pdf"))]
+
+
+def write_sw(app: Path = APP, playbooks: Path = PLAYBOOKS) -> tuple[list, str]:
+    """Regenerate the VERSION and PRECACHE block in app/sw.js (written with LF endings)."""
+    precache = precache_list(app, playbooks)
+    version = cache_version(precache, app, playbooks)
+    path = app / "sw.js"
+    sw = path.read_bytes().decode("utf-8").replace("\r\n", "\n")
+    sw = replace_block(sw, "// BEGIN GENERATED", "// END GENERATED",
+                       f"const VERSION = {json.dumps(version)};\n"
+                       f"const PRECACHE = {json.dumps(precache, indent=2)};")
+    path.write_bytes(sw.encode("utf-8"))
+    return precache, version
+
+
+def sw_version(app: Path = APP) -> str:
+    """The VERSION currently written in app/sw.js."""
+    m = re.search(r'const VERSION = "([0-9a-f]+)";', (app / "sw.js").read_text(encoding="utf-8"))
+    return m.group(1) if m else ""
 
 
 def copy_playbooks(src: Path = PLAYBOOKS, app: Path = APP) -> list:
@@ -375,13 +448,30 @@ def copy_playbooks(src: Path = PLAYBOOKS, app: Path = APP) -> list:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Build the offline app data bundle")
     ap.add_argument("--copy-only", action="store_true",
-                    help="only copy playbooks/*.pdf into app/playbooks (deploy step)")
+                    help="app-only step: copy playbooks/*.pdf into app/playbooks and refresh "
+                         "the service worker VERSION from the committed bundle (no data/raw/)")
+    ap.add_argument("--allow-missing-raw", action="store_true",
+                    help="only with --copy-only: state that data/raw/ may be absent")
     args = ap.parse_args(argv)
+    if args.allow_missing_raw and not args.copy_only:
+        ap.error("--allow-missing-raw is only for --copy-only; the full build needs data/raw/")
     if args.copy_only:
-        print(f"Copied {len(copy_playbooks())} PDF playbooks -> app/playbooks/")
+        for name in ("bundle.json", "version.json"):
+            if not (DATA / name).is_file():
+                print(f"Missing committed app/data/{name}; --copy-only never regenerates data.",
+                      file=sys.stderr)
+                return 1
+        pdfs = copy_playbooks()
+        precache, version = write_sw()
+        print(f"Copied {len(pdfs)} PDF playbooks -> app/playbooks/; "
+              f"app/sw.js VERSION {version} ({len(precache)} files, committed bundle reused)")
         return 0
-    inp = load_inputs()
-    bundle = build(inp)
+    try:
+        inp = load_inputs()
+        bundle = build(inp)
+    except MissingInput as e:
+        print(e, file=sys.stderr)
+        return 1
     DATA.mkdir(parents=True, exist_ok=True)
     (DATA / "bundle.json").write_text(json.dumps(bundle, ensure_ascii=False,
                                                  separators=(",", ":")), encoding="utf-8")
@@ -398,15 +488,9 @@ def main(argv=None) -> int:
     for marker in ("PDF LINKS", "FOOTER PDF LINKS"):       # <noscript> list and footer list
         idx = replace_block(idx, f"<!-- BEGIN GENERATED {marker} -->",
                             f"<!-- END GENERATED {marker} -->", f"<ul>\n{links}\n</ul>")
-    (APP / "index.html").write_text(idx, encoding="utf-8")
+    (APP / "index.html").write_text(idx, encoding="utf-8", newline="\n")
 
-    data_files = sorted(f"data/{p.name}" for p in DATA.iterdir() if p.is_file())
-    precache = SHELL + data_files + [f"playbooks/{p.name}" for p in pdfs]
-    sw = (APP / "sw.js").read_text(encoding="utf-8")
-    sw = replace_block(sw, "// BEGIN GENERATED", "// END GENERATED",
-                       f"const VERSION = {json.dumps(cache_version(precache))};\n"
-                       f"const PRECACHE = {json.dumps(precache, indent=2)};")
-    (APP / "sw.js").write_text(sw, encoding="utf-8")
+    precache, _version = write_sw()
 
     size = (DATA / "bundle.json").stat().st_size
     pdf_size = sum(p.stat().st_size for p in pdfs)

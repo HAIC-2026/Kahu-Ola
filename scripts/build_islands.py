@@ -30,6 +30,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fetch_data import fetch_json, query_url  # noqa: E402
 from geo import ZoneIndex, area_centroid, point_in_geometry, sample_points  # noqa: E402
+from raw_inputs import MissingInput, load_geojson  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw" / "coastline.geojson"
@@ -115,7 +116,11 @@ def main(argv=None) -> int:
     if not ap.parse_args(argv).offline:
         RAW.parent.mkdir(parents=True, exist_ok=True)
         RAW.write_text(json.dumps(download()), encoding="utf-8")
-    coast = json.loads(RAW.read_text(encoding="utf-8"))
+    try:
+        coast = load_geojson(RAW, "State coastline (island outlines)")
+    except MissingInput as e:
+        print(e, file=sys.stderr)
+        return 1
     rows, missing = assign(json.loads(AFN.read_text(encoding="utf-8")),
                            json.loads(SHELTERS.read_text(encoding="utf-8")), coast)
     for r in rows:

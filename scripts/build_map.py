@@ -30,6 +30,7 @@ from geo import ZoneIndex, representative_point  # noqa: E402
 from fetch_data import COUNTIES, NRI_HAZARD_LAYERS, county_from_fips  # noqa: E402
 import fetch_cmist_detail  # noqa: E402
 import block_shares  # noqa: E402
+from raw_inputs import MissingInput, load_geojson  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
@@ -266,15 +267,21 @@ def coverage(fc: dict) -> dict:
     return out
 
 
+def need(key: str, what: str) -> dict:
+    return load_geojson(RAW / f"{key}.geojson", what)
+
+
 def main() -> int:
-    svi = load("svi")
-    if not svi:
-        print("Missing data/raw/svi.geojson – run scripts/fetch_data.py first.",
-              file=sys.stderr)
+    try:   # every layer is required: a missing one would silently zero that hazard
+        svi = need("svi", "CDC/ATSDR SVI Census areas")
+        nri = {hz: need(f"nri_{hz}", f"FEMA NRI {hz}") for hz in NRI_HAZARD_LAYERS}
+        layers = [need("tsunami_zone", "State tsunami evacuation zones"),
+                  need("tsunami_extreme", "State extreme tsunami evacuation zones"),
+                  need("empower_county", "HHS emPOWER county counts")]
+    except MissingInput as e:
+        print(e, file=sys.stderr)
         return 1
-    nri = {hz: load(f"nri_{hz}") for hz in NRI_HAZARD_LAYERS}
-    fc = build(svi, nri, load("tsunami_zone"), load("tsunami_extreme"),
-               load("empower_county"), blocks=block_shares.load())
+    fc = build(svi, nri, *layers, blocks=block_shares.load())
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "afn_tracts.geojson").write_text(json.dumps(fc), encoding="utf-8")
     props = [f["properties"] for f in fc["features"]]
