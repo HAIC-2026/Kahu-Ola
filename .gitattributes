@@ -1,0 +1,7 @@
+# Line endings: LF in the repo on every OS, so file hashes (app/sw.js VERSION) match.
+* text=auto eol=lf
+
+# Binary: never converted
+*.pdf binary
+*.png binary
+*.ico binary
