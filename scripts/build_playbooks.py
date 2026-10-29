@@ -35,7 +35,8 @@ from match import load_languages, select_languages  # noqa: E402
 from build_tract_labels import load_labels  # noqa: E402
 from message_library import LANG_LABEL  # noqa: E402
 from hawaii_time import hst_date  # noqa: E402
-from model_needs import HAZARDS, site_status  # noqa: E402
+from model_needs import FLOOD, HAZARDS, site_status  # noqa: E402
+import build_access  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 PROC = ROOT / "data" / "processed"
@@ -128,6 +129,11 @@ SOURCE = {
                     "Maui, Kauaʻi; night of Jan 25, 2026) and Partners In Care 2026 count for "
                     "Oʻahu as released by the City and County of Honolulu; visitors – DBEDT "
                     "State of Hawaiʻi Data Book 2025, Table 7.06. Details: {SOURCES}.",
+    "access": f"{build_access.SOURCE_TEXT} {build_access.ATTRIBUTION}",
+    "facilities": "Source: CMS Provider Data Catalog (dialysis facilities, nursing homes, "
+                  "hospitals; facility addresses only), located with Esri ArcGIS World Geocoder; "
+                  "zones: State tsunami evacuation zone and FEMA flood zones (Hawaiʻi Statewide "
+                  "GIS, State DFIRM).",
     "reach": "Source: proposed channels and formats in the plan's communication pathways – "
              "supports, does not replace, county and State public-information plans.",
 }
@@ -278,6 +284,7 @@ def load_inputs() -> dict:
         "languages": load_languages(),
         "labels": load_labels(),
         "data_as_of": hst_date(needs.get("built_at")),
+        "access": build_access.load(),      # None: no ArcGIS summary, straight-line only
     }
 
 
@@ -534,7 +541,7 @@ def map_html(inp: dict, county: str, hazard: str, sites: list) -> str:
             f'<p class="src">{escape(src_text("people"))}</p>')
 
 
-def sites_html(sites: list, sc: dict) -> str:
+def sites_html(sites: list, sc: dict, access: dict | None = None) -> str:
     rows = [[str(s["n"]), f'<span class="status">{escape(STATUS_LABEL.get(s["status"], "Not located"))}</span>',
              escape(s["name"]), escape(s["address"]), escape(plain_reason(s["reason"])),
              str(s["times_opened_2026"])] for s in sites]
@@ -543,6 +550,7 @@ def sites_html(sites: list, sc: dict) -> str:
             + table(["#", "Status for this hazard", "Site", "Address", "Why",
                      "Times opened in 2026"], rows, num_cols=(0, 5))
             + f'<p class="src">{escape(src_text("sites"))}</p>'
+            + (f'<p class="src">{escape(src_text("access"))}</p>' if access else "")
             + f'<p>Candidate public schools in this county usable for this hazard: '
               f'<b>{n(sc.get("candidate_schools_usable"))}</b>'
             + (f'; flood risk not mapped (FEMA zone D): {n(sc.get("candidate_schools_flood_undetermined"))}'
@@ -695,6 +703,41 @@ def results_html(r: dict) -> str:
     return '<h2 class="page">9. Results</h2><ul class="results">' + "".join(items) + "</ul>"
 
 
+FACILITY_ZONE_D = "Also in FEMA zone D (flood risk not mapped, not counted above): {n} –"
+NO_FACILITY_SCREEN = ("No facility-level zone screen for this hazard (the same as for shelter "
+                      "sites).")
+
+
+def facility_rows(access: dict | None, county: str, hazard: str) -> tuple[list, int]:
+    """(care facilities in this hazard's zone, all care facilities) for one county."""
+    fac = [f for f in (access or {}).get("facilities", []) if f["county"] == county]
+    return [f for f in fac if f["zones"].get(hazard)], len(fac)
+
+
+def facilities_html(inp: dict, county: str, hazard: str) -> str:
+    if not inp.get("access"):
+        return ""
+    rows, total = facility_rows(inp["access"], county, hazard)
+    head = "<h3>Care facilities in hazard zones</h3>"
+    if hazard not in ("tsunami", *FLOOD):
+        body = f"<p>{escape(NO_FACILITY_SCREEN)} Care facilities in this county: {total}.</p>"
+    elif rows:
+        body = table(["Name", "Type", "Zone"],
+                     [[escape(f["name"]), escape(f["type_label"]), escape(f["zones"][hazard])]
+                      for f in rows],
+                     caption=f"Care facilities in hazard zones – {COUNTY_LABEL[county]}, "
+                             f"{HAZARD_LABEL[hazard]} ({len(rows)} of {total})")
+    else:
+        body = (f"<p>None of the {total} care facilities in this county is inside the "
+                f"{escape(HAZARD_LABEL[hazard].lower())} zone.</p>")
+    zone_d = [f for f in inp["access"]["facilities"]
+              if f["county"] == county and (f["fld_zone"] or "").upper() == "D"]
+    if hazard in FLOOD and zone_d:
+        body += (f"<p>{FACILITY_ZONE_D.format(n=len(zone_d))} "
+                 + escape(", ".join(f["name"] for f in zone_d)) + ".</p>")
+    return head + body + f'<p class="src">{escape(src_text("facilities"))}</p>'
+
+
 def sources_html(inp: dict) -> str:
     pf = inp["needs"]["planning_factors"]
     rows = []
@@ -744,6 +787,13 @@ def sources_html(inp: dict) -> str:
     ]
     data += [[escape(k.replace("_", " ")), "", escape(u)]
              for k, u in inp["match"]["sources"]["triggers"].items()]
+    if inp.get("access"):
+        data += [[escape(f"CMS Provider Data Catalog – {t}"), "", escape(
+                     f"https://data.cms.gov/provider-data/dataset/{ds}")]
+                 for ds, t in build_access.fa.CMS.values()]
+        data += [["Esri ArcGIS World Geocoder (site check, care facilities) and ArcGIS "
+                  "routing (drive and walk times, normal traffic). Powered by Esri.", "",
+                  "https://developers.arcgis.com/rest/"]]
     return ('<h2 class="page">8. Sources and assumptions</h2>'
             '<h3>Planning factors</h3>'
             + table(["Factor", "Value", "Source or team assumption"], rows)
@@ -777,7 +827,8 @@ def playbook_html(inp: dict, county: str, hazard: str) -> str:
 {scope_html(sc, comms, hazard)}
 {guide_html(sc, comms, hazard)}
 {map_html(inp, county, hazard, sites)}
-{sites_html(sites, sc)}
+{sites_html(sites, sc, inp.get("access"))}
+{facilities_html(inp, county, hazard)}
 {needs_html(ms, partner_names(inp["partners"]), county, inp["county_lines"])}
 {decisions_html(inp["match"], hazard, partner_names(inp["partners"]))}
 {outreach_html(ms, langs, county, comms, inp["comm"], partner_names(inp["partners"]))}

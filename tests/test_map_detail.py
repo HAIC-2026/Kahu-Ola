@@ -44,10 +44,20 @@ def usable_sites(county: str, hazard: str) -> list:
 
 
 def expected_nearest(county: str, hazard: str, fips: str) -> list:
-    """Same island only; never a site on another island."""
+    """Same island only; never a site on another island. By drive time when the ArcGIS
+    matrix covers the area, else straight-line distance."""
     island = TRACTS[fips]["i"]
     same = [s for s in usable_sites(county, hazard) if s["island"] == island]
+    if TRACTS[fips].get("a"):
+        by_id = {s["id"]: s for s in same}
+        rows = sorted((r for r in TRACTS[fips]["a"] if r[0] in by_id and r[1] is not None),
+                      key=lambda r: (r[1], by_id[r[0]]["name"]))
+        return [by_id[r[0]]["name"] for r in rows[:3]]
     return [s["name"] for _km, s in nearest(TRACTS[fips]["p"], same)]
+
+
+def distance_words(fips: str) -> str:
+    return "min drive" if TRACTS[fips].get("a") else "km straight-line, same island"
 
 
 def nearest_section(dom: str) -> str:
@@ -164,7 +174,7 @@ class Overlay(unittest.TestCase):
         self.assertEqual(set(zone), {"Honolulu", "Hawaii", "Maui", "Kauai"})
         size = len(json.dumps(zone, separators=(",", ":")))
         self.assertLess(size, 150_000)
-        self.assertLess((APP / "data" / "bundle.json").stat().st_size, 645_000 + 150 * 1024)
+        self.assertLess((APP / "data" / "bundle.json").stat().st_size, 782_422 + 150 * 1024)
         self.assertIn('hazard === "tsunami" ? (DATA.tsunami_zone[county] || []) : []', JS)
 
     def test_official_map_is_a_plain_link(self):
@@ -228,7 +238,7 @@ class DeepLinks(unittest.TestCase):
             elif not want:
                 self.assertIn("No known usable site on this island for this hazard", section)
             else:
-                self.assertIn("km straight-line, same island", section)
+                self.assertIn(distance_words(fips), section)
 
     def test_molokai_lanai_niihau_cases(self):
         got = {TRACTS[f]["i"] for _c, _h, f in self.extra}
@@ -248,7 +258,7 @@ class DeepLinks(unittest.TestCase):
             for name in expected_nearest(county, hazard, fips):
                 self.assertIn(name, p, (county, hazard, fips))
             if expected_nearest(county, hazard, fips):
-                self.assertIn("km straight-line", p)
+                self.assertIn(distance_words(fips), p)
 
     def test_nearest_order_matches_python(self):
         for (county, hazard, fips), dom in zip(self.cases, self.doms):

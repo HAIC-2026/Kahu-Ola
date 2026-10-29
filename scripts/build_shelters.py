@@ -192,8 +192,11 @@ def main() -> int:
         print(f"Missing {SRC.relative_to(ROOT)}", file=sys.stderr)
         return 1
     schools = (_load(RAW / "schools.geojson") or {}).get("features", [])
+    import build_access   # lazy: build_access -> fetch_arcgis -> geocode_shelters -> here
+    # Census geocodes first; a site the Census could not locate may be located by ArcGIS
+    geocodes = {**build_access.located_points(), **load_geocodes()}
     fc = build(load_activations(), schools, _load(OUT / "afn_tracts.geojson"),
-               _load(RAW / "tsunami_zone.geojson"), load_geocodes(), load_cache())
+               _load(RAW / "tsunami_zone.geojson"), geocodes, load_cache())
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "shelters_2026.geojson").write_text(json.dumps(fc, indent=1, ensure_ascii=False),
                                                encoding="utf-8")

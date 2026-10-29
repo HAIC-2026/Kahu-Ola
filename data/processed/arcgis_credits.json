@@ -1,0 +1,75 @@
+{
+ "budget": 22.0,
+ "rate_sources": [
+  "https://doc.arcgis.com/en/arcgis-online/administer/credits.htm",
+  "https://pro.arcgis.com/en/pro-app/latest/help/analysis/networks/credit-consumption-and-analysis-limits.htm"
+ ],
+ "rates": {
+  "geocode": 0.04,
+  "od_pair": 0.0005,
+  "service_area": 0.5
+ },
+ "reserve": 3,
+ "steps": {
+  "geocode_facilities": {
+   "actual_method": "billed units returned by the service x published rate",
+   "credits_actual": 4.28,
+   "credits_estimate": 4.28,
+   "note": "",
+   "rate": 0.04,
+   "unit": "geocodes",
+   "units_billed": 107,
+   "updated": "2026-10-29T07:09:26Z"
+  },
+  "geocode_sites": {
+   "actual_method": "billed units returned by the service x published rate",
+   "credits_actual": 1.2,
+   "credits_estimate": 1.2,
+   "note": "",
+   "rate": 0.04,
+   "unit": "geocodes",
+   "units_billed": 30,
+   "updated": "2026-10-29T07:07:08Z"
+  },
+  "od_drive": {
+   "actual_method": "billed units returned by the service x published rate",
+   "credits_actual": 1.4905,
+   "credits_estimate": 1.4905,
+   "note": "2100 pairs in 3 requests of 100 origins were rejected by the service (maximum 50 origins per request) and returned no matrix; they are not counted (assumed not billed: check the ArcGIS Online credit report) and were re-run in requests of 50.",
+   "rate": 0.0005,
+   "unit": "OD pairs",
+   "units_billed": 2981,
+   "updated": "2026-10-29T07:14:59Z"
+  },
+  "od_walk": {
+   "actual_method": "billed units returned by the service x published rate",
+   "credits_actual": 1.4905,
+   "credits_estimate": 1.4905,
+   "note": "2100 pairs in 3 requests of 100 origins were rejected by the service (maximum 50 origins per request) and returned no matrix; they are not counted (assumed not billed: check the ArcGIS Online credit report) and were re-run in requests of 50. Walk times came back empty for all but 7 pairs: walking mode rejects requests whose inputs are more than 27 miles (43 km) apart, and every island-wide request was. Counted as billed (conservative). Replaced by od_walk_near.",
+   "rate": 0.0005,
+   "unit": "OD pairs",
+   "units_billed": 2981,
+   "updated": "2026-10-29T07:15:01Z"
+  },
+  "od_walk_near": {
+   "actual_method": "billed units returned by the service x published rate",
+   "credits_actual": 0.2395,
+   "credits_estimate": 0.2395,
+   "note": "",
+   "rate": 0.0005,
+   "unit": "OD pairs",
+   "units_billed": 479,
+   "updated": "2026-10-29T07:19:17Z"
+  },
+  "service_areas": {
+   "credits_actual": 0,
+   "credits_estimate": 15.0,
+   "note": "skipped: 30 service areas x 0.5 = 15.0 credits would pass the budget (8.461 spent of 22.0). The 'outside 15-minute drive' layer uses the drive-time matrix instead.",
+   "rate": 0.5,
+   "unit": "service areas",
+   "units_billed": 0,
+   "updated": "2026-10-29T07:09:35Z"
+  }
+ },
+ "total_credits_actual": 8.7005
+}

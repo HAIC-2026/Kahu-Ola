@@ -985,7 +985,13 @@
   },
   {
    "type": "Feature",
-   "geometry": null,
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -156.3428,
+     20.8381
+    ]
+   },
    "properties": {
     "name": "Mayor Hannibal Tavares Community Center (Social Hall)",
     "county": "Maui",
@@ -999,12 +1005,17 @@
     "sources": [
      "https://www.mauicounty.gov/CivicAlerts.aspx?AID=19289"
     ],
-    "location_method": "",
-    "needs_geocode": true,
+    "location_method": "arcgis_world_geocoder",
+    "needs_geocode": false,
     "capacity": null,
     "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
-    "fld_zone": null,
-    "in_sfha": null
+    "fld_zone": "X",
+    "in_sfha": false,
+    "in_tsunami_zone": false,
+    "tract_fips": "15009030406",
+    "nri_inland_flood_rating": "Relatively High",
+    "nri_coastal_flood_rating": "No Rating",
+    "nri_hurricane_rating": "Relatively Low"
    }
   },
   {
@@ -1045,7 +1056,7 @@
  ],
  "metadata": {
   "title": "Hawaiʻi shelters and refuge areas opened in 2026 events",
-  "built_at": "2026-10-28T07:27:02-10:00",
+  "built_at": "2026-10-28T21:28:06-10:00",
   "source_table": "data/sources/county_shelter_activations.csv",
   "disclaimer": "Sites a county has opened in past events. Not every site opens in every emergency; always follow current county announcements.",
   "note": "Site types are kept as each county names them; counties define sheltering differently (DHS challenge pain point)."

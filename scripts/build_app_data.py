@@ -34,9 +34,10 @@ import message_library  # noqa: E402
 import svgmap  # noqa: E402
 from geo import area_centroid  # noqa: E402
 import build_islands  # noqa: E402
+import build_access  # noqa: E402
 from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, COUNTY_LINE_LABEL,  # noqa: E402
                              DETAIL_KEYS, DISCLAIMER, KALAWAO_NOTE, SERVICE_ANIMALS, WHO_ELSE,
-                             results_data,
+                             results_data, NO_FACILITY_SCREEN, FACILITY_ZONE_D,
                              FOOTPRINT_TEXT, HAZARD_LABEL, HURRICANE_SCOPE_NOTE, PROV_NUMBERS,
                              PROV_SHELTERS, RATE_NOTE,
                              SITE_KEY_STATUS, SOURCE, area_label, lang_label, partner_names,
@@ -113,9 +114,41 @@ def tsunami_overlay(path: Path = ROOT / "data" / "raw" / "tsunami_zone.geojson")
 
 
 ISLANDS = build_islands.load()        # data/sources/islands.csv (build_islands.py)
+ACCESS = build_access.load()          # data/sources/arcgis_summary.json, or None (fallback)
 
 
-def tract_geometry(afn: dict, labels: dict | None = None) -> list:
+def area_access(fips: str, site_ids: dict, access: dict | None) -> dict:
+    """Per Census area: "a" = [[site id, drive min, drive km, walk min]] to every known site
+    on the same island, nearest drive first; "o" = 1 when no known site is within a
+    15-minute drive. Empty without the ArcGIS summary (straight-line fallback)."""
+    a = (access or {}).get("areas", {}).get(fips)
+    if not a:
+        return {}
+    rows = sorted(([site_ids[k], *v] for k, v in a["sites"].items() if k in site_ids),
+                  key=lambda r: (r[1] is None, r[1] or 0, r[0]))
+    return {"a": rows, "o": int(a["outside_15"])}
+
+
+def facilities_bundle(access: dict | None) -> list:
+    """Care facilities: name, type, county, island, Census area, point, zone per hazard."""
+    return [{"n": f["name"], "t": f["type"], "c": f["county"], "i": f["island"], "f": f["tract"],
+             "x": f["lon"], "y": f["lat"], "z": {h: z for h, z in f["zones"].items() if z},
+             **({"d": 1} if (f["fld_zone"] or "").upper() == "D" else {})}
+            for f in (access or {}).get("facilities", [])]
+
+
+def access_meta(access: dict | None) -> dict:
+    if not access:
+        return {}
+    m = access["meta"]
+    return {"source": m["source_text"], "attribution": m["attribution"],
+            "times_note": m["times_note"], "no_walk": m["no_walk"], "limit": m["drive_limit_min"],
+            "outside_method": m["outside_15_method"], "types": build_access.TYPE_LABEL,
+            "no_screen": NO_FACILITY_SCREEN, "zone_d": FACILITY_ZONE_D}
+
+
+def tract_geometry(afn: dict, labels: dict | None = None, site_ids: dict | None = None,
+                   access: dict | None = None) -> list:
     labels = labels or {}
     out = []
     for f in afn["features"]:
@@ -133,8 +166,17 @@ def tract_geometry(afn: dict, labels: dict | None = None) -> list:
             out.append({"f": fips, "c": f["properties"]["county"],
                         "l": labels.get(fips, {}).get("tract_label", fips), "g": rings,
                         "p": [r4(cx), r4(cy)], "n": area_counts(f["properties"]),
-                        "i": ISLANDS.get(("area", fips), "")})
+                        "i": ISLANDS.get(("area", fips), ""),
+                        **area_access(fips, site_ids or {}, access)})
     return out
+
+
+def site_check(key: str) -> str:
+    """Location check label: "Confirmed (2 sources)", "Needs review (546 m apart)", ..."""
+    c = (ACCESS or {}).get("sites", {}).get(key)
+    if not c:
+        return ""
+    return c["label"] + (f" ({c['distance_m']:,} m apart)" if c["status"] == "needs_review" else "")
 
 
 def build(inp: dict) -> dict:
@@ -155,7 +197,7 @@ def build(inp: dict) -> dict:
                     "times_opened_2026": s["times_opened_2026"],
                     "island": ISLANDS.get(("site", f"{s['name']}|{c}"), ""),
                     "lon": s["lon"] and r4(s["lon"]), "lat": s["lat"] and r4(s["lat"]),
-                    "status": {}})
+                    "status": {}, "loc": site_check(s["name"] + "|" + c)})
                 site["status"][h] = [s["status"], plain_reason(s["reason"])]
             scenarios[key] = {
                 "summary": {k: sc.get(k) for k in SCENARIO_FIELDS if k in sc},
@@ -202,7 +244,10 @@ def build(inp: dict) -> dict:
         "counties": [[c, COUNTY_LABEL[c]] for c in COUNTIES],
         "hazards": [[h, HAZARD_LABEL[h]] for h in HAZARDS],
         "status_labels": STATUS_LABEL,
-        "tracts": tract_geometry(inp["afn"], inp.get("labels")),
+        "tracts": tract_geometry(inp["afn"], inp.get("labels"),
+                                 {k: v["id"] for k, v in sites.items()}, ACCESS),
+        "facilities": facilities_bundle(ACCESS),
+        "access": access_meta(ACCESS),
         "sites": sorted(sites.values(), key=lambda s: s["id"]),
         "scenarios": scenarios,
         "decision_points": decisions,

@@ -16,6 +16,13 @@ const MARKERS = {
   "undetermined": ["diamond", "Flood risk not mapped (FEMA zone D)"],
   "exclude": ["square", "Not for this hazard"],
 };
+/* care facilities (CMS): filled black shapes, distinct from the white site markers */
+const FACILITY = {
+  "dialysis": ["hexagon", "Dialysis facility"],
+  "nursing_home": ["house", "Nursing home"],
+  "hospital": ["cross", "Hospital"],
+};
+const LAYERS = { outside: true, care: true };     // map layer checkboxes (kept across views)
 const STATUS_ORDER = ["ok", "check", "check (tract-level)", "undetermined", "exclude", "unlocated"];
 const MAIN_ISLANDS_WEST = -160.6;
 
@@ -146,6 +153,29 @@ function markerShape(shape, x, y, r = 7) {
   return g;
 }
 
+function facilityShape(shape, x, y, r = 5) {
+  const st = { fill: "#000000", stroke: "#ffffff", "stroke-width": "1.5" };
+  const g = svg("g");
+  if (shape === "hexagon") {
+    const pts = Array.from({ length: 6 }, (_, i) => {
+      const a = Math.PI / 3 * i;
+      return `${(x + r * 1.15 * Math.cos(a)).toFixed(1)},${(y + r * 1.15 * Math.sin(a)).toFixed(1)}`;
+    });
+    g.append(svg("polygon", { points: pts.join(" "), ...st }));
+  } else if (shape === "house") {
+    g.append(svg("polygon", { points: `${x},${y - r * 1.3} ${x + r * 1.1},${y - r * 0.2} ${x + r * 1.1},${y + r} ${x - r * 1.1},${y + r} ${x - r * 1.1},${y - r * 0.2}`, ...st }));
+  } else {
+    const a = r * 0.45, b = r * 1.2;
+    g.append(svg("polygon", { points: `${x - a},${y - b} ${x + a},${y - b} ${x + a},${y - a} ${x + b},${y - a} ${x + b},${y + a} ${x + a},${y + a} ${x + a},${y + b} ${x - a},${y + b} ${x - a},${y + a} ${x - b},${y + a} ${x - b},${y - a} ${x - a},${y - a}`, ...st }));
+  }
+  return g;
+}
+
+/* the zone a care facility is in for this hazard ("" = outside it, null = no screen) */
+const ZONE_HAZARDS = ["tsunami", "inland_flood", "coastal_flood"];
+const facilityZone = (f, hazard) => (ZONE_HAZARDS.includes(hazard) ? (f.z[hazard] || "") : null);
+const hasAccess = () => Boolean(DATA.access && DATA.access.source);
+
 /* ---------- map: Census areas, sites, tsunami zone; click or Enter opens an area ---------- */
 const MAP = {};                       // state of the map on screen (one at a time)
 const REDUCED = () => window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -176,7 +206,9 @@ function renderMap(county, sc, sites, title, hazard) {
   const defs = svg("defs");
   const hatch = svg("pattern", { id: "tsunami-hatch", width: 8, height: 8, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
   hatch.append(svg("line", { x1: 0, y1: 0, x2: 0, y2: 8, stroke: "#000000", "stroke-width": "1.5" }));
-  defs.append(hatch); root.append(defs);
+  const hatch2 = svg("pattern", { id: "outside-hatch", width: 6, height: 6, patternUnits: "userSpaceOnUse", patternTransform: "rotate(90)" });
+  hatch2.append(svg("line", { x1: 0, y1: 0, x2: 0, y2: 6, stroke: "#000000", "stroke-width": "1.2" }));
+  defs.append(hatch, hatch2); root.append(defs);
   root.append(svg("rect", { width: W, height: H, fill: "#ffffff" }));
   const paths = {};
   for (const tr of tracts) {
@@ -198,7 +230,32 @@ function renderMap(county, sc, sites, title, hazard) {
       stroke: "#000000", "stroke-width": "1.2", "stroke-dasharray": "5,3", "vector-effect": "non-scaling-stroke",
       "pointer-events": "none", class: "tsunami-zone" }));
   }
+  // Census areas with no known site within a 15-minute drive (ArcGIS drive-time matrix)
+  const access = hasAccess();
+  const outside = access ? tracts.filter((tr) => tr.o === 1) : [];
+  const outsideLayer = svg("path", { d: outside.map((tr) => tr.g.map(ringPath).join(" ")).join(" "),
+    fill: "url(#outside-hatch)", "fill-opacity": "0.7", stroke: "none", "pointer-events": "none", class: "layer-outside" });
+  if (outside.length) root.append(outsideLayer);
   const marks = [];
+  // care facilities: black shapes; ⚠ when inside the selected hazard's zone
+  const careLayer = svg("g", { class: "layer-care" });
+  const facilities = access ? DATA.facilities.filter((f) => f.c === county) : [];
+  for (const f of facilities) {
+    const [x, y] = proj(f.x, f.y);
+    const g = svg("g", { class: "facility", transform: `translate(${x} ${y}) scale(1)` });
+    g.dataset.x = x; g.dataset.y = y;
+    g.append(facilityShape((FACILITY[f.t] || FACILITY.hospital)[0], 0, 0));
+    const zone = facilityZone(f, hazard);
+    if (zone) {
+      const w = svg("text", { x: 6, y: -4, "font-size": "13", "font-weight": "bold", stroke: "#ffffff", "stroke-width": "3", "paint-order": "stroke", class: "zone-flag" });
+      w.textContent = "⚠"; g.append(w);
+    }
+    const tip = svg("title");
+    tip.textContent = `${f.n} – ${DATA.access.types[f.t]}${zone ? ` – inside: ${zone}` : zone === "" ? " – outside this hazard's zone" : ""}`;
+    g.append(tip);
+    marks.push(g); careLayer.append(g);
+  }
+  if (facilities.length) root.append(careLayer);
   for (const s of sites) {
     if (s.lon === null) continue;
     const [x, y] = proj(s.lon, s.lat);
@@ -210,8 +267,8 @@ function renderMap(county, sc, sites, title, hazard) {
     lab.textContent = s.n; g.append(lab);
     marks.push(g); root.append(g);
   }
-  Object.assign(MAP, { root, W, H, proj, paths, marks, tracts, county, sc, sites, hazard, level, hatch,
-    view: [0, 0, W, H] });
+  Object.assign(MAP, { root, W, H, proj, paths, marks, tracts, county, sc, sites, hazard, level,
+    hatches: [[hatch, 8, 1.5], [hatch2, 6, 1.2]], view: [0, 0, W, H] });
 
   const legend = el("ul", { class: "legend", "aria-label": "Map legend" });
   let lo = 0;
@@ -234,6 +291,19 @@ function renderMap(county, sc, sites, title, hazard) {
     sw.append(svg("rect", { width: 28, height: 16, fill: "url(#tsunami-hatch-key)", stroke: "#000", "stroke-dasharray": "5,3" }));
     legend.append(el("li", null, sw, "Hatched, dashed edge: State tsunami evacuation zone (simplified outline)"));
   }
+  if (outside.length) {
+    const sw = svg("svg", { width: 28, height: 16, "aria-hidden": "true" });
+    const p3 = svg("defs"); const pat = hatch2.cloneNode(true); pat.setAttribute("id", "outside-hatch-key"); p3.append(pat); sw.append(p3);
+    sw.append(svg("rect", { width: 28, height: 16, fill: "url(#outside-hatch-key)", stroke: "#000" }));
+    legend.append(el("li", null, sw, `Horizontal lines: outside a ${DATA.access.limit}-minute drive of any known site`));
+  }
+  for (const [shape, label] of Object.values(FACILITY)) {
+    if (!facilities.length) break;
+    const sw = svg("svg", { width: 28, height: 22, "aria-hidden": "true" });
+    sw.append(facilityShape(shape, 14, 11, 6));
+    legend.append(el("li", null, sw, `${label} (care facility)`));
+  }
+  if (facilities.some((f) => facilityZone(f, hazard))) legend.append(el("li", null, el("span", { class: "legend-glyph", "aria-hidden": "true" }, "⚠"), "Care facility inside this hazard's zone"));
   const seen = new Set();
   for (const [shape, label] of Object.values(MARKERS)) {
     if (seen.has(label)) continue; seen.add(label);
@@ -257,11 +327,24 @@ function renderMap(county, sc, sites, title, hazard) {
   const official = el("a", { class: "button", href: DATA.official_map.url, target: "_blank", rel: "noopener noreferrer" },
     `${DATA.official_map.label} (${DATA.official_map.source}, opens in a new tab)`);
   const panel = el("section", { id: "area-panel", class: "area-panel", role: "region", "aria-labelledby": "area-title", hidden: "" });
-  return [el("p", null, official),
+  const layerBox = (key, label, node, count) => {
+    const id = `layer-${key}`;
+    const box = el("input", { type: "checkbox", id, name: id });
+    box.checked = LAYERS[key];
+    const show = () => { if (box.checked) node.removeAttribute("display"); else node.setAttribute("display", "none"); };
+    box.addEventListener("change", () => { LAYERS[key] = box.checked; show(); });
+    show();
+    return el("label", { for: id, class: "check" }, box, ` ${label} (${fmt(count)})`);
+  };
+  const layers = access ? el("fieldset", { class: "layers" }, el("legend", null, "Map layers"),
+    layerBox("outside", `Outside ${DATA.access.limit}-minute drive of any known site`, outsideLayer, outside.length),
+    layerBox("care", "Care facilities", careLayer, facilities.length)) : null;
+  return [el("p", null, official), layers,
     el("div", { class: "mapwrap" }, el("div", { class: "map" }, root),
       el("div", null, el("h3", null, "Site key"), key)),
     el("p", { class: "hint" }, "Select a Census area on the map, or open one from the list below the legend."),
-    panel, legend, areas];
+    panel, legend, areas,
+    access ? el("p", { class: "src" }, `${DATA.access.source} ${DATA.access.attribution} ${DATA.access.outside_method}`) : null];
 }
 
 /* ---------- zoom: animate the SVG viewBox; markers keep their size ---------- */
@@ -270,11 +353,13 @@ function setView(v) {
   MAP.root.setAttribute("viewBox", v.map((x) => x.toFixed(1)).join(" "));
   const k = v[2] / MAP.W;
   for (const g of MAP.marks) g.setAttribute("transform", `translate(${g.dataset.x} ${g.dataset.y}) scale(${k.toFixed(3)})`);
-  // keep the tsunami hatch the same on screen at any zoom
-  const s = (8 * k).toFixed(2);
-  MAP.hatch.setAttribute("width", s); MAP.hatch.setAttribute("height", s);
-  const line = MAP.hatch.firstChild;
-  line.setAttribute("y2", s); line.setAttribute("stroke-width", (1.5 * k).toFixed(2));
+  // keep the hatches the same on screen at any zoom
+  for (const [pat, size, width] of MAP.hatches) {
+    const s = (size * k).toFixed(2), line = pat.firstChild;
+    pat.setAttribute("width", s); pat.setAttribute("height", s);
+    line.setAttribute("y2", s);
+    line.setAttribute("stroke-width", (width * k).toFixed(2));
+  }
 }
 
 function zoomTo(target) {
@@ -310,12 +395,52 @@ function haversineKm(lon1, lat1, lon2, lat2) {
   return 2 * R * Math.asin(Math.sqrt(h));
 }
 
-/* usable sites on the SAME island only (never another island), nearest first */
+/* usable sites on the SAME island only (never another island), nearest first:
+   by drive time when the ArcGIS matrix has this area, else straight-line distance */
 function nearestSites(tr, sites, k = 3) {
   const point = tr.p;
-  return sites.filter((s) => s.st === "ok" && s.lon !== null && tr.i && s.island === tr.i)
+  const usable = sites.filter((s) => s.st === "ok" && s.lon !== null && tr.i && s.island === tr.i);
+  if (tr.a && tr.a.length) {
+    const byId = new Map(usable.map((s) => [s.id, s]));
+    return tr.a.filter((r) => byId.has(r[0]) && r[1] !== null)
+      .map(([id, drive, km, walk]) => ({ s: byId.get(id), drive, km, walk }))
+      .sort((a, b) => a.drive - b.drive || a.s.name.localeCompare(b.s.name)).slice(0, k);
+  }
+  return usable
     .map((s) => ({ s, km: haversineKm(point[0], point[1], s.lon, s.lat) }))
     .sort((a, b) => a.km - b.km || a.s.name.localeCompare(b.s.name)).slice(0, k);
+}
+
+/* care facilities inside this Census area, and whether each is in the hazard's zone */
+function careInArea(f, hazard) {
+  if (!hasAccess()) return null;
+  const here = DATA.facilities.filter((x) => x.f === f);
+  const hz = Object.fromEntries(DATA.hazards)[hazard].toLowerCase();
+  if (!here.length) return [el("h4", null, "Care facilities in this area"), el("p", null, "None listed (CMS dialysis facilities, nursing homes, hospitals).")];
+  return [el("h4", null, "Care facilities in this area"),
+    table("Care facilities in this area", ["Name", "Type", `In the ${hz} zone?`],
+      here.map((x) => {
+        const z = facilityZone(x, hazard);
+        return [x.n, DATA.access.types[x.t], z ? `⚠ Yes – ${z}` : z === "" ? (x.d && hazard !== "tsunami" ? "No – FEMA zone D (flood risk not mapped)" : "No") : DATA.access.no_screen];
+      }))];
+}
+
+/* care facilities in this hazard's zone, one county (the same table as the PDFs) */
+function careTable(county, hazard, cLabel, hLabel) {
+  if (!hasAccess()) return [];
+  const all = DATA.facilities.filter((x) => x.c === county);
+  const rows = all.filter((x) => facilityZone(x, hazard));
+  const out = [el("h3", { id: "care-facilities" }, "Care facilities in hazard zones")];
+  if (!ZONE_HAZARDS.includes(hazard)) out.push(el("p", null, `${DATA.access.no_screen} Care facilities in this county: ${fmt(all.length)}.`));
+  else if (rows.length) out.push(table(`Care facilities in hazard zones – ${cLabel}, ${hLabel} (${rows.length} of ${all.length})`,
+    ["Name", "Type", "Zone"], rows.map((x) => [x.n, DATA.access.types[x.t], x.z[hazard]])));
+  else out.push(el("p", null, `None of the ${fmt(all.length)} care facilities in this county is inside the ${hLabel.toLowerCase()} zone.`));
+  const zoneD = all.filter((x) => x.d);
+  if (hazard !== "tsunami" && ZONE_HAZARDS.includes(hazard) && zoneD.length) {
+    out.push(el("p", null, `${DATA.access.zone_d.replace("{n}", zoneD.length)} ${zoneD.map((x) => x.n).join(", ")}.`));
+  }
+  out.push(source("facilities"));
+  return out;
 }
 
 /* ---------- detail panel for one Census area ---------- */
@@ -365,10 +490,18 @@ function openArea(f, opener) {
     el("h4", null, `Nearest sites usable for ${hz.toLowerCase()} on ${tr.i || "this island"}`),
     tr.i === "Niʻihau"
       ? el("p", { class: "note", id: "nearest-none" }, DATA.meta.niihau_note)
-      : near.length
-        ? table(`Same island only; straight-line distance from the area's center`, ["#", "Site", "Distance"],
-          near.map(({ s, km }) => [s.n, s.name, `${km.toFixed(1)} km straight-line, same island`]), [0, 2])
-        : el("p", { class: "note", id: "nearest-none" }, DATA.meta.no_island_site),
+      : near.length && near[0].drive !== undefined
+        ? table(`Same island only; travel times by road from the area's center (Esri ArcGIS routing)`, ["#", "Site", "Travel time", "Road distance"],
+          near.map(({ s, drive, km, walk }) => [s.n, s.name,
+            `${Math.round(drive)} min drive · ${walk === null ? DATA.access.no_walk : `${Math.round(walk)} min walk`} (${DATA.access.times_note})`,
+            `${km.toFixed(1)} km`]), [0, 3])
+        : near.length
+          ? table(`Same island only; straight-line distance from the area's center`, ["#", "Site", "Distance"],
+            near.map(({ s, km }) => [s.n, s.name, `${km.toFixed(1)} km straight-line, same island`]), [0, 2])
+          : el("p", { class: "note", id: "nearest-none" }, DATA.meta.no_island_site),
+    tr.o === 1 && tr.i !== "Niʻihau" ? el("p", { class: "note", id: "outside-drive" }, `No known site within a ${DATA.access.limit}-minute drive of this area (any hazard status).`) : null,
+    near.length && near[0].drive !== undefined ? el("p", { class: "src" }, `${DATA.access.source} ${DATA.access.attribution}`) : null,
+    careInArea(f, hazard),
     el("p", null, el("strong", null, "Proposed partners: "), `lead – ${[...lead].join(", ") || "—"}; support – ${[...support].join(", ") || "—"}. `, DATA.meta.role_status),
     el("p", null, el("strong", null, `Top languages (${L.area}): `), langs.map((r) => `${r[0]} ${fmt(r[1])}`).join("; ") || "—"),
     el("p", null, el("strong", null, "Messages: "), msgLink(`all ${hz.toLowerCase()} messages`),
@@ -621,9 +754,11 @@ function renderPlan() {
 
     el("h2", null, "Known sites (opened in 2026 events)"),
     provLabel(DATA.provenance.shelters),
-    table("Sites with status for this hazard", ["#", "Status for this hazard", "Site", "Address", "Why", "Times opened in 2026"],
-      sites.map((x) => [x.n, el("span", { class: "status" }, DATA.status_labels[x.st] || "Not located"), x.name, x.address, x.why, x.times_opened_2026]), [0, 5]),
+    table("Sites with status for this hazard", ["#", "Status for this hazard", "Site", "Address", "Why", "Times opened in 2026", ...(hasAccess() ? ["Location check"] : [])],
+      sites.map((x) => [x.n, el("span", { class: "status" }, DATA.status_labels[x.st] || "Not located"), x.name, x.address, x.why, x.times_opened_2026, ...(hasAccess() ? [x.loc || "–"] : [])]), [0, 5]),
     source("sites"),
+    hasAccess() ? source("access") : null,
+    ...careTable(county, hazard, cLabel, hLabel),
     el("p", null, `Candidate public schools usable for this hazard: ${fmt(s.candidate_schools_usable)}. Not every site opens in every event; follow current county announcements.`),
 
     el("h2", null, "Needs and proposed partners"),
