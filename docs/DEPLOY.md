@@ -17,6 +17,18 @@ The build step only copies the 20 committed PDFs from `playbooks/` into `app/pla
 
 `app/_headers` sets the security headers (CSP, Permissions-Policy, Referrer-Policy) and `no-cache` for `sw.js` and `data/*`, so updates reach users.
 
+## Who deploys
+
+Production deploys of shelters.kahuola.org are done by **Long Nguyen** (Cloudflare account owner).
+
+- **Teammates:** merge the pull request once CI is green, then message Long with the `main` commit and the `VERSION` from `app/sw.js`.
+- **Long:** runs the deploy command with `--branch main`, then confirms the live `VERSION` matches:
+
+```sh
+python3 scripts/build_app_data.py --copy-only && npx wrangler pages deploy app --project-name haic2026-shelters --branch main
+curl -s https://shelters.kahuola.org/sw.js | grep "const VERSION"
+```
+
 ## Redeploy after data changes
 
 1. Rebuild locally (see `README.md`), ending with `build_playbooks.py` and `build_app_data.py`.
