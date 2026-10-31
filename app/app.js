@@ -754,6 +754,22 @@ function render() {
   else if (view === "whatif") renderWhatIf();
   else renderPlan();
   showVersion();
+  SHOWN = view;
+}
+
+/* The user switched views (menu tab, a Messages link, browser Back): start at the top of the
+   new view with focus on its heading. Not on first load or a deep link, so focus is never taken
+   from someone just arriving. Instant jump, never a smooth scroll (prefers-reduced-motion). */
+let SHOWN = null;
+function onHashChange() {
+  const before = SHOWN;
+  render();
+  if (SHOWN === before) return;
+  const h = document.querySelector("#app h2");
+  window.scrollTo(0, 0);
+  if (!h) return;
+  h.setAttribute("tabindex", "-1");
+  h.focus({ preventScroll: true });
 }
 
 const provLabel = (text, link) => {
@@ -1358,7 +1374,7 @@ async function init() {
     render();
   });
   document.getElementById("controls").addEventListener("submit", (e) => e.preventDefault());
-  window.addEventListener("hashchange", render);
+  window.addEventListener("hashchange", onHashChange);
   updateBanner();
   render();
   // deep link: ?county=&hazard=&area=<Census area code> opens the area panel
