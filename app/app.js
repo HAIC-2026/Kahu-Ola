@@ -822,6 +822,25 @@ function render() {
   else if (view === "whatif") { if (lazyReady("whatif", "What-if: change the planning numbers")) renderWhatIf(); }
   else renderPlan();
   showVersion();
+  SHOWN = view;
+}
+
+/* The user switched views (menu tab, a Messages link, browser Back): start at the top of the
+   new view with focus on its heading. Not on first load or a deep link, so focus is never taken
+   from someone just arriving. Instant jump, never a smooth scroll (prefers-reduced-motion). */
+let SHOWN = null;
+function onHashChange() {
+  const before = SHOWN;
+  render();
+  if (SHOWN === before) return;
+  window.scrollTo(0, 0);
+  focusViewHeading();
+}
+function focusViewHeading() {
+  const h = document.querySelector("#app h2");
+  if (!h) return;
+  h.setAttribute("tabindex", "-1");
+  h.focus({ preventScroll: true });
 }
 
 const provLabel = (text, link) => {
@@ -867,7 +886,12 @@ function renderMessages() {
     app.replaceChildren(el("h2", { id: "messages" }, "Messages"), el("p", { role: "status" }, "Loading the message library…"));
     MSGS = MSGS || fetch(DATA.meta.messages_url).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
       .then((j) => { DATA.messages = j.messages; });
-    MSGS.then(() => { if (currentView() === "messages") renderMessages(); })
+    MSGS.then(() => {
+      if (currentView() !== "messages") return;
+      const hadFocus = document.activeElement === app.querySelector("h2");   // keep focus on the heading once loaded
+      renderMessages();
+      if (hadFocus) focusViewHeading();
+    })
       .catch(() => { MSGS = null; app.replaceChildren(el("h2", { id: "messages" }, "Messages"), el("p", { role: "alert" }, "The message library could not be loaded. The printable playbooks still work.")); });
     return;
   }
@@ -1119,7 +1143,12 @@ function lazyReady(view, title) {
   if (DATA.stress && DATA.whatif && DATA.hub && window.renderStress && window.WhatIf) return true;
   const app = document.getElementById("app");
   app.replaceChildren(el("h2", { id: view }, title), el("p", { role: "status" }, "Loading the stress tests and what-if data…"));
-  loadLazy().then(() => { if (currentView() === view) render(); })
+  loadLazy().then(() => {
+    if (currentView() !== view) return;
+    const hadFocus = document.activeElement === app.querySelector("h2");   // keep focus on the heading once loaded
+    render();
+    if (hadFocus) focusViewHeading();
+  })
     .catch(() => { app.replaceChildren(el("h2", { id: view }, title), el("p", { role: "alert" }, "This part could not be loaded. The plan view and the printable playbooks still work.")); });
   return false;
 }
@@ -1188,7 +1217,10 @@ async function init() {
     render();
   });
   document.getElementById("controls").addEventListener("submit", (e) => e.preventDefault());
-  window.addEventListener("hashchange", render);
+  window.addEventListener("hashchange", onHashChange);
+  // Back/Forward land at the top of the view (onHashChange); without this the browser restores
+  // the old scroll position later, once lazily loaded data has made the page tall again
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   updateBanner();
   render();
   // deep link: ?county=&hazard=&area=<Census area code> opens the area panel
