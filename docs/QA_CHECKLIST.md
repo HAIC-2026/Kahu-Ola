@@ -105,12 +105,17 @@ fragile) · **Low** (polish).
 
 **The day before**
 - [ ] The latest `main` is deployed, and `VERSION` matches on both addresses (release step 8).
-- [ ] Rehearse the 3-minute script with a timer. It covers the three DHS metrics: 436/436 Census
-      areas, the Lahaina backtest (calibration), and the 44-second rebuild.
+- [ ] **Choose the demo address.** Open https://shelters.kahuola.org with the console open (F12).
+      If the console shows a blocked `static.cloudflareinsights.com` script (Cloudflare Web
+      Analytics injected at the edge), demo on **https://haic2026-shelters.pages.dev** instead:
+      it serves the same version with a clean console.
+- [ ] Rehearse the 3-minute script with a timer. It covers the three DHS metrics: needs data for
+      436/436 Census areas (FEMA hazard data for 435), the Lahaina backtest (calibration, not
+      validation), and the 44-second rebuild from local data.
 
 **Morning of the demo, while online**
 - [ ] Chrome in a normal window (not Incognito, which drops the offline cache when it closes).
-- [ ] Open https://shelters.kahuola.org and reload **twice**: the first reload installs the new
+- [ ] Open the chosen demo address and reload **twice**: the first reload installs the new
       service worker, the second shows it.
 - [ ] Open the Maui wildfire PDF once, then close the tab.
 - [ ] Rehearse airplane mode once: reload and see "Offline – data as of …". Turn airplane mode off
