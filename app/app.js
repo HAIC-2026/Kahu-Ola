@@ -701,8 +701,8 @@ function lahainaNote(label, inline) {
 }
 /* "{SOURCES}" becomes a "see Sources" link (the PDFs say "section 8") */
 const linkSources = (text) => text.split("{SOURCES}").flatMap((part, i) => (i
-  ? [el("a", { href: DATA.provenance.sources_url, rel: "noopener noreferrer" }, "see Sources"), part]
-  : [part]));
+  ? [el("a", { href: DATA.provenance.sources_url, rel: "noopener noreferrer" }, "see Sources"), keep(part)]
+  : keep(part)));
 const source = (key) => el("p", { class: "src" }, linkSources(DATA.meta.sources[key]));
 
 /* ---------- help panel ("?") ---------- */
@@ -728,7 +728,7 @@ function helpPanel(sc, hazard) {
     el("h3", null, "Map"),
     el("p", null, "Darker blue means more people with needs, from “Lowest need” to “Highest need”. A solid outline marks a Census area in the risk area; a dashed outline is outside it. Symbols: ○ usable site, △ check flood zone, ◇ flood risk not mapped, ☒ not for this hazard. Numbers on the map match the site key."),
     el("h3", null, "Why population numbers can differ"),
-    el("p", null, "People in the risk area come from ACS 2018–2022 estimates (through the CDC Social Vulnerability Index 2022). Community names use 2020 Census counts. County totals in the plan use Census estimates for 2025. Each table names its source underneath."),
+    el("p", null, keep("People in the risk area come from ACS 2018–2022 estimates (through the CDC Social Vulnerability Index 2022). Community names use 2020 Census counts. County totals in the plan use Census estimates for 2025. Each table names its source underneath.")),
     el("p", { class: "note" }, el("strong", null, "Every number is a planning estimate. In an event, follow county announcements.")));
   return el("details", { class: "help", id: "help" },
     el("summary", null, el("span", { class: "help-icon", "aria-hidden": "true" }, "?"), " How to read this page"),
@@ -1037,7 +1037,7 @@ function findingLinks(r, county, hazard) {
   const out = [];
   for (const f of r[11]) {
     if (!label[f]) continue;
-    out.push(el("a", { href: `?county=${encodeURIComponent(county)}&hazard=${h}&area=${f}#plan` }, label[f]));
+    out.push(el("a", { href: `?county=${encodeURIComponent(county)}&hazard=${h}&area=${f}#plan` }, keep(label[f])));
   }
   for (const id of r[12]) {
     const s = DATA.sites.find((x) => x.id === id);
@@ -1055,7 +1055,7 @@ function findingCard(r, county, hazard) {
     el("p", null, el("span", { class: "tag" }, S.label)),
     el("details", { class: "finding-detail" }, el("summary", null, "Evidence, sources and assumptions"),
       r[13] ? table(`Evidence – ${r[2]}`, ["What", "Number"], r[13]) : null,
-      el("h4", null, "Sources"), el("ul", null, r[9].map((i) => el("li", null, S.sources[i]))),
+      el("h4", null, "Sources"), el("ul", null, r[9].map((i) => el("li", null, keep(S.sources[i])))),
       el("h4", null, "Assumptions"),
       r[10].length ? el("ul", null, r[10].map((i) => el("li", null, S.assumptions[i])))
         : el("p", null, "Only the plan's own factors and rates.")),
@@ -1149,7 +1149,7 @@ function wiResults(county, hazard) {
   const al = window.WhatIf.allocate(areas, sites.map((x) => ({ id: x.id, island: x.island,
     usable: x.lon !== null && (x.status[hazard] || [""])[0] === "ok" })), inp, a.rate);
   const H = W.how, name = Object.fromEntries(sites.map((x) => [x.id, x.name]));
-  const how = (k) => el("details", { class: "how" }, el("summary", null, "How this is calculated"), el("p", null, H[k]));
+  const how = (k) => el("details", { class: "how" }, el("summary", null, "How this is calculated"), el("p", null, keep(H[k])));
   const stayW = `${fmt(inp.stay)} ${inp.stay === 1 ? "day" : "days"}`;
   const rows = [
     ["People who may need a public shelter", fmt(r.people_in_shelter), "people", how("people_in_shelter")],
