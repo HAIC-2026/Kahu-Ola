@@ -892,7 +892,7 @@ def build(groups: str = "AB") -> dict:
 
 def write_csv(path: Path, findings: list) -> None:
     with open(path, "w", newline="", encoding="utf-8") as fh:
-        w = csv.writer(fh)
+        w = csv.writer(fh, lineterminator="\n")
         w.writerow(["rank", "county_rank", "id", "test", "title", "scenario", "county", "hazard",
                     "people_affected", "unit", "evidence", "sources", "assumptions", "label"])
         for f in findings:
