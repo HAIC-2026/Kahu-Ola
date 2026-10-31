@@ -121,7 +121,7 @@ class Removed(unittest.TestCase):
 
     def test_no_new_requests(self):
         self.assertEqual(re.findall(r"fetch\(([^)]*)\)", JS),
-                         ['VERSION_URL, { cache: "no-store" }', "DATA.meta.messages_url", "DATA.meta.lazy", "BUNDLE_URL"])
+                         ['VERSION_URL, { cache: "no-store" }', "DATA.meta.areas_url", "DATA.meta.messages_url", "DATA.meta.lazy", "BUNDLE_URL"])
         # the two lazy files are same-origin paths from the bundle (stress tests, messages)
         self.assertNotRegex(JS, r"https?://(?!www\.w3\.org/2000/svg)")
 

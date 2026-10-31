@@ -34,7 +34,7 @@ function stressHead(r) {
 }
 /* people (or household) counts under 10 are never shown; facility counts are not people */
 const NOT_PEOPLE = new Set(["19", "22"]);
-const peopleText = (r) => (NOT_PEOPLE.has(r[1]) ? fmt(r[5]) : cnt(r[5]));
+const peopleText = (r) => (NOT_PEOPLE.has(r[1]) ? fmt(r[5]) : tokText(r[5]));
 function findingLinks(r, county, hazard) {
   const h = DATA.hazards.some(([k]) => k === r[4]) ? r[4] : hazard;
   const label = Object.fromEntries(DATA.tracts.map((t) => [t.f, t.l || t.f]));
@@ -69,7 +69,7 @@ function stressCsv(rows, county) {
   const S = DATA.stress;
   downloadCsv(`stress-tests-${county.toLowerCase()}.csv`, [
     ["Rank in county", "Rank statewide", "Test", "Test name", "Scenario", "Hazard", "Number", "What is counted", "More", "Sources", "Assumptions", "Label"],
-    ...rows.map((r) => [r[7], r[6], r[1], S.tests[r[1]], r[2], hzName(r[4]), r[5] === null ? S.needs_data : (NOT_PEOPLE.has(r[1]) ? r[5] : cnt(r[5]).replace(/,/g, "")),
+    ...rows.map((r) => [r[7], r[6], r[1], S.tests[r[1]], r[2], hzName(r[4]), r[5] === null ? S.needs_data : (NOT_PEOPLE.has(r[1]) ? r[5] : tokText(r[5]).replace(/,/g, "")),
       S.measures[r[1]] || "", r[8], r[9].map((i) => S.sources[i]).join("; "), r[10].map((i) => S.assumptions[i]).join("; "), S.label])]);
 }
 
@@ -150,10 +150,11 @@ function wiResults(county, hazard) {
   const r = window.WhatIf.compute(W, key, inp);
   const sc = DATA.scenarios[key];
   const sites = DATA.sites.filter((x) => x.county === county);
-  const areas = DATA.tracts.filter((t) => t.c === county && t.f in sc.tracts)
-    .map((t) => ({ f: t.f, island: t.i || "", people: sc.tracts[t.f][1], a: t.a || [], t }));
+  const pre = W.areas[key];                      // per-area and per-site figures computed at build time
+  const areas = DATA.tracts.filter((t) => t.c === county && t.f in pre.areas)
+    .map((t) => ({ f: t.f, island: t.i || "", people: pre.areas[t.f][0], nc: pre.areas[t.f][1], a: t.a || [], t }));
   const al = window.WhatIf.allocate(areas, sites.map((x) => ({ id: x.id, island: x.island,
-    usable: x.lon !== null && (x.status[hazard] || [""])[0] === "ok" })), inp, a.rate);
+    usable: x.lon !== null && (x.status[hazard] || [""])[0] === "ok" })), inp, a.rate, pre);
   const H = W.how, name = Object.fromEntries(sites.map((x) => [x.id, x.name]));
   const how = (k) => el("details", { class: "how" }, el("summary", null, "How this is calculated"), el("p", null, H[k]));
   const stayW = `${fmt(inp.stay)} ${inp.stay === 1 ? "day" : "days"}`;
@@ -172,12 +173,10 @@ function wiResults(county, hazard) {
   ];
   const known = al.sites.filter((x) => x.cap !== null);
   const capLine = known.length
-    ? el("p", { id: "wi-shortfall" }, el("strong", null, `Sites over capacity: ${fmt(al.over_sites)} of ${fmt(known.length)} with a capacity entered; shortfall ${fmt(al.shortfall)} people.`))
+    ? el("p", { id: "wi-shortfall" }, el("strong", null, `Sites over capacity: ${fmt(al.over_sites)} of ${fmt(known.length)} with a capacity entered; shortfall ${fmt(al.shortfall)} people.`),
+      al.unknown_sites ? ` ${fmt(al.unknown_sites)} ${al.unknown_sites === 1 ? "site has" : "sites have"} fewer than 10 people at plan rates and ${al.unknown_sites === 1 ? "is" : "are"} not counted.` : "")
     : el("p", { id: "wi-shortfall" }, "Capacity unknown: enter a capacity for a site to see whether it is over capacity.");
-  const trips = (t) => {
-    const share = t.t.n[0] ? sc.tracts[t.f][0] / t.t.n[0] : 0;
-    return t.t.n[5] * share;
-  };
+  const tripsText = (nc) => (nc === 0 ? "0" : typeof nc === "number" && Math.round(nc) >= 10 ? fmt(Math.ceil(nc / inp.trip)) : "–");
   return [
     el("p", { class: "note" }, el("strong", null, `${W.label}. `), `${Object.fromEntries(DATA.counties)[county]} – ${Object.fromEntries(DATA.hazards)[hazard]}. Planning factors and data are the plan's; only the inputs above change.`),
     el("div", { class: "table-wrap", tabindex: "0", role: "region", "aria-label": "What-if results" },
@@ -189,16 +188,16 @@ function wiResults(county, hazard) {
     how("interpreters"),
     el("h3", { id: "wi-sites" }, "People by nearest usable site (same island, by drive time)"),
     table("Allocation to the nearest usable 2026 site", ["Site", "People in shelter", "Capacity entered", "Over capacity"],
-      al.sites.map((x) => [name[x.id], ac(x.load), x.cap === null ? "unknown" : fmt(x.cap), x.over === null ? "–" : ac(x.over)]), [1, 2, 3]),
+      al.sites.map((x) => [name[x.id], el("span", { class: "ac" }, scaledText(x.load, null, al.k)), x.cap === null ? "unknown" : fmt(x.cap),
+        x.unknown ? "unknown (fewer than 10 people at plan rates)" : x.over === null ? "–" : el("span", { class: "ac" }, scaledText(x.over, null, 1))]), [1, 2, 3]),
     capLine, how("allocation"),
-    al.unassigned > 0 ? el("p", { class: "note", id: "wi-unassigned" }, `${fmt(al.unassigned)} people live in Census areas with no known usable 2026 site on their island for this hazard. ${DATA.meta.no_island_site}`) : null,
+    al.unassigned === "lt10" || al.unassigned > 0 ? el("p", { class: "note", id: "wi-unassigned" }, `${al.unassigned === "lt10" ? scaledText(al.unassigned, null, al.k) : fmt(al.unassigned)} people live in Census areas with no known usable 2026 site on their island for this hazard. ${DATA.meta.no_island_site}`) : null,
     el("details", { class: "areas", id: "wi-areas" }, el("summary", null, `By Census area (${fmt(al.areas.length)})`),
       table("People in shelter by Census area and their nearest usable site", ["Census area", "People in shelter", "Nearest usable site", "Drive", "People without a car", "Vehicle trips"],
         al.areas.map((x, i) => {
-          const nc = trips(areas[i]);
-          const pop = areas[i].t.n[0];
-          return [areas[i].t.l || x.f, ac(x.people, pop), x.site === null ? "none on this island" : name[x.site],
-            x.drive === null ? "–" : `${Math.round(x.drive)} min`, ac(nc, pop), hidden(nc, pop) ? "–" : fmt(Math.ceil(nc / inp.trip))];
+          const nc = areas[i].nc, pop = areas[i].t.pop;
+          return [areas[i].t.l || x.f, el("span", { class: "ac" }, scaledText(x.people, pop, al.k)), x.site === null ? "none on this island" : name[x.site],
+            x.drive === null ? "–" : `${Math.round(x.drive)} min`, el("span", { class: "ac" }, scaledText(nc, pop, 1)), tripsText(nc)];
         }), [1, 3, 4, 5]),
       el("p", { class: "hint" }, `Per-area numbers are rounded; the county totals above use the plan's exact sums. ${DATA.meta.suppress.line}`)),
   ];
@@ -269,11 +268,12 @@ function renderWhatIf() {
       ...Object.entries(r.staff).map(([k, v]) => [`Staff – ${W.staff_labels[k] || k}`, v]),
       ...r.interpreters.map(([l, n]) => [`People with limited English – ${l}`, n]), [], ["Census area", "People in shelter", "Nearest usable site", "Drive (min)"]];
     const sites2 = DATA.sites.filter((x) => x.county === county);
-    const al = window.WhatIf.allocate(DATA.tracts.filter((t) => t.c === county && t.f in sc.tracts).map((t) => ({ f: t.f, island: t.i || "", people: sc.tracts[t.f][1], a: t.a || [] })),
-      sites2.map((x) => ({ id: x.id, island: x.island, usable: x.lon !== null && (x.status[hazard] || [""])[0] === "ok" })), WI.inp, a.rate);
+    const pre = W.areas[key];
+    const al = window.WhatIf.allocate(DATA.tracts.filter((t) => t.c === county && t.f in pre.areas).map((t) => ({ f: t.f, island: t.i || "", people: pre.areas[t.f][0], a: t.a || [] })),
+      sites2.map((x) => ({ id: x.id, island: x.island, usable: x.lon !== null && (x.status[hazard] || [""])[0] === "ok" })), WI.inp, a.rate, pre);
     const nm = Object.fromEntries(sites2.map((x) => [x.id, x.name])), lab = Object.fromEntries(DATA.tracts.map((t) => [t.f, t.l || t.f]));
-    const popOf = Object.fromEntries(DATA.tracts.map((t) => [t.f, t.n[0]]));
-    for (const x of al.areas) rows.push([lab[x.f], cnt(x.people, popOf[x.f]).replace(/,/g, ""), x.site === null ? "none on this island" : nm[x.site], x.drive === null ? "" : Math.round(x.drive)]);
+    const popByF = Object.fromEntries(DATA.tracts.map((t) => [t.f, t.pop]));
+    for (const x of al.areas) rows.push([lab[x.f], scaledText(x.people, popByF[x.f], al.k).replace(/,/g, ""), x.site === null ? "none on this island" : nm[x.site], x.drive === null ? "" : Math.round(x.drive)]);
     downloadCsv(`what-if-${county.toLowerCase()}-${hazard}.csv`, rows);
   });
   const print = el("button", { type: "button", class: "button" }, "Print");

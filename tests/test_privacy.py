@@ -30,6 +30,7 @@ from model_needs import HAZARDS  # noqa: E402
 APP = ROOT / "app"
 PLAY = ROOT / "playbooks"
 BUNDLE = json.loads((APP / "data" / "bundle.json").read_text(encoding="utf-8"))
+AREAS = json.loads((APP / "data" / "areas.json").read_text(encoding="utf-8"))
 JS = (APP / "app.js").read_text(encoding="utf-8")
 SMALL_SHOWN = re.compile(r"^[1-9](?: ± [\d,]+)?$")          # a count 1-9, with or without ±
 AC = re.compile(r'<span class="ac">([^<]*)</span>')
@@ -52,12 +53,21 @@ class Rule(unittest.TestCase):
 
     @unittest.skipUnless(NODE, "Node.js not installed")
     def test_javascript_rule_matches(self):
-        src = re.search(r"function cnt\(v, pop\) \{.*?\n\}", JS, re.S).group(0)
+        """Build-time tokens (area_view.token) shown by the app (tokText) read exactly like
+        privacy.count_text on the raw value; scaledText applies the same rule after scaling."""
+        import area_view
+        src = "\n".join(re.search(rf"function {name}\(.*?\n\}}", JS, re.S).group(0) for name in ("tokText", "scaledText"))
         meta = json.dumps({"suppress": BUNDLE["meta"]["suppress"]})
-        cases = json.dumps([[v, pop] for v, pop, _w in self.CASES])
-        prog = f"const DATA = {{meta: {meta}}};\n{src}\nconsole.log(JSON.stringify({cases}.map(([v, p]) => cnt(v, p === null ? undefined : p))));"
+        toks = json.dumps([[area_view.token(v, pop), pop] for v, pop, _w in self.CASES])
+        raw = json.dumps([[v, pop] for v, pop, _w in self.CASES if v is None or v >= 9.5 or v == 0])
+        prog = (f"const DATA = {{meta: {meta}}}; const FEWER_PLAN = 'fewer than 10 at plan rates';\n{src}\n"
+                f"console.log(JSON.stringify([{toks}.map(([t, p]) => tokText(t, p === null ? undefined : p)),"
+                f" {raw}.map(([v, p]) => scaledText(v, p === null ? undefined : p, 1)),"
+                f" [scaledText('lt10', null, 1), scaledText('lt10', null, 1.5), scaledText(40 * 0.2, null, 0.2)]]));")
         out = json.loads(subprocess.run([NODE, "-e", prog], capture_output=True, text=True, check=True).stdout)
-        self.assertEqual(out, [w for _v, _p, w in self.CASES])
+        self.assertEqual(out[0], [w for _v, _p, w in self.CASES])
+        self.assertEqual(out[1], [w for v, _p, w in self.CASES if v is None or v >= 9.5 or v == 0])
+        self.assertEqual(out[2], ["fewer than 10", "fewer than 10 at plan rates", "fewer than 10"])
 
 
 class Generated(unittest.TestCase):
@@ -98,7 +108,7 @@ class Generated(unittest.TestCase):
                 self.assertTrue(stress_text.headline(f).startswith("fewer than 10"), f["id"])
 
     def test_small_areas_listed(self):
-        small = [t for t in BUNDLE["tracts"] if t["n"][0] < privacy.SMALL_AREA]
+        small = [t for t in BUNDLE["tracts"] if t["pop"] < privacy.SMALL_AREA]
         self.assertTrue(small)
         self.assertIn("15005031900", [t["f"] for t in small])              # Kalawao (Kalaupapa)
 
@@ -119,9 +129,15 @@ class Citations(unittest.TestCase):
     def test_moe_from_source_only(self):
         moe = privacy.load_moe()
         self.assertGreaterEqual(sum(1 for v in moe.values() if v["lep"] is not None), 430)
-        for t in BUNDLE["tracts"]:
-            self.assertEqual(len(t["m"]), 1 + len(BUNDLE["area_fields"]))
-            self.assertIsNone(t["m"][1 + BUNDLE["area_fields"].index("power")])   # emPOWER: none
+        power = BUNDLE["area_fields"].index("power")
+        moes = 0
+        for f, cells in AREAS["w"].items():
+            self.assertFalse(isinstance(cells[power], list), f)                      # emPOWER: none
+            moes += sum(1 for c in cells if isinstance(c, list))
+            for c in cells:                                                          # never with a hidden count
+                if isinstance(c, list):
+                    self.assertIsInstance(c[0], int, f)
+        self.assertGreater(moes, 2000)
         cells = [c for p in sorted(PLAY.glob("*_*.html")) for c in AC.findall(p.read_text(encoding="utf-8"))]
         self.assertTrue(any(" ± " in c for c in cells))
 
@@ -164,10 +180,14 @@ class RenderedApp(unittest.TestCase):
         cls.server = http.server.ThreadingHTTPServer(("127.0.0.1", port), handler)
         threading.Thread(target=cls.server.serve_forever, daemon=True).start()
         b = f"http://127.0.0.1:{port}/"
-        small = sorted({f for sc in BUNDLE["scenarios"].values() for f, v in sc["tracts"].items() if 0 < v[0] < 10})[:4]
+        lt10 = sorted((f, k) for k, v in AREAS["s"].items() for f, c in v.items() if c[0] == "lt10")
+        small, hz = [], {}
+        for f, k in lt10:
+            if f not in hz:
+                small.append(f)
+                hz[f] = k.split("|")[1]
+        small = small[:4]
         county = {t["f"]: t["c"] for t in BUNDLE["tracts"]}
-        hz = {f: next(k.split("|")[1] for k, sc in BUNDLE["scenarios"].items() if f in sc["tracts"] and 0 < sc["tracts"][f][0] < 10)
-              for f in small}
         cls.urls = ([f"{b}?county={c}&hazard={h}#plan" for c in COUNTIES for h in HAZARDS] +
                     [f"{b}?county=Maui&hazard=hurricane&area=15005031900#plan"] +
                     [f"{b}?county={county[f]}&hazard={hz[f]}&area={f}#plan" for f in small] +

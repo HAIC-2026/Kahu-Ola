@@ -5,7 +5,7 @@
 "use strict";
 
 // BEGIN GENERATED
-const VERSION = "d0c3aae69320";
+const VERSION = "fb8efd01aa3d";
 const PRECACHE = [
   "./",
   "index.html",
@@ -18,6 +18,7 @@ const PRECACHE = [
   "icon-180.png",
   "icon-192.png",
   "icon-512.png",
+  "data/areas.json",
   "data/bundle.json",
   "data/messages.json",
   "data/stress.json",
