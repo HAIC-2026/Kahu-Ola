@@ -15,6 +15,8 @@ import message_library as ml  # noqa: E402
 APP = ROOT / "app"
 PLAY = ROOT / "playbooks"
 BUNDLE = json.loads((APP / "data" / "bundle.json").read_text(encoding="utf-8"))
+# the message library is its own file (fetched when the Messages tab opens)
+BUNDLE["messages"] = json.loads((APP / "data" / "messages.json").read_text(encoding="utf-8"))["messages"]
 JS = (APP / "app.js").read_text(encoding="utf-8")
 ROWS = ml.load_messages()
 WORDS = re.compile(r"(?<![A-Za-z])AI(?![A-Za-z])|Claude")    # also catches "HAIC_AI"
@@ -119,7 +121,8 @@ class Removed(unittest.TestCase):
 
     def test_no_new_requests(self):
         self.assertEqual(re.findall(r"fetch\(([^)]*)\)", JS),
-                         ['VERSION_URL, { cache: "no-store" }', "BUNDLE_URL"])
+                         ['VERSION_URL, { cache: "no-store" }', "DATA.meta.messages_url", "DATA.meta.lazy", "BUNDLE_URL"])
+        # the two lazy files are same-origin paths from the bundle (stress tests, messages)
         self.assertNotRegex(JS, r"https?://(?!www\.w3\.org/2000/svg)")
 
 

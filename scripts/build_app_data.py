@@ -52,7 +52,7 @@ from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, COUNTY_LINE_LA
                              all_languages, MESSAGES_LINE, TOO_FEW, LOW_RELIABILITY, CV_LIMIT,
                              FOOTPRINT_TEXT, HAZARD_LABEL, HURRICANE_SCOPE_NOTE, PROV_NUMBERS,
                              PROV_SHELTERS, RATE_NOTE,
-                             SITE_KEY_STATUS, SOURCE, area_label, lang_label, partner_names,
+                             SITE_KEY_STATUS, SOURCE, area_label, basis_text, lang_label, partner_names,
                              partner_text, plain_reason,
                              KAUAI_MAUI_NOTE, STATUS_LABEL, largest_communities, load_inputs,
                              scenario, sites_for, slug, tract_rows)
@@ -65,7 +65,7 @@ APP = ROOT / "app"
 DATA = APP / "data"
 PLAYBOOKS = ROOT / "playbooks"
 TOL = 0.0008                  # degrees (~80 m) for outline simplification
-SHELL = ["./", "index.html", "app.js", "whatif.js", "styles.css", "manifest.webmanifest", "icon.svg",
+SHELL = ["./", "index.html", "app.js", "stress.js", "whatif.js", "styles.css", "manifest.webmanifest", "icon.svg",
          "icon-180.png", "icon-192.png", "icon-512.png"]
 SCENARIO_FIELDS = ("at_risk_pop", "shelter_demand_low", "shelter_demand_central",
                    "shelter_demand_high", "rate_low", "rate_central", "rate_high",
@@ -173,14 +173,7 @@ def stress_bundle(sites: dict) -> dict:
     F = st["findings"]
     if not F:
         raise MissingInput("Build stopped: data/processed/stress_tests.json has no findings.")
-    keep = []
-    for f in F:
-        e = f["evidence"]
-        if f["test"] == "2":
-            if e["more_than_worst_single_loss"] > 0 or e["areas_left_with_no_usable_site_on_island"] > 0:
-                keep.append(f)
-        elif f["people_affected"] or f["people_affected"] is None or f["unit"] != "people":
-            keep.append(f)
+    keep = stress_text.shown(F)
     tops = {}
     for c in COUNTIES:
         tops[c] = {"all": [f["id"] for f in stress_text.top(F, c)]}
@@ -203,6 +196,7 @@ def stress_bundle(sites: dict) -> dict:
     tested = {c: sum(1 for f in F if stress_text.in_county(f, c)) for c in COUNTIES}
     import build_stress_tests
     return {"label": stress_text.LABEL, "method": st["method"], "tests": st["tests"],
+            "definition_15": st["definition_15"],
             "measures": build_stress_tests.MEASURE, "needs_data": stress_text.NEEDS_DATA,
             "questions": stress_text.QUESTIONS, "sources": srcs, "assumptions": asms, "rows": rows,
             "top": tops, "tested": tested, "per_test": stress_text.PER_TEST,
@@ -221,22 +215,23 @@ def hub_bundle(hub: dict, sites: dict) -> dict:
             "maui_2013": m["maui_2013_note"],
             "pdc_sites": {str(sites[k]): [v["capacity"], v["pdc_name"]] for k, v in pdc["site_capacity"].items() if k in sites},
             "pdc_schools": len(pdc["school_capacity"]), "pdc_with_capacity": pdc["with_capacity"],
-            "pdc_note": "2009 reference capacity (American Red Cross Hawaiʻi State Chapter, via the "
-                        "Pacific Disaster Center, ground condition October 2009): may be outdated. "
-                        "Use only as a starting point; confirm with the county.",
+            "pdc_note": "2009 reference capacity (American Red Cross Hawaiʻi State Chapter, Pacific "
+                        "Disaster Center data via a third-party ArcGIS Online copy; the PDC catalogue "
+                        "confirms the 2009 date): may be outdated. Use only as a starting point; "
+                        "confirm with the county.",
             "sources": {"safe_zones": "Tsunami Safe Zones (Hawaiʻi Statewide GIS; Hawaiʻi Island, "
                                       "Oʻahu and Kauaʻi zones 2025, Maui County zones 2013), simplified outline.",
                         "fire": "State Fire Risk Areas (DLNR Division of Forestry and Wildlife, 2007; "
                                 "boundaries confirmed 2022, via Hawaiʻi Statewide GIS), simplified outline. "
                                 "The plan's wildfire numbers use the FEMA National Risk Index; this layer is a comparison.",
-                        "flooded": "Potential flooded highways with 3.2 ft of sea level rise (Hawaiʻi Sea "
-                                   "Level Rise Viewer, PacIOOS, via Hawaiʻi Statewide GIS). Chronic flooding "
-                                   "later this century, not an event forecast."}}
+                        "flooded": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against "
+                                   "2026 sites: potentially flooded highways (Hawaiʻi Sea Level Rise Viewer, PacIOOS, "
+                                   "via Hawaiʻi Statewide GIS). Chronic flooding later this century, not an event forecast."}}
 
 
 WHATIF_HOW = {
     "people_in_shelter": "People in the risk area × shelter-seeking rate.",
-    "cots": "One cot per person in shelter (rounded up).",
+    "cots": "One cot per person in shelter, rounded up (planning assumption: no published per-person cot factor is cited).",
     "floor_sqft": "20 sq ft per person for stays up to 3 days, 40 sq ft beyond (Florida DEM 2010; past 14 days a team assumption).",
     "water": "1 gallon per person per day (Florida DEM 2010) × days of stay.",
     "meals": "2 meals per person per day (Florida DEM 2010) × days of stay.",
@@ -412,7 +407,8 @@ def build(inp: dict) -> dict:
                            partner_text(l["lead_partner_types"], partners),
                            partner_text(l["support_partner_types"], partners),
                            l["pledged_capacity"],
-                           "confirm with partner" if l["gap"].startswith("unknown") else l["gap"]]
+                           "confirm with partner" if l["gap"].startswith("unknown") else l["gap"],
+                           basis_text(l["basis"])]
                           for l in ms["needs"]],
                 "priority_tracts": ms["priority_tracts"],
                 "playbook": f"playbooks/{slug(c, h)}.pdf",
@@ -484,8 +480,33 @@ def build(inp: dict) -> dict:
     for page in sorted(PLAYBOOKS.glob("*.html")):     # printable playbooks are planning data too
         h.update(page.name.encode())                   # (HTML: the PDFs carry a creation date)
         h.update(page.read_bytes().replace(b"\r\n", b"\n"))
-    bundle["meta"]["version"] = h.hexdigest()[:12]
+    bundle["meta"]["version"] = h.hexdigest()[:12]      # covers the stress-test file too
     return bundle
+
+
+LAZY = "stress.json"          # stress tests + what-if: loaded only when those views open
+MESSAGES = "messages.json"    # message library: loaded only when the Messages tab opens
+
+
+def split_lazy(bundle: dict) -> tuple[dict, dict]:
+    """(bundle without the stress tests, what-if data and State Hub map layers, the lazy
+    file). Same version (computed before the split)."""
+    lazy = {"version": bundle["meta"]["version"], "stress": bundle.pop("stress"),
+            "whatif": bundle.pop("whatif"), "hub": bundle.pop("hub")}
+    bases = []                                         # need-line bases: each text once
+    for sc in bundle["scenarios"].values():
+        for n in sc["needs"]:
+            if n[7] not in bases:
+                bases.append(n[7])
+            n[7] = bases.index(n[7])
+    bundle["meta"]["bases"] = bases
+    # the message library (full texts) is read only by the Messages tab: its own file
+    msgs = bundle.pop("messages")
+    bundle["message_index"] = sorted({(m["language_label"], m["language"]) for m in msgs})
+    bundle["meta"]["messages_url"] = f"data/{MESSAGES}"
+    bundle["meta"]["lazy"] = f"data/{LAZY}"
+    bundle["meta"]["annex"] = {c: f"playbooks/annex/{c.lower()}_stress_annex.pdf" for c in COUNTIES}
+    return bundle, lazy, {"version": lazy["version"], "messages": msgs}
 
 
 def app_results() -> dict:
@@ -546,7 +567,8 @@ def cache_version(precache: list, app: Path = APP, playbooks: Path = PLAYBOOKS) 
 def precache_list(app: Path = APP, playbooks: Path = PLAYBOOKS) -> list:
     """App shell + app/data/* + one entry per committed PDF playbook."""
     data_files = sorted(f"data/{p.name}" for p in (app / "data").iterdir() if p.is_file())
-    return SHELL + data_files + [f"playbooks/{p.name}" for p in sorted(playbooks.glob("*.pdf"))]
+    return SHELL + data_files + [f"playbooks/{p.name}" for p in sorted(playbooks.glob("*.pdf"))] + \
+        [f"playbooks/annex/{p.name}" for p in sorted(playbooks.glob("annex/*.pdf"))]   # stress-test annexes
 
 
 def write_sw(app: Path = APP, playbooks: Path = PLAYBOOKS) -> tuple[list, str]:
@@ -576,6 +598,13 @@ def copy_playbooks(src: Path = PLAYBOOKS, app: Path = APP) -> list:
     pdfs = sorted(src.glob("*.pdf"))
     for p in pdfs:
         shutil.copy2(p, app / "playbooks" / p.name)
+    annex = app / "playbooks" / "annex"                  # one stress-test annex per county
+    if annex.exists():
+        shutil.rmtree(annex)
+    if (src / "annex").is_dir():
+        annex.mkdir()
+        for p in sorted((src / "annex").glob("*.pdf")):
+            shutil.copy2(p, annex / p.name)
     return pdfs
 
 
@@ -607,8 +636,11 @@ def main(argv=None) -> int:
         print(e, file=sys.stderr)
         return 1
     DATA.mkdir(parents=True, exist_ok=True)
+    bundle, lazy, messages = split_lazy(bundle)
+    (DATA / MESSAGES).write_text(json.dumps(messages, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     (DATA / "bundle.json").write_text(json.dumps(bundle, ensure_ascii=False,
                                                  separators=(",", ":")), encoding="utf-8")
+    (DATA / LAZY).write_text(json.dumps(lazy, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     version = {"version": bundle["meta"]["version"], "data_as_of": inp["data_as_of"]}
     (DATA / "version.json").write_text(json.dumps(version), encoding="utf-8")
 

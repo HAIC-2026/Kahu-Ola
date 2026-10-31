@@ -168,6 +168,14 @@ def area_label(area: str) -> str:
     return AREA_DISPLAY.get(area, area)
 
 
+def basis_text(text: str) -> str:
+    """A need line's basis in plain words: readable language and area names."""
+    text = lang_label(text)
+    for raw, shown in AREA_DISPLAY.items():
+        text = text.replace(f"({raw})", f"({shown})")
+    return text
+
+
 def lang_label(text: str) -> str:
     """Readable language names inside any label (e.g. a need name)."""
     for raw, shown in LANG_LABEL.items():
@@ -464,7 +472,8 @@ td small, .src, .range { font-size: 9pt; color: #333; }
 .mapwrap { display: grid; grid-template-columns: 2fr 1fr; gap: 10pt; align-items: start; }
 ol.sitekey { margin: 0; padding-left: 0; list-style: none; font-size: 10pt; }
 ol.sitekey li { margin: 0 0 3pt; }
-ol.stress { padding-left: 24pt; } ol.stress li { margin: 0 0 6pt; break-inside: avoid; } ol.stress small { font-size: 9pt; }
+ol.stress { padding-left: 24pt; }
+.stress-summary { font-size: 10pt; } .stress-summary h3 { margin: 6pt 0 2pt; } .stress-summary ol li { margin: 0 0 3pt; } .stress-summary p { margin: 3pt 0; } ol.stress li { margin: 0 0 6pt; break-inside: avoid; } ol.stress small { font-size: 9pt; }
 .guide h3 { margin-top: 8pt; }
 .guide p, .guide li { font-size: 11pt; }
 .example td { background: #f2f2f2; }
@@ -761,7 +770,8 @@ def more_needs_html(comms: list) -> str:
 
 
 def needs_html(ms: dict, partners: dict, county: str = "", lines: list | None = None) -> str:
-    rows = [[escape(lang_label(l["need"])), n(l["quantity"]), escape(l["unit"]),
+    rows = [[escape(lang_label(l["need"])), n(l["quantity"]),
+             f'{escape(l["unit"])}<br><small>{escape(basis_text(l["basis"]))}</small>',
              escape(partner_text(l["lead_partner_types"], partners)),
              escape(partner_text(l["support_partner_types"], partners)),
              escape(str(l["pledged_capacity"]) or "—"), "confirm with partner"
@@ -769,7 +779,7 @@ def needs_html(ms: dict, partners: dict, county: str = "", lines: list | None = 
     return ('<h2 class="page">5. Needs and proposed partners</h2>'
             '<p>Likely estimate. Roles are <b>proposed – to be confirmed with partner</b>. '
             'The pledged column stays blank until a partner confirms it.</p>'
-            + table(["Need", "How many", "Unit", "Proposed lead", "Proposed support",
+            + table(["Need", "How many", "Unit and basis (source)", "Proposed lead", "Proposed support",
                      "Pledged by partner", "Still needed"], rows, num_cols=(1,))
             + f'<p class="src">{escape(src_text("needs"))}</p>'
             + f'<p><b>{escape(SERVICE_ANIMALS)}</b></p>'
@@ -914,36 +924,93 @@ NO_FACILITY_SCREEN = ("No facility-level zone screen for this hazard (the same a
                       "sites).")
 
 
-def stress_html(inp: dict, county: str, hazard: str) -> str:
-    """10. Stress tests: the top 10 for this county x hazard (people affected; at most two
-    of one test), each with its numbers, sources and team assumptions."""
+ANNEX = OUT / "annex"
+
+
+def annex_name(county: str) -> str:
+    return f"{COUNTY_LABEL[county]} stress-test annex"
+
+
+def stress_item(f: dict, st: dict, detail: bool) -> str:
     import stress_text as stx
-    st = inp.get("stress") or {}
-    if not st.get("findings"):
-        return ""
-    top = stx.top(st["findings"], county, hazard)
-    items = []
-    for f in top:
-        ev = stx.evidence_lines(f)[:5]
-        items.append(
-            f'<li><b>{escape(f["scenario"])}</b> <small>(test {escape(f["test"])}: {escape(st["tests"][f["test"]])})</small><br>'
+    ev = stx.evidence_lines(f) if detail else []
+    return (f'<li><b>{escape(f["scenario"])}</b> <small>(test {escape(f["test"])}: {escape(st["tests"][f["test"]])})</small><br>'
             f'{escape(stx.summary(f))}.'
             + (f'<br><small>{escape(" · ".join(f"{k}: {v}" for k, v in ev))}</small>' if ev else "")
             + f'<br><small>Sources: {escape("; ".join(f["sources"]))}.'
             + (f' Team assumptions: {escape("; ".join(a["text"] + ": " + str(a["value"]) for a in f["assumptions"]))}.'
                if f["assumptions"] else "") + "</small></li>")
-    return ('<h2 class="page">10. Stress tests – what could break</h2>'
-            f'<div class="note"><b>{escape(stx.LABEL)}.</b> Each test changes one thing in the plan '
+
+
+def stress_intro(st: dict) -> str:
+    import stress_text as stx
+    return (f'<div class="note"><b>{escape(stx.LABEL)}.</b> Each test changes one thing in the plan '
             '(a site closes, two hazards strike together, a road is cut, more people come) and counts '
             f'who is affected, from the plan\'s own data. {escape(st["method"])}</div>'
-            f'<p>Top {len(top)} for {escape(COUNTY_LABEL[county])} – {escape(HAZARD_LABEL[hazard])} and '
-            'all-hazard tests, ranked by people affected (at most two from one test). The full list, with '
-            'every test, is in the app (Stress tests).</p>'
-            f'<ol class="stress">{"".join(items)}</ol>'
-            f'<p class="src">{escape(build_access.NOT_NO_SHELTER)}</p>'
-            '<h2>11. Questions for counties</h2>'
+            f'<p><small>{escape(st["definition_15"])}</small></p>')
+
+
+def stress_html(inp: dict, county: str, hazard: str) -> str:
+    """10. Stress tests: a one-page summary (top 3 for this county x hazard and the questions
+    for counties); the full results are in the county's stress-test annex."""
+    import stress_text as stx
+    st = inp.get("stress") or {}
+    if not st.get("findings"):
+        return ""
+    top = stx.top(st["findings"], county, hazard, 3)
+    return ('<section class="page stress-summary"><h2>10. Stress tests – summary</h2>' + stress_intro(st)
+            + f'<p>Top {len(top)} for {escape(COUNTY_LABEL[county])} – {escape(HAZARD_LABEL[hazard])} and '
+            'all-hazard tests, ranked by people affected (at most two from one test). Full results: the '
+            f'<b>{escape(annex_name(county))}</b> (a separate PDF, also linked in the app).</p>'
+            + '<ol class="stress">' + "".join(
+                f'<li><b>{escape(f["scenario"])}</b><br>{escape(stx.summary(f))}.</li>' for f in top)
+            + '</ol><p class="src">Sources, evidence and team assumptions for each result: in the annex.</p>'
+            + '<h3>Questions for counties</h3>'
             '<p>These need county knowledge. The plan has no data for them, so it shows no numbers.</p><ol>'
-            + "".join(f"<li><b>{escape(t)}:</b> {escape(q)}</li>" for t, q in stx.QUESTIONS) + "</ol>")
+            + "".join(f"<li><b>{escape(t)}:</b> {escape(q)}</li>" for t, q in stx.QUESTIONS) + "</ol></section>")
+
+
+def annex_html(inp: dict, county: str) -> str:
+    """<County> stress-test annex: top 10 per hazard with every number, then every result."""
+    import stress_text as stx
+    st = inp["stress"]
+    F = st["findings"]
+    title = annex_name(county)
+    parts = []
+    for h in HAZARDS:
+        top = stx.top(F, county, h)
+        parts.append(f'<h2 class="page">{escape(HAZARD_LABEL[h])}: top {len(top)}</h2>'
+                     f'<ol class="stress">{"".join(stress_item(f, st, True) for f in top)}</ol>')
+    rows = [f for f in stx.shown(F) if stx.in_county(f, county)]
+    tested = sum(1 for f in F if stx.in_county(f, county))
+    table_rows = [[str(f["county_rank"]), escape(f["test"]), escape(f["scenario"]),
+                   escape(" + ".join(HAZARD_LABEL.get(x, {"dam": "Dam failure", "power": "Power loss",
+                                                             "all": "All hazards"}.get(x, x)) for x in f["hazard"].split("+"))),
+                   escape(stx.summary(f))] for f in sorted(rows, key=lambda f: f["county_rank"])]
+    return f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{escape(title)}</title><style>{css(inp["data_as_of"])}</style></head>
+<body>
+<header>
+<h1>{escape(title)}</h1>
+<p class="asof">Data as of {escape(inp["data_as_of"])}</p>
+<div class="note"><b>{escape(DISCLAIMER)}</b></div>
+</header>
+<main>
+{stress_intro(st)}
+<p>{tested} tests ran for {escape(COUNTY_LABEL[county])}; {len(rows)} affect someone or need county data and are listed
+below. Two-site losses are listed only when they add people beyond either site alone. {escape(build_access.NOT_NO_SHELTER)}</p>
+{"".join(parts)}
+<h2 class="page">Every result, ranked by people affected</h2>
+{table(["Rank", "Test", "Scenario", "Hazard", "Result"], table_rows, num_cols=(0,))}
+<h2>Questions for counties</h2>
+<p>These need county knowledge. The plan has no data for them, so it shows no numbers.</p><ol>
+{"".join(f"<li><b>{escape(t)}:</b> {escape(q)}</li>" for t, q in stx.QUESTIONS)}</ol>
+</main>
+<footer class="footer">Data as of {escape(inp["data_as_of"])} · {escape(DISCLAIMER)}</footer>
+</body></html>
+"""
 
 
 def facility_rows(access: dict | None, county: str, hazard: str,
@@ -1069,7 +1136,9 @@ def _sources(inp: dict) -> tuple[list, list]:
     for key in ("safe_zones", "fire_risk", "flooded_highways", "pdc_shelters", "roads"):
         src = hub.get(key)
         if src:
-            data.append([escape(src["title"] + (f" ({src['dates']})" if src.get("dates") else "")),
+            note = (" – via third-party ArcGIS Online copy; PDC catalogue confirms 2009 date"
+                    if key == "pdc_shelters" else "")
+            data.append([escape(src["title"] + (f" ({src['dates']})" if src.get("dates") else "") + note),
                          escape(hst_date(src.get("fetched_at", ""))), escape(src.get("url", ""))])
     if hub:
         data += [["Hawaiʻi DOT surveyed mile markers (road-closure point, Route 11 in Kaʻū)", "2026-10-30",
@@ -1193,6 +1262,12 @@ def main(argv=None) -> int:
             html.write_text(playbook_html(inp, c, h), encoding="utf-8")
             if not args.html_only:
                 engine = to_pdf(html, OUT / f"{slug(c, h)}.pdf", browser)
+    ANNEX.mkdir(exist_ok=True)
+    for c in COUNTIES:
+        html = ANNEX / f"{c.lower()}_stress_annex.html"
+        html.write_text(linkify(annex_html(inp, c)), encoding="utf-8")
+        if not args.html_only:
+            to_pdf(html, ANNEX / f"{c.lower()}_stress_annex.pdf", browser)
     (OUT / "index.html").write_text(index_html(inp["data_as_of"]), encoding="utf-8")
     print(f"Wrote {len(COUNTIES) * len(HAZARDS)} playbooks -> playbooks/ (PDF engine: {engine})")
     return 0

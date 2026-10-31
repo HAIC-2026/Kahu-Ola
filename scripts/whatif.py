@@ -143,8 +143,7 @@ def areas_for(bundle: dict, county: str, hazard: str) -> tuple[list, list]:
 
 
 if __name__ == "__main__":
-    b = json.loads((ROOT / "app" / "data" / "bundle.json").read_text(encoding="utf-8"))
-    W = b["whatif"]
+    W = json.loads((ROOT / "app" / "data" / "stress.json").read_text(encoding="utf-8"))["whatif"]
     for key in W["scenarios"]:
         c, h = key.split("|")
         r = compute(W, key, {"rate": W["scenarios"][key]["rate"], "stay": 3, "outage": 0,

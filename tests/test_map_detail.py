@@ -183,7 +183,8 @@ class Overlay(unittest.TestCase):
         self.assertIn('target: "_blank", rel: "noopener noreferrer"', JS)
         self.assertNotRegex(JS, r"https?://(?!www\.w3\.org/2000/svg)")   # URL lives in the data
         self.assertEqual(re.findall(r"fetch\(([^)]*)\)", JS),
-                         ['VERSION_URL, { cache: "no-store" }', "BUNDLE_URL"])
+                         ['VERSION_URL, { cache: "no-store" }', "DATA.meta.messages_url", "DATA.meta.lazy", "BUNDLE_URL"])
+        # the two lazy files are same-origin paths from the bundle (stress tests, messages)
 
     def test_panel_accessibility_rules(self):
         self.assertIn('role: "region", "aria-labelledby": "area-title"', JS)

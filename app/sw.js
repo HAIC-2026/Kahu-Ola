@@ -5,11 +5,12 @@
 "use strict";
 
 // BEGIN GENERATED
-const VERSION = "6ee9174b8ab2";
+const VERSION = "789d94e1f423";
 const PRECACHE = [
   "./",
   "index.html",
   "app.js",
+  "stress.js",
   "whatif.js",
   "styles.css",
   "manifest.webmanifest",
@@ -18,6 +19,8 @@ const PRECACHE = [
   "icon-192.png",
   "icon-512.png",
   "data/bundle.json",
+  "data/messages.json",
+  "data/stress.json",
   "data/version.json",
   "playbooks/hawaii_coastal_flood.pdf",
   "playbooks/hawaii_hurricane.pdf",
@@ -38,7 +41,11 @@ const PRECACHE = [
   "playbooks/maui_hurricane.pdf",
   "playbooks/maui_inland_flood.pdf",
   "playbooks/maui_tsunami.pdf",
-  "playbooks/maui_wildfire.pdf"
+  "playbooks/maui_wildfire.pdf",
+  "playbooks/annex/hawaii_stress_annex.pdf",
+  "playbooks/annex/honolulu_stress_annex.pdf",
+  "playbooks/annex/kauai_stress_annex.pdf",
+  "playbooks/annex/maui_stress_annex.pdf"
 ];
 // END GENERATED
 

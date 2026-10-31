@@ -39,6 +39,8 @@ SOURCES = ROOT / "data" / "sources"
 ST = json.loads((PROC / "stress_tests.json").read_text(encoding="utf-8"))
 F = ST["findings"]
 BUNDLE = json.loads((APP / "data" / "bundle.json").read_text(encoding="utf-8"))
+LAZY = json.loads((APP / "data" / "stress.json").read_text(encoding="utf-8"))   # stress, what-if, map layers
+BUNDLE.update({k: LAZY[k] for k in ("stress", "whatif", "hub")})
 HUB = json.loads((SOURCES / "hub_layers_summary.json").read_text(encoding="utf-8"))
 ROADS = json.loads((SOURCES / "road_closures_summary.json").read_text(encoding="utf-8"))
 NODE = shutil.which("node")
@@ -58,6 +60,61 @@ def scen(county, hazard):
 
 
 class Findings(unittest.TestCase):
+    def test_definition_15_everywhere(self):
+        d = ST["definition_15"]
+        self.assertIn("15 minutes or less before the loss and is more than 15 minutes", d)
+        self.assertEqual(LAZY["stress"]["definition_15"], d)
+        self.assertIn("definition_15", (APP / "stress.js").read_text(encoding="utf-8"))
+        import html as _html
+        self.assertIn(_html.escape(d), (ROOT / "playbooks" / "maui_tsunami.html").read_text(encoding="utf-8"))
+        self.assertIn(d, (ROOT / "PLAN.md").read_text(encoding="utf-8"))
+
+    def test_incremental_15_minutes(self):
+        """Every area counted was within 15 minutes before the loss and is beyond it after."""
+        acc = json.loads((SOURCES / "arcgis_summary.json").read_text(encoding="utf-8"))["areas"]
+        sites = {s["name"] + "|" + s["county"]: s for s in BUNDLE["sites"]}
+        for fid in ("T01-hurricane-manoa_valley_district_park-honolulu", ):
+            f = BY_ID[fid]
+            k, h = f["sites"][0], f["hazard"]
+            ok = {kk for kk, s in sites.items() if (s["status"].get(h) or [""])[0] == "ok"}
+            n = 0
+            for a, v in acc.items():
+                if ISLAND[("area", a)] != f["evidence"]["island"]:
+                    continue
+                t = [m[0] for kk, m in v["sites"].items() if kk in ok and m[0] is not None]
+                t2 = [m[0] for kk, m in v["sites"].items() if kk in ok and kk != k and m[0] is not None]
+                before, after = min(t, default=None), min(t2, default=None)
+                if before is not None and before <= 15 and (after is None or after > 15):
+                    n += 1
+            self.assertGreaterEqual(n, f["evidence"]["areas_pushed_outside"])   # risk-area subset of these
+
+    def test_slr_label_and_cut_off_area(self):
+        label = "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites"
+        f = BY_ID["T24-flooded_maui-drive"]
+        self.assertTrue(f["scenario"].startswith(label))
+        self.assertEqual(f["evidence"]["areas_cut_off"], ["Launiupoko / Māʻalaea · Census area 320"])
+        self.assertIn(label, LAZY["hub"]["sources"]["flooded"])
+        self.assertIn(label, (APP / "app.js").read_text(encoding="utf-8"))
+        self.assertIn(label, (ROOT / "PLAN.md").read_text(encoding="utf-8"))
+
+    def test_factor_sources_next_to_numbers(self):
+        bases = BUNDLE["meta"]["bases"]
+        for sc in BUNDLE["scenarios"].values():
+            got = {n[0]: bases[n[7]] for n in sc["needs"]}
+            self.assertIn("Florida DEM (2010): 2 meals per person per day", got["Meals"])
+            self.assertIn("Florida DEM (2010): 1 gal per person per day", got["Water"])
+            self.assertIn("planning assumption", got["Cots / sleeping space"])
+            self.assertIn("registration 1:165", got["Shelter staff"])
+        html = (ROOT / "playbooks" / "maui_tsunami.html").read_text(encoding="utf-8")
+        self.assertIn("Florida DEM (2010): 2 meals per person per day", html)
+        self.assertIn("one cot per person in shelter** (planning assumption", (ROOT / "PLAN.md").read_text(encoding="utf-8").split("## 10.")[1])
+
+    def test_pdc_source_wording(self):
+        w = "via third-party ArcGIS Online copy; PDC catalogue confirms 2009 date"
+        self.assertIn(w, (ROOT / "playbooks" / "maui_tsunami.html").read_text(encoding="utf-8"))
+        self.assertIn(w, (ROOT / "PLAN.md").read_text(encoding="utf-8"))
+        self.assertIn("third-party ArcGIS Online copy", LAZY["hub"]["pdc_note"])
+
     def test_every_test_ran(self):
         tests = {f["test"] for f in F}
         want = {str(i) for i in range(1, 23)} | {"23a", "23b", "24", "25"}
@@ -254,13 +311,55 @@ class Pdc(unittest.TestCase):
         for k, v in HUB["pdc"]["site_capacity"].items():
             self.assertGreater(v["capacity"], 0)
             self.assertLessEqual(v["distance_m"], 400)
-        js = (APP / "app.js").read_text(encoding="utf-8")
+        js = (APP / "stress.js").read_text(encoding="utf-8")
         self.assertIn("support: null, cap: {}", (APP / "whatif.js").read_text(encoding="utf-8"))   # default: unknown
         self.assertIn("Load 2009 reference capacity (may be outdated)", js)
 
     def test_maui_2013_limitation_shown(self):
         self.assertIn("2013", BUNDLE["hub"]["maui_2013"])
         self.assertIn("maui_2013", (APP / "app.js").read_text(encoding="utf-8"))
+
+
+@unittest.skipUnless(shutil.which("pdftotext") and shutil.which("pdfinfo"), "poppler not installed")
+class Annex(unittest.TestCase):
+    ANNEX = sorted((ROOT / "playbooks" / "annex").glob("*_stress_annex.pdf"))
+
+    @staticmethod
+    def text(pdf, first=None, last=None):
+        args = ["pdftotext"] + ([f"-f", str(first), "-l", str(last)] if first else []) + [str(pdf), "-"]
+        return subprocess.run(args, capture_output=True, text=True, check=True).stdout
+
+    @staticmethod
+    def pages(pdf):
+        return int(re.search(r"Pages:\s+(\d+)", subprocess.run(["pdfinfo", str(pdf)], capture_output=True,
+                                                                text=True, check=True).stdout).group(1))
+
+    def test_one_annex_per_county(self):
+        self.assertEqual([p.name for p in self.ANNEX], [f"{c.lower()}_stress_annex.pdf" for c in sorted(COUNTIES, key=str.lower)])
+        for pdf in self.ANNEX:
+            t = self.text(pdf)
+            self.assertIn("stress-test annex", t)
+            self.assertIn("Every result, ranked by people affected", t)
+            self.assertIn("Planning aid. Supports, does not replace, county emergency plans.", t)
+            self.assertNotRegex(t, r"(?<![A-Za-z])AI(?![A-Za-z])|Claude|\w+\.(json|csv|py|geojson)\b|\b(null|undefined|NaN)\b")
+
+    def test_playbook_summary_is_one_last_page(self):
+        for pdf in sorted((ROOT / "playbooks").glob("*.pdf")):
+            n = self.pages(pdf)
+            last = self.text(pdf, n, n)
+            self.assertIn("10. Stress tests – summary", last, pdf.name)
+            self.assertIn("Questions for counties", last, pdf.name)
+            self.assertIn("Partner capacity", last, pdf.name)                      # the last question fits
+            self.assertNotIn("10. Stress tests", self.text(pdf, n - 1, n - 1), pdf.name)
+
+    def test_annexes_linked_and_precached(self):
+        sw = (APP / "sw.js").read_text(encoding="utf-8")
+        for c in COUNTIES:
+            self.assertEqual(BUNDLE["meta"]["annex"][c], f"playbooks/annex/{c.lower()}_stress_annex.pdf")
+            self.assertIn(f'"playbooks/annex/{c.lower()}_stress_annex.pdf"', sw)
+        for f in ("data/stress.json", "data/messages.json", "stress.js", "whatif.js"):
+            self.assertIn(f'"{f}"', sw)
+        self.assertNotIn("stress", json.loads((APP / "data" / "bundle.json").read_text(encoding="utf-8")))
 
 
 W = BUNDLE["whatif"]
@@ -287,7 +386,7 @@ process.stdout.write(JSON.stringify(out));"""
     with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as fh:
         fh.write(script)
     try:
-        res = subprocess.run([NODE, fh.name, str(APP / "whatif.js"), str(APP / "data" / "bundle.json")],
+        res = subprocess.run([NODE, fh.name, str(APP / "whatif.js"), str(APP / "data" / "stress.json")],
                              input=json.dumps(cases), capture_output=True, text=True, timeout=120, check=True)
     finally:
         os.unlink(fh.name)
@@ -465,7 +564,7 @@ class Browser(unittest.TestCase):
                 self.assertIn("Reset to plan defaults", t)
         self.assertIn("Tsunami Safe Zones", text[self.urls[8]])
         self.assertIn("State Fire Risk Areas", text[self.urls[9]])
-        self.assertIn("sea level rise", text[self.urls[10]])
+        self.assertIn("sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA)", text[self.urls[10]])
 
     def test_whatif_url_restores_inputs(self):
         b = f"http://127.0.0.1:{self.port}/"

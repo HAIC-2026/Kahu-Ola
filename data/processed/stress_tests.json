@@ -1,5 +1,6 @@
 {
- "built_at": "2026-10-31T00:06:36-10:00",
+ "built_at": "2026-10-31T00:26:52-10:00",
+ "definition_15": "People counted: residents of Census areas whose drive from the area's centre point to the nearest usable 2026 site was 15 minutes or less before the loss and is more than 15 minutes (or no route) after it; areas already beyond 15 minutes are not counted.",
  "findings": [
   {
    "areas": [
@@ -1084,13 +1085,16 @@
    "assumptions": [
     {
      "kind": "team assumption",
-     "text": "Every flooded-highway segment on the island closed at once (sea level rise 3.2 ft scenario)",
+     "text": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites: every potentially flooded highway segment on the island closed at once",
      "value": "all segments"
     }
    ],
    "county": "Maui",
    "county_rank": 1,
    "evidence": {
+    "areas_cut_off": [
+     "Launiupoko / Māʻalaea · Census area 320"
+    ],
     "areas_isolated": 1,
     "areas_isolated_from_2026_sites": 1,
     "areas_losing_sites_within_reach": 18,
@@ -1114,7 +1118,7 @@
    "measure": "people in areas with a longer drive, fewer known sites within 45 minutes, or cut off",
    "people_affected": 70875,
    "rank": 26,
-   "scenario": "All 'flooded highway' segments (sea level rise 3.2 ft) closed – Maui",
+   "scenario": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Maui: every potentially flooded highway segment closed",
    "sites": [],
    "sources": [
     "Esri ArcGIS routing with road closures (build time); highway centrelines: Hawaiʻi DOT HPMS and surveyed mile markers (Hawaiʻi Statewide GIS)",
@@ -1233,6 +1237,7 @@
    "county": "Maui",
    "county_rank": 4,
    "evidence": {
+    "areas_cut_off": "none",
     "areas_isolated": 0,
     "areas_isolated_from_2026_sites": 0,
     "areas_losing_sites_within_reach": 18,
@@ -4537,13 +4542,17 @@
    "assumptions": [
     {
      "kind": "team assumption",
-     "text": "Every flooded-highway segment on the island closed at once (sea level rise 3.2 ft scenario)",
+     "text": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites: every potentially flooded highway segment on the island closed at once",
      "value": "all segments"
     }
    ],
    "county": "Honolulu",
    "county_rank": 76,
    "evidence": {
+    "areas_cut_off": [
+     "Hauʻula · Census area 102.04",
+     "Nānākuli · Census area 9400.07"
+    ],
     "areas_isolated": 1,
     "areas_isolated_from_2026_sites": 2,
     "areas_losing_sites_within_reach": 8,
@@ -4567,7 +4576,7 @@
    "measure": "people in areas with a longer drive, fewer known sites within 45 minutes, or cut off",
    "people_affected": 23903,
    "rank": 105,
-   "scenario": "All 'flooded highway' segments (sea level rise 3.2 ft) closed – Oʻahu",
+   "scenario": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Oʻahu: every potentially flooded highway segment closed",
    "sites": [],
    "sources": [
     "Esri ArcGIS routing with road closures (build time); highway centrelines: Hawaiʻi DOT HPMS and surveyed mile markers (Hawaiʻi Statewide GIS)",
@@ -6714,6 +6723,7 @@
    "county": "Honolulu",
    "county_rank": 94,
    "evidence": {
+    "areas_cut_off": "none",
     "areas_isolated": 0,
     "areas_isolated_from_2026_sites": 0,
     "areas_losing_sites_within_reach": 6,
@@ -8733,6 +8743,7 @@
    "county": "Maui",
    "county_rank": 23,
    "evidence": {
+    "areas_cut_off": "none",
     "areas_isolated": 0,
     "areas_isolated_from_2026_sites": 0,
     "areas_losing_sites_within_reach": 0,
@@ -9013,6 +9024,7 @@
    "county": "Maui",
    "county_rank": 26,
    "evidence": {
+    "areas_cut_off": "none",
     "areas_isolated": 0,
     "areas_isolated_from_2026_sites": 0,
     "areas_losing_sites_within_reach": 0,
@@ -10226,13 +10238,14 @@
    "assumptions": [
     {
      "kind": "team assumption",
-     "text": "Every flooded-highway segment on the island closed at once (sea level rise 3.2 ft scenario)",
+     "text": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites: every potentially flooded highway segment on the island closed at once",
      "value": "all segments"
     }
    ],
    "county": "Kauai",
    "county_rank": 22,
    "evidence": {
+    "areas_cut_off": "none",
     "areas_isolated": 0,
     "areas_isolated_from_2026_sites": 0,
     "areas_losing_sites_within_reach": 3,
@@ -10256,7 +10269,7 @@
    "measure": "people in areas with a longer drive, fewer known sites within 45 minutes, or cut off",
    "people_affected": 9151,
    "rank": 237,
-   "scenario": "All 'flooded highway' segments (sea level rise 3.2 ft) closed – Kauaʻi",
+   "scenario": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Kauaʻi: every potentially flooded highway segment closed",
    "sites": [],
    "sources": [
     "Esri ArcGIS routing with road closures (build time); highway centrelines: Hawaiʻi DOT HPMS and surveyed mile markers (Hawaiʻi Statewide GIS)",
@@ -10572,6 +10585,9 @@
    "county": "Kauai",
    "county_rank": 26,
    "evidence": {
+    "areas_cut_off": [
+     "Hāʻena / Hanalei · Census area 401.04"
+    ],
     "areas_isolated": 0,
     "areas_isolated_from_2026_sites": 1,
     "areas_losing_sites_within_reach": 3,
@@ -13584,6 +13600,7 @@
    "county": "Hawaii",
    "county_rank": 90,
    "evidence": {
+    "areas_cut_off": "none",
     "areas_isolated": 0,
     "areas_isolated_from_2026_sites": 0,
     "areas_losing_sites_within_reach": 1,
@@ -18587,6 +18604,7 @@
    "county": "Honolulu",
    "county_rank": 149,
    "evidence": {
+    "areas_cut_off": "none",
     "areas_isolated": 0,
     "areas_isolated_from_2026_sites": 0,
     "areas_losing_sites_within_reach": 0,
@@ -32440,13 +32458,14 @@
    "assumptions": [
     {
      "kind": "team assumption",
-     "text": "Every flooded-highway segment on the island closed at once (sea level rise 3.2 ft scenario)",
+     "text": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites: every potentially flooded highway segment on the island closed at once",
      "value": "all segments"
     }
    ],
    "county": "Hawaii",
    "county_rank": 323,
    "evidence": {
+    "areas_cut_off": "none",
     "areas_isolated": 0,
     "areas_isolated_from_2026_sites": 0,
     "areas_losing_sites_within_reach": 0,
@@ -32470,7 +32489,7 @@
    "measure": "people in areas with a longer drive, fewer known sites within 45 minutes, or cut off",
    "people_affected": 0,
    "rank": 801,
-   "scenario": "All 'flooded highway' segments (sea level rise 3.2 ft) closed – Hawaiʻi",
+   "scenario": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Hawaiʻi: every potentially flooded highway segment closed",
    "sites": [],
    "sources": [
     "Esri ArcGIS routing with road closures (build time); highway centrelines: Hawaiʻi DOT HPMS and surveyed mile markers (Hawaiʻi Statewide GIS)",
@@ -32495,6 +32514,7 @@
    "county": "Maui",
    "county_rank": 139,
    "evidence": {
+    "areas_cut_off": "none",
     "areas_isolated": 0,
     "areas_isolated_from_2026_sites": 0,
     "areas_losing_sites_within_reach": 0,
@@ -32542,6 +32562,7 @@
    "county": "Hawaii",
    "county_rank": 324,
    "evidence": {
+    "areas_cut_off": "none",
     "areas_isolated": 0,
     "areas_isolated_from_2026_sites": 0,
     "areas_losing_sites_within_reach": 0,
@@ -32589,6 +32610,7 @@
    "county": "Kauai",
    "county_rank": 123,
    "evidence": {
+    "areas_cut_off": "none",
     "areas_isolated": 0,
     "areas_isolated_from_2026_sites": 0,
     "areas_losing_sites_within_reach": 0,
@@ -34659,7 +34681,7 @@
     "max_added_min": 0.0,
     "median_added_min_where_longer": 0,
     "mode": "drive",
-    "name": "All 'flooded highway' segments (sea level rise 3.2 ft) closed – Hawaiʻi",
+    "name": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Hawaiʻi: every potentially flooded highway segment closed",
     "no_route": [],
     "people_affected": 0,
     "people_isolated": 0,
@@ -34672,7 +34694,7 @@
      "after",
      "known sites no longer within reach"
     ],
-    "short": "Flooded highways closed – Hawaiʻi",
+    "short": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Hawaiʻi",
     "why": ""
    },
    "flooded_kauai|drive": {
@@ -34718,7 +34740,7 @@
     "max_added_min": 0.0,
     "median_added_min_where_longer": 0,
     "mode": "drive",
-    "name": "All 'flooded highway' segments (sea level rise 3.2 ft) closed – Kauaʻi",
+    "name": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Kauaʻi: every potentially flooded highway segment closed",
     "no_route": [],
     "people_affected": 9151,
     "people_isolated": 0,
@@ -34731,7 +34753,7 @@
      "after",
      "known sites no longer within reach"
     ],
-    "short": "Flooded highways closed – Kauaʻi",
+    "short": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Kauaʻi",
     "why": ""
    },
    "flooded_maui|drive": {
@@ -34942,7 +34964,7 @@
     "max_added_min": 3.8,
     "median_added_min_where_longer": 2.4,
     "mode": "drive",
-    "name": "All 'flooded highway' segments (sea level rise 3.2 ft) closed – Maui",
+    "name": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Maui: every potentially flooded highway segment closed",
     "no_route": [
      "15009032000"
     ],
@@ -34957,7 +34979,7 @@
      "after",
      "known sites no longer within reach"
     ],
-    "short": "Flooded highways closed – Maui",
+    "short": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Maui",
     "why": ""
    },
    "flooded_oahu|drive": {
@@ -36170,7 +36192,7 @@
     "max_added_min": 13.6,
     "median_added_min_where_longer": 6.5,
     "mode": "drive",
-    "name": "All 'flooded highway' segments (sea level rise 3.2 ft) closed – Oʻahu",
+    "name": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Oʻahu: every potentially flooded highway segment closed",
     "no_route": [
      "15003940007"
     ],
@@ -36185,7 +36207,7 @@
      "after",
      "known sites no longer within reach"
     ],
-    "short": "Flooded highways closed – Oʻahu",
+    "short": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Oʻahu",
     "why": ""
    },
    "hana|drive": {

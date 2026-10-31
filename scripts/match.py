@@ -43,7 +43,7 @@ AFN_PARTS = ("M_power_dependent_at_risk", "I_disability_at_risk", "C_lep_at_risk
 # (capacity function, capacity field) that a partner pledge is compared against.
 NEEDS = [
     ("Cots / sleeping space", ["shelter_operations"], "cots", "cots",
-     "1 per person in shelter (central estimate)", ("shelter_operations", "cots")),
+     "1 per person in shelter (planning assumption; no published per-person cot factor cited)", ("shelter_operations", "cots")),
     ("Floor space (≤72 h)", ["shelter_operations"], "floor_sqft_72h", "sq ft",
      "Florida DEM (2010): 20 sq ft per person", ("shelter_operations", "floor_sqft")),
     ("Floor space (≤2 weeks)", ["shelter_operations"], "floor_sqft_2wk", "sq ft",
@@ -57,11 +57,11 @@ NEEDS = [
     ("Toilets (≤2 weeks)", ["shelter_operations"], "toilets_2wk", "toilets",
      "Florida DEM (2010): 1 per 20 persons", ("shelter_operations", "toilets")),
     ("Shelter staff", ["shelter_operations", "donations_volunteers"], "staff_per_shift",
-     "staff per shift", "Florida DEM (2010) staffing ratios, incl. children's area 1:12",
+     "staff per shift", "Florida DEM (2010) staffing ratios per shift: registration 1:165, dormitory 1:100, meals 1:110, mental health 1:250, health 1:200, security 1:100, sanitation 1:200, each at least 1; children's area 1:12",
      ("shelter_operations", "staff_per_shift")),
     ("Power outlets for power-dependent residents", ["power_medical_devices"],
      "power_outlets", "outlets",
-     "1 per power-dependent person in shelter (team_assumption; emPOWER-based estimate)",
+     "1 per power-dependent person in shelter (planning assumption; HHS emPOWER-based estimate)",
      ("power_medical_devices", "power_outlets")),
     ("Accessible transport", ["transportation"], "T_no_vehicle_persons_at_risk",
      "people in no-vehicle households at risk",

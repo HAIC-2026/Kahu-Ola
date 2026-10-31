@@ -75,7 +75,7 @@ All sources are public. Fetch dates are recorded in the build metadata (`data/pr
 | Hawaiʻi Statewide GIS, Hazards MapServer layer 13 "Tsunami Safe Zones", https://geodata.hawaii.gov/arcgis/rest/services/Hazards/MapServer/13 (metadata https://files.hawaii.gov/dbedt/op/gis/data/tsunevac.pdf) | Walking time to the nearest safe zone for people without a car (§5.12); map layer in the tsunami view | Hawaiʻi Island March 2025 (corrected November 2025), Oʻahu April 2025, Kauaʻi March 2025, **Maui, Molokaʻi and Lānaʻi 2013**; fetched 2026-10-30 |
 | Hawaiʻi Statewide GIS, Hazards MapServer layer 7 "Fire Risk Areas" (DLNR Division of Forestry and Wildlife), https://geodata.hawaii.gov/arcgis/rest/services/Hazards/MapServer/7 (metadata https://files.hawaii.gov/dbedt/op/gis/data/FireRisk.pdf) | Comparison with the NRI wildfire footprint (§5.12, stress test 23b); optional map layer in the wildfire view | 2007; boundaries confirmed by DLNR-DOFAW 2017 and 2022; fetched 2026-10-30 |
 | Hawaiʻi Statewide GIS, Climate MapServer layer 71 "SLR Potential Flooded Highways – 3.2 Ft. Scenario" (Hawaiʻi Sea Level Rise Viewer, PacIOOS), https://geodata.hawaii.gov/arcgis/rest/services/Climate/MapServer/71 | Road-closure stress test (all flooded segments of an island closed); map layer in the coastal flooding view | SLR Vulnerability and Adaptation Report 2017; fetched 2026-10-30 |
-| Pacific Disaster Center "Hawaii Emergency Shelters" (capacity from the American Red Cross Hawaiʻi State Chapter; metadata https://ghin.pdc.org/ghin/catalog/search/resource/details.page?uuid=%7B51D8DB9C-1FBF-41E4-84FB-7634099EA8A2%7D), as republished on ArcGIS Online (https://www.arcgis.com/home/item.html?id=50c24479afdc40359a4b51285f945968; the PDC download link no longer answers) | Optional "2009 reference capacity" in the what-if panel, labelled "may be outdated" (never the default). Phone and contact fields are never downloaded | ground condition 2009-10-08 (PDC metadata); fetched 2026-10-30 |
+| Pacific Disaster Center "Hawaii Emergency Shelters" (capacity from the American Red Cross Hawaiʻi State Chapter; **via third-party ArcGIS Online copy; PDC catalogue confirms 2009 date**; metadata https://ghin.pdc.org/ghin/catalog/search/resource/details.page?uuid=%7B51D8DB9C-1FBF-41E4-84FB-7634099EA8A2%7D), as republished on ArcGIS Online (https://www.arcgis.com/home/item.html?id=50c24479afdc40359a4b51285f945968; the PDC download link no longer answers) | Optional "2009 reference capacity" in the what-if panel, labelled "may be outdated" (never the default). Phone and contact fields are never downloaded | ground condition 2009-10-08 (PDC metadata); fetched 2026-10-30 |
 | Hawaiʻi DOT HPMS road centrelines (Transportation MapServer layer 12, https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12) and surveyed mile markers (layer 14) | Road-closure barrier lines (Routes 30, 360, 83, 560) and the Route 11 closure point (MP 53.9) | HPMS 2024 (DOT, September 2025); mile markers 2023 survey; fetched 2026-10-30 |
 | Esri ArcGIS routing with road closures (polyline/polygon barriers) and walking time to safe-zone edges, build time only | Stress tests 23a, 24, 25 | run 2026-10-30; per-area summaries in `data/sources/road_closures_summary.json` and `hub_layers_summary.json` |
 
@@ -285,6 +285,23 @@ Tsunami shelter demand (likely) changed with it: Honolulu 4,110 → 4,017; Maui 
 
 **What it is.** Each stress test changes one thing in the plan – a site closes, two hazards strike together, a road is cut, more people come – and counts who is affected, using only the plan's own data (`scripts/build_stress_tests.py` → `data/processed/stress_tests.json` and `.csv`). Every result is labelled **"stress test, not a forecast"**. Each finding has an id, the scenario, county, hazard, the people affected (and what is counted), its evidence numbers, its sources in plain words, every team assumption with its value, and a stable rank (people affected, then id). A test without data says **"needs county data"** and shows no number. Wording never says an area is "safe" or "has no shelter"; results say "no usable 2026 site within …" and repeat that counties designate shelters for each event.
 
+**Definition ("pushes N people past 15 minutes", tests 1–3).** People counted: residents of Census areas whose drive from the area's centre point to the nearest usable 2026 site was 15 minutes or less before the loss and is more than 15 minutes (or no route) after it; areas already beyond 15 minutes are not counted. Checked: for "lose Mānoa Valley District Park (hurricane)" all 85 areas counted (215,418 people) had their nearest usable 2026 site at 14.9 minutes or less before and 17.5 minutes or more after. The ten largest:
+
+| Census area | People in the risk area | Before (min) | After (min) |
+|---|---|---|---|
+| Urban Honolulu · 27.02 | 5,029 | 6.2 | 24.9 |
+| Urban Honolulu · 38.02 | 4,992 | 12.2 | 23.2 |
+| Urban Honolulu · 34.04 | 4,959 | 7.3 | 22.7 |
+| Urban Honolulu · 34.14 | 4,690 | 5.6 | 21.6 |
+| Urban Honolulu · 30 | 4,658 | 2.3 | 23.5 |
+| Urban Honolulu · 53 | 4,453 | 14.9 | 20.7 |
+| Urban Honolulu · 13 | 4,225 | 9.6 | 25.0 |
+| Urban Honolulu · 26 | 3,981 | 8.1 | 22.5 |
+| East Honolulu · 4.02 | 3,912 | 14.8 | 30.3 |
+| Urban Honolulu · 8 | 3,879 | 11.2 | 26.6 |
+
+The count is per whole Census area (drive from the area's centre point), so it is an area-level, not a household-level, figure.
+
 **Computed (861 results; settings and assumptions in `config/stress_tests.json` and `config/stress_roads.json`):**
 
 | # | Test | Method |
@@ -307,14 +324,14 @@ Tsunami shelter demand (likely) changed with it: Honolulu 4,110 → 4,017; Maui 
 | 22 | Care facilities in hazard zones | nearest usable same-island site and drive minutes (from the facility's Census area) |
 | 23a | Walking to a tsunami safe zone without a car | §5.12 |
 | 23b | State Fire Risk vs NRI | §5.12 |
-| 24 | Road closures, driving (ArcGIS barriers) | Honoapiʻilani Hwy (Pali and Olowalu), Hāna Hwy (Keʻanae), Kamehameha Hwy (Waimea Bay), Kūhiō Hwy (Hanalei bridge), Hwy 11 (Kaʻū, MP 53.9), and every 3.2 ft flooded-highway segment per island: longer drive to a 2026 site, known sites lost within 45 minutes, areas cut off (over 45 minutes or no route) |
+| 24 | Road closures, driving (ArcGIS barriers) | Honoapiʻilani Hwy (Pali and Olowalu), Hāna Hwy (Keʻanae), Kamehameha Hwy (Waimea Bay), Kūhiō Hwy (Hanalei bridge), Hwy 11 (Kaʻū, MP 53.9), and the **Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites** (every potentially flooded highway segment of an island closed at once): longer drive to a 2026 site, known sites lost within 45 minutes, areas cut off (over 45 minutes or no route) |
 | 25 | Road closures, walking | the same closures, sites within 12 km |
 
 **Questions for counties (no data, so no numbers):** shelter building resilience to earthquake and wind; inter-island resupply for Molokaʻi and Lānaʻi; cell-network outage areas; how long a school can be a shelter; partner capacity collection with a county-run form (e.g. Survey123, no personal data).
 
 **Top 3 by people affected (at most two from one test):**
 - **Honolulu:** losing Wahiawā and Mānoa Valley District Parks in a hurricane pushes **306,869** people outside a 15-minute drive to a usable 2026 site (115 Census areas; 91,451 more than either loss alone); 236,444 people live in areas rated high by the State Fire Risk layer but outside the plan's NRI wildfire areas; losing Mānoa Valley District Park alone pushes 215,418 people outside 15 minutes.
-- **Maui:** closing every 3.2 ft flooded-highway segment affects **70,875** people (18 areas lose known sites within 45 minutes; one area is cut off from every 2026 site; up to 92 minutes added); losing Baldwin High School and the Mayor Hannibal Tavares Community Center in a hurricane pushes 69,957 people outside 15 minutes; closing Honoapiʻilani Hwy at the Pali and Olowalu affects 68,353 (up to 104 minutes added to known sites; no area cut off, because Kahekili Hwy remains open in the road network).
+- **Maui:** the Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites (every potentially flooded highway segment closed) affects **70,875** people (18 areas lose known sites within 45 minutes; **Launiupoko / Māʻalaea, Census area 320**, is cut off from every 2026 site; up to 92 minutes added); losing Baldwin High School and the Mayor Hannibal Tavares Community Center in a hurricane pushes 69,957 people outside 15 minutes; closing Honoapiʻilani Hwy at the Pali and Olowalu affects 68,353 (up to 104 minutes added to known sites; no area cut off, because Kahekili Hwy remains open in the road network).
 - **Hawaiʻi:** losing Keaʻau Armory and Puʻuʻeo Community Center in a hurricane pushes **48,669** people outside 15 minutes (28,820 more than either alone); a hurricane in all four counties at once needs 43,519 cots and 2,921 shelter staff per shift; 35,640 visitors are on the island on an average day (how many are in tsunami zones needs county data).
 - **Kauaʻi:** all four counties at once (above); losing Kapaʻa Middle School and Kauaʻi High School Gym in a hurricane pushes **33,883** people outside 15 minutes; losing Kalāheo Neighborhood Center and Kapaʻa Middle School, 32,787.
 
@@ -356,9 +373,9 @@ Downloaded at build time from public State services (`scripts/fetch_hub_layers.p
 
 The two layers agree on a minority of areas in every county. The State layer marks many more urban-fringe Oʻahu and Central/West Maui areas as High; NRI ranks some rural Hawaiʻi Island and Kauaʻi areas higher. Counties should say which one they plan with.
 
-**Flooded highways (3.2 ft sea level rise).** 282 features (650 line pieces): Oʻahu 369 pieces (28.5 km), Maui County 234 (Maui 105, Molokaʻi 107, Lānaʻi 22; 22.0 km), Kauaʻi 173 (10.4 km), Hawaiʻi 3 (0.1 km). Shown in the coastal flooding view and closed together in test 24. Chronic flooding later this century, not an event forecast.
+**Flooded highways – Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites.** 282 features (650 line pieces): Oʻahu 369 pieces (28.5 km), Maui County 234 (Maui 105, Molokaʻi 107, Lānaʻi 22; 22.0 km), Kauaʻi 173 (10.4 km), Hawaiʻi 3 (0.1 km). Shown in the coastal flooding view and closed together in test 24. Chronic flooding later this century, not an event forecast.
 
-**PDC 2009 shelters.** 237 shelters; 30 have a capacity above 0. Matched by name (a shared distinctive word and the same school level) and location (within 400 m): 203 match a 2026 site or DOE school; **26 with capacity** (4 of the 2026 sites – Baldwin High School 2,078, Kauaʻi High School Gym 2,283, Kapaʻa Middle School 467, Waimea Canyon Middle School 2,649 – and 22 DOE schools). Phone and contact fields are never downloaded (tests check). Offered only as "2009 reference capacity, may be outdated" in the what-if panel.
+**PDC 2009 shelters** (via third-party ArcGIS Online copy; PDC catalogue confirms 2009 date). 237 shelters; 30 have a capacity above 0. Matched by name (a shared distinctive word and the same school level) and location (within 400 m): 203 match a 2026 site or DOE school; **26 with capacity** (4 of the 2026 sites – Baldwin High School 2,078, Kauaʻi High School Gym 2,283, Kapaʻa Middle School 467, Waimea Canyon Middle School 2,649 – and 22 DOE schools). Phone and contact fields are never downloaded (tests check). Offered only as "2009 reference capacity, may be outdated" in the what-if panel.
 
 ## 6. The three DHS metrics
 
@@ -376,7 +393,7 @@ Result: Lahaina wildfire, 2023-08-11. Observed 1,418 people in shelters (Maui No
 The challenge PDF gives no baseline number ("Teams may propose their own baseline and target time", p. 7).
 - **Baseline (team assumption, to be confirmed with DHS):** at least **2 working days per county per event**, about 8 working days statewide. Reasoning: the manual steps DHS describes (p. 3–4): pull program and provider reports, cross-reference lists with hazard zones, recompile shelter lists, and call partners to confirm capacity "for each planning cycle and each event". These steps are done by hand, often "only after an event begins" (p. 4).
 - **Target:** same day, under 1 working day statewide.
-- **Measured:** a full rebuild from local data (all 14 build steps, 20 scenarios, 20 PDFs, app bundle) takes **44.0 seconds** on an Apple M4 laptop (measured 2026-10-28 with `scripts/time_rebuild.py`; result in `data/processed/rebuild_timing.json`). The test suite (393 automated tests, including headless-browser checks of every view, deep links, keyboard map layers, offline use, the stress-test and what-if views, and the what-if JavaScript against its Python reference) takes about 3 minutes. A full data refresh from the internet adds downloads plus the flood-zone queries, which are paced at 1 s per point for 311 points (at least 5.2 minutes). That refresh is not timed end to end.
+- **Measured:** a full rebuild from local data (all 14 build steps, 20 scenarios, 20 PDFs, app bundle) takes **44.0 seconds** on an Apple M4 laptop (measured 2026-10-28 with `scripts/time_rebuild.py`; result in `data/processed/rebuild_timing.json`). The test suite (401 automated tests, including headless-browser checks of every view, deep links, keyboard map layers, offline use, the stress-test and what-if views, and the what-if JavaScript against its Python reference) takes about 3 minutes. A full data refresh from the internet adds downloads plus the flood-zone queries, which are paced at 1 s per point for 311 points (at least 5.2 minutes). That refresh is not timed end to end.
 - **Plus human review (team assumption):** one review session per county to confirm sites, roles and pledges. The pipeline removes the compiling and arithmetic; it does not remove the partner calls. It turns them into filling in blank capacity fields.
 - **Measurement plan.** The baseline above stays a team assumption until it is measured. We propose a timed tabletop exercise with DHS and one county. The same planners produce a needs-and-resources draft for one county × hazard scenario twice: once with their current manual process (baseline) and once with this tool (tool-assisted). **Start** = hazard selected; **stop** = needs-and-resources draft approved by the county or DHS lead. We report both times in minutes (baseline vs tool-assisted), with the number of partner calls and corrections made during review.
 
@@ -408,15 +425,15 @@ The challenge PDF requires usability "during high-stress, low-connectivity condi
 | Tier | Conditions | What works |
 |---|---|---|
 | 1. Online | Normal internet | Web app (https://shelters.kahuola.org, also https://haic2026-shelters.pages.dev) |
-| 2. Weak | Slow or intermittent | The app loads from its local cache. The only data is one 1203 KB bundle, and every PDF is already cached |
+| 2. Weak | Slow or intermittent | The app loads from its local cache. The only data is one 829 KB bundle (the stress-test and message files are fetched when those views open, and pre-cached), and every PDF is already cached |
 | 3. Offline | No internet (after one earlier visit) | Installed web app (PWA). The service worker pre-caches the app, the data and all 20 PDFs, and the app shows "Offline – data as of <date>". Tested in airplane mode in Chrome. |
-| 4. Paper | No power or devices | 20 printed playbooks (`playbooks/*.pdf`): US Letter, black-and-white safe, 28–32 pages each (printed at true size: smallest text 9 pt; every source URL wraps inside the page and is a clickable link), with the disclaimer and "Data as of" on every page |
+| 4. Paper | No power or devices | 20 printed playbooks (`playbooks/*.pdf`): US Letter, black-and-white safe, 26–30 pages each, the last page a one-page stress-test summary; plus one stress-test annex per county (`playbooks/annex/`: Hawaiʻi 26, Kauaʻi 30, Maui 32, Honolulu 35 pages) (printed at true size: smallest text 9 pt; every source URL wraps inside the page and is a clickable link), with the disclaimer and "Data as of" on every page |
 
 ## 9. How AI was used
 
 We used AI to **build** the framework and **draft** content, not to run it. Specifically:
 
-1. **Building the pipeline – Claude Code.** An AI coding assistant wrote and tested most of the Python pipeline, the playbook generator and the web app, under team direction and review. That included checking sources (opening each cited document and comparing values), the DBEDT validation, and the browser tests in airplane mode. The 393 automated tests are in `tests/`.
+1. **Building the pipeline – Claude Code.** An AI coding assistant wrote and tested most of the Python pipeline, the playbook generator and the web app, under team direction and review. That included checking sources (opening each cited document and comparing values), the DBEDT validation, and the browser tests in airplane mode. The 401 automated tests are in `tests/`.
 2. **Data discovery – Datatrove.** The challenge names Datatrove as the primary data source (p. 4). We used Datatrove to find current FEMA NRI v1.20 Census-area layers and their field names, the HHS emPOWER county fields, and a keyless Census download route when the Census API began to require a key.
 3. **Shelter announcement normalization.** The 2026 shelter activation table was compiled by an AI assistant (Claude) from county press releases and news reports via web search, extracting site name, address, event, date and pet policy, each row with its source URL. A team member reviewed the table; deterministic code then grouped, geocoded and hazard-checked the sites. The table is `data/sources/county_shelter_activations.csv`; the code is `scripts/build_shelters.py` (grouping, name normalization including ʻokina and diacritics, DOE school matching), `scripts/fetch_flood_zones.py` and `scripts/model_needs.py`.
 4. **Multilingual message drafting, with mandatory human review.** AI drafted 15 short English messages (before / evacuate / shelter open × 5 hazards) and translations into 9 languages. Every draft has status "DRAFT – AI translation, needs native-speaker review", `approved = no`, and an empty reviewer field. A test blocks any approved row without a named reviewer and review date. For **Chuukese and Marshallese the AI did not produce drafts**: its output in those languages is not reliable enough to help a reviewer, so those rows are marked "NEEDS HUMAN TRANSLATION". Vietnamese drafts are assigned to Kim Quynh Do for review. The messages make no promises the counties have not made: they say "follow county announcements", and they make no statements about law enforcement at shelters.
@@ -434,7 +451,8 @@ AI is **not** used at run time: the model, the matching, the stress tests, the w
    - tsunami and flood shelter-seeking rates (2 / 5 / 11%);
    - the wildfire low and central rates;
    - the footprint rule (top 25% of each county's Census areas by NRI score);
-   - one power outlet per power-dependent person.
+   - one power outlet per power-dependent person;
+   - **one cot per person in shelter** (planning assumption: no published per-person cot factor is cited; meals 2 and water 1 gal per person per day and the staffing ratios are cited to Florida DEM 2010 next to each number in the app and the PDFs).
 
    All are marked "team_assumption" and should be replaced with county figures.
 5. **Validation:** see §6(2). We need 2026 shelter counts from the counties.
