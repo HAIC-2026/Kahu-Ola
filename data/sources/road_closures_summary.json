@@ -23,7 +23,7 @@
    "max_added_min": 0.0,
    "median_added_min_where_longer": 0,
    "mode": "drive",
-   "name": "All 'flooded highway' segments (sea level rise 3.2 ft) closed – Hawaiʻi",
+   "name": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Hawaiʻi: every potentially flooded highway segment closed",
    "no_route": [],
    "people_affected": 0,
    "people_isolated": 0,
@@ -36,7 +36,7 @@
     "after",
     "known sites no longer within reach"
    ],
-   "short": "Flooded highways closed – Hawaiʻi",
+   "short": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Hawaiʻi",
    "why": ""
   },
   "flooded_kauai|drive": {
@@ -82,7 +82,7 @@
    "max_added_min": 0.0,
    "median_added_min_where_longer": 0,
    "mode": "drive",
-   "name": "All 'flooded highway' segments (sea level rise 3.2 ft) closed – Kauaʻi",
+   "name": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Kauaʻi: every potentially flooded highway segment closed",
    "no_route": [],
    "people_affected": 9151,
    "people_isolated": 0,
@@ -95,7 +95,7 @@
     "after",
     "known sites no longer within reach"
    ],
-   "short": "Flooded highways closed – Kauaʻi",
+   "short": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Kauaʻi",
    "why": ""
   },
   "flooded_maui|drive": {
@@ -306,7 +306,7 @@
    "max_added_min": 3.8,
    "median_added_min_where_longer": 2.4,
    "mode": "drive",
-   "name": "All 'flooded highway' segments (sea level rise 3.2 ft) closed – Maui",
+   "name": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Maui: every potentially flooded highway segment closed",
    "no_route": [
     "15009032000"
    ],
@@ -321,7 +321,7 @@
     "after",
     "known sites no longer within reach"
    ],
-   "short": "Flooded highways closed – Maui",
+   "short": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Maui",
    "why": ""
   },
   "flooded_oahu|drive": {
@@ -1534,7 +1534,7 @@
    "max_added_min": 13.6,
    "median_added_min_where_longer": 6.5,
    "mode": "drive",
-   "name": "All 'flooded highway' segments (sea level rise 3.2 ft) closed – Oʻahu",
+   "name": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Oʻahu: every potentially flooded highway segment closed",
    "no_route": [
     "15003940007"
    ],
@@ -1549,7 +1549,7 @@
     "after",
     "known sites no longer within reach"
    ],
-   "short": "Flooded highways closed – Oʻahu",
+   "short": "Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – Oʻahu",
    "why": ""
   },
   "hana|drive": {

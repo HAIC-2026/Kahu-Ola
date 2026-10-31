@@ -229,6 +229,11 @@ MEASURE = {
 }
 
 
+DEFINITION_15 = ("People counted: residents of Census areas whose drive from the area's centre point to the "
+                 "nearest usable 2026 site was 15 minutes or less before the loss and is more than 15 minutes "
+                 "(or no route) after it; areas already beyond 15 minutes are not counted.")
+
+
 def site_loss(inp: Inputs) -> list:
     out = []
     by_isl = {}
@@ -804,8 +809,8 @@ def road_summary(inp: Inputs) -> dict:
             c = names.get(scen, {})
             isl = c.get("island") or next(iter({inp.island.get(o) for o in rows}), "")
             out["scenarios"][key] = {
-                "id": scen, "mode": mode, "name": c.get("name") or f"All 'flooded highway' segments (sea level rise 3.2 ft) closed – {isl}",
-                "short": c.get("short") or f"Flooded highways closed – {isl}", "why": c.get("why", ""),
+                "id": scen, "mode": mode, "name": c.get("name") or f"Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – {isl}: every potentially flooded highway segment closed",
+                "short": c.get("short") or f"Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites – {isl}", "why": c.get("why", ""),
                 "island": isl, "county": c.get("county") or fa.ISLE_COUNTY.get(isl, ""),
                 "row_fields": ["nearest known site, before (min)", "after", "nearest 2026 activated site, before",
                                "after", "known sites no longer within reach"],
@@ -840,7 +845,8 @@ def roads(inp: Inputs, rs: dict) -> list:
               "max_added_min_any_site": s["max_added_any_site_min"],
               "isolated_rule": f"over {rs['isolated_min']} minutes or no route" if test == 24 else "no walking route",
               "reach": f"{rs['isolated_min']}-minute drive" if test == 24 else "walking route (sites within 12 km)",
-              "why_this_road": s["why"], "note": NOT_NO_SHELTER}
+              "why_this_road": s["why"], "note": NOT_NO_SHELTER,
+              "areas_cut_off": [inp.label(o) for o in sorted(set(s["isolated"]) | set(s["isolated_from_2026_sites"]))] or "none"}
         src = ["barriers", "walk" if test == 25 else "drive", "sites", "schools"]
         if s["id"].startswith("flooded_"):
             src.append("flooded")
@@ -848,7 +854,7 @@ def roads(inp: Inputs, rs: dict) -> list:
                            s["county"], "all", people, ev, src,
                            [assume("Closure location along the highway (a stretch of about 0.8 km)", "team assumption")]
                            if not s["id"].startswith("flooded_") else
-                           [assume("Every flooded-highway segment on the island closed at once (sea level rise 3.2 ft scenario)", "all segments")],
+                           [assume("Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites: every potentially flooded highway segment on the island closed at once", "all segments")],
                            areas=top_areas(rows), title=TITLES[test]))
     return out
 
@@ -889,7 +895,7 @@ def build(groups: str = "AB") -> dict:
     return {"label": inp.cfg["label"], "built_at": now_hst(),
             "method": "Deterministic code computes every number from the plan's data; people review the results.",
             "tests": {str(k): v for k, v in TITLES.items()}, "share_method": blocks["method"] if blocks else "area",
-            "findings": rank(findings), "roads": rs}
+            "definition_15": DEFINITION_15, "findings": rank(findings), "roads": rs}
 
 
 def write_csv(path: Path, findings: list) -> None:

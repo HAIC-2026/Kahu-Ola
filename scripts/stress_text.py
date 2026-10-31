@@ -111,7 +111,7 @@ EV = {  # evidence key -> plain words
     "centres_in_county": "Childcare centres in the county", "centres_in_zone": "Childcare centres in the zone",
     "children_enrolled": "Children enrolled", "how": "In the zone means", "drive_from": "Drive measured from",
     "facilities": "Facilities", "over_15_min_or_no_site": "Facilities over 15 minutes from a usable site, or none on the island",
-    "residents_or_patients": "Residents or patients", "finding": "Result", "people": "People",
+    "residents_or_patients": "Residents or patients", "areas_cut_off": "Census areas cut off", "finding": "Result", "people": "People",
 }
 SKIP = {"note", "upper_bound", "island_level"}
 UNIT = {"water_gal": "gallons of water", "meals": "meals", "toilets": "toilets",
@@ -226,4 +226,19 @@ def top(findings: list, county: str, hazard: str | None = None, n: int = TOP) ->
         out.append(f)
         if len(out) == n:
             break
+    return out
+
+
+def shown(findings: list) -> list:
+    """Findings worth listing: every result that affects someone, needs county data, or counts
+    facilities; two-site losses only when they add people beyond either site alone or leave an
+    island without a usable site (the others repeat a one-site result)."""
+    out = []
+    for f in findings:
+        e = f["evidence"]
+        if f["test"] == "2":
+            if e["more_than_worst_single_loss"] > 0 or e["areas_left_with_no_usable_site_on_island"] > 0:
+                out.append(f)
+        elif f["people_affected"] or f["people_affected"] is None or f["unit"] != "people":
+            out.append(f)
     return out
