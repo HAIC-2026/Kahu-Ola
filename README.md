@@ -28,6 +28,8 @@ python3 scripts/build_demographics.py       # Vintage 2025, ACS 2020-2024, 2020 
 python3 scripts/build_place_names.py        # USGS GNIS: Hawaiian spellings (ʻokina, kahakō) for place names
 python3 scripts/build_tract_labels.py       # 2020 Block Assignment File + PL block population -> tract community names
 #    ACS PUMS: download the files listed in scripts/build_languages_pums.py into data/raw/pums/
+python3 scripts/fetch_hub_layers.py         # State Hub: safe zones, fire risk, flooded highways, PDC shelters, HPMS
+ARCGIS_TOKEN=... python3 scripts/fetch_stress_routes.py   # paid, budget-guarded: walk to safe zones, road closures
 
 # 2. Rebuild everything from local data (offline, about 1 minute)
 python3 scripts/fetch_data.py --offline
@@ -40,6 +42,8 @@ python3 scripts/build_tract_labels.py --offline   # tract community names (befor
 python3 scripts/build_islands.py --offline        # island of every Census area and site (coastline layer)
 python3 scripts/model_needs.py
 python3 scripts/match.py
+python3 scripts/build_hub_layers.py         # State Hub layers summary (safe zones, fire risk, flooded highways, PDC 2009)
+python3 scripts/build_stress_tests.py       # stress tests 1-25 -> data/processed/stress_tests.json (needs data/raw/)
 python3 scripts/build_playbooks.py          # add --html-only to skip PDFs
 python3 scripts/build_app_data.py           # app bundle and service worker; copies PDFs into app/
 ```
