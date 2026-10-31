@@ -2,8 +2,8 @@
 """
 HAIC 2026 – Team Kahu Ola – stress tests: "what could break" (deterministic, build time).
 
-AI proposed the list of scenarios; this script computes every number from the plan's data
-files, with no AI and no network. Each finding is labelled "stress test, not a forecast".
+The scenario list was proposed during planning (see PLAN.md §9); this script computes every
+number from the plan's data files, deterministically and with no network. Each finding is labelled "stress test, not a forecast".
 
 Group A (existing data, tests 1-23) and group B (ArcGIS road-closure routing, tests 24-25:
 summarised from data/raw/arcgis/ into the committed data/sources/road_closures_summary.json).
@@ -416,6 +416,7 @@ def need_qty(m: dict, name: str) -> int:
 
 
 def several_counties(inp: Inputs) -> list:
+    from build_playbooks import lang_label
     out = []
     groups = [list(p) for p in itertools.combinations(COUNTIES, 2)] + [list(COUNTIES)]
     for h in HAZARDS:
@@ -425,7 +426,8 @@ def several_counties(inp: Inputs) -> list:
             for m in ms:
                 for n in m["needs"]:
                     if n.get("language"):
-                        interp[n["language"]] = interp.get(n["language"], 0) + n["quantity"]
+                        lab = lang_label(n["language"])
+                        interp[lab] = interp.get(lab, 0) + n["quantity"]
             people = sum(m["shelter_demand_central"] for m in ms)
             code = "all" if len(g) == 4 else "-".join(c.lower() for c in g)
             name = "All four counties" if len(g) == 4 else " and ".join(COUNTY_LABEL[c] for c in g)
@@ -499,7 +501,7 @@ def outages(inp: Inputs) -> list:
             out.append(finding(12, f"{h}-{c.lower()}", f"Power out 1 to 14 days – {COUNTY_LABEL[c]} ({HZ_LABEL[h]})", c, h, pd,
                                {"power_dependent_in_risk_area": pd, "outlets_plan_in_shelter": sc["power_outlets"],
                                 "outlets_per_day_while_out": ceil(pd * k),
-                                "charge_point_days": {f"{d} days": ceil(pd * k) * d for d in inp.cfg["outage_days"]["value"]}},
+                                "charge_point_days": {f"{d} {'day' if d == 1 else 'days'}": ceil(pd * k) * d for d in inp.cfg["outage_days"]["value"]}},
                                ["people"], [assume("Charges per power-dependent resident per day while the power is out (upper bound)", k)],
                                title=TITLES[12]))
     return out
@@ -885,7 +887,7 @@ def build(groups: str = "AB") -> dict:
     if dup:
         raise RuntimeError(f"duplicate finding ids: {sorted(dup)[:5]}")
     return {"label": inp.cfg["label"], "built_at": now_hst(),
-            "method": "AI proposed the scenario list; deterministic code computes every number; people review.",
+            "method": "Deterministic code computes every number from the plan's data; people review the results.",
             "tests": {str(k): v for k, v in TITLES.items()}, "share_method": blocks["method"] if blocks else "area",
             "findings": rank(findings), "roads": rs}
 

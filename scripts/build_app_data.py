@@ -42,6 +42,9 @@ from geo import area_centroid  # noqa: E402
 import build_islands  # noqa: E402
 import build_access  # noqa: E402
 import build_state_layers as bsl  # noqa: E402
+import build_hub_layers as bhl  # noqa: E402
+import stress_text  # noqa: E402
+import whatif  # noqa: E402
 from raw_inputs import MissingInput, load_geojson  # noqa: E402
 from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, COUNTY_LINE_LABEL,  # noqa: E402
                              DETAIL_KEYS, DISCLAIMER, KALAWAO_NOTE, SERVICE_ANIMALS, WHO_ELSE,
@@ -62,7 +65,7 @@ APP = ROOT / "app"
 DATA = APP / "data"
 PLAYBOOKS = ROOT / "playbooks"
 TOL = 0.0008                  # degrees (~80 m) for outline simplification
-SHELL = ["./", "index.html", "app.js", "styles.css", "manifest.webmanifest", "icon.svg",
+SHELL = ["./", "index.html", "app.js", "whatif.js", "styles.css", "manifest.webmanifest", "icon.svg",
          "icon-180.png", "icon-192.png", "icon-512.png"]
 SCENARIO_FIELDS = ("at_risk_pop", "shelter_demand_low", "shelter_demand_central",
                    "shelter_demand_high", "rate_low", "rate_central", "rate_high",
@@ -140,9 +143,137 @@ def require_summaries() -> None:
     if not STATE.get("sirens") or not STATE.get("areas"):
         raise MissingInput("Build stopped: data/sources/state_layers_summary.json has no "
                            "sirens or Census areas.")
+    if not HUB or not HUB.get("overlays") or not HUB.get("safe_zone_walk"):
+        raise MissingInput("Build stopped: data/sources/hub_layers_summary.json is missing or "
+                           "empty. Run python3 scripts/build_hub_layers.py first.")
     if not ACCESS.get("facilities") or not ACCESS.get("areas"):
         raise MissingInput("Build stopped: data/sources/arcgis_summary.json has no care "
                            "facilities or travel times.")
+
+
+STRESS_JSON = PROC / "stress_tests.json"
+HUB = bhl.load()                      # data/sources/hub_layers_summary.json (build_hub_layers.py)
+STRESS_SHOW = ("1", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16",
+               "17", "18", "19", "20", "21", "22", "23a", "23b", "24", "25")
+
+
+def stress_bundle(sites: dict) -> dict:
+    """Stress tests for the app: every finding that affects someone, needs county data, or
+    counts facilities (two-site losses only when they add people beyond either site alone or
+    leave an island without a usable site); plain-word evidence lines for each county's and
+    each hazard's top 10. Rows: [id, test, scenario, county, hazard, people (null = needs
+    county data), measure, rank, county rank, summary, source ids, assumption ids, areas,
+    site ids, evidence lines (top 10 only)]. Rows: [id, test, scenario, county, hazard, people
+    (null = needs county data), rank, county rank, summary extra, source ids, assumption ids,
+    areas, site ids, evidence lines or 0]; the measure is per test ("measures")."""
+    if not STRESS_JSON.exists():
+        raise MissingInput("Build stopped: data/processed/stress_tests.json is missing. "
+                           "Run python3 scripts/build_stress_tests.py first.")
+    st = json.loads(STRESS_JSON.read_text(encoding="utf-8"))
+    F = st["findings"]
+    if not F:
+        raise MissingInput("Build stopped: data/processed/stress_tests.json has no findings.")
+    keep = []
+    for f in F:
+        e = f["evidence"]
+        if f["test"] == "2":
+            if e["more_than_worst_single_loss"] > 0 or e["areas_left_with_no_usable_site_on_island"] > 0:
+                keep.append(f)
+        elif f["people_affected"] or f["people_affected"] is None or f["unit"] != "people":
+            keep.append(f)
+    tops = {}
+    for c in COUNTIES:
+        tops[c] = {"all": [f["id"] for f in stress_text.top(F, c)]}
+        for h in HAZARDS:
+            tops[c][h] = [f["id"] for f in stress_text.top(F, c, h)]
+    detail = {i for t in tops.values() for ids in t.values() for i in ids}
+    keep_ids = {f["id"] for f in keep}
+    keep += [f for f in F if f["id"] in detail and f["id"] not in keep_ids]
+    srcs, asms, rows = [], [], []
+    idx = lambda lst, v: lst.index(v) if v in lst else (lst.append(v) or len(lst) - 1)  # noqa: E731
+    for f in sorted(keep, key=lambda f: f["rank"]):
+        county = f["county"] if f["county"] != "Statewide" else "|".join(["Statewide", *f["evidence"]["counties"]])
+        rows.append([f["id"], f["test"], f["scenario"], county, f["hazard"], f["people_affected"],
+                     f["rank"], f["county_rank"], stress_text.extra(f),
+                     [idx(srcs, x) for x in f["sources"]],
+                     [idx(asms, f"{a['text']}: {a['value']} (team assumption)") for a in f["assumptions"]],
+                     f["areas"][:3], [sites[k] for k in f["sites"] if k in sites][:6],
+                     stress_text.evidence_lines(f) + ([["Note", f["evidence"]["note"]]] if "note" in f["evidence"] else [])
+                     if f["id"] in detail else 0])
+    tested = {c: sum(1 for f in F if stress_text.in_county(f, c)) for c in COUNTIES}
+    import build_stress_tests
+    return {"label": stress_text.LABEL, "method": st["method"], "tests": st["tests"],
+            "measures": build_stress_tests.MEASURE, "needs_data": stress_text.NEEDS_DATA,
+            "questions": stress_text.QUESTIONS, "sources": srcs, "assumptions": asms, "rows": rows,
+            "top": tops, "tested": tested, "per_test": stress_text.PER_TEST,
+            "not_no_shelter": build_access.NOT_NO_SHELTER}
+
+
+def hub_bundle(hub: dict, sites: dict) -> dict:
+    """Map overlays (Tsunami Safe Zones, State Fire Risk, flooded highways) and the PDC 2009
+    reference capacity of matched 2026 sites (offered in the what-if panel, never the default)."""
+    m = hub["meta"]
+    pdc = hub["pdc"]
+    return {"safe_zones": hub["overlays"]["safe_zones"], "fire_high": hub["overlays"]["fire_high"],
+            "fire_medium": hub["overlays"]["fire_medium"],
+            "flooded": {c: v["segments"] for c, v in hub["flooded"].items()},
+            "flooded_km": {c: v["km"] for c, v in hub["flooded"].items()},
+            "maui_2013": m["maui_2013_note"],
+            "pdc_sites": {str(sites[k]): [v["capacity"], v["pdc_name"]] for k, v in pdc["site_capacity"].items() if k in sites},
+            "pdc_schools": len(pdc["school_capacity"]), "pdc_with_capacity": pdc["with_capacity"],
+            "pdc_note": "2009 reference capacity (American Red Cross Hawaiʻi State Chapter, via the "
+                        "Pacific Disaster Center, ground condition October 2009): may be outdated. "
+                        "Use only as a starting point; confirm with the county.",
+            "sources": {"safe_zones": "Tsunami Safe Zones (Hawaiʻi Statewide GIS; Hawaiʻi Island, "
+                                      "Oʻahu and Kauaʻi zones 2025, Maui County zones 2013), simplified outline.",
+                        "fire": "State Fire Risk Areas (DLNR Division of Forestry and Wildlife, 2007; "
+                                "boundaries confirmed 2022, via Hawaiʻi Statewide GIS), simplified outline. "
+                                "The plan's wildfire numbers use the FEMA National Risk Index; this layer is a comparison.",
+                        "flooded": "Potential flooded highways with 3.2 ft of sea level rise (Hawaiʻi Sea "
+                                   "Level Rise Viewer, PacIOOS, via Hawaiʻi Statewide GIS). Chronic flooding "
+                                   "later this century, not an event forecast."}}
+
+
+WHATIF_HOW = {
+    "people_in_shelter": "People in the risk area × shelter-seeking rate.",
+    "cots": "One cot per person in shelter (rounded up).",
+    "floor_sqft": "20 sq ft per person for stays up to 3 days, 40 sq ft beyond (Florida DEM 2010; past 14 days a team assumption).",
+    "water": "1 gallon per person per day (Florida DEM 2010) × days of stay.",
+    "meals": "2 meals per person per day (Florida DEM 2010) × days of stay.",
+    "toilets": "1 per 40 people for stays up to 3 days, 1 per 20 beyond (Florida DEM 2010).",
+    "outlets": "1 outlet per power-dependent person in shelter (HHS emPOWER-based estimate; team assumption). During a power outage: 1 charge a day for every power-dependent resident in the risk area, if that is more (team assumption, upper bound).",
+    "staff": "Florida DEM (2010) ratios per shift: registration 1 per 165, dormitory 1 per 100, meals 1 per 110, mental health 1 per 250, health 1 per 200, security 1 per 100, sanitation 1 per 200 (each at least 1); children's area 1 per 12 children.",
+    "interpreters": "People with limited English in shelter × each language's share of limited-English speakers (ACS PUMS 2019–2023). Each person may need an interpreter; it is not a count of interpreters.",
+    "support": "People in shelter × the share needing support. Plan default: the share of people in shelter with a disability (ACS via CDC SVI).",
+    "trips": "People in households without a car in the risk area ÷ people per vehicle trip, rounded up (an upper bound: not all will need a ride).",
+    "pets": "Households in shelter × 44.6% with a dog and 26% with a cat (AVMA, 2020 data).",
+    "allocation": "Each Census area's people in shelter go to the nearest usable 2026 site on the same island by drive time (Esri ArcGIS, normal traffic). Capacity is compared only when you enter it.",
+}
+
+
+def whatif_bundle(inp: dict) -> dict:
+    cfg = json.loads((ROOT / "config" / "planning_factors.json").read_text(encoding="utf-8"))
+    scfg = json.loads((ROOT / "config" / "stress_tests.json").read_text(encoding="utf-8"))
+    langs = {c: [[lang_label(l["language"]), l["share_of_area_lep"]]
+                 for l in select_languages(inp["languages"].get(c, []), inp["comm"])] for c in COUNTIES}
+    agg = whatif.aggregates(inp["afn"], inp.get("labels") or {}, inp["shelters"]["features"],
+                            inp["candidates"]["features"], cfg, langs)
+    w = scfg["whatif"]
+    return {"label": stress_text.WHATIF_LABEL, "factors": whatif.factors(cfg, scfg),
+            "defaults": {"stay_days": w["stay_days"]["value"], "outage_days": w["outage_days"]["value"],
+                         "people_per_trip": w["people_per_trip"]["value"]},
+            "limits": {"rate": [w["rate"]["min"], w["rate"]["max"]], "stay": [w["stay_days"]["min"], w["stay_days"]["max"]],
+                       "outage": [w["outage_days"]["min"], w["outage_days"]["max"]],
+                       "trip": [w["people_per_trip"]["min"], w["people_per_trip"]["max"]],
+                       "support": [w["support_share"]["min"], w["support_share"]["max"]]},
+            "assumptions": {"people_per_trip": f"{w['people_per_trip']['value']} people per vehicle trip (team assumption: the plan gives no value)",
+                            "stay": "3 days = the plan's 72-hour shelter factors",
+                            "outage": "0 days = the plan: outlets for people in shelter only"},
+            "staff_labels": {"client_registration": "Registration", "dormitory_management": "Dormitory",
+                             "meal_service": "Meal service", "mental_health": "Mental health",
+                             "public_health_medical": "Health and medical", "security": "Security",
+                             "sanitation": "Sanitation", "children_area": "Children's area"},
+            "how": WHATIF_HOW, "scenarios": agg}
 
 
 ISLANDS = build_islands.load()        # data/sources/islands.csv (build_islands.py)
@@ -342,6 +473,9 @@ def build(inp: dict) -> dict:
         "tsunami_zone": tsunami_overlay(),
         "area_fields": [k for k, _s in AREA_FIELDS],
         "official_map": OFFICIAL_MAP,
+        "stress": stress_bundle({k: v["id"] for k, v in sites.items()}),
+        "hub": hub_bundle(HUB, {k: v["id"] for k, v in sites.items()}),
+        "whatif": whatif_bundle(inp),
         "provenance": {"numbers": PROV_NUMBERS, "shelters": PROV_SHELTERS,
                        "sources_url": message_library.SOURCES_URL},
     }

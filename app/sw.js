@@ -5,11 +5,12 @@
 "use strict";
 
 // BEGIN GENERATED
-const VERSION = "ee5a22dc2eef";
+const VERSION = "6ee9174b8ab2";
 const PRECACHE = [
   "./",
   "index.html",
   "app.js",
+  "whatif.js",
   "styles.css",
   "manifest.webmanifest",
   "icon.svg",

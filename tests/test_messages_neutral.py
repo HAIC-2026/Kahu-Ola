@@ -1,4 +1,4 @@
-"""Messages tab with a neutral review status, a two-tab menu, and no "AI"/"Claude"
+"""Messages tab with a neutral review status, a four-tab menu, and no "AI"/"Claude"
 wording anywhere in the app or the printed playbooks."""
 import json
 import re
@@ -43,12 +43,13 @@ class NoAIWording(unittest.TestCase):
 
 
 class Navigation(unittest.TestCase):
-    def test_exactly_two_tabs(self):
+    def test_exactly_four_tabs(self):
         html = (APP / "index.html").read_text(encoding="utf-8")
         nav = re.search(r'<nav id="menu".*?</nav>', html, re.S).group(0)
         self.assertEqual(re.findall(r'<a [^>]*href="(#\w+)">([^<]+)</a>', nav),
-                         [("#plan", "Plan"), ("#messages", "Messages")])
-        self.assertIn('const VIEWS = { plan: "Plan", messages: "Messages" };', JS)
+                         [("#plan", "Plan"), ("#stress", "Stress tests"), ("#whatif", "What-if"),
+                          ("#messages", "Messages")])
+        self.assertIn('const VIEWS = { plan: "Plan", stress: "Stress tests", whatif: "What-if", messages: "Messages" };', JS)
 
     def test_header_unchanged(self):
         html = (APP / "index.html").read_text(encoding="utf-8")

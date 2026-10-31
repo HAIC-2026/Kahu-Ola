@@ -1,5 +1,5 @@
 {
- "built_at": "2026-10-30T23:51:47-10:00",
+ "built_at": "2026-10-31T00:06:36-10:00",
  "findings": [
   {
    "areas": [
@@ -2363,9 +2363,9 @@
      "Japanese": 201,
      "Korean": 99,
      "Marshallese": 24,
-     "Other English-based Creole languages": 25,
+     "Pidgin (Hawaiʻi Creole English)": 25,
      "Spanish": 29,
-     "Tagalog, Filipino": 302,
+     "Tagalog/Filipino": 302,
      "Vietnamese": 65
     },
     "meals_per_day": 87036,
@@ -2939,9 +2939,9 @@
      "Japanese": 190,
      "Korean": 99,
      "Marshallese": 18,
-     "Other English-based Creole languages": 25,
+     "Pidgin (Hawaiʻi Creole English)": 25,
      "Spanish": 15,
-     "Tagalog, Filipino": 260,
+     "Tagalog/Filipino": 260,
      "Vietnamese": 65
     },
     "meals_per_day": 72736,
@@ -3055,7 +3055,7 @@
      "Korean": 99,
      "Marshallese": 16,
      "Spanish": 9,
-     "Tagalog, Filipino": 277,
+     "Tagalog/Filipino": 277,
      "Vietnamese": 65
     },
     "meals_per_day": 70495,
@@ -3321,7 +3321,7 @@
      "Korean": 99,
      "Marshallese": 14,
      "Spanish": 5,
-     "Tagalog, Filipino": 263,
+     "Tagalog/Filipino": 263,
      "Vietnamese": 65
     },
     "meals_per_day": 65017,
@@ -4410,9 +4410,9 @@
      "Japanese": 82,
      "Korean": 40,
      "Marshallese": 11,
-     "Other English-based Creole languages": 11,
+     "Pidgin (Hawaiʻi Creole English)": 11,
      "Spanish": 13,
-     "Tagalog, Filipino": 123,
+     "Tagalog/Filipino": 123,
      "Vietnamese": 26
     },
     "meals_per_day": 50906,
@@ -4809,9 +4809,9 @@
      "Japanese": 53,
      "Korean": 24,
      "Marshallese": 7,
-     "Other English-based Creole languages": 9,
+     "Pidgin (Hawaiʻi Creole English)": 9,
      "Spanish": 12,
-     "Tagalog, Filipino": 82,
+     "Tagalog/Filipino": 82,
      "Vietnamese": 16
     },
     "meals_per_day": 44231,
@@ -4900,9 +4900,9 @@
      "Japanese": 77,
      "Korean": 40,
      "Marshallese": 8,
-     "Other English-based Creole languages": 11,
+     "Pidgin (Hawaiʻi Creole English)": 11,
      "Spanish": 7,
-     "Tagalog, Filipino": 105,
+     "Tagalog/Filipino": 105,
      "Vietnamese": 26
     },
     "meals_per_day": 43499,
@@ -4992,7 +4992,7 @@
      "Korean": 40,
      "Marshallese": 7,
      "Spanish": 4,
-     "Tagalog, Filipino": 112,
+     "Tagalog/Filipino": 112,
      "Vietnamese": 26
     },
     "meals_per_day": 42213,
@@ -5898,7 +5898,7 @@
      "Korean": 40,
      "Marshallese": 6,
      "Spanish": 2,
-     "Tagalog, Filipino": 106,
+     "Tagalog/Filipino": 106,
      "Vietnamese": 26
     },
     "meals_per_day": 39088,
@@ -6128,9 +6128,9 @@
      "Japanese": 48,
      "Korean": 24,
      "Marshallese": 5,
-     "Other English-based Creole languages": 9,
+     "Pidgin (Hawaiʻi Creole English)": 9,
      "Spanish": 6,
-     "Tagalog, Filipino": 64,
+     "Tagalog/Filipino": 64,
      "Vietnamese": 16
     },
     "meals_per_day": 37183,
@@ -6237,7 +6237,7 @@
      "Korean": 24,
      "Marshallese": 5,
      "Spanish": 5,
-     "Tagalog, Filipino": 76,
+     "Tagalog/Filipino": 76,
      "Vietnamese": 16
     },
     "meals_per_day": 36311,
@@ -6326,9 +6326,9 @@
      "Japanese": 82,
      "Korean": 39,
      "Marshallese": 11,
-     "Other English-based Creole languages": 14,
+     "Pidgin (Hawaiʻi Creole English)": 14,
      "Spanish": 14,
-     "Tagalog, Filipino": 122,
+     "Tagalog/Filipino": 122,
      "Vietnamese": 26
     },
     "meals_per_day": 35325,
@@ -6627,7 +6627,7 @@
      "Korean": 24,
      "Marshallese": 3,
      "Spanish": 1,
-     "Tagalog, Filipino": 62,
+     "Tagalog/Filipino": 62,
      "Vietnamese": 16
     },
     "meals_per_day": 33591,
@@ -7116,9 +7116,9 @@
      "Japanese": 78,
      "Korean": 39,
      "Marshallese": 9,
-     "Other English-based Creole languages": 14,
+     "Pidgin (Hawaiʻi Creole English)": 14,
      "Spanish": 8,
-     "Tagalog, Filipino": 104,
+     "Tagalog/Filipino": 104,
      "Vietnamese": 26
     },
     "meals_per_day": 29738,
@@ -7249,7 +7249,7 @@
      "Korean": 39,
      "Marshallese": 6,
      "Spanish": 4,
-     "Tagalog, Filipino": 110,
+     "Tagalog/Filipino": 110,
      "Vietnamese": 26
     },
     "meals_per_day": 28009,
@@ -8550,7 +8550,7 @@
      "Korean": 39,
      "Marshallese": 6,
      "Spanish": 2,
-     "Tagalog, Filipino": 104,
+     "Tagalog/Filipino": 104,
      "Vietnamese": 26
     },
     "meals_per_day": 26260,
@@ -9431,9 +9431,9 @@
      "Ilocano": 92,
      "Japanese": 24,
      "Marshallese": 10,
-     "Other English-based Creole languages": 25,
+     "Pidgin (Hawaiʻi Creole English)": 25,
      "Spanish": 24,
-     "Tagalog, Filipino": 39
+     "Tagalog/Filipino": 39
     },
     "meals_per_day": 22019,
     "people_in_shelter_likely": 11009,
@@ -10488,9 +10488,9 @@
      "Ilocano": 67,
      "Japanese": 21,
      "Marshallese": 8,
-     "Other English-based Creole languages": 25,
+     "Pidgin (Hawaiʻi Creole English)": 25,
      "Spanish": 20,
-     "Tagalog, Filipino": 25
+     "Tagalog/Filipino": 25
     },
     "meals_per_day": 16541,
     "people_in_shelter_likely": 8270,
@@ -11416,7 +11416,7 @@
      "Japanese": 11,
      "Marshallese": 6,
      "Spanish": 14,
-     "Tagalog, Filipino": 42
+     "Tagalog/Filipino": 42
     },
     "meals_per_day": 14300,
     "people_in_shelter_likely": 7149,
@@ -13240,7 +13240,7 @@
    "county_rank": 125,
    "evidence": {
     "charge_point_days": {
-     "1 days": 6385,
+     "1 day": 6385,
      "14 days": 89390,
      "3 days": 19155,
      "7 days": 44695
@@ -13285,9 +13285,9 @@
      "Japanese": 28,
      "Korean": 12,
      "Marshallese": 3,
-     "Other English-based Creole languages": 3,
+     "Pidgin (Hawaiʻi Creole English)": 3,
      "Spanish": 6,
-     "Tagalog, Filipino": 45,
+     "Tagalog/Filipino": 45,
      "Vietnamese": 8
     },
     "meals_per_day": 12766,
@@ -13509,9 +13509,9 @@
      "Ilocano": 41,
      "Japanese": 11,
      "Marshallese": 5,
-     "Other English-based Creole languages": 11,
+     "Pidgin (Hawaiʻi Creole English)": 11,
      "Spanish": 11,
-     "Tagalog, Filipino": 17
+     "Tagalog/Filipino": 17
     },
     "meals_per_day": 11818,
     "people_in_shelter_likely": 5909,
@@ -13679,7 +13679,7 @@
      "Korean": 12,
      "Marshallese": 2,
      "Spanish": 3,
-     "Tagalog, Filipino": 41,
+     "Tagalog/Filipino": 41,
      "Vietnamese": 8
     },
     "meals_per_day": 10651,
@@ -13722,9 +13722,9 @@
      "Ilocano": 45,
      "Japanese": 10,
      "Marshallese": 4,
-     "Other English-based Creole languages": 9,
+     "Pidgin (Hawaiʻi Creole English)": 9,
      "Spanish": 11,
-     "Tagalog, Filipino": 20
+     "Tagalog/Filipino": 20
     },
     "meals_per_day": 10640,
     "people_in_shelter_likely": 5320,
@@ -14444,9 +14444,9 @@
      "Japanese": 24,
      "Korean": 12,
      "Marshallese": 2,
-     "Other English-based Creole languages": 3,
+     "Pidgin (Hawaiʻi Creole English)": 3,
      "Spanish": 2,
-     "Tagalog, Filipino": 32,
+     "Tagalog/Filipino": 32,
      "Vietnamese": 8
     },
     "meals_per_day": 9246,
@@ -14674,9 +14674,9 @@
      "Ilocano": 45,
      "Japanese": 13,
      "Marshallese": 5,
-     "Other English-based Creole languages": 14,
+     "Pidgin (Hawaiʻi Creole English)": 14,
      "Spanish": 12,
-     "Tagalog, Filipino": 18
+     "Tagalog/Filipino": 18
     },
     "meals_per_day": 9065,
     "people_in_shelter_likely": 4532,
@@ -14835,7 +14835,7 @@
      "Korean": 12,
      "Marshallese": 1,
      "Spanish": 1,
-     "Tagalog, Filipino": 34,
+     "Tagalog/Filipino": 34,
      "Vietnamese": 8
     },
     "meals_per_day": 8939,
@@ -14878,9 +14878,9 @@
      "Ilocano": 29,
      "Japanese": 10,
      "Marshallese": 4,
-     "Other English-based Creole languages": 11,
+     "Pidgin (Hawaiʻi Creole English)": 11,
      "Spanish": 9,
-     "Tagalog, Filipino": 11
+     "Tagalog/Filipino": 11
     },
     "meals_per_day": 8693,
     "people_in_shelter_likely": 4346,
@@ -15131,9 +15131,9 @@
      "Ilocano": 20,
      "Japanese": 7,
      "Marshallese": 2,
-     "Other English-based Creole languages": 9,
+     "Pidgin (Hawaiʻi Creole English)": 9,
      "Spanish": 7,
-     "Tagalog, Filipino": 6
+     "Tagalog/Filipino": 6
     },
     "meals_per_day": 7920,
     "people_in_shelter_likely": 3960,
@@ -15606,7 +15606,7 @@
      "Japanese": 5,
      "Marshallese": 3,
      "Spanish": 6,
-     "Tagalog, Filipino": 18
+     "Tagalog/Filipino": 18
     },
     "meals_per_day": 7407,
     "people_in_shelter_likely": 3703,
@@ -15648,9 +15648,9 @@
      "Ilocano": 33,
      "Japanese": 11,
      "Marshallese": 5,
-     "Other English-based Creole languages": 14,
+     "Pidgin (Hawaiʻi Creole English)": 14,
      "Spanish": 10,
-     "Tagalog, Filipino": 12
+     "Tagalog/Filipino": 12
     },
     "meals_per_day": 7316,
     "people_in_shelter_likely": 3657,
@@ -15950,7 +15950,7 @@
      "Japanese": 5,
      "Marshallese": 2,
      "Spanish": 6,
-     "Tagalog, Filipino": 18
+     "Tagalog/Filipino": 18
     },
     "meals_per_day": 7048,
     "people_in_shelter_likely": 3524,
@@ -17103,7 +17103,7 @@
      "Japanese": 4,
      "Marshallese": 2,
      "Spanish": 6,
-     "Tagalog, Filipino": 18
+     "Tagalog/Filipino": 18
     },
     "meals_per_day": 5587,
     "people_in_shelter_likely": 2793,
@@ -18025,7 +18025,7 @@
    "county_rank": 147,
    "evidence": {
     "charge_point_days": {
-     "1 days": 2315,
+     "1 day": 2315,
      "14 days": 32410,
      "3 days": 6945,
      "7 days": 16205
@@ -18324,9 +18324,9 @@
      "Ilocano": 23,
      "Japanese": 5,
      "Marshallese": 2,
-     "Other English-based Creole languages": 3,
+     "Pidgin (Hawaiʻi Creole English)": 3,
      "Spanish": 5,
-     "Tagalog, Filipino": 11
+     "Tagalog/Filipino": 11
     },
     "meals_per_day": 3827,
     "people_in_shelter_likely": 1913,
@@ -18364,7 +18364,7 @@
    "county_rank": 148,
    "evidence": {
     "charge_point_days": {
-     "1 days": 1893,
+     "1 day": 1893,
      "14 days": 26502,
      "3 days": 5679,
      "7 days": 13251
@@ -18639,7 +18639,7 @@
      "Japanese": 4,
      "Marshallese": 1,
      "Spanish": 4,
-     "Tagalog, Filipino": 13
+     "Tagalog/Filipino": 13
     },
     "meals_per_day": 3520,
     "people_in_shelter_likely": 1760,
@@ -18905,7 +18905,7 @@
    "county_rank": 155,
    "evidence": {
     "charge_point_days": {
-     "1 days": 1552,
+     "1 day": 1552,
      "14 days": 21728,
      "3 days": 4656,
      "7 days": 10864
@@ -19410,7 +19410,7 @@
    "county_rank": 119,
    "evidence": {
     "charge_point_days": {
-     "1 days": 1450,
+     "1 day": 1450,
      "14 days": 20300,
      "3 days": 4350,
      "7 days": 10150
@@ -20195,7 +20195,7 @@
    "county_rank": 86,
    "evidence": {
     "charge_point_days": {
-     "1 days": 1074,
+     "1 day": 1074,
      "14 days": 15036,
      "3 days": 3222,
      "7 days": 7518
@@ -20297,9 +20297,9 @@
      "Ilocano": 10,
      "Japanese": 3,
      "Marshallese": 1,
-     "Other English-based Creole languages": 3,
+     "Pidgin (Hawaiʻi Creole English)": 3,
      "Spanish": 3,
-     "Tagalog, Filipino": 4
+     "Tagalog/Filipino": 4
     },
     "meals_per_day": 2115,
     "people_in_shelter_likely": 1057,
@@ -21189,7 +21189,7 @@
    "county_rank": 163,
    "evidence": {
     "charge_point_days": {
-     "1 days": 507,
+     "1 day": 507,
      "14 days": 7098,
      "3 days": 1521,
      "7 days": 3549
@@ -21226,7 +21226,7 @@
    "county_rank": 135,
    "evidence": {
     "charge_point_days": {
-     "1 days": 484,
+     "1 day": 484,
      "14 days": 6776,
      "3 days": 1452,
      "7 days": 3388
@@ -21996,7 +21996,7 @@
    "county_rank": 143,
    "evidence": {
     "charge_point_days": {
-     "1 days": 421,
+     "1 day": 421,
      "14 days": 5894,
      "3 days": 1263,
      "7 days": 2947
@@ -22033,7 +22033,7 @@
    "county_rank": 144,
    "evidence": {
     "charge_point_days": {
-     "1 days": 410,
+     "1 day": 410,
      "14 days": 5740,
      "3 days": 1230,
      "7 days": 2870
@@ -22289,7 +22289,7 @@
    "county_rank": 78,
    "evidence": {
     "charge_point_days": {
-     "1 days": 374,
+     "1 day": 374,
      "14 days": 5236,
      "3 days": 1122,
      "7 days": 2618
@@ -22326,7 +22326,7 @@
    "county_rank": 98,
    "evidence": {
     "charge_point_days": {
-     "1 days": 374,
+     "1 day": 374,
      "14 days": 5236,
      "3 days": 1122,
      "7 days": 2618
@@ -22440,7 +22440,7 @@
    "county_rank": 100,
    "evidence": {
     "charge_point_days": {
-     "1 days": 311,
+     "1 day": 311,
      "14 days": 4354,
      "3 days": 933,
      "7 days": 2177
@@ -22673,7 +22673,7 @@
    "county_rank": 101,
    "evidence": {
     "charge_point_days": {
-     "1 days": 237,
+     "1 day": 237,
      "14 days": 3318,
      "3 days": 711,
      "7 days": 1659
@@ -22940,7 +22940,7 @@
    "county_rank": 104,
    "evidence": {
     "charge_point_days": {
-     "1 days": 160,
+     "1 day": 160,
      "14 days": 2240,
      "3 days": 480,
      "7 days": 1120
@@ -23128,7 +23128,7 @@
    "county_rank": 87,
    "evidence": {
     "charge_point_days": {
-     "1 days": 114,
+     "1 day": 114,
      "14 days": 1596,
      "3 days": 342,
      "7 days": 798
@@ -23165,7 +23165,7 @@
    "county_rank": 88,
    "evidence": {
     "charge_point_days": {
-     "1 days": 111,
+     "1 day": 111,
      "14 days": 1554,
      "3 days": 333,
      "7 days": 777
@@ -23236,7 +23236,7 @@
    "county_rank": 90,
    "evidence": {
     "charge_point_days": {
-     "1 days": 98,
+     "1 day": 98,
      "14 days": 1372,
      "3 days": 294,
      "7 days": 686
@@ -23273,7 +23273,7 @@
    "county_rank": 149,
    "evidence": {
     "charge_point_days": {
-     "1 days": 89,
+     "1 day": 89,
      "14 days": 1246,
      "3 days": 267,
      "7 days": 623
@@ -23516,7 +23516,7 @@
    "county_rank": 95,
    "evidence": {
     "charge_point_days": {
-     "1 days": 46,
+     "1 day": 46,
      "14 days": 644,
      "3 days": 138,
      "7 days": 322
@@ -34633,7 +34633,7 @@
  ],
  "groups": "AB",
  "label": "stress test, not a forecast",
- "method": "AI proposed the scenario list; deterministic code computes every number; people review.",
+ "method": "Deterministic code computes every number from the plan's data; people review the results.",
  "roads": {
   "isolated_min": 45,
   "scenarios": {

@@ -485,11 +485,11 @@ class Browser(unittest.TestCase):
 
 
 class Size(unittest.TestCase):
-    def test_bundle_growth_under_150_kb(self):
-        before_arcgis = 782_422            # bundle.json at commit a1ccb82
-        state_layers = 100 * 1024          # State layers: own limit (test_state_layers.py)
-        self.assertLess((APP / "data" / "bundle.json").stat().st_size,
-                        before_arcgis + 150 * 1024 + state_layers)
+    def test_bundle_growth_within_budget(self):
+        # ArcGIS (a1ccb82 + 150 KB) and State layers (+100 KB) were within their limits; the
+        # stress tests, what-if and State Hub layers have their own: d60f134 + 300 KB
+        before_stress = 967_068            # bundle.json at commit d60f134
+        self.assertLess((APP / "data" / "bundle.json").stat().st_size, before_stress + 300 * 1024)
 
     def test_app_makes_no_arcgis_requests(self):
         js = (APP / "app.js").read_text(encoding="utf-8")

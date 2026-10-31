@@ -345,6 +345,8 @@ def load_inputs() -> dict:
         "data_as_of": hst_date(needs.get("built_at")),
         "access": build_access.load(),      # None: no ArcGIS summary, straight-line only
         "state": (state := bsl.load()),     # childcare, sirens, dam zones; None: left out
+        "stress": load_json(PROC / "stress_tests.json"),        # build_stress_tests.py
+        "hub": load_json(ROOT / "data" / "sources" / "hub_layers_summary.json"),
     } | ({"county_lines": load_county_lines() + dam_lines(state)} if state else {})
 
 
@@ -462,6 +464,7 @@ td small, .src, .range { font-size: 9pt; color: #333; }
 .mapwrap { display: grid; grid-template-columns: 2fr 1fr; gap: 10pt; align-items: start; }
 ol.sitekey { margin: 0; padding-left: 0; list-style: none; font-size: 10pt; }
 ol.sitekey li { margin: 0 0 3pt; }
+ol.stress { padding-left: 24pt; } ol.stress li { margin: 0 0 6pt; break-inside: avoid; } ol.stress small { font-size: 9pt; }
 .guide h3 { margin-top: 8pt; }
 .guide p, .guide li { font-size: 11pt; }
 .example td { background: #f2f2f2; }
@@ -911,6 +914,38 @@ NO_FACILITY_SCREEN = ("No facility-level zone screen for this hazard (the same a
                       "sites).")
 
 
+def stress_html(inp: dict, county: str, hazard: str) -> str:
+    """10. Stress tests: the top 10 for this county x hazard (people affected; at most two
+    of one test), each with its numbers, sources and team assumptions."""
+    import stress_text as stx
+    st = inp.get("stress") or {}
+    if not st.get("findings"):
+        return ""
+    top = stx.top(st["findings"], county, hazard)
+    items = []
+    for f in top:
+        ev = stx.evidence_lines(f)[:5]
+        items.append(
+            f'<li><b>{escape(f["scenario"])}</b> <small>(test {escape(f["test"])}: {escape(st["tests"][f["test"]])})</small><br>'
+            f'{escape(stx.summary(f))}.'
+            + (f'<br><small>{escape(" · ".join(f"{k}: {v}" for k, v in ev))}</small>' if ev else "")
+            + f'<br><small>Sources: {escape("; ".join(f["sources"]))}.'
+            + (f' Team assumptions: {escape("; ".join(a["text"] + ": " + str(a["value"]) for a in f["assumptions"]))}.'
+               if f["assumptions"] else "") + "</small></li>")
+    return ('<h2 class="page">10. Stress tests – what could break</h2>'
+            f'<div class="note"><b>{escape(stx.LABEL)}.</b> Each test changes one thing in the plan '
+            '(a site closes, two hazards strike together, a road is cut, more people come) and counts '
+            f'who is affected, from the plan\'s own data. {escape(st["method"])}</div>'
+            f'<p>Top {len(top)} for {escape(COUNTY_LABEL[county])} – {escape(HAZARD_LABEL[hazard])} and '
+            'all-hazard tests, ranked by people affected (at most two from one test). The full list, with '
+            'every test, is in the app (Stress tests).</p>'
+            f'<ol class="stress">{"".join(items)}</ol>'
+            f'<p class="src">{escape(build_access.NOT_NO_SHELTER)}</p>'
+            '<h2>11. Questions for counties</h2>'
+            '<p>These need county knowledge. The plan has no data for them, so it shows no numbers.</p><ol>'
+            + "".join(f"<li><b>{escape(t)}:</b> {escape(q)}</li>" for t, q in stx.QUESTIONS) + "</ol>")
+
+
 def facility_rows(access: dict | None, county: str, hazard: str,
                   state: dict | None = None) -> tuple[list, int]:
     """(care facilities in this hazard's zone, all care facilities) for one county,
@@ -1030,6 +1065,17 @@ def _sources(inp: dict) -> tuple[list, list]:
         r = inp["state"]["meta"]["siren_radius"]
         data.append(["Hawaiʻi Emergency Management Agency – siren audible radius (3,400 feet, "
                      "manufacturer rating)", "2026-10-28", escape(r["url"])])
+    hub = (inp.get("hub") or {}).get("meta", {}).get("sources", {})
+    for key in ("safe_zones", "fire_risk", "flooded_highways", "pdc_shelters", "roads"):
+        src = hub.get(key)
+        if src:
+            data.append([escape(src["title"] + (f" ({src['dates']})" if src.get("dates") else "")),
+                         escape(hst_date(src.get("fetched_at", ""))), escape(src.get("url", ""))])
+    if hub:
+        data += [["Hawaiʻi DOT surveyed mile markers (road-closure point, Route 11 in Kaʻū)", "2026-10-30",
+                  "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/14"],
+                 ["DBEDT State of Hawaiʻi Data Book 2025, Table 7.06 (average daily visitor census)", "2026-10-27",
+                  "https://files.hawaii.gov/dbedt/economic/databook/db2025/DB2025_section07.xlsx"]]
     if inp.get("access"):
         data += [[escape(f"CMS Provider Data Catalog – {t}"), "", escape(
                      f"https://data.cms.gov/provider-data/dataset/{ds}")]
@@ -1079,6 +1125,7 @@ def _playbook_html(inp: dict, county: str, hazard: str) -> str:
                                {f: v["tract_label"] for f, v in inp.get("labels", {}).items()}))}
 {sources_html(inp)}
 {results_html(inp["results"])}
+{stress_html(inp, county, hazard)}
 </main>
 <footer class="footer">Data as of {escape(inp["data_as_of"])} · {escape(DISCLAIMER)}</footer>
 </body></html>

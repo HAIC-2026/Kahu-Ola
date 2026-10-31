@@ -323,9 +323,9 @@ The challenge PDF requires usability "during high-stress, low-connectivity condi
 | Tier | Conditions | What works |
 |---|---|---|
 | 1. Online | Normal internet | Web app (https://shelters.kahuola.org, also https://haic2026-shelters.pages.dev) |
-| 2. Weak | Slow or intermittent | The app loads from its local cache. The only data is one 938 KB bundle, and every PDF is already cached |
+| 2. Weak | Slow or intermittent | The app loads from its local cache. The only data is one 1203 KB bundle, and every PDF is already cached |
 | 3. Offline | No internet (after one earlier visit) | Installed web app (PWA). The service worker pre-caches the app, the data and all 20 PDFs, and the app shows "Offline – data as of <date>". Tested in airplane mode in Chrome. |
-| 4. Paper | No power or devices | 20 printed playbooks (`playbooks/*.pdf`): US Letter, black-and-white safe, 23–27 pages each (printed at true size: smallest text 9 pt; every source URL wraps inside the page and is a clickable link), with the disclaimer and "Data as of" on every page |
+| 4. Paper | No power or devices | 20 printed playbooks (`playbooks/*.pdf`): US Letter, black-and-white safe, 28–32 pages each (printed at true size: smallest text 9 pt; every source URL wraps inside the page and is a clickable link), with the disclaimer and "Data as of" on every page |
 
 ## 9. How AI was used
 

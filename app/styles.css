@@ -316,3 +316,47 @@ button.linklike { min-height: 44px; padding: var(--space-1) 0; border: 0; backgr
   .disclaimer { background: #ffffff !important; color: #000000 !important; border: 2px solid #000000 !important; }
   details.msg-group::details-content { content-visibility: visible; display: block; }
 }
+
+/* stress tests: ranked findings (number in bold + "stress test, not a forecast" tag, not colour alone) */
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.plan-links { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.findings { padding-left: 1.6em; }
+.finding { background: var(--color-surface); border-radius: var(--radius-lg); padding: var(--space-2) var(--space-3); margin: 0 0 var(--space-3); }
+.finding h3 { margin: 0 0 var(--space-1); }
+.finding-meta { margin: 0; font-size: var(--font-size-small); color: var(--color-muted); }
+.finding-head { margin: var(--space-1) 0; }
+.finding .tag { margin-left: 0; }
+.finding-detail h4 { margin: var(--space-2) 0 var(--space-1); }
+.finding-links a, .questions a { display: inline-flex; align-items: center; min-height: 44px; }
+.questions li { margin: 0 0 var(--space-2); }
+#stress-hazard { width: 24px; height: 24px; margin: 0; accent-color: var(--color-accent); flex-shrink: 0; }
+label.check[for="stress-hazard"] { display: inline-flex; align-items: center; gap: var(--space-1); min-height: 44px; }
+
+/* what-if: every input is a slider and a number field, both at least 44 px tall */
+.wi-form fieldset { border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-2) var(--space-3); margin: 0 0 var(--space-3); }
+.wi-form legend { font-weight: 700; padding: 0 var(--space-1); }
+.wi-field { margin: 0 0 var(--space-3); }
+.wi-field > label { display: block; font-weight: 700; }
+.wi-field small { display: block; color: var(--color-muted); font-size: var(--font-size-small); }
+.wi-inputs { display: grid; grid-template-columns: minmax(0, 1fr) 7.5em; gap: var(--space-2); align-items: center; }
+.wi-form input[type="range"] { width: 100%; min-height: 44px; margin: 0; accent-color: var(--color-accent); }
+.wi-form input[type="number"] {
+  font: inherit; min-height: 44px; width: 100%; padding: var(--space-1) var(--space-2);
+  border: 2px solid var(--color-border); border-radius: var(--radius); background: var(--color-bg); color: var(--color-text);
+}
+.wi-cap { display: grid; grid-template-columns: minmax(0, 1fr) 8em; gap: var(--space-2); align-items: center; margin: 0 0 var(--space-1); }
+.wi-cap label { overflow-wrap: anywhere; }
+details.how { font-size: var(--font-size-small); }
+details.how > summary { min-height: 44px; display: flex; align-items: center; padding: 0; cursor: pointer; color: var(--color-accent); }
+details.how p { margin: 0 0 var(--space-1); }
+#wi-out th[scope="row"] { font-weight: 700; }
+@media (max-width: 480px) {
+  .wi-inputs { grid-template-columns: minmax(0, 1fr) 6em; }
+  .wi-cap { grid-template-columns: minmax(0, 1fr) 6.5em; }
+}
+/* a site opened from a stress test: a thick ring in the focus colour plus the note above the map */
+.map svg g.site.selected-site circle, .map svg g.site.selected-site polygon, .map svg g.site.selected-site rect { stroke: var(--color-focus); stroke-width: 4; }
+@media print {
+  .wi-form input[type="range"] { display: none; }
+  details.how::details-content, .finding-detail::details-content { content-visibility: visible; display: block; }
+}
