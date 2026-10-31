@@ -1,0 +1,22 @@
+{
+  "_about": "Settings for the stress tests (scripts/build_stress_tests.py) and the what-if panel defaults (app). Every value that is not from a cited source is marked team_assumption and is printed with its value wherever it is used. Results are stress tests and what-ifs, not forecasts.",
+  "label": "stress test, not a forecast",
+  "whatif_label": "what-if, not a forecast",
+  "drive_limit_min": {"value": 15, "source": "plan: the 15-minute drive used for the 'outside a 15-minute drive' layer"},
+  "isolated_min": {"value": 45, "source": "team_assumption: an area is 'isolated' by a road closure when the shortest drive to any known site is over 45 minutes or there is no route"},
+  "people_per_site": {"value": 250, "source": "team_assumption: sites needed at 250 people per site, used only while site capacity is unknown"},
+  "rate_sweep": {"from": 0.02, "to": 0.20, "step": 0.01, "source": "team_assumption: range of shelter-seeking rates tested (the plan uses 3–5% likely, 11.2% observed in Maui 2023)"},
+  "stay_days": {"value": [3, 7, 14, 30], "source": "team_assumption: stay lengths tested; floor space and toilets use the Florida DEM (2010) 72-hour factors up to 3 days and the 2-week factors beyond (applied past 14 days too, team_assumption)"},
+  "outage_days": {"value": [1, 3, 7, 14], "source": "team_assumption: power outage lengths tested"},
+  "charges_per_day": {"value": 1, "source": "team_assumption: while the power is out, every power-dependent resident in the risk area needs one outlet (charge point) a day; an upper bound (some have batteries, generators or leave the area)"},
+  "dam_rate": {"value": "inland_flood", "source": "team_assumption: no published shelter-seeking rate for dam failure; the inland flooding rates are used"},
+  "union_rate": {"value": "highest", "source": "team_assumption: a person inside two hazard footprints is counted once, at the higher of the two shelter-seeking rates"},
+  "pit_unsheltered": {"source": "team_assumption: every person counted as unsheltered in the 2026 Point-in-Time count may seek a public shelter (upper bound); Oʻahu's release gives the total only, so the total is used and labelled"},
+  "whatif": {
+    "people_per_trip": {"value": 20, "min": 4, "max": 40, "source": "team_assumption: people per accessible vehicle trip (mixed fleet of paratransit vans and buses); the plan gives no value"},
+    "rate": {"min": 0.01, "max": 0.25, "source": "plan: the likely shelter-seeking rate for the hazard (config/planning_factors.json)"},
+    "stay_days": {"value": 3, "min": 1, "max": 30, "source": "plan: the 72-hour emergency shelter factors (Florida DEM 2010)"},
+    "outage_days": {"value": 0, "min": 0, "max": 14, "source": "plan: power outlets for power-dependent residents in shelter only (no outage beyond the shelter)"},
+    "support_share": {"min": 0, "max": 0.30, "source": "plan: share of people in shelter with a disability (ACS via CDC SVI, the Census areas in the risk area)"}
+  }
+}
