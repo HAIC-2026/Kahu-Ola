@@ -176,12 +176,14 @@ def render(tracts: list, values: dict, at_risk: set, sites: list, title: str,
 
 
 def legend(bounds: list) -> str:
+    from privacy import count_text      # the bounds are real areas' values: small ones are hidden
     """HTML legend: color swatches with numeric labels, marker shapes with text labels."""
     items, lo = [], 0
     for i, (b, name) in enumerate(zip(bounds, need_names(len(bounds)))):
         items.append(f'<li><svg width="28" height="16" aria-hidden="true"><rect width="28" '
                      f'height="16" fill="{RAMP[i]}" stroke="#000"/></svg> {name} '
-                     f'<span class="range">({lo:,.0f}–{b:,.0f} people)</span></li>')
+                     f'<span class="range">(<span class="ac">{count_text(lo)}</span> to '
+                     f'<span class="ac">{count_text(b)}</span> people)</span></li>')
         lo = b
     items.append('<li><svg width="28" height="16" aria-hidden="true"><rect width="28" height="16" '
                  'fill="#fff" stroke="#000" stroke-width="2"/></svg> Solid outline: Census area '

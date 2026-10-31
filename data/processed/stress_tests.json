@@ -1,5 +1,5 @@
 {
- "built_at": "2026-10-31T00:26:52-10:00",
+ "built_at": "2026-10-31T11:15:15-10:00",
  "definition_15": "People counted: residents of Census areas whose drive from the area's centre point to the nearest usable 2026 site was 15 minutes or less before the loss and is more than 15 minutes (or no route) after it; areas already beyond 15 minutes are not counted.",
  "findings": [
   {
@@ -2349,11 +2349,17 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 1,
    "evidence": {
-    "cots": 43519,
+    "cots": 43518,
     "counties": [
      "Kauai",
      "Honolulu",
@@ -2362,27 +2368,28 @@
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 247,
-     "Chuukese": 57,
-     "Hawaiian": 27,
+     "Chuukese": 58,
+     "Hawaiian": 28,
      "Ilocano": 369,
      "Japanese": 201,
      "Korean": 99,
      "Marshallese": 24,
      "Pidgin (Hawaiʻi Creole English)": 25,
      "Spanish": 29,
-     "Tagalog/Filipino": 302,
-     "Vietnamese": 65
+     "Tagalog/Filipino": 303,
+     "Vietnamese": 66
     },
     "meals_per_day": 87036,
-    "people_in_shelter_likely": 43517,
+    "people_in_shelter_likely": 43518,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 2921,
-    "water_gal_per_day": 43519
+    "water_gal_per_day": 43518
    },
    "hazard": "hurricane",
    "id": "T09-hurricane-all",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 43517,
+   "people_affected": 43518,
    "rank": 55,
    "scenario": "All four counties at once (hurricane)",
    "sites": [],
@@ -2927,7 +2934,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 2,
    "evidence": {
@@ -2938,19 +2951,20 @@
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 247,
-     "Chuukese": 57,
+     "Chuukese": 58,
      "Hawaiian": 23,
-     "Ilocano": 292,
+     "Ilocano": 293,
      "Japanese": 190,
      "Korean": 99,
-     "Marshallese": 18,
+     "Marshallese": 19,
      "Pidgin (Hawaiʻi Creole English)": 25,
      "Spanish": 15,
-     "Tagalog/Filipino": 260,
-     "Vietnamese": 65
+     "Tagalog/Filipino": 261,
+     "Vietnamese": 66
     },
     "meals_per_day": 72736,
     "people_in_shelter_likely": 36368,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 2433,
     "water_gal_per_day": 36368
    },
@@ -3042,7 +3056,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 3,
    "evidence": {
@@ -3052,19 +3072,20 @@
      "Maui"
     ],
     "interpreters_people_with_limited_english": {
-     "Chinese": 239,
-     "Chuukese": 57,
-     "Hawaiian": 18,
+     "Chinese": 240,
+     "Chuukese": 58,
+     "Hawaiian": 19,
      "Ilocano": 302,
-     "Japanese": 180,
+     "Japanese": 181,
      "Korean": 99,
      "Marshallese": 16,
-     "Spanish": 9,
-     "Tagalog/Filipino": 277,
-     "Vietnamese": 65
+     "Spanish": 10,
+     "Tagalog/Filipino": 278,
+     "Vietnamese": 66
     },
     "meals_per_day": 70495,
-    "people_in_shelter_likely": 35247,
+    "people_in_shelter_likely": 35248,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 2357,
     "water_gal_per_day": 35248
    },
@@ -3072,7 +3093,7 @@
    "id": "T09-hurricane-honolulu-maui",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 35247,
+   "people_affected": 35248,
    "rank": 71,
    "scenario": "Honolulu and Maui at once (hurricane)",
    "sites": [],
@@ -3308,7 +3329,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 4,
    "evidence": {
@@ -3318,19 +3345,20 @@
      "Honolulu"
     ],
     "interpreters_people_with_limited_english": {
-     "Chinese": 239,
-     "Chuukese": 57,
-     "Hawaiian": 16,
+     "Chinese": 240,
+     "Chuukese": 58,
+     "Hawaiian": 17,
      "Ilocano": 277,
      "Japanese": 177,
      "Korean": 99,
      "Marshallese": 14,
      "Spanish": 5,
-     "Tagalog/Filipino": 263,
-     "Vietnamese": 65
+     "Tagalog/Filipino": 264,
+     "Vietnamese": 66
     },
     "meals_per_day": 65017,
-    "people_in_shelter_likely": 32508,
+    "people_in_shelter_likely": 32509,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 2177,
     "water_gal_per_day": 32509
    },
@@ -3338,7 +3366,7 @@
    "id": "T09-hurricane-kauai-honolulu",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 32508,
+   "people_affected": 32509,
    "rank": 77,
    "scenario": "Kauaʻi and Honolulu at once (hurricane)",
    "sites": [],
@@ -4396,11 +4424,17 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 5,
    "evidence": {
-    "cots": 25454,
+    "cots": 25452,
     "counties": [
      "Kauai",
      "Honolulu",
@@ -4409,21 +4443,22 @@
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 100,
-     "Chuukese": 23,
-     "Hawaiian": 11,
-     "Ilocano": 152,
+     "Chuukese": 24,
+     "Hawaiian": 12,
+     "Ilocano": 153,
      "Japanese": 82,
      "Korean": 40,
-     "Marshallese": 11,
-     "Pidgin (Hawaiʻi Creole English)": 11,
+     "Marshallese": 10,
+     "Pidgin (Hawaiʻi Creole English)": 12,
      "Spanish": 13,
-     "Tagalog/Filipino": 123,
-     "Vietnamese": 26
+     "Tagalog/Filipino": 124,
+     "Vietnamese": 27
     },
-    "meals_per_day": 50906,
+    "meals_per_day": 50904,
     "people_in_shelter_likely": 25452,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 1723,
-    "water_gal_per_day": 25454
+    "water_gal_per_day": 25452
    },
    "hazard": "inland_flood",
    "id": "T09-inland_flood-all",
@@ -4799,11 +4834,17 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 6,
    "evidence": {
-    "cots": 22116,
+    "cots": 22115,
     "counties": [
      "Kauai",
      "Honolulu",
@@ -4815,18 +4856,19 @@
      "Chuukese": 14,
      "Hawaiian": 9,
      "Ilocano": 110,
-     "Japanese": 53,
+     "Japanese": 54,
      "Korean": 24,
-     "Marshallese": 7,
-     "Pidgin (Hawaiʻi Creole English)": 9,
+     "Marshallese": 8,
+     "Pidgin (Hawaiʻi Creole English)": 10,
      "Spanish": 12,
-     "Tagalog/Filipino": 82,
+     "Tagalog/Filipino": 84,
      "Vietnamese": 16
     },
-    "meals_per_day": 44231,
+    "meals_per_day": 44229,
     "people_in_shelter_likely": 22115,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 1534,
-    "water_gal_per_day": 22116
+    "water_gal_per_day": 22115
    },
    "hazard": "wildfire",
    "id": "T09-wildfire-all",
@@ -4892,7 +4934,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 7,
    "evidence": {
@@ -4903,19 +4951,20 @@
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 100,
-     "Chuukese": 23,
-     "Hawaiian": 9,
+     "Chuukese": 24,
+     "Hawaiian": 10,
      "Ilocano": 120,
-     "Japanese": 77,
+     "Japanese": 78,
      "Korean": 40,
      "Marshallese": 8,
-     "Pidgin (Hawaiʻi Creole English)": 11,
+     "Pidgin (Hawaiʻi Creole English)": 12,
      "Spanish": 7,
-     "Tagalog/Filipino": 105,
-     "Vietnamese": 26
+     "Tagalog/Filipino": 106,
+     "Vietnamese": 27
     },
     "meals_per_day": 43499,
-    "people_in_shelter_likely": 21749,
+    "people_in_shelter_likely": 21750,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 1468,
     "water_gal_per_day": 21750
    },
@@ -4923,7 +4972,7 @@
    "id": "T09-inland_flood-honolulu-hawaii",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 21749,
+   "people_affected": 21750,
    "rank": 113,
    "scenario": "Honolulu and Hawaiʻi at once (inland flooding)",
    "sites": [],
@@ -4983,31 +5032,38 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 8,
    "evidence": {
-    "cots": 21107,
+    "cots": 21106,
     "counties": [
      "Honolulu",
      "Maui"
     ],
     "interpreters_people_with_limited_english": {
-     "Chinese": 96,
-     "Chuukese": 23,
-     "Hawaiian": 7,
+     "Chinese": 97,
+     "Chuukese": 24,
+     "Hawaiian": 8,
      "Ilocano": 123,
-     "Japanese": 72,
+     "Japanese": 73,
      "Korean": 40,
      "Marshallese": 7,
-     "Spanish": 4,
-     "Tagalog/Filipino": 112,
-     "Vietnamese": 26
+     "Spanish": 5,
+     "Tagalog/Filipino": 113,
+     "Vietnamese": 27
     },
-    "meals_per_day": 42213,
+    "meals_per_day": 42212,
     "people_in_shelter_likely": 21106,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 1423,
-    "water_gal_per_day": 21107
+    "water_gal_per_day": 21106
    },
    "hazard": "inland_flood",
    "id": "T09-inland_flood-honolulu-maui",
@@ -5889,37 +5945,44 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 9,
    "evidence": {
-    "cots": 19545,
+    "cots": 19544,
     "counties": [
      "Kauai",
      "Honolulu"
     ],
     "interpreters_people_with_limited_english": {
-     "Chinese": 96,
-     "Chuukese": 23,
+     "Chinese": 97,
+     "Chuukese": 24,
      "Hawaiian": 7,
-     "Ilocano": 111,
-     "Japanese": 71,
+     "Ilocano": 112,
+     "Japanese": 72,
      "Korean": 40,
      "Marshallese": 6,
      "Spanish": 2,
-     "Tagalog/Filipino": 106,
-     "Vietnamese": 26
+     "Tagalog/Filipino": 107,
+     "Vietnamese": 27
     },
-    "meals_per_day": 39088,
-    "people_in_shelter_likely": 19543,
+    "meals_per_day": 39087,
+    "people_in_shelter_likely": 19544,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 1322,
-    "water_gal_per_day": 19545
+    "water_gal_per_day": 19544
    },
    "hazard": "inland_flood",
    "id": "T09-inland_flood-kauai-honolulu",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 19543,
+   "people_affected": 19544,
    "rank": 136,
    "scenario": "Kauaʻi and Honolulu at once (inland flooding)",
    "sites": [],
@@ -6120,11 +6183,17 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 10,
    "evidence": {
-    "cots": 18592,
+    "cots": 18591,
     "counties": [
      "Honolulu",
      "Hawaii"
@@ -6134,18 +6203,19 @@
      "Chuukese": 14,
      "Hawaiian": 7,
      "Ilocano": 77,
-     "Japanese": 48,
+     "Japanese": 49,
      "Korean": 24,
-     "Marshallese": 5,
-     "Pidgin (Hawaiʻi Creole English)": 9,
+     "Marshallese": 6,
+     "Pidgin (Hawaiʻi Creole English)": 10,
      "Spanish": 6,
-     "Tagalog/Filipino": 64,
+     "Tagalog/Filipino": 65,
      "Vietnamese": 16
     },
-    "meals_per_day": 37183,
+    "meals_per_day": 37182,
     "people_in_shelter_likely": 18591,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 1285,
-    "water_gal_per_day": 18592
+    "water_gal_per_day": 18591
    },
    "hazard": "wildfire",
    "id": "T09-wildfire-honolulu-hawaii",
@@ -6228,11 +6298,17 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 11,
    "evidence": {
-    "cots": 18156,
+    "cots": 18155,
     "counties": [
      "Honolulu",
      "Maui"
@@ -6241,18 +6317,19 @@
      "Chinese": 58,
      "Chuukese": 14,
      "Hawaiian": 6,
-     "Ilocano": 90,
-     "Japanese": 46,
+     "Ilocano": 91,
+     "Japanese": 47,
      "Korean": 24,
      "Marshallese": 5,
-     "Spanish": 5,
-     "Tagalog/Filipino": 76,
+     "Spanish": 6,
+     "Tagalog/Filipino": 77,
      "Vietnamese": 16
     },
-    "meals_per_day": 36311,
+    "meals_per_day": 36310,
     "people_in_shelter_likely": 18155,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 1258,
-    "water_gal_per_day": 18156
+    "water_gal_per_day": 18155
    },
    "hazard": "wildfire",
    "id": "T09-wildfire-honolulu-maui",
@@ -6316,11 +6393,17 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 12,
    "evidence": {
-    "cots": 17664,
+    "cots": 17662,
     "counties": [
      "Kauai",
      "Honolulu",
@@ -6328,28 +6411,29 @@
      "Hawaii"
     ],
     "interpreters_people_with_limited_english": {
-     "Chinese": 98,
-     "Chuukese": 22,
-     "Hawaiian": 12,
-     "Ilocano": 153,
-     "Japanese": 82,
+     "Chinese": 99,
+     "Chuukese": 23,
+     "Hawaiian": 13,
+     "Ilocano": 154,
+     "Japanese": 83,
      "Korean": 39,
      "Marshallese": 11,
-     "Pidgin (Hawaiʻi Creole English)": 14,
-     "Spanish": 14,
+     "Pidgin (Hawaiʻi Creole English)": 15,
+     "Spanish": 15,
      "Tagalog/Filipino": 122,
      "Vietnamese": 26
     },
-    "meals_per_day": 35325,
-    "people_in_shelter_likely": 17661,
+    "meals_per_day": 35324,
+    "people_in_shelter_likely": 17662,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 1171,
-    "water_gal_per_day": 17664
+    "water_gal_per_day": 17662
    },
    "hazard": "coastal_flood",
    "id": "T09-coastal_flood-all",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 17661,
+   "people_affected": 17662,
    "rank": 145,
    "scenario": "All four counties at once (coastal flooding)",
    "sites": [],
@@ -6618,11 +6702,17 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 13,
    "evidence": {
-    "cots": 16796,
+    "cots": 16795,
     "counties": [
      "Kauai",
      "Honolulu"
@@ -6631,18 +6721,19 @@
      "Chinese": 58,
      "Chuukese": 14,
      "Hawaiian": 4,
-     "Ilocano": 65,
+     "Ilocano": 66,
      "Japanese": 43,
      "Korean": 24,
-     "Marshallese": 3,
+     "Marshallese": 4,
      "Spanish": 1,
-     "Tagalog/Filipino": 62,
+     "Tagalog/Filipino": 63,
      "Vietnamese": 16
     },
-    "meals_per_day": 33591,
+    "meals_per_day": 33590,
     "people_in_shelter_likely": 16795,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 1163,
-    "water_gal_per_day": 16796
+    "water_gal_per_day": 16795
    },
    "hazard": "wildfire",
    "id": "T09-wildfire-kauai-honolulu",
@@ -7109,38 +7200,45 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 14,
    "evidence": {
-    "cots": 14870,
+    "cots": 14869,
     "counties": [
      "Honolulu",
      "Hawaii"
     ],
     "interpreters_people_with_limited_english": {
-     "Chinese": 98,
-     "Chuukese": 22,
-     "Hawaiian": 10,
-     "Ilocano": 121,
+     "Chinese": 99,
+     "Chuukese": 23,
+     "Hawaiian": 11,
+     "Ilocano": 122,
      "Japanese": 78,
      "Korean": 39,
      "Marshallese": 9,
-     "Pidgin (Hawaiʻi Creole English)": 14,
-     "Spanish": 8,
-     "Tagalog/Filipino": 104,
+     "Pidgin (Hawaiʻi Creole English)": 15,
+     "Spanish": 9,
+     "Tagalog/Filipino": 105,
      "Vietnamese": 26
     },
     "meals_per_day": 29738,
-    "people_in_shelter_likely": 14868,
+    "people_in_shelter_likely": 14869,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 977,
-    "water_gal_per_day": 14870
+    "water_gal_per_day": 14869
    },
    "hazard": "coastal_flood",
    "id": "T09-coastal_flood-honolulu-hawaii",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 14868,
+   "people_affected": 14869,
    "rank": 162,
    "scenario": "Honolulu and Hawaiʻi at once (coastal flooding)",
    "sites": [],
@@ -7241,7 +7339,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 15,
    "evidence": {
@@ -7252,18 +7356,19 @@
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 94,
-     "Chuukese": 22,
-     "Hawaiian": 7,
-     "Ilocano": 120,
+     "Chuukese": 23,
+     "Hawaiian": 8,
+     "Ilocano": 121,
      "Japanese": 71,
      "Korean": 39,
-     "Marshallese": 6,
-     "Spanish": 4,
+     "Marshallese": 7,
+     "Spanish": 5,
      "Tagalog/Filipino": 110,
      "Vietnamese": 26
     },
     "meals_per_day": 28009,
-    "people_in_shelter_likely": 14004,
+    "people_in_shelter_likely": 14005,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 926,
     "water_gal_per_day": 14005
    },
@@ -7271,7 +7376,7 @@
    "id": "T09-coastal_flood-honolulu-maui",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 14004,
+   "people_affected": 14005,
    "rank": 165,
    "scenario": "Honolulu and Maui at once (coastal flooding)",
    "sites": [],
@@ -8542,21 +8647,27 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 16,
    "evidence": {
-    "cots": 13131,
+    "cots": 13130,
     "counties": [
      "Kauai",
      "Honolulu"
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 94,
-     "Chuukese": 22,
+     "Chuukese": 23,
      "Hawaiian": 7,
-     "Ilocano": 108,
-     "Japanese": 69,
+     "Ilocano": 109,
+     "Japanese": 70,
      "Korean": 39,
      "Marshallese": 6,
      "Spanish": 2,
@@ -8564,15 +8675,16 @@
      "Vietnamese": 26
     },
     "meals_per_day": 26260,
-    "people_in_shelter_likely": 13129,
+    "people_in_shelter_likely": 13130,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 868,
-    "water_gal_per_day": 13131
+    "water_gal_per_day": 13130
    },
    "hazard": "coastal_flood",
    "id": "T09-coastal_flood-kauai-honolulu",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 13129,
+   "people_affected": 13130,
    "rank": 197,
    "scenario": "Kauaʻi and Honolulu at once (coastal flooding)",
    "sites": [],
@@ -9428,7 +9540,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 17,
    "evidence": {
@@ -9441,14 +9559,15 @@
      "Chinese": 8,
      "Hawaiian": 11,
      "Ilocano": 92,
-     "Japanese": 24,
+     "Japanese": 25,
      "Marshallese": 10,
      "Pidgin (Hawaiʻi Creole English)": 25,
-     "Spanish": 24,
-     "Tagalog/Filipino": 39
+     "Spanish": 25,
+     "Tagalog/Filipino": 40
     },
     "meals_per_day": 22019,
-    "people_in_shelter_likely": 11009,
+    "people_in_shelter_likely": 11010,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 744,
     "water_gal_per_day": 11010
    },
@@ -9456,7 +9575,7 @@
    "id": "T09-hurricane-maui-hawaii",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 11009,
+   "people_affected": 11010,
    "rank": 217,
    "scenario": "Maui and Hawaiʻi at once (hurricane)",
    "sites": [],
@@ -10486,7 +10605,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 18,
    "evidence": {
@@ -10497,16 +10622,17 @@
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 8,
-     "Hawaiian": 9,
+     "Hawaiian": 10,
      "Ilocano": 67,
      "Japanese": 21,
-     "Marshallese": 8,
+     "Marshallese": 9,
      "Pidgin (Hawaiʻi Creole English)": 25,
      "Spanish": 20,
-     "Tagalog/Filipino": 25
+     "Tagalog/Filipino": 26
     },
     "meals_per_day": 16541,
-    "people_in_shelter_likely": 8270,
+    "people_in_shelter_likely": 8271,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 564,
     "water_gal_per_day": 8271
    },
@@ -10514,7 +10640,7 @@
    "id": "T09-hurricane-kauai-hawaii",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 8270,
+   "people_affected": 8271,
    "rank": 243,
    "scenario": "Kauaʻi and Hawaiʻi at once (hurricane)",
    "sites": [],
@@ -11417,33 +11543,40 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 19,
    "evidence": {
-    "cots": 7151,
+    "cots": 7150,
     "counties": [
      "Kauai",
      "Maui"
     ],
     "interpreters_people_with_limited_english": {
-     "Hawaiian": 4,
+     "Hawaiian": 5,
      "Ilocano": 77,
-     "Japanese": 11,
+     "Japanese": 12,
      "Marshallese": 6,
-     "Spanish": 14,
-     "Tagalog/Filipino": 42
+     "Spanish": 15,
+     "Tagalog/Filipino": 43
     },
     "meals_per_day": 14300,
-    "people_in_shelter_likely": 7149,
+    "people_in_shelter_likely": 7150,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 488,
-    "water_gal_per_day": 7151
+    "water_gal_per_day": 7150
    },
    "hazard": "hurricane",
    "id": "T09-hurricane-kauai-maui",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 7149,
+   "people_affected": 7150,
    "rank": 265,
    "scenario": "Kauaʻi and Maui at once (hurricane)",
    "sites": [],
@@ -13282,11 +13415,17 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 20,
    "evidence": {
-    "cots": 6384,
+    "cots": 6382,
     "counties": [
      "Kauai",
      "Honolulu",
@@ -13295,21 +13434,22 @@
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 31,
-     "Chuukese": 7,
-     "Hawaiian": 4,
+     "Chuukese": 8,
+     "Hawaiian": 5,
      "Ilocano": 60,
      "Japanese": 28,
-     "Korean": 12,
-     "Marshallese": 3,
-     "Pidgin (Hawaiʻi Creole English)": 3,
-     "Spanish": 6,
-     "Tagalog/Filipino": 45,
-     "Vietnamese": 8
+     "Korean": 13,
+     "Marshallese": 4,
+     "Pidgin (Hawaiʻi Creole English)": 4,
+     "Spanish": 7,
+     "Tagalog/Filipino": 46,
+     "Vietnamese": 9
     },
-    "meals_per_day": 12766,
+    "meals_per_day": 12764,
     "people_in_shelter_likely": 6382,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 442,
-    "water_gal_per_day": 6384
+    "water_gal_per_day": 6382
    },
    "hazard": "tsunami",
    "id": "T09-tsunami-all",
@@ -13510,7 +13650,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 21,
    "evidence": {
@@ -13521,16 +13667,17 @@
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 4,
-     "Hawaiian": 4,
+     "Hawaiian": 5,
      "Ilocano": 41,
      "Japanese": 11,
      "Marshallese": 5,
-     "Pidgin (Hawaiʻi Creole English)": 11,
+     "Pidgin (Hawaiʻi Creole English)": 12,
      "Spanish": 11,
-     "Tagalog/Filipino": 17
+     "Tagalog/Filipino": 18
     },
-    "meals_per_day": 11818,
+    "meals_per_day": 11817,
     "people_in_shelter_likely": 5909,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 401,
     "water_gal_per_day": 5909
    },
@@ -13637,6 +13784,59 @@
    "unit": "people"
   },
   {
+   "areas": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
+   "county": "Statewide",
+   "county_rank": 22,
+   "evidence": {
+    "cots": 5326,
+    "counties": [
+     "Honolulu",
+     "Maui"
+    ],
+    "interpreters_people_with_limited_english": {
+     "Chinese": 30,
+     "Chuukese": 8,
+     "Hawaiian": 3,
+     "Ilocano": 50,
+     "Japanese": 25,
+     "Korean": 13,
+     "Marshallese": 3,
+     "Spanish": 4,
+     "Tagalog/Filipino": 42,
+     "Vietnamese": 9
+    },
+    "meals_per_day": 10651,
+    "people_in_shelter_likely": 5326,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
+    "staff_per_shift": 362,
+    "water_gal_per_day": 5326
+   },
+   "hazard": "tsunami",
+   "id": "T09-tsunami-honolulu-maui",
+   "label": "stress test, not a forecast",
+   "measure": "people who may need a public shelter (likely), counties together",
+   "people_affected": 5326,
+   "rank": 320,
+   "scenario": "Honolulu and Maui at once (tsunami)",
+   "sites": [],
+   "sources": [
+    "CDC/ATSDR Social Vulnerability Index 2022 (ACS 2018–2022), HHS emPOWER, FEMA National Risk Index; 2020 Census blocks",
+    "Florida Division of Emergency Management, Sheltering Guidance Aid (2010)",
+    "ACS PUMS 2019–2023 5-year (limited-English speakers by language)",
+    "shelter-seeking rates in the plan (South Carolina EMD 2026 Annex G; Maui 2023 observed; team assumptions)"
+   ],
+   "test": "9",
+   "title": "Several counties at once",
+   "unit": "people"
+  },
+  {
    "areas": [
     "15009031900"
    ],
@@ -13661,7 +13861,7 @@
    "label": "stress test, not a forecast",
    "measure": "people in the risk area pushed outside a 15-minute drive to a usable 2026 site",
    "people_affected": 5325,
-   "rank": 320,
+   "rank": 321,
    "scenario": "Lose Baldwin High School and Mayor Hannibal Tavares Community Center (Social Hall) (coastal flooding)",
    "sites": [
     "Baldwin High School|Maui",
@@ -13678,53 +13878,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
-   "county": "Statewide",
-   "county_rank": 22,
-   "evidence": {
-    "cots": 5326,
-    "counties": [
-     "Honolulu",
-     "Maui"
-    ],
-    "interpreters_people_with_limited_english": {
-     "Chinese": 30,
-     "Chuukese": 7,
-     "Hawaiian": 3,
-     "Ilocano": 50,
-     "Japanese": 25,
-     "Korean": 12,
-     "Marshallese": 2,
-     "Spanish": 3,
-     "Tagalog/Filipino": 41,
-     "Vietnamese": 8
-    },
-    "meals_per_day": 10651,
-    "people_in_shelter_likely": 5325,
-    "staff_per_shift": 362,
-    "water_gal_per_day": 5326
-   },
-   "hazard": "tsunami",
-   "id": "T09-tsunami-honolulu-maui",
-   "label": "stress test, not a forecast",
-   "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 5325,
-   "rank": 321,
-   "scenario": "Honolulu and Maui at once (tsunami)",
-   "sites": [],
-   "sources": [
-    "CDC/ATSDR Social Vulnerability Index 2022 (ACS 2018–2022), HHS emPOWER, FEMA National Risk Index; 2020 Census blocks",
-    "Florida Division of Emergency Management, Sheltering Guidance Aid (2010)",
-    "ACS PUMS 2019–2023 5-year (limited-English speakers by language)",
-    "shelter-seeking rates in the plan (South Carolina EMD 2026 Annex G; Maui 2023 observed; team assumptions)"
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
    ],
-   "test": "9",
-   "title": "Several counties at once",
-   "unit": "people"
-  },
-  {
-   "areas": [],
-   "assumptions": [],
    "county": "Statewide",
    "county_rank": 23,
    "evidence": {
@@ -13737,14 +13897,15 @@
      "Chinese": 3,
      "Hawaiian": 5,
      "Ilocano": 45,
-     "Japanese": 10,
-     "Marshallese": 4,
-     "Pidgin (Hawaiʻi Creole English)": 9,
-     "Spanish": 11,
-     "Tagalog/Filipino": 20
+     "Japanese": 11,
+     "Marshallese": 5,
+     "Pidgin (Hawaiʻi Creole English)": 10,
+     "Spanish": 12,
+     "Tagalog/Filipino": 21
     },
     "meals_per_day": 10640,
     "people_in_shelter_likely": 5320,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 371,
     "water_gal_per_day": 5320
    },
@@ -14444,38 +14605,45 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 24,
    "evidence": {
-    "cots": 4624,
+    "cots": 4623,
     "counties": [
      "Honolulu",
      "Hawaii"
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 31,
-     "Chuukese": 7,
+     "Chuukese": 8,
      "Hawaiian": 3,
      "Ilocano": 37,
      "Japanese": 24,
-     "Korean": 12,
-     "Marshallese": 2,
-     "Pidgin (Hawaiʻi Creole English)": 3,
+     "Korean": 13,
+     "Marshallese": 3,
+     "Pidgin (Hawaiʻi Creole English)": 4,
      "Spanish": 2,
-     "Tagalog/Filipino": 32,
-     "Vietnamese": 8
+     "Tagalog/Filipino": 33,
+     "Vietnamese": 9
     },
-    "meals_per_day": 9246,
-    "people_in_shelter_likely": 4622,
+    "meals_per_day": 9245,
+    "people_in_shelter_likely": 4623,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 316,
-    "water_gal_per_day": 4624
+    "water_gal_per_day": 4623
    },
    "hazard": "tsunami",
    "id": "T09-tsunami-honolulu-hawaii",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 4622,
+   "people_affected": 4623,
    "rank": 339,
    "scenario": "Honolulu and Hawaiʻi at once (tsunami)",
    "sites": [],
@@ -14676,7 +14844,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 25,
    "evidence": {
@@ -14686,17 +14860,18 @@
      "Hawaii"
     ],
     "interpreters_people_with_limited_english": {
-     "Chinese": 4,
-     "Hawaiian": 5,
+     "Chinese": 5,
+     "Hawaiian": 6,
      "Ilocano": 45,
      "Japanese": 13,
-     "Marshallese": 5,
-     "Pidgin (Hawaiʻi Creole English)": 14,
-     "Spanish": 12,
-     "Tagalog/Filipino": 18
+     "Marshallese": 6,
+     "Pidgin (Hawaiʻi Creole English)": 15,
+     "Spanish": 13,
+     "Tagalog/Filipino": 19
     },
     "meals_per_day": 9065,
-    "people_in_shelter_likely": 4532,
+    "people_in_shelter_likely": 4533,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 303,
     "water_gal_per_day": 4533
    },
@@ -14704,7 +14879,7 @@
    "id": "T09-coastal_flood-maui-hawaii",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 4532,
+   "people_affected": 4533,
    "rank": 345,
    "scenario": "Maui and Hawaiʻi at once (coastal flooding)",
    "sites": [],
@@ -14834,31 +15009,38 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 26,
    "evidence": {
-    "cots": 4470,
+    "cots": 4469,
     "counties": [
      "Kauai",
      "Honolulu"
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 30,
-     "Chuukese": 7,
-     "Hawaiian": 2,
+     "Chuukese": 8,
+     "Hawaiian": 3,
      "Ilocano": 37,
      "Japanese": 23,
-     "Korean": 12,
-     "Marshallese": 1,
+     "Korean": 13,
+     "Marshallese": 2,
      "Spanish": 1,
      "Tagalog/Filipino": 34,
-     "Vietnamese": 8
+     "Vietnamese": 9
     },
-    "meals_per_day": 8939,
+    "meals_per_day": 8938,
     "people_in_shelter_likely": 4469,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 306,
-    "water_gal_per_day": 4470
+    "water_gal_per_day": 4469
    },
    "hazard": "tsunami",
    "id": "T09-tsunami-kauai-honolulu",
@@ -14880,7 +15062,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 27,
    "evidence": {
@@ -14891,16 +15079,17 @@
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 4,
-     "Hawaiian": 4,
-     "Ilocano": 29,
+     "Hawaiian": 5,
+     "Ilocano": 30,
      "Japanese": 10,
      "Marshallese": 4,
-     "Pidgin (Hawaiʻi Creole English)": 11,
+     "Pidgin (Hawaiʻi Creole English)": 12,
      "Spanish": 9,
      "Tagalog/Filipino": 11
     },
     "meals_per_day": 8693,
-    "people_in_shelter_likely": 4346,
+    "people_in_shelter_likely": 4347,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 300,
     "water_gal_per_day": 4347
    },
@@ -14908,7 +15097,7 @@
    "id": "T09-inland_flood-kauai-hawaii",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 4346,
+   "people_affected": 4347,
    "rank": 350,
    "scenario": "Kauaʻi and Hawaiʻi at once (inland flooding)",
    "sites": [],
@@ -15133,7 +15322,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 28,
    "evidence": {
@@ -15144,16 +15339,17 @@
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 3,
-     "Hawaiian": 3,
+     "Hawaiian": 4,
      "Ilocano": 20,
-     "Japanese": 7,
-     "Marshallese": 2,
-     "Pidgin (Hawaiʻi Creole English)": 9,
+     "Japanese": 8,
+     "Marshallese": 3,
+     "Pidgin (Hawaiʻi Creole English)": 10,
      "Spanish": 7,
-     "Tagalog/Filipino": 6
+     "Tagalog/Filipino": 7
     },
-    "meals_per_day": 7920,
+    "meals_per_day": 7919,
     "people_in_shelter_likely": 3960,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 276,
     "water_gal_per_day": 3960
    },
@@ -15608,27 +15804,34 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 29,
    "evidence": {
-    "cots": 3704,
+    "cots": 3703,
     "counties": [
      "Kauai",
      "Maui"
     ],
     "interpreters_people_with_limited_english": {
      "Hawaiian": 2,
-     "Ilocano": 32,
+     "Ilocano": 33,
      "Japanese": 5,
      "Marshallese": 3,
-     "Spanish": 6,
+     "Spanish": 7,
      "Tagalog/Filipino": 18
     },
-    "meals_per_day": 7407,
+    "meals_per_day": 7406,
     "people_in_shelter_likely": 3703,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 255,
-    "water_gal_per_day": 3704
+    "water_gal_per_day": 3703
    },
    "hazard": "inland_flood",
    "id": "T09-inland_flood-kauai-maui",
@@ -15650,35 +15853,42 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 30,
    "evidence": {
-    "cots": 3659,
+    "cots": 3658,
     "counties": [
      "Kauai",
      "Hawaii"
     ],
     "interpreters_people_with_limited_english": {
-     "Chinese": 4,
+     "Chinese": 5,
      "Hawaiian": 5,
-     "Ilocano": 33,
-     "Japanese": 11,
+     "Ilocano": 34,
+     "Japanese": 12,
      "Marshallese": 5,
-     "Pidgin (Hawaiʻi Creole English)": 14,
-     "Spanish": 10,
+     "Pidgin (Hawaiʻi Creole English)": 15,
+     "Spanish": 11,
      "Tagalog/Filipino": 12
     },
     "meals_per_day": 7316,
-    "people_in_shelter_likely": 3657,
+    "people_in_shelter_likely": 3658,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 245,
-    "water_gal_per_day": 3659
+    "water_gal_per_day": 3658
    },
    "hazard": "coastal_flood",
    "id": "T09-coastal_flood-kauai-hawaii",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 3657,
+   "people_affected": 3658,
    "rank": 368,
    "scenario": "Kauaʻi and Hawaiʻi at once (coastal flooding)",
    "sites": [],
@@ -15952,7 +16162,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 31,
    "evidence": {
@@ -15963,14 +16179,15 @@
     ],
     "interpreters_people_with_limited_english": {
      "Hawaiian": 2,
-     "Ilocano": 33,
+     "Ilocano": 34,
      "Japanese": 5,
-     "Marshallese": 2,
-     "Spanish": 6,
-     "Tagalog/Filipino": 18
+     "Marshallese": 3,
+     "Spanish": 7,
+     "Tagalog/Filipino": 19
     },
-    "meals_per_day": 7048,
+    "meals_per_day": 7047,
     "people_in_shelter_likely": 3524,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 249,
     "water_gal_per_day": 3524
    },
@@ -17105,7 +17322,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 32,
    "evidence": {
@@ -17117,13 +17340,14 @@
     "interpreters_people_with_limited_english": {
      "Hawaiian": 2,
      "Ilocano": 32,
-     "Japanese": 4,
-     "Marshallese": 2,
+     "Japanese": 5,
+     "Marshallese": 3,
      "Spanish": 6,
      "Tagalog/Filipino": 18
     },
     "meals_per_day": 5587,
-    "people_in_shelter_likely": 2793,
+    "people_in_shelter_likely": 2794,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 194,
     "water_gal_per_day": 2794
    },
@@ -17131,7 +17355,7 @@
    "id": "T09-coastal_flood-kauai-maui",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 2793,
+   "people_affected": 2794,
    "rank": 401,
    "scenario": "Kauaʻi and Maui at once (coastal flooding)",
    "sites": [],
@@ -18326,7 +18550,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 33,
    "evidence": {
@@ -18338,15 +18568,16 @@
     "interpreters_people_with_limited_english": {
      "Chinese": 1,
      "Hawaiian": 2,
-     "Ilocano": 23,
+     "Ilocano": 24,
      "Japanese": 5,
-     "Marshallese": 2,
-     "Pidgin (Hawaiʻi Creole English)": 3,
-     "Spanish": 5,
-     "Tagalog/Filipino": 11
+     "Marshallese": 3,
+     "Pidgin (Hawaiʻi Creole English)": 4,
+     "Spanish": 6,
+     "Tagalog/Filipino": 12
     },
     "meals_per_day": 3827,
-    "people_in_shelter_likely": 1913,
+    "people_in_shelter_likely": 1914,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 136,
     "water_gal_per_day": 1914
    },
@@ -18354,7 +18585,7 @@
    "id": "T09-tsunami-maui-hawaii",
    "label": "stress test, not a forecast",
    "measure": "people who may need a public shelter (likely), counties together",
-   "people_affected": 1913,
+   "people_affected": 1914,
    "rank": 426,
    "scenario": "Maui and Hawaiʻi at once (tsunami)",
    "sites": [],
@@ -18642,7 +18873,13 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 34,
    "evidence": {
@@ -18652,15 +18889,16 @@
      "Maui"
     ],
     "interpreters_people_with_limited_english": {
-     "Hawaiian": 1,
-     "Ilocano": 23,
+     "Hawaiian": 2,
+     "Ilocano": 24,
      "Japanese": 4,
-     "Marshallese": 1,
-     "Spanish": 4,
+     "Marshallese": 2,
+     "Spanish": 5,
      "Tagalog/Filipino": 13
     },
     "meals_per_day": 3520,
     "people_in_shelter_likely": 1760,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 126,
     "water_gal_per_day": 1760
    },
@@ -20300,29 +20538,36 @@
   },
   {
    "areas": [],
-   "assumptions": [],
+   "assumptions": [
+    {
+     "kind": "team assumption",
+     "text": "One rounding rule for counties together: add the unrounded county numbers, then round up once",
+     "value": "round up"
+    }
+   ],
    "county": "Statewide",
    "county_rank": 35,
    "evidence": {
-    "cots": 1058,
+    "cots": 1057,
     "counties": [
      "Kauai",
      "Hawaii"
     ],
     "interpreters_people_with_limited_english": {
      "Chinese": 1,
-     "Hawaiian": 1,
+     "Hawaiian": 2,
      "Ilocano": 10,
      "Japanese": 3,
-     "Marshallese": 1,
-     "Pidgin (Hawaiʻi Creole English)": 3,
+     "Marshallese": 2,
+     "Pidgin (Hawaiʻi Creole English)": 4,
      "Spanish": 3,
-     "Tagalog/Filipino": 4
+     "Tagalog/Filipino": 5
     },
-    "meals_per_day": 2115,
+    "meals_per_day": 2114,
     "people_in_shelter_likely": 1057,
+    "rounding": "counties' unrounded numbers added, then rounded up once",
     "staff_per_shift": 80,
-    "water_gal_per_day": 1058
+    "water_gal_per_day": 1057
    },
    "hazard": "tsunami",
    "id": "T09-tsunami-kauai-hawaii",

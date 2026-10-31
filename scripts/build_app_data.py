@@ -45,6 +45,7 @@ import build_state_layers as bsl  # noqa: E402
 import build_hub_layers as bhl  # noqa: E402
 import stress_text  # noqa: E402
 import whatif  # noqa: E402
+import privacy  # noqa: E402
 from raw_inputs import MissingInput, load_geojson  # noqa: E402
 from build_playbooks import (AFN_PARTS, CMIST, COL, COUNTY_LABEL, COUNTY_LINE_LABEL,  # noqa: E402
                              DETAIL_KEYS, DISCLAIMER, KALAWAO_NOTE, SERVICE_ANIMALS, WHO_ELSE,
@@ -143,6 +144,9 @@ def require_summaries() -> None:
     if not STATE.get("sirens") or not STATE.get("areas"):
         raise MissingInput("Build stopped: data/sources/state_layers_summary.json has no "
                            "sirens or Census areas.")
+    if not MOE:
+        raise MissingInput("Build stopped: data/sources/area_moe.csv (margins of error) is missing. "
+                           "Run python3 scripts/privacy.py first.")
     if not HUB or not HUB.get("overlays") or not HUB.get("safe_zone_walk"):
         raise MissingInput("Build stopped: data/sources/hub_layers_summary.json is missing or "
                            "empty. Run python3 scripts/build_hub_layers.py first.")
@@ -272,6 +276,7 @@ def whatif_bundle(inp: dict) -> dict:
 
 
 ISLANDS = build_islands.load()        # data/sources/islands.csv (build_islands.py)
+MOE = privacy.load_moe()              # data/sources/area_moe.csv (privacy.py)
 ACCESS = build_access.load()          # data/sources/arcgis_summary.json, or None (fallback)
 STATE = bsl.load()                    # data/sources/state_layers_summary.json, or None
 
@@ -358,6 +363,9 @@ def tract_geometry(afn: dict, labels: dict | None = None, site_ids: dict | None 
                         "p": [r4(cx), r4(cy)], "n": area_counts(f["properties"]),
                         "i": ISLANDS.get(("area", fips), ""),
                         **area_access(fips, site_ids or {}, access),
+                        # whole-area 90% margins of error: population, then area_fields (null = none)
+                        "m": [None if MOE.get(fips, {}).get(k) is None else round(MOE[fips][k])
+                              for k in ["population", *[a for a, _s in AREA_FIELDS]]],
                         **({"sd": STATE["areas"][fips]["nearest_siren_ft"],
                             "sc": STATE["areas"][fips]["siren_share"]}
                            if STATE and fips in STATE["areas"] else {})})
@@ -444,7 +452,10 @@ def build(inp: dict) -> dict:
                                    "county designates shelters; follow county announcements.",
                  "niihau_note": dict(WHO_ELSE)["Niʻihau"],
                  "privacy": "Counts for whole Census areas and public facility names only. "
-                            "No individual records."},
+                            "No individual records. " + privacy.PRIVACY_LINE,
+                 "suppress": {"fewer": privacy.FEWER, "small": privacy.SMALL, "min": privacy.MIN_COUNT,
+                              "small_area": privacy.SMALL_AREA, "line": privacy.PRIVACY_LINE},
+                 "cite": {k: v[0] for k, v in privacy.CITE.items()}, "moe_note": privacy.MOE_NOTE},
         "counties": [[c, COUNTY_LABEL[c]] for c in COUNTIES],
         "hazards": [[h, HAZARD_LABEL[h]] for h in HAZARDS],
         "status_labels": STATUS_LABEL,

@@ -59,6 +59,38 @@ const pct = (v) => {
   const p = Math.round(v * 1000) / 10;
   return Number.isInteger(p) ? `${p}%` : `${p.toFixed(1)}%`;
 };
+/* ---------- small-number suppression (the same rule as scripts/privacy.py) ----------
+   A per-area count of 0 shows 0; above 0 but under 10 (rounded) shows "fewer than 10"; in a
+   Census area with fewer than 100 residents every sub-count reads "suppressed (small area)".
+   County and state totals are not suppressed. Sorting may use true values; display never does. */
+function cnt(v, pop) {
+  const S = DATA.meta.suppress;
+  if (pop !== undefined && pop !== null && pop < S.small_area) return S.small;
+  if (v === null || v === undefined || v === "") return "–";
+  if (v === 0) return "0";
+  if (Math.round(v) < S.min) return S.fewer;
+  return Math.round(v).toLocaleString("en-US");
+}
+const hidden = (v, pop) => cnt(v, pop) === DATA.meta.suppress.fewer || cnt(v, pop) === DATA.meta.suppress.small;
+/* a per-area count, with ± its 90% margin of error when the source has one (hidden with the count) */
+function ac(v, pop, moe) {
+  const t = cnt(v, pop);
+  return el("span", { class: "ac" }, moe === null || moe === undefined || hidden(v, pop) || v === null || v === undefined ? t : `${t} ± ${Math.round(moe).toLocaleString("en-US")}`);
+}
+const AREA_FIELD_INDEX = () => Object.fromEntries([["population", 0], ...DATA.area_fields.map((k, i) => [k, i + 1])]);
+/* a per-area count for Census area f: suppression by its population; MOE scaled by the share at risk */
+function areaCount(f, v, field, atRisk) {
+  const tr = DATA.tracts.find((t) => t.f === f);
+  const pop = tr ? tr.n[0] : null;
+  let moe = null;
+  if (tr && field && tr.m) {
+    const m = tr.m[AREA_FIELD_INDEX()[field]];
+    if (m !== null && m !== undefined && pop) moe = m * (atRisk === undefined || atRisk === null ? 1 : atRisk / pop);
+  }
+  return ac(v, pop, moe);
+}
+/* the per-area source line: ACS table and years per column, the MOE note and the privacy line */
+const citeLine = (fields) => el("p", { class: "src" }, `Per-area figures – ${fields.map((k) => `${k === "population" ? DATA.meta.cols.at_risk : DATA.meta.cols[k]}: ${DATA.meta.cite[k]}`).join("; ")}. ${DATA.meta.moe_note} Shelter estimates and need totals are model results with no margin of error. ${DATA.meta.suppress.line}`);
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 /* keep a date, "140 – 349 – 781" or "Census area 314.05" on one line on phones:
    dates become <time datetime class="nowrap">, the rest <span class="nowrap">; the text is unchanged */
@@ -327,7 +359,7 @@ function renderMap(county, sc, sites, title, hazard) {
   bounds.forEach((b, i) => {
     const sw = svg("svg", { width: 28, height: 16, "aria-hidden": "true" });
     sw.append(svg("rect", { width: 28, height: 16, fill: css(RAMP[i]), stroke: "#000" }));
-    legend.append(el("li", null, sw, names[i], " ", el("small", null, keep(`(${fmt(lo)}–${fmt(b)} people)`))));
+    legend.append(el("li", null, sw, names[i], " ", el("small", null, "(", el("span", { class: "ac" }, cnt(lo)), " to ", el("span", { class: "ac" }, cnt(b)), " people)")));
     lo = b;
   });
   const swatch = (attrs, text) => {
@@ -380,7 +412,7 @@ function renderMap(county, sc, sites, title, hazard) {
   const areas = el("details", { class: "areas" },
     el("summary", null, `Census areas on this map in the risk area (${risk.length}) – open one for details`),
     el("ul", null, risk.map((tr) => {
-      const b = el("button", { type: "button", class: "linklike" }, keep(`${tr.l || tr.f}: ${fmt(afn[tr.f])} people with needs (${level(tr.f)})`));
+      const b = el("button", { type: "button", class: "linklike" }, `${tr.l || tr.f}: `, el("span", { class: "ac" }, cnt(afn[tr.f], tr.n[0])), ` people with needs (${level(tr.f)})`);
       b.addEventListener("click", () => openArea(tr.f, b));
       return el("li", null, b, lahainaNote(tr.l, true));
     })));
@@ -597,7 +629,12 @@ function openArea(f, opener) {
   const pop = tr.n[0], share = inRisk && pop ? v[0] / pop : 0;
   const [main, sub] = (tr.l || f).split(" · ");
   const hz = Object.fromEntries(DATA.hazards)[hazard];
-  const counts = DATA.area_fields.map((k, i) => [C[k], fmt(inRisk ? tr.n[i + 1] * share : tr.n[i + 1])]);
+  const small = pop < DATA.meta.suppress.small_area;
+  const counts = DATA.area_fields.map((k, i) => {
+    const val = inRisk ? tr.n[i + 1] * share : tr.n[i + 1];
+    const m = tr.m ? tr.m[i + 1] : null;
+    return [C[k], ac(val, pop, m === null || m === undefined ? null : m * (inRisk ? share : 1)), DATA.meta.cite[k]];
+  });
   const near = nearestSites(tr, MAP.sites);
   const lead = new Set(), support = new Set();
   for (const n of sc.needs) { n[3].split(", ").forEach((x) => x && lead.add(x)); n[4].split(", ").forEach((x) => x && support.add(x)); }
@@ -621,10 +658,13 @@ function openArea(f, opener) {
     el("p", null, el("strong", null, inRisk ? `Inside the ${hz.toLowerCase()} risk area` : `Outside the ${hz.toLowerCase()} risk area`),
       ` · Need level: ${MAP.level(f)}`),
     el("dl", { class: "area-facts" },
-      el("dt", null, inRisk ? C.at_risk : "People living in the area"), el("dd", null, fmt(inRisk ? v[0] : pop)),
-      inRisk ? [el("dt", null, "May need a public shelter (likely)"), el("dd", null, fmt(v[1]))] : null),
+      el("dt", null, "People living in the area"), el("dd", null, fmt(pop)),
+      inRisk ? [el("dt", null, C.at_risk), el("dd", null, ac(v[0], pop, tr.m && tr.m[0] !== null ? tr.m[0] * share : null)),
+        el("dt", null, "May need a public shelter (likely)"), el("dd", null, ac(v[1], pop))] : null),
+    small ? el("p", { class: "note", id: "small-area" }, `Fewer than ${DATA.meta.suppress.small_area} people live in this Census area: only the population is shown. ${DATA.meta.suppress.line}`) : null,
     table(inRisk ? "Access and functional needs (people in the risk area)" : "Access and functional needs (people living in the area)",
-      ["Need", "People"], counts, [1]),
+      ["Need", "People (± 90% margin of error)", "Source"], counts, [1]),
+    el("p", { class: "src" }, `${DATA.meta.moe_note} ${DATA.meta.suppress.line}`),
     el("h4", null, `Nearest sites usable for ${hz.toLowerCase()} on ${tr.i || "this island"}`),
     tr.i === "Niʻihau"
       ? el("p", { class: "note", id: "nearest-none" }, DATA.meta.niihau_note)
@@ -725,8 +765,8 @@ function helpPanel(sc, hazard) {
   if (ex) {
     body.push(el("h3", null, "Example row"),
       table("One row from the “Largest single community” table", [C.area, C.at_risk, C.shelter],
-        [[community(ex.label_main, ex.label_sub), fmt(ex.at_risk_pop), `${fmt(ex.low)} – ${fmt(ex.central)} – ${fmt(ex.high)}`]], [1, 2]),
-      el("p", null, `Read it as: about ${fmt(ex.at_risk_pop)} people live in the risk area of ${ex.label_main}.${isLahaina(ex.label_main) ? ` ${DATA.meta.lahaina_note}` : ""} If this hazard hits, between ${fmt(ex.low)} and ${fmt(ex.high)} of them may need a public shelter; ${fmt(ex.central)} is the likely number.`));
+        [[community(ex.label_main, ex.label_sub), areaCount(ex.tract_fips, ex.at_risk_pop), [areaCount(ex.tract_fips, ex.low), " – ", areaCount(ex.tract_fips, ex.central), " – ", areaCount(ex.tract_fips, ex.high)]]], [1, 2]),
+      el("p", null, "Read it as: about ", areaCount(ex.tract_fips, ex.at_risk_pop), ` people live in the risk area of ${ex.label_main}.${isLahaina(ex.label_main) ? ` ${DATA.meta.lahaina_note}` : ""} If this hazard hits, between `, areaCount(ex.tract_fips, ex.low), " and ", areaCount(ex.tract_fips, ex.high), " of them may need a public shelter; ", areaCount(ex.tract_fips, ex.central), " is the likely number."));
   }
   body.push(
     el("h3", null, "Census area"),
@@ -959,15 +999,18 @@ function renderPlan() {
       ? [largestTitle, el("br"), el("span", { class: "caption-note" }, DATA.meta.hurricane_scope_note)]
       : largestTitle,
       [C.area, C.at_risk, C.shelter, C.lep, C.power, C.disability, C.age65, C.no_car],
-      sc.largest.map((c) => [community(c.label_main || c.tract_label, c.label_sub), fmt(c.at_risk_pop),
-        `${fmt(c.low)} – ${fmt(c.central)} – ${fmt(c.high)}`,
-        fmt(c.C_lep_at_risk), fmt(c.M_power_dependent_at_risk), fmt(c.I_disability_at_risk), fmt(c.I_age65_at_risk),
-        fmt(c.T_no_vehicle_persons_at_risk)]), [1, 2, 3, 4, 5, 6, 7]),
+      sc.largest.map((c) => [community(c.label_main || c.tract_label, c.label_sub), areaCount(c.tract_fips, c.at_risk_pop, "population", c.at_risk_pop),
+        [areaCount(c.tract_fips, c.low), " – ", areaCount(c.tract_fips, c.central), " – ", areaCount(c.tract_fips, c.high)],
+        areaCount(c.tract_fips, c.C_lep_at_risk, "lep", c.at_risk_pop), areaCount(c.tract_fips, c.M_power_dependent_at_risk, "power", c.at_risk_pop),
+        areaCount(c.tract_fips, c.I_disability_at_risk, "disability", c.at_risk_pop), areaCount(c.tract_fips, c.I_age65_at_risk, "age65", c.at_risk_pop),
+        areaCount(c.tract_fips, c.T_no_vehicle_persons_at_risk, "no_car", c.at_risk_pop)]), [1, 2, 3, 4, 5, 6, 7]),
     source("people"),
+    citeLine(["population", "lep", "power", "disability", "age65", "no_car"]),
     table("More needs in the largest communities", [C.area, ...DATA.meta.detail_keys.map(([k]) => C[k])],
       sc.largest.map((c) => [community(c.label_main || c.tract_label, c.label_sub),
-        ...DATA.meta.detail_keys.map(([, field]) => fmt(c[field]))]), [1, 2, 3, 4]),
+        ...DATA.meta.detail_keys.map(([k, field]) => areaCount(c.tract_fips, c[field], k, c.at_risk_pop))]), [1, 2, 3, 4]),
     source("detail"),
+    citeLine(DATA.meta.detail_keys.map(([k]) => k)),
 
     el("h2", null, "Map: people with needs and known sites"),
     ...renderMap(county, sc, sites, `${cLabel} ${hLabel}: people with needs by Census area and known shelter sites`, hazard),
@@ -1008,9 +1051,12 @@ function renderPlan() {
     el("h2", null, "Priority outreach and languages"),
     table("Top 10 Census areas by number of people with needs",
       ["#", C.area, C.at_risk, C.power, C.disability, C.lep, C.no_car, C.needs_total],
-      sc.priority_tracts.map((t) => [t.rank, community(t.label_main || t.tract_label, t.label_sub), fmt(t.at_risk_pop), fmt(t.power_dependent), fmt(t.disability),
-        fmt(t.limited_english), fmt(t.no_vehicle), fmt(t.afn_need_sum)]), [0, 2, 3, 4, 5, 6, 7]),
+      sc.priority_tracts.map((t) => [t.rank, community(t.label_main || t.tract_label, t.label_sub), areaCount(t.tract_fips, t.at_risk_pop, "population", t.at_risk_pop),
+        areaCount(t.tract_fips, t.power_dependent, "power", t.at_risk_pop), areaCount(t.tract_fips, t.disability, "disability", t.at_risk_pop),
+        areaCount(t.tract_fips, t.limited_english, "lep", t.at_risk_pop), areaCount(t.tract_fips, t.no_vehicle, "no_car", t.at_risk_pop),
+        areaCount(t.tract_fips, t.afn_need_sum)]), [0, 2, 3, 4, 5, 6, 7]),
     source("people"),
+    citeLine(["population", "power", "disability", "lep", "no_car"]),
     el("h3", null, "How to reach residents"),
     table("Channels", ["Channel", "Owner (proposed)", "Support (proposed)"], DATA.reach.channels),
     source("reach"),

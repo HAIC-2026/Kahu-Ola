@@ -34,6 +34,7 @@ th, td { border: 1px solid #000; padding: 3pt 5pt; text-align: left; vertical-al
 th { background: #e6e6e6; }
 td.num, th.num { text-align: right; }
 td.num { white-space: nowrap; }
+td.num .ac { white-space: normal; }   /* "96 ± 41" may wrap at the ± so tables keep true size */
 th { font-size: 9.5pt; line-height: 1.2; }
 td:first-child { min-width: 1.3in; }
 td small, .src, .range { font-size: 9pt; color: #333; }

@@ -147,9 +147,9 @@ class Findings(unittest.TestCase):
             self.assertEqual(BY_ID[f"T23a-walk-{c.lower()}"]["people_affected"], round(over))
         match = json.loads((PROC / "match_plan.json").read_text(encoding="utf-8"))["scenarios"]
         f = BY_ID["T09-hurricane-all"]
-        self.assertEqual(f["people_affected"], sum(s["shelter_demand_central"] for s in match if s["hazard"] == "hurricane"))
-        self.assertEqual(f["evidence"]["cots"], sum(n["quantity"] for s in match if s["hazard"] == "hurricane"
-                                                    for n in s["needs"] if n["need"] == "Cots / sleeping space"))
+        # counties' unrounded demand added, then rounded up once: within one person per county
+        self.assertLessEqual(abs(f["people_affected"] - sum(s["shelter_demand_central"] for s in match if s["hazard"] == "hurricane")), 4)
+        self.assertEqual(f["evidence"]["cots"], f["people_affected"])
         pop = {x["properties"]["tract_fips"]: x["properties"].get("population") or 0 for x in
                json.loads((PROC / "afn_tracts.geojson").read_text(encoding="utf-8"))["features"]}
         for key, s in ROADS["scenarios"].items():

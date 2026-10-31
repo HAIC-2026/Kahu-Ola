@@ -420,30 +420,54 @@ def need_qty(m: dict, name: str) -> int:
     return sum(n["quantity"] for n in m["needs"] if n["need"] == name)
 
 
-def several_counties(inp: Inputs) -> list:
+def exact_sums(inp: Inputs) -> dict:
+    """(county, hazard) -> unrounded in-shelter sums from the plan's own model run (the same
+    numbers the what-if engine uses), so statewide totals are rounded once, at the end."""
+    import whatif
     from build_playbooks import lang_label
+    from build_tract_labels import load_labels
+    from match import load_languages, select_languages
+    comm = load_json(ROOT / "config" / "communication.json", "communication settings")
+    langs = load_languages()
+    sel = {c: [[lang_label(l["language"]), l["share_of_area_lep"]] for l in select_languages(langs.get(c, []), comm)]
+           for c in COUNTIES}
+    agg = whatif.aggregates(inp.afn, load_labels(), load_json(fa.SHELTERS, "2026 shelter sites")["features"],
+                            load_json(fa.CANDIDATES, "DOE candidate schools")["features"], inp.pf, sel)
+    return {tuple(k.split("|")): v for k, v in agg.items()}
+
+
+def several_counties(inp: Inputs) -> list:
+    """Counties hit at once. People, cots, water and meals come from the counties' unrounded
+    demand added first and rounded up once (one rule, applied once at the end), so people =
+    cots = water. Staff per shift stays the sum of the counties' own shelter staffing."""
+    pp = inp.pf["per_person"]
+    exact = exact_sums(inp)
     out = []
     groups = [list(p) for p in itertools.combinations(COUNTIES, 2)] + [list(COUNTIES)]
     for h in HAZARDS:
         for g in groups:
             ms = [inp.match[(c, h)] for c in g]
+            demand = sum(exact[(c, h)]["demand"] for c in g)
             interp = {}
-            for m in ms:
-                for n in m["needs"]:
-                    if n.get("language"):
-                        lab = lang_label(n["language"])
-                        interp[lab] = interp.get(lab, 0) + n["quantity"]
-            people = sum(m["shelter_demand_central"] for m in ms)
+            for c in g:
+                a = exact[(c, h)]
+                for lang, share in a["languages"]:
+                    interp[lang] = interp.get(lang, 0.0) + a["lep_in_shelter"] * share
+            people = ceil(demand)
             code = "all" if len(g) == 4 else "-".join(c.lower() for c in g)
             name = "All four counties" if len(g) == 4 else " and ".join(COUNTY_LABEL[c] for c in g)
             out.append(finding(9, f"{h}-{code}", f"{name} at once ({HZ_LABEL[h]})", "Statewide", h, people,
                                {"counties": g, "people_in_shelter_likely": people,
-                                "cots": sum(need_qty(m, "Cots / sleeping space") for m in ms),
-                                "meals_per_day": sum(need_qty(m, "Meals") for m in ms),
-                                "water_gal_per_day": sum(need_qty(m, "Water") for m in ms),
+                                "cots": ceil(demand),
+                                "meals_per_day": ceil(demand * pp["meals_per_day"]["value"]),
+                                "water_gal_per_day": ceil(demand * pp["water_gal_per_day"]["value"]),
                                 "staff_per_shift": sum(need_qty(m, "Shelter staff") for m in ms),
-                                "interpreters_people_with_limited_english": dict(sorted(interp.items(), key=lambda kv: -kv[1]))},
-                               ["people", "factors", "languages", "rates"], title=TITLES[9]))
+                                "interpreters_people_with_limited_english": {k: ceil(v) for k, v in sorted(
+                                    interp.items(), key=lambda kv: (-kv[1], kv[0]))},
+                                "rounding": "counties' unrounded numbers added, then rounded up once"},
+                               ["people", "factors", "languages", "rates"],
+                               [assume("One rounding rule for counties together: add the unrounded county numbers, then round up once", "round up")],
+                               title=TITLES[9]))
     return out
 
 
