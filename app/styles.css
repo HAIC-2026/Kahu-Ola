@@ -151,6 +151,8 @@ caption { text-align: left; font-weight: 700; padding: var(--space-1) 0; }
 th, td { border: 1px solid var(--color-border); padding: var(--space-1) var(--space-2); text-align: left; vertical-align: top; }
 th { background: var(--color-surface); }
 td.num { text-align: right; white-space: nowrap; }
+/* dates, number ranges and "Census area 314.05" never split over two lines (app.js keep()) */
+.nowrap { white-space: nowrap; }
 .status { font-weight: 700; white-space: nowrap; }
 
 .map { border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: #ffffff; overflow: hidden; }
@@ -266,7 +268,8 @@ li a { display: inline-flex; align-items: center; min-height: 44px; }
 .map svg path.area.selected { stroke: var(--color-focus); stroke-width: 4; }
 .area-panel { border: 1px solid var(--color-border); background: var(--color-bg); border-radius: var(--radius-lg); padding: var(--space-2) var(--space-3); margin: var(--space-3) 0; }
 .area-panel h3:focus { outline: 3px solid var(--color-focus); outline-offset: 2px; }
-.area-facts { display: grid; grid-template-columns: max-content 1fr; gap: 2px var(--space-2); }
+/* fit-content: a long label wraps instead of pushing the number off a 320px screen */
+.area-facts { display: grid; grid-template-columns: fit-content(65%) 1fr; gap: 2px var(--space-2); }
 .area-facts dt { font-weight: 700; }
 .area-facts dd { margin: 0; }
 .panel-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
@@ -297,6 +300,7 @@ button.linklike { min-height: 44px; padding: var(--space-1) 0; border: 0; backgr
   .controls .hint, .controls .check { grid-column: 1 / -1; }   /* full-width rows (Messages filters too) */
   .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .kpis b { font-size: 1.25rem; }
+  .kpis .kpi-range { grid-column: 1 / -1; }   /* "977 – 5,469" stays on one line: full-width card */
   .site-header h1 { font-size: 1.6rem; }
 }
 

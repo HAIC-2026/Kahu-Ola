@@ -60,12 +60,18 @@ const pct = (v) => {
   return Number.isInteger(p) ? `${p}%` : `${p.toFixed(1)}%`;
 };
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+/* keep a date, "140 – 349 – 781" or "Census area 314.05" on one line on phones:
+   dates become <time datetime class="nowrap">, the rest <span class="nowrap">; the text is unchanged */
+const KEEP = /(\d{4}-\d{2}-\d{2})|(\d[\d,.]*(?: ?– ?\d[\d,.]*)+|Census area \d+(?:\.\d+)?)/g;
+const keep = (text) => String(text).split(KEEP).map((part, i) => (part === undefined || part === "" ? null
+  : i % 3 === 1 ? el("time", { datetime: part, class: "nowrap" }, part)
+  : i % 3 === 2 ? el("span", { class: "nowrap" }, part) : part)).filter((x) => x !== null);
 
 function table(caption, headers, rows, numCols = []) {
   const head = el("tr", null, headers.map((h, i) =>
     el("th", { scope: "col", class: numCols.includes(i) ? "num" : null }, h)));
   const body = rows.map((r) => el("tr", null, r.map((c, i) =>
-    el("td", { class: numCols.includes(i) ? "num" : null }, c))));
+    el("td", { class: numCols.includes(i) ? "num" : null }, typeof c === "string" ? keep(c) : c))));
   const name = Array.isArray(caption) ? caption[0] : caption;
   return el("div", { class: "table-wrap", tabindex: "0", role: "region", "aria-label": name },
     el("table", null, el("caption", null, caption), el("thead", null, head), el("tbody", null, body)));
@@ -75,15 +81,15 @@ function table(caption, headers, rows, numCols = []) {
 function updateBanner() {
   const b = document.getElementById("offline");
   const asOf = DATA ? DATA.meta.data_as_of : "last download";
-  b.textContent = `Offline – data as of ${asOf}`;
+  b.replaceChildren(...keep(`Offline – data as of ${asOf}`));
   b.hidden = navigator.onLine;
 }
 
 /* ---------- data version and update notice ---------- */
 function showVersion() {
   const text = `Data version ${DATA.meta.version} · Data as of ${DATA.meta.data_as_of}`;
-  document.getElementById("dataver").textContent = text;
-  document.getElementById("version").textContent = text;
+  document.getElementById("dataver").replaceChildren(...keep(text));
+  document.getElementById("version").replaceChildren(...keep(text));
 }
 
 /* When online, compare the server's version.json (never from a cache) with the bundle
@@ -102,7 +108,7 @@ function showUpdate(latest) {
   const b = document.getElementById("update");
   const btn = el("button", { type: "button", class: "button" }, "Reload");
   btn.addEventListener("click", reloadWithNewData);
-  b.replaceChildren(`New planning data available (data as of ${latest.data_as_of}) – `, btn);
+  b.replaceChildren(...keep(`New planning data available (data as of ${latest.data_as_of}) – `), btn);
   b.hidden = false;
 }
 
@@ -303,7 +309,7 @@ function renderMap(county, sc, sites, title, hazard) {
   bounds.forEach((b, i) => {
     const sw = svg("svg", { width: 28, height: 16, "aria-hidden": "true" });
     sw.append(svg("rect", { width: 28, height: 16, fill: css(RAMP[i]), stroke: "#000" }));
-    legend.append(el("li", null, sw, names[i], " ", el("small", null, `(${fmt(lo)}–${fmt(b)} people)`)));
+    legend.append(el("li", null, sw, names[i], " ", el("small", null, keep(`(${fmt(lo)}–${fmt(b)} people)`))));
     lo = b;
   });
   const swatch = (attrs, text) => {
@@ -354,7 +360,7 @@ function renderMap(county, sc, sites, title, hazard) {
   const areas = el("details", { class: "areas" },
     el("summary", null, `Census areas on this map in the risk area (${risk.length}) – open one for details`),
     el("ul", null, risk.map((tr) => {
-      const b = el("button", { type: "button", class: "linklike" }, `${tr.l || tr.f}: ${fmt(afn[tr.f])} people with needs (${level(tr.f)})`);
+      const b = el("button", { type: "button", class: "linklike" }, keep(`${tr.l || tr.f}: ${fmt(afn[tr.f])} people with needs (${level(tr.f)})`));
       b.addEventListener("click", () => openArea(tr.f, b));
       return el("li", null, b, lahainaNote(tr.l, true));
     })));
@@ -456,7 +462,7 @@ function zeroSirens(county) {
   return [el("p", { id: "outside-sirens" }, `${DATA.state.outside_text}: `, el("strong", null, fmt(DATA.state.outside[county] || 0)), "."),
     low.length ? el("details", { class: "areas", id: "zero-sirens" },
       el("summary", null, `${DATA.state.low_text} (${low.length}): ${DATA.state.no_sirens}`),
-      el("ul", null, low.map((f) => el("li", null, `${label[f] || f} – ${Math.round(share[f] * 100)}% within rated range`, lahainaNote(label[f], true))))) : null,
+      el("ul", null, low.map((f) => el("li", null, keep(`${label[f] || f} – ${Math.round(share[f] * 100)}% within rated range`), lahainaNote(label[f], true))))) : null,
     source("sirens")];
 }
 
@@ -529,7 +535,7 @@ function openArea(f, opener) {
 
   panel.replaceChildren();
   append(panel,
-    el("h3", { id: "area-title", tabindex: "-1" }, main, " ", el("small", null, sub || "")),
+    el("h3", { id: "area-title", tabindex: "-1" }, main, " ", el("small", null, keep(sub || ""))),
     isLahaina(main) ? el("p", { class: "note lahaina-note", id: "lahaina-note" }, DATA.meta.lahaina_note) : null,
     el("p", null, el("strong", null, inRisk ? `Inside the ${hz.toLowerCase()} risk area` : `Outside the ${hz.toLowerCase()} risk area`),
       ` · Need level: ${MAP.level(f)}`),
@@ -561,7 +567,7 @@ function openArea(f, opener) {
     el("p", null, el("strong", null, "Proposed partners: "), `lead – ${[...lead].join(", ") || "—"}; support – ${[...support].join(", ") || "—"}. `, DATA.meta.role_status),
     el("p", null, el("strong", null, `Top languages (${L.area}): `), langs.map((r) => `${r[0]} ${fmt(r[1])}`).join("; ") || "—"),
     el("p", null, el("strong", null, "Messages: "), msgLink(`all ${hz.toLowerCase()} messages`),
-      langs.filter((r) => msgLangs.has(r[0])).map((r) => [", ", msgLink(r[0], DATA.messages.find((m) => m.language_label === r[0]).language)])),
+      langs.filter((r) => msgLangs.has(r[0])).flatMap((r) => [", ", msgLink(r[0], DATA.messages.find((m) => m.language_label === r[0]).language)])),
     el("p", { class: "panel-actions" }, back, " ", print));
   panel.hidden = false;
   const q = new URLSearchParams(location.search);
@@ -600,7 +606,7 @@ function needNames(k) {
 
 /* community name first, Census area ID as a smaller second line */
 function community(main, sub) {
-  return [el("span", null, main), el("br"), el("small", null, sub || ""), ...(lahainaNote(main) || [])];
+  return [el("span", null, main), el("br"), el("small", null, keep(sub || "")), ...(lahainaNote(main) || [])];
 }
 /* Lahaina-area Census areas (community label names Lahaina): 2020 population predates the
    August 2023 fire. Only Census-area labels are passed here, never site names. */
@@ -629,7 +635,7 @@ function helpPanel(sc, hazard) {
   }
   body.push(
     el("h3", null, "Census area"),
-    el("p", null, "A neighborhood-sized area the U.S. Census uses, usually 1,200–8,000 people. The number (for example “Census area 308”) is its Census ID. Each area is named after the Census place where most of its people live; “near” means no one in the area lives inside a named place, and “rural near” means most people live outside named places."),
+    el("p", null, keep("A neighborhood-sized area the U.S. Census uses, usually 1,200–8,000 people. The number (for example “Census area 308”) is its Census ID. Each area is named after the Census place where most of its people live; “near” means no one in the area lives inside a named place, and “rural near” means most people live outside named places.")),
     el("h3", null, "Low – likely – high"),
     el("p", null, `The share of people in the risk area who may go to a public shelter: low ${pct(s.rate_low)}, likely ${pct(s.rate_central)}, high ${pct(s.rate_high)}. Where the rates come from: ${DATA.meta.rate_note[hazard]}`),
     el("h3", null, "Who has access and functional needs (CMIST)"),
@@ -742,7 +748,7 @@ function renderMessages() {
       el("dt", null, "Status"), el("dd", null, badge(m.status)),
       el("dt", null, "Review assigned to"), el("dd", null, m.review_assignee || "—"),
       el("dt", null, "Reviewed by"), el("dd", null, m.reviewed_by || "—"),
-      el("dt", null, "Review date"), el("dd", null, m.review_date || "—"),
+      el("dt", null, "Review date"), el("dd", null, keep(m.review_date || "—")),
       el("dt", null, "Approved"), el("dd", null, m.approved || "—"),
       m.notes ? [el("dt", null, "Notes"), el("dd", null, m.notes)] : null),
     copyButton(m.text, `${m.language_label} – ${hz[m.hazard] || m.hazard}, ${m.phase.toLowerCase()}`)));
@@ -822,7 +828,7 @@ function renderPlan() {
     helpPanel(sc, hazard),
     provLabel(DATA.provenance.numbers, DATA.provenance.sources_url),
     el("p", null, el("a", { class: "button", href: sc.playbook }, `⬇ Printable playbook (PDF): ${cLabel} – ${hLabel}`)),
-    el("ul", { class: "kpis" }, kpis.map(([k, v]) => el("li", null, k, el("b", null, v)))),
+    el("ul", { class: "kpis" }, kpis.map(([k, v]) => el("li", { class: /–/.test(v) ? "kpi-range" : null }, k, el("b", null, keep(v))))),
     county === "Maui" ? el("p", { class: "note lahaina-note", id: "lahaina-summary" }, DATA.meta.lahaina_summary) : null,
     source("summary"),
     el("p", null, `Share of people in the risk area who may need a public shelter: low ${pct(s.rate_low)}, likely ${pct(s.rate_central)}, high ${pct(s.rate_high)}. One person can be counted in more than one need. Open “How to read this page” for an explanation.`),
@@ -916,7 +922,7 @@ function resultsSection() {
     el("li", null, el("strong", null, "Coverage: "),
       `${fmt(r.with_cmist)} of ${fmt(r.tracts)} Census areas have needs data (FEMA risk data joined for ${fmt(r.with_nri)} of ${fmt(r.tracts)}). `,
       el("small", null, `Source: ${r.sources.coverage}`)),
-    b ? el("li", null, el("strong", null, `Backtest – ${b.event} (${b.date}): `),
+    b ? el("li", null, el("strong", null, keep(`Backtest – ${b.event} (${b.date}): `)),
       `observed ${fmt(+b.observed)} people in shelters; model ${fmt(+b.model_low)} / ${fmt(+b.model_central)} / ${fmt(+b.model_high)} (low / likely / high). `,
       b.calibration_event === "True" ? "This is a calibration event, not validation: the high rate was set from it. " : "",
       el("small", null, `Source: ${r.sources.backtest}`)) : null,
