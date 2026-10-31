@@ -88,6 +88,10 @@ body {
 h1, h2, h3 { font-family: var(--font-heading); }
 a { color: var(--color-accent); }
 :focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+/* a view heading that receives focus after a view change (app.js onHashChange): ring only for
+   keyboard users, never after a mouse click or tap */
+h2[tabindex="-1"]:focus:not(:focus-visible) { outline: none; }
+h2[tabindex="-1"]:focus-visible { outline-offset: 4px; border-radius: var(--radius); }
 .skip { position: absolute; left: -999px; top: 0; }
 .skip:focus { left: var(--space-2); background: var(--color-bg); padding: var(--space-2); z-index: 10; }
 [hidden] { display: none !important; }
