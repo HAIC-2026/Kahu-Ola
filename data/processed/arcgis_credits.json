@@ -31,6 +31,26 @@
    "units_billed": 30,
    "updated": "2026-10-29T07:07:08Z"
   },
+  "od_closures_drive": {
+   "actual_method": "billed units returned by the service x published rate",
+   "credits_actual": 0.668,
+   "credits_estimate": 0.668,
+   "note": "",
+   "rate": 0.0005,
+   "unit": "OD pairs",
+   "units_billed": 1336,
+   "updated": "2026-10-31T09:25:47Z"
+  },
+  "od_closures_walk": {
+   "actual_method": "billed units returned by the service x published rate",
+   "credits_actual": 0.0585,
+   "credits_estimate": 0.0585,
+   "note": "",
+   "rate": 0.0005,
+   "unit": "OD pairs",
+   "units_billed": 117,
+   "updated": "2026-10-31T09:25:48Z"
+  },
   "od_drive": {
    "actual_method": "billed units returned by the service x published rate",
    "credits_actual": 1.4905,
@@ -50,6 +70,16 @@
    "unit": "OD pairs",
    "units_billed": 41,
    "updated": "2026-10-29T07:55:39Z"
+  },
+  "od_flooded_drive": {
+   "actual_method": "billed units returned by the service x published rate",
+   "credits_actual": 1.37,
+   "credits_estimate": 1.37,
+   "note": "",
+   "rate": 0.0005,
+   "unit": "OD pairs",
+   "units_billed": 2740,
+   "updated": "2026-10-31T09:47:27Z"
   },
   "od_schools": {
    "actual_method": "billed units returned by the service x published rate",
@@ -99,7 +129,17 @@
    "unit": "service areas",
    "units_billed": 0,
    "updated": "2026-10-29T07:09:35Z"
+  },
+  "walk_safe_zones": {
+   "actual_method": "billed units returned by the service x published rate",
+   "credits_actual": 0.189,
+   "credits_estimate": 0.189,
+   "note": "",
+   "rate": 0.0005,
+   "unit": "OD pairs",
+   "units_billed": 378,
+   "updated": "2026-10-31T09:23:11Z"
   }
  },
- "total_credits_actual": 10.103
+ "total_credits_actual": 12.3885
 }
