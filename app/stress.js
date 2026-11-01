@@ -41,7 +41,7 @@ function findingLinks(r, county, hazard) {
   const out = [];
   for (const f of r[11]) {
     if (!label[f]) continue;
-    out.push(el("a", { href: `?county=${encodeURIComponent(county)}&hazard=${h}&area=${f}#plan` }, label[f]));
+    out.push(el("a", { href: `?county=${encodeURIComponent(county)}&hazard=${h}&area=${f}#plan` }, keep(label[f])));
   }
   for (const id of r[12]) {
     const s = DATA.sites.find((x) => x.id === id);
@@ -55,11 +55,11 @@ function findingCard(r, county, hazard) {
   return el("li", { class: "finding" },
     el("h3", null, r[2]),
     el("p", { class: "finding-meta" }, `Test ${r[1]}: ${S.tests[r[1]]} · ${hzName(r[4])} · rank ${fmt(r[7])} in the county, ${fmt(r[6])} statewide`),
-    el("p", { class: "finding-head" }, el("strong", null, stressHead(r)), r[8] ? ` (${r[8]})` : ""),
+    el("p", { class: "finding-head" }, el("strong", null, stressHead(r)), r[8] ? keep(` (${r[8]})`) : ""),
     el("p", null, el("span", { class: "tag" }, S.label)),
     el("details", { class: "finding-detail" }, el("summary", null, "Evidence, sources and assumptions"),
       r[13] ? table(`Evidence – ${r[2]}`, ["What", "Number"], r[13]) : null,
-      el("h4", null, "Sources"), el("ul", null, r[9].map((i) => el("li", null, S.sources[i]))),
+      el("h4", null, "Sources"), el("ul", null, r[9].map((i) => el("li", null, keep(S.sources[i])))),
       el("h4", null, "Assumptions"),
       r[10].length ? el("ul", null, r[10].map((i) => el("li", null, S.assumptions[i])))
         : el("p", null, "Only the plan's own factors and rates.")),
@@ -105,7 +105,7 @@ function renderStress() {
       el("summary", null, `Full list for ${cLabel} (${fmt(all.length)})`),
       table(`Every stress test result for ${cLabel}${STRESS.hazardOnly ? ` – ${hLabel}` : ""}, ranked by people affected`,
         ["Rank", "Test", "Scenario", "Hazard", "Result"],
-        all.map((r) => [fmt(r[7]), r[1], r[2], hzName(r[4]), [stressHead(r), r[8] ? ` (${r[8]})` : ""]]), [0])),
+        all.map((r) => [fmt(r[7]), r[1], r[2], hzName(r[4]), [stressHead(r), ...(r[8] ? keep(` (${r[8]})`) : [])]]), [0])),
     el("p", null, csv),
     el("h2", { id: "questions" }, "Questions for counties"),
     el("p", null, "These questions need county knowledge. The plan has no data for them, so it shows no numbers."),
@@ -156,7 +156,7 @@ function wiResults(county, hazard) {
   const al = window.WhatIf.allocate(areas, sites.map((x) => ({ id: x.id, island: x.island,
     usable: x.lon !== null && (x.status[hazard] || [""])[0] === "ok" })), inp, a.rate, pre);
   const H = W.how, name = Object.fromEntries(sites.map((x) => [x.id, x.name]));
-  const how = (k) => el("details", { class: "how" }, el("summary", null, "How this is calculated"), el("p", null, H[k]));
+  const how = (k) => el("details", { class: "how" }, el("summary", null, "How this is calculated"), el("p", null, keep(H[k])));
   const stayW = `${fmt(inp.stay)} ${inp.stay === 1 ? "day" : "days"}`;
   const rows = [
     ["People who may need a public shelter", fmt(r.people_in_shelter), "people", how("people_in_shelter")],

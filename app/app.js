@@ -90,7 +90,7 @@ function scaledText(x, pop, k) {
   return Math.round(x).toLocaleString("en-US");
 }
 /* the per-area source line: ACS table and years per column, the MOE note and the privacy line */
-const citeLine = (fields) => el("p", { class: "src" }, `Per-area figures – ${fields.map((k) => `${k === "population" ? DATA.meta.cols.at_risk : DATA.meta.cols[k]}: ${DATA.meta.cite[k]}`).join("; ")}. ${DATA.meta.moe_note} Shelter estimates and need totals are model results with no margin of error. ${DATA.meta.suppress.line}`);
+const citeLine = (fields) => el("p", { class: "src" }, keep(`Per-area figures – ${fields.map((k) => `${k === "population" ? DATA.meta.cols.at_risk : DATA.meta.cols[k]}: ${DATA.meta.cite[k]}`).join("; ")}. ${DATA.meta.moe_note} Shelter estimates and need totals are model results with no margin of error. ${DATA.meta.suppress.line}`));
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 /* keep a date, "140 – 349 – 781" or "Census area 314.05" on one line on phones:
    dates become <time datetime class="nowrap">, the rest <span class="nowrap">; the text is unchanged */
@@ -106,7 +106,7 @@ function table(caption, headers, rows, numCols = []) {
     el("td", { class: numCols.includes(i) ? "num" : null }, typeof c === "string" ? keep(c) : c))));
   const name = Array.isArray(caption) ? caption[0] : caption;
   return el("div", { class: "table-wrap", tabindex: "0", role: "region", "aria-label": name },
-    el("table", null, el("caption", null, caption), el("thead", null, head), el("tbody", null, body)));
+    el("table", null, el("caption", null, typeof caption === "string" ? keep(caption) : caption), el("thead", null, head), el("tbody", null, body)));
 }
 
 /* ---------- offline banner ---------- */
@@ -414,7 +414,7 @@ function renderMap(county, sc, sites, title, hazard) {
   const areas = el("details", { class: "areas" },
     el("summary", null, `Census areas on this map in the risk area (${risk.length}) – open one for details`),
     el("ul", null, risk.map((tr) => {
-      const b = el("button", { type: "button", class: "linklike" }, `${tr.l || tr.f}: `, cellEl(inMap.get(tr.f)[2], tr.pop), ` people with needs (${level(tr.f)})`);
+      const b = el("button", { type: "button", class: "linklike" }, keep(`${tr.l || tr.f}: `), cellEl(inMap.get(tr.f)[2], tr.pop), ` people with needs (${level(tr.f)})`);
       b.addEventListener("click", () => openArea(tr.f, b));
       return el("li", null, b, lahainaNote(tr.l, true));
     })));
@@ -480,7 +480,7 @@ function renderMap(county, sc, sites, title, hazard) {
       fl.length ? layerBox("flooded", `Future sea-level-rise scenario (3.2 ft; State of Hawaiʻi SLR-XA), tested against 2026 sites: potentially flooded highways (thick line, ${fmt(HUBD.flooded_km[county])} km)`, floodLayer, null) : null,
     ].filter(Boolean));
     srcBox.append(...[safe.length ? HUBD.sources.safe_zones : null, fh.length || fm.length ? HUBD.sources.fire : null, fl.length ? HUBD.sources.flooded : null]
-      .filter(Boolean).map((t) => el("p", { class: "src" }, `Source: ${t}`)));
+      .filter(Boolean).map((t) => el("p", { class: "src" }, keep(`Source: ${t}`))));
     if (MAP.root === root) setView(MAP.view);         // patterns at the current zoom
   };
   MAP.addHub = addHub;
@@ -495,7 +495,7 @@ function renderMap(county, sc, sites, title, hazard) {
     el("p", { class: "hint" }, "Select a Census area on the map, or open one from the list below the legend."),
     el("p", { class: "note", id: "site-focus", role: "status", hidden: "" }),
     panel, legend, areas,
-    access ? el("p", { class: "src" }, `${DATA.access.source} ${DATA.access.attribution} ${DATA.access.outside_method}`) : null,
+    access ? el("p", { class: "src" }, keep(`${DATA.access.source} ${DATA.access.attribution} ${DATA.access.outside_method}`)) : null,
     srcBox, (addHub(), null)];
 }
 
@@ -680,7 +680,7 @@ function openArea(f, opener) {
     small ? el("p", { class: "note", id: "small-area" }, `Fewer than ${DATA.meta.suppress.small_area} people live in this Census area: only the population is shown. ${DATA.meta.suppress.line}`) : null,
     table(inRisk ? "Access and functional needs (people in the risk area)" : "Access and functional needs (people living in the area)",
       ["Need", "People (± 90% margin of error)", "Source"], counts, [1]),
-    el("p", { class: "src" }, `${DATA.meta.moe_note} ${DATA.meta.suppress.line}`),
+    el("p", { class: "src" }, keep(`${DATA.meta.moe_note} ${DATA.meta.suppress.line}`)),
     el("h4", null, `Nearest sites usable for ${hz.toLowerCase()} on ${tr.i || "this island"}`),
     tr.i === "Niʻihau"
       ? el("p", { class: "note", id: "nearest-none" }, DATA.meta.niihau_note)
@@ -695,7 +695,7 @@ function openArea(f, opener) {
           : el("p", { class: "note", id: "nearest-none" }, DATA.meta.no_island_site),
     tr.o && tr.o[hazard] && tr.i !== "Niʻihau" ? el("p", { class: "note", id: "outside-drive" },
       `${DATA.access.no_activated}, for ${hz.toLowerCase()}. With DOE candidate schools: ${tr.o[hazard] === 1 ? `a candidate school usable for ${hz.toLowerCase()} is within ${DATA.access.limit} minutes` : `still none within ${DATA.access.limit} minutes`}. ${DATA.access.not_no_shelter}`) : null,
-    near.length && near[0].drive !== undefined ? el("p", { class: "src" }, `${DATA.access.source} ${DATA.access.attribution}`) : null,
+    near.length && near[0].drive !== undefined ? el("p", { class: "src" }, keep(`${DATA.access.source} ${DATA.access.attribution}`)) : null,
     hasState() ? el("p", { id: "area-sirens" },
       el("strong", null, `Nearest outdoor siren: ${tr.sd === null || tr.sd === undefined ? "none on this island" : `${fmt(tr.sd)} ft`} (rated range ${fmt(DATA.state.radius_ft)} ft)`), el("br"),
       el("strong", null, `Share ${DATA.state.share_word} within rated siren range: ${Math.round((tr.sc || 0) * 100)}%`),
@@ -769,8 +769,8 @@ function lahainaNote(label, inline) {
 }
 /* "{SOURCES}" becomes a "see Sources" link (the PDFs say "section 8") */
 const linkSources = (text) => text.split("{SOURCES}").flatMap((part, i) => (i
-  ? [el("a", { href: DATA.provenance.sources_url, rel: "noopener noreferrer" }, "see Sources"), part]
-  : [part]));
+  ? [el("a", { href: DATA.provenance.sources_url, rel: "noopener noreferrer" }, "see Sources"), keep(part)]
+  : keep(part)));
 const source = (key) => el("p", { class: "src" }, linkSources(DATA.meta.sources[key]));
 
 /* ---------- help panel ("?") ---------- */
@@ -796,7 +796,7 @@ function helpPanel(sc, hazard) {
     el("h3", null, "Map"),
     el("p", null, "Darker blue means more people with needs, from “Lowest need” to “Highest need”. A solid outline marks a Census area in the risk area; a dashed outline is outside it. Symbols: ○ usable site, △ check flood zone, ◇ flood risk not mapped, ☒ not for this hazard. Numbers on the map match the site key."),
     el("h3", null, "Why population numbers can differ"),
-    el("p", null, "People in the risk area come from ACS 2018–2022 estimates (through the CDC Social Vulnerability Index 2022). Community names use 2020 Census counts. County totals in the plan use Census estimates for 2025. Each table names its source underneath."),
+    el("p", null, keep("People in the risk area come from ACS 2018–2022 estimates (through the CDC Social Vulnerability Index 2022). Community names use 2020 Census counts. County totals in the plan use Census estimates for 2025. Each table names its source underneath.")),
     el("p", { class: "note" }, el("strong", null, "Every number is a planning estimate. In an event, follow county announcements.")));
   return el("details", { class: "help", id: "help" },
     el("summary", null, el("span", { class: "help-icon", "aria-hidden": "true" }, "?"), " How to read this page"),
