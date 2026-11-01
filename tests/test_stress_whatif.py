@@ -344,8 +344,12 @@ class Annex(unittest.TestCase):
             self.assertNotRegex(t, r"(?<![A-Za-z])AI(?![A-Za-z])|Claude|\w+\.(json|csv|py|geojson)\b|\b(null|undefined|NaN)\b")
 
     def test_playbook_summary_is_one_last_page(self):
+        """The stress-test summary is one page, just before "After the event" (the last page)."""
         for pdf in sorted((ROOT / "playbooks").glob("*.pdf")):
             n = self.pages(pdf)
+            self.assertIn("11. After the event", self.text(pdf, n, n), pdf.name)
+            self.assertIn("When to rerun the plan", self.text(pdf, n, n), pdf.name)
+            n -= 1
             last = self.text(pdf, n, n)
             self.assertIn("10. Stress tests – summary", last, pdf.name)
             self.assertIn("Questions for counties", last, pdf.name)

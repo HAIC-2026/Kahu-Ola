@@ -124,14 +124,15 @@ class Playbooks(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("pdftotext"), "pdftotext not installed")
     def test_reading_guide_opens_its_own_page_after_scope(self):
-        """Page 1 is the summary; the reading guide starts at the top of the page right after
-        the Scope section (page 2 or 3 at true size, text >= 9 pt)."""
+        """Page 1 is the readiness sheet, page 2 the summary; the reading guide starts at the top
+        of the page right after the Scope section (page 3 or 4 at true size, text >= 9 pt)."""
         def page(pdf, n):
             return subprocess.run(["pdftotext", "-f", str(n), "-l", str(n), str(pdf), "-"],
                                   capture_output=True, text=True, check=True).stdout
         for pdf in sorted(PLAY.glob("*.pdf")):
-            self.assertIn("1. Summary", page(pdf, 1), pdf.name)
-            starts = [n for n in (2, 3) if page(pdf, n).lstrip().startswith("How to read this playbook")]
+            self.assertIn("Readiness sheet", page(pdf, 1), pdf.name)
+            self.assertIn("1. Summary", page(pdf, 2), pdf.name)
+            starts = [n for n in (3, 4) if page(pdf, n).lstrip().startswith("How to read this playbook")]
             self.assertEqual(len(starts), 1, pdf.name)
             before = "".join(page(pdf, n) for n in range(1, starts[0]))
             self.assertIn("Largest single community", before, pdf.name)     # Scope ends first

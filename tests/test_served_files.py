@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT / "tests"))
 import area_view  # noqa: E402
+from privacy import PRIVACY_LINE  # noqa: E402
 import build_playbooks as bp  # noqa: E402
 
 APP = ROOT / "app"
@@ -119,6 +120,7 @@ class ServedPdfs(unittest.TestCase):
                                         check=True).stdout.split())
             self.assertNotRegex(t, r"(?<![\d,.])[1-9] ± \d", pdf.name)               # a shown count with its MOE
             self.assertNotRegex(t, r"\((?:\d[\d,]*|fewer than 10) to [1-9] people\)|\([1-9] to ", pdf.name)
+            self.assertIn(PRIVACY_LINE, t, pdf.name)                                   # every served PDF
 
 
 @unittest.skipUnless(BROWSER, "Chrome/Chromium not installed")

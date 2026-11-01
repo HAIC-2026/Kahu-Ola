@@ -70,24 +70,29 @@ class ReviewStatus(unittest.TestCase):
         for r in ROWS:
             m = bundled[(r["file"], r["message_id"])]
             approved = (r["approved"].strip().lower() == "yes" and r["reviewed_by"].strip()
-                        and r["review_date"].strip())
+                        and r["review_date"].strip() and ml.language_reviewed(r["language"]))
             want = ("Reviewed" if approved else
-                    "Needs a translator" if not r["text"].strip() else "Draft — not yet reviewed")
+                    "Needs a translator" if not r["text"].strip() else ml.DRAFT_EN if r["language"] == "English"
+                    else "Draft — needs review by a native speaker before use")
             self.assertEqual(m["status"], want, (r["file"], r["message_id"]))
             self.assertEqual(m["text"], r["text"])
 
     def test_only_two_statuses_and_rule_edges(self):
         self.assertEqual({m["status"] for m in BUNDLE["messages"]} - {"Reviewed"},
-                         {"Draft — not yet reviewed", "Needs a translator"})
+                         {"Draft — needs review by a native speaker before use",
+                          "Draft — needs review by a county public information officer before use", "Needs a translator"})
         for m in BUNDLE["messages"]:
             if m["language"] in ("Chuukese", "Marshallese"):
                 self.assertEqual(m["status"], "Needs a translator")
         base = {"approved": "yes", "reviewed_by": "A. Reviewer", "review_date": "2026-11-01",
-                "text": "x"}
-        self.assertEqual(ml.review_status(base), "Reviewed")
+                "text": "x", "language": "Spanish"}
+        lang = {"Spanish": {"reviewed_by": "A. Reviewer", "review_date": "2026-11-01"}}
+        self.assertEqual(ml.review_status(base, lang), "Reviewed")
+        self.assertEqual(ml.review_status(base, {"Spanish": {"reviewed_by": ""}}),
+                         "Draft — needs review by a native speaker before use")   # no language reviewer
         for missing in ("reviewed_by", "review_date"):
-            self.assertEqual(ml.review_status({**base, missing: ""}), "Draft — not yet reviewed")
-        self.assertEqual(ml.review_status({**base, "approved": "no"}), "Draft — not yet reviewed")
+            self.assertEqual(ml.review_status({**base, missing: ""}, lang), "Draft — needs review by a native speaker before use")
+        self.assertEqual(ml.review_status({**base, "approved": "no"}, lang), "Draft — needs review by a native speaker before use")
 
     def test_badge_shows_bundle_status(self):
         self.assertIn("badge(m.status)", JS)

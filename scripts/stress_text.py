@@ -11,6 +11,7 @@ from __future__ import annotations
 LABEL = "Stress test, not a forecast"
 WHATIF_LABEL = "What-if, not a forecast"
 TOP = 10
+SITES_NOTE = "Results depend on the 30 sites opened in 2026; county-designated lists would change them."
 PER_TEST = 2                  # at most 2 findings of one test in a county's top 10
 NEEDS_DATA = "needs county data"
 
@@ -236,18 +237,24 @@ def in_county(f: dict, county: str) -> bool:
     return f["county"] == county or (f["county"] == "Statewide" and county in f["evidence"].get("counties", []))
 
 
-def top(findings: list, county: str, hazard: str | None = None, n: int = TOP) -> list:
+TEST_TYPE = {"1": "site loss", "2": "site loss"}   # one site lost and two sites lost: one type
+
+
+def top(findings: list, county: str, hazard: str | None = None, n: int = TOP,
+        per_test: int = PER_TEST, by_type: bool = False) -> list:
     """Top n findings for a county (optionally one hazard, plus 'all hazards' findings), in
-    rank order (people affected), at most PER_TEST of one test so different risks show."""
+    rank order (people affected), at most per_test of one test so different risks show
+    (by_type: of one test type, so single- and two-site losses count together)."""
     out, seen = [], {}
     for f in sorted(findings, key=lambda f: f["rank"]):
         if not in_county(f, county) or not f["people_affected"]:
             continue
         if hazard and not ({hazard, "all"} & set(f["hazard"].split("+"))):
             continue
-        if seen.get(f["test"], 0) >= PER_TEST:
+        key = TEST_TYPE.get(f["test"], f["test"]) if by_type else f["test"]
+        if seen.get(key, 0) >= per_test:
             continue
-        seen[f["test"]] = seen.get(f["test"], 0) + 1
+        seen[key] = seen.get(key, 0) + 1
         out.append(f)
         if len(out) == n:
             break
