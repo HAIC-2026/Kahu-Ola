@@ -32,7 +32,7 @@ MIN_COUNT = 10
 SMALL_AREA = 100
 FEWER = "fewer than 10"
 SMALL = "suppressed (small area)"
-PRIVACY_LINE = "Counts under 10 are not shown so no one can be identified."
+PRIVACY_LINE = "Per-area counts from 1 to 9 are not shown. All figures are public Census Bureau, CDC and HHS estimates, not personal records."
 NO_MOE = "no margin of error (model estimate)"
 # area field -> (citation, MOE column in area_moe.csv or None)
 CITE = {

@@ -96,7 +96,7 @@ class Generated(unittest.TestCase):
             self.assertGreaterEqual(text.count("fewer than 10"), want, pdf.name)
             self.assertNotRegex(text, r"\([1-9] to |to [1-9] people\)", pdf.name)
             if not pdf.parent.name == "annex":
-                self.assertIn("Counts under 10 are not shown so no one can be identified", text, pdf.name)
+                self.assertIn("Per-area counts from 1 to 9 are not shown. All figures are public Census Bureau, CDC and HHS estimates, not personal records", text, pdf.name)
 
     def test_stress_text_never_shows_small_people_counts(self):
         st = json.loads((ROOT / "data" / "processed" / "stress_tests.json").read_text(encoding="utf-8"))
@@ -142,11 +142,18 @@ class Citations(unittest.TestCase):
         self.assertTrue(any(" ± " in c for c in cells))
 
     def test_privacy_line_everywhere(self):
-        line = "Counts under 10 are not shown so no one can be identified."
+        line = "Per-area counts from 1 to 9 are not shown. All figures are public Census Bureau, CDC and HHS estimates, not personal records."
         self.assertIn(line, (APP / "index.html").read_text(encoding="utf-8"))
         self.assertIn(line, BUNDLE["meta"]["privacy"])
         self.assertIn(line, (PLAY / "maui_tsunami.html").read_text(encoding="utf-8"))
-        self.assertIn(line, (ROOT / "PLAN.md").read_text(encoding="utf-8"))
+        claim = "The app and PDFs never show a per-area count under 10"
+        derive = "its value can be derived by subtraction; the underlying estimates are public."
+        plan, readme = ((ROOT / f).read_text(encoding="utf-8") for f in ("PLAN.md", "README.md"))
+        self.assertGreaterEqual(plan.count(claim), 2)                    # privacy section and section 10
+        self.assertIn(derive, plan.split("## 10.")[1])
+        self.assertIn(claim, readme)
+        self.assertIn(derive, readme)
+        self.assertNotIn("no one can be identified", plan + readme)
 
 
 class StressFixes(unittest.TestCase):

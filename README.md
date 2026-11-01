@@ -83,6 +83,10 @@ python3 scripts/build_app_data.py --copy-only
 | `docs/` | Deploy note and security answer |
 | `tests/` | Offline unit tests |
 
+## Privacy
+
+The app and PDFs never show a per-area count under 10 (a count of 0 is shown as 0). The pipeline's intermediate files in `data/processed/` and `data/sources/` are copies of public Census Bureau and CDC SVI tract estimates (already published at data.census.gov) and HHS emPOWER county counts allocated to areas; they contain no personal records. County totals are shown in full, so where only one area in a county is suppressed for a measure, its value can be derived by subtraction; the underlying estimates are public. See PLAN.md §4 and §10.
+
 ## Disclaimer
 
 This is a planning aid built from public, aggregate data. It supports, and does not replace, county and State emergency plans or alerting systems. Sites listed are places a county opened in past events; not every site opens in every event. Roles, decision points and messages are proposals to be confirmed with each partner and county. Message translations are AI drafts that need native-speaker review before use. In an emergency, follow official county announcements and call 911 if you are in danger.

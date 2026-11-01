@@ -6,11 +6,13 @@ messages), the JavaScript and HTML, the CSV exports the app builds, and the text
 under app/playbooks. A per-area count field holds a number of 10 or more, 0, the marker
 "lt10", or nothing (areas with fewer than 100 residents ship their population only).
 
-Rendered views are compared with a reference rendered before the change
-(tests/golden/views_before.json.gz, see tests/render_views.py). The only allowed difference
-is the one the rules require: in the what-if panel, a per-area or per-site value that is
+Rendered views are compared with a reference (tests/golden/views_before.json.gz, see
+tests/render_views.py). It was first rendered before the change; the only difference then was
+the one the rules require: in the what-if panel, a per-area or per-site value that is
 "fewer than 10" at the plan rate reads "fewer than 10 at plan rates" when a slider raises the
-rate (its true value is not shipped, so it cannot be re-checked)."""
+rate (its true value is not shipped, so it cannot be re-checked). The reference was
+regenerated when the privacy line was reworded, and now includes that rule, so every view
+must match it exactly."""
 import json
 import math
 import re
@@ -130,16 +132,16 @@ class RenderedUnchanged(unittest.TestCase):
     def test_same_views(self):
         self.assertEqual(sorted(self.now), sorted(self.golden["texts"]))
 
-    def test_text_identical_except_required_change(self):
-        changed = []
-        for k, before in sorted(self.golden["texts"].items()):
-            now = self.now[k]
-            if now != before:
-                changed.append(k)
-                # the only change allowed: "fewer than 10" -> "fewer than 10 at plan rates" (what-if, rate raised)
-                self.assertTrue(k.startswith("whatif "), k)
-                self.assertEqual(now.replace("fewer than 10 at plan rates", "fewer than 10"), before, k)
-        self.assertEqual(changed, ["whatif county=Hawaii&hazard=tsunami&outage=5&rate=0.08"])
+    def test_text_identical(self):
+        changed = [k for k, before in sorted(self.golden["texts"].items()) if self.now[k] != before]
+        self.assertEqual(changed, [])
+
+    def test_whatif_rule_in_reference(self):
+        # a value "fewer than 10" at the plan rate is not scaled when a slider raises the rate
+        self.assertIn("fewer than 10 at plan rates",
+                      self.golden["texts"]["whatif county=Hawaii&hazard=tsunami&outage=5&rate=0.08"])
+        self.assertFalse(any("at plan rates" in v and "rate=" not in k for k, v in self.golden["texts"].items()
+                             if k.startswith("whatif ")))
 
 
 @unittest.skipUnless(BROWSER and NODE, "Chrome/Chromium or Node.js not installed")
