@@ -1115,6 +1115,7 @@ def data_sources(inp: dict) -> list:
 
 
 def sources_html(inp: dict) -> str:
+    import privacy
     rows, data = _sources(inp)
     return ('<h2 class="page">8. Sources and assumptions</h2>'
             '<h3>Planning factors</h3>'
@@ -1123,9 +1124,7 @@ def sources_html(inp: dict) -> str:
             + table(["Source", "Fetched", "URL / file"], [[a, b, link(c)] for a, b, c in data],
                     cls="sources-table", cols=("c-src", "c-date", "c-url"), cell_cls={2: "url"})
             + '<p>Privacy: aggregate census-tract and county data only. No individual '
-              'records. Public facility names and addresses only. Counts under 10 are not shown '
-              'so no one can be identified; in a Census area with fewer than 100 residents only the '
-              'population is shown.</p>')
+              'records. Public facility names and addresses only. ' + escape(privacy.PRIVACY_LINE) + ' In a Census area with fewer than 100 residents only the population is shown.</p>')
 
 
 def _sources(inp: dict) -> tuple[list, list]:

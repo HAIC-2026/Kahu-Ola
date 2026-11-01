@@ -2,7 +2,8 @@
 
 Used by tests/test_served_files.py to check that moving per-area computation to build time
 did not change what anyone sees. The reference (tests/golden/views_before.json.gz) was
-rendered from the app before that change (commit fc9f627, PR #11) with:
+was first rendered before that change (commit fc9f627, PR #11) and is regenerated, keeping
+the same views, whenever on-screen text changes on purpose:
 
     python3 tests/render_views.py --write
 
@@ -128,8 +129,10 @@ def load_golden() -> dict:
 
 if __name__ == "__main__":
     if "--write" in sys.argv:
-        b = json.loads((APP / "data" / "bundle.json").read_text(encoding="utf-8"))
-        panels = pick_panels(b)
+        # the panel list is kept from the existing reference (the bundle no longer ships the
+        # per-area values pick_panels() chose them by)
+        panels = [tuple(x) for x in load_golden()["panels"]] if GOLDEN.exists() else \
+            pick_panels(json.loads((APP / "data" / "bundle.json").read_text(encoding="utf-8")))
         texts = render(APP, views(panels))
         GOLDEN.parent.mkdir(exist_ok=True)
         GOLDEN.write_bytes(gzip.compress(json.dumps({"panels": panels, "texts": texts}, ensure_ascii=False,
