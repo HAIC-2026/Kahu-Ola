@@ -157,6 +157,7 @@ th { background: var(--color-surface); }
 td.num { text-align: right; white-space: nowrap; }
 /* dates, number ranges and "Census area 314.05" never split over two lines (app.js keep()) */
 .nowrap { white-space: nowrap; }
+.ac { white-space: nowrap; }   /* a per-area value with its margin of error: "6,442 ± 1,024" */
 .status { font-weight: 700; white-space: nowrap; }
 
 .map { border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: #ffffff; overflow: hidden; }
