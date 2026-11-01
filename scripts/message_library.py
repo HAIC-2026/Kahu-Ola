@@ -5,7 +5,7 @@ Reads every row of data/sources/messages/*.csv. Readers see a neutral review sta
 "Reviewed" only when the language has a native-speaker reviewer in config/communication.json
 (message_library.language_review.<language>.reviewed_by) and the row is approved with a named
 reviewer and a review date; every other row with text is "Draft — needs review by a native
-speaker before use".
+speaker before use" (English, the source text: "… by a county public information officer …").
 """
 from __future__ import annotations
 
@@ -62,6 +62,7 @@ def message_counts(rows: list) -> list:
 
 REVIEWED = "Reviewed"
 DRAFT = "Draft — needs review by a native speaker before use"
+DRAFT_EN = "Draft — needs review by a county public information officer before use"
 CONFIG = ROOT / "config" / "communication.json"
 
 
@@ -86,7 +87,9 @@ def review_status(r: dict, review: dict | None = None) -> str:
           and r["review_date"].strip() and language_reviewed(r["language"], review))
     if ok:
         return REVIEWED
-    return NEEDS_TRANSLATOR if not r.get("text", "").strip() else DRAFT
+    if not r.get("text", "").strip():
+        return NEEDS_TRANSLATOR
+    return DRAFT_EN if r["language"] == "English" else DRAFT
 
 
 TRIGGERS = ROOT / "config" / "decision_points.json"

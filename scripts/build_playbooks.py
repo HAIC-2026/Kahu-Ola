@@ -1289,7 +1289,7 @@ def readiness_html(inp: dict, county: str, hazard: str, sc: dict, sites: list) -
     rows.insert(1, ["May need a public shelter (low – high)",
                     nw(f'{n(sc["shelter_demand_low"])} – {n(sc["shelter_demand_high"])}')])
     st = inp.get("stress") or {}
-    top = stx.top(st.get("findings") or [], county, hazard, 3, per_test=1)   # one per test type
+    top = stx.top(st.get("findings") or [], county, hazard, 3, per_test=1, by_type=True)   # one per test type
     usable = [s["name"] for s in sites if s["status"] == "ok"]
     site_text = (escape(", ".join(usable)) + "." if usable else
                  "No known usable 2026 site for this hazard. The county designates shelters; "

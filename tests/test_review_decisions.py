@@ -54,7 +54,9 @@ class MessageReview(unittest.TestCase):
             if not REVIEW[m["language"]]["reviewed_by"].strip():
                 self.assertNotEqual(m["status"], ml.REVIEWED, m["language"])
                 if m["text"]:
-                    self.assertEqual(m["status"], "Draft — needs review by a native speaker before use")
+                    self.assertEqual(m["status"], "Draft — needs review by a county public information officer "
+                                     "before use" if m["language"] == "English" else
+                                     "Draft — needs review by a native speaker before use", m["language"])
         for c in BUNDLE["message_counts"]:
             if not REVIEW[c["language"]]["reviewed_by"].strip():
                 self.assertEqual(c["reviewed"], 0, c["language"])
@@ -80,6 +82,19 @@ class MessageReview(unittest.TestCase):
             self.assertIn(ml.DRAFT, t, pdf.name)
 
 
+class EnglishLabel(unittest.TestCase):
+    def test_english_needs_county_review(self):
+        self.assertEqual(ml.DRAFT_EN, "Draft — needs review by a county public information officer before use")
+        en = [m for m in bundled_messages() if m["language"] == "English"]
+        self.assertTrue(en)
+        for m in en:
+            self.assertEqual(m["status"], ml.DRAFT_EN)
+            self.assertNotIn("native speaker", m["status"])
+        r = {"approved": "no", "reviewed_by": "", "review_date": "", "text": "x", "language": "English"}
+        self.assertEqual(ml.review_status(r, REVIEW), ml.DRAFT_EN)
+        self.assertEqual(ml.review_status({**r, "language": "Spanish"}, REVIEW), ml.DRAFT)
+
+
 class SitesNote(unittest.TestCase):
     def test_app_annex_playbook(self):
         js = (APP / "stress.js").read_text(encoding="utf-8")
@@ -95,12 +110,17 @@ class ReadinessFindings(unittest.TestCase):
         inp = bp.load_inputs()
         for c in bp.COUNTY_LABEL:
             for h in bp.HAZARD_LABEL:
-                top = stx.top(inp["stress"]["findings"], c, h, 3, per_test=1)
-                self.assertEqual(len({f["test"] for f in top}), len(top), (c, h))
+                top = stx.top(inp["stress"]["findings"], c, h, 3, per_test=1, by_type=True)
+                types = [stx.TEST_TYPE.get(f["test"], f["test"]) for f in top]
+                self.assertEqual(len(set(types)), len(top), (c, h))               # one per test type
                 r = (PLAY / f"{bp.slug(c, h)}.html").read_text(encoding="utf-8")
                 sheet = re.search(r'<section class="readiness">.*?</section>', r, re.S).group(0)
                 items = re.findall(r"<li><b>(.*?):</b>", sheet)
                 self.assertEqual(len(items), len(top), (c, h))
+
+
+    def test_site_losses_are_one_type(self):
+        self.assertEqual(stx.TEST_TYPE["1"], stx.TEST_TYPE["2"])
 
 
 class PlanDecisions(unittest.TestCase):
@@ -119,7 +139,7 @@ class PlanDecisions(unittest.TestCase):
         self.assertIn("statewide totals that did not add up (43,517 people vs 43,519 cots)", s9)
         self.assertIn("with a second AI as checker", s9)
         self.assertNotIn("TODO", s9)
-        self.assertNotIn("Datatrove", s9)
+        self.assertIn("Datatrove was used to confirm HHS emPOWER field definitions.", s9)
 
 
 if __name__ == "__main__":

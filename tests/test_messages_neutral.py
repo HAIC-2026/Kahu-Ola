@@ -72,13 +72,15 @@ class ReviewStatus(unittest.TestCase):
             approved = (r["approved"].strip().lower() == "yes" and r["reviewed_by"].strip()
                         and r["review_date"].strip() and ml.language_reviewed(r["language"]))
             want = ("Reviewed" if approved else
-                    "Needs a translator" if not r["text"].strip() else "Draft — needs review by a native speaker before use")
+                    "Needs a translator" if not r["text"].strip() else ml.DRAFT_EN if r["language"] == "English"
+                    else "Draft — needs review by a native speaker before use")
             self.assertEqual(m["status"], want, (r["file"], r["message_id"]))
             self.assertEqual(m["text"], r["text"])
 
     def test_only_two_statuses_and_rule_edges(self):
         self.assertEqual({m["status"] for m in BUNDLE["messages"]} - {"Reviewed"},
-                         {"Draft — needs review by a native speaker before use", "Needs a translator"})
+                         {"Draft — needs review by a native speaker before use",
+                          "Draft — needs review by a county public information officer before use", "Needs a translator"})
         for m in BUNDLE["messages"]:
             if m["language"] in ("Chuukese", "Marshallese"):
                 self.assertEqual(m["status"], "Needs a translator")
