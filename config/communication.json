@@ -77,6 +77,57 @@
   "no_ai_draft_status": "NEEDS HUMAN TRANSLATION – no reliable AI draft for this language",
   "review_assignees": {
    "Vietnamese": "Kim Quynh Do"
+  },
+  "language_review_about": "Per language: the native speaker who reviewed this language's messages. A message shows 'Reviewed' only when this is filled and the row itself is approved with a reviewer and a date; until then the app and the PDFs show 'Draft — needs review by a native speaker before use'. Only the team lead fills it, after the review.",
+  "language_review": {
+   "Chinese": {
+    "reviewed_by": "",
+    "review_date": ""
+   },
+   "Chuukese": {
+    "reviewed_by": "",
+    "review_date": ""
+   },
+   "English": {
+    "reviewed_by": "",
+    "review_date": ""
+   },
+   "Hawaiian": {
+    "reviewed_by": "",
+    "review_date": ""
+   },
+   "Ilocano": {
+    "reviewed_by": "",
+    "review_date": ""
+   },
+   "Japanese": {
+    "reviewed_by": "",
+    "review_date": ""
+   },
+   "Korean": {
+    "reviewed_by": "",
+    "review_date": ""
+   },
+   "Marshallese": {
+    "reviewed_by": "",
+    "review_date": ""
+   },
+   "Other English-based Creole languages": {
+    "reviewed_by": "",
+    "review_date": ""
+   },
+   "Spanish": {
+    "reviewed_by": "",
+    "review_date": ""
+   },
+   "Tagalog, Filipino": {
+    "reviewed_by": "",
+    "review_date": ""
+   },
+   "Vietnamese": {
+    "reviewed_by": "",
+    "review_date": ""
+   }
   }
  },
  "accessible_formats": {

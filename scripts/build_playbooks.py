@@ -33,6 +33,7 @@ from fetch_data import COUNTIES  # noqa: E402
 from fetch_flood_zones import CACHE as FLOOD_CACHE, LAYER_URL as FLOOD_URL  # noqa: E402
 from match import load_languages, select_languages  # noqa: E402
 from build_tract_labels import load_labels  # noqa: E402
+import message_library  # noqa: E402
 from message_library import LANG_LABEL  # noqa: E402
 from hawaii_time import hst_date  # noqa: E402
 from model_needs import FLOOD, HAZARDS, site_status  # noqa: E402
@@ -860,9 +861,7 @@ CV_LIMIT = 0.40                       # coefficient of variation above this: low
 Z90 = 1.645                           # MOE (90%) = 1.645 x standard error
 TOO_FEW = "too few to estimate"
 LOW_RELIABILITY = "low reliability"
-MESSAGES_LINE = ("Draft messages are available statewide in Chinese, Hawaiian, Ilocano, Japanese, "
-                 "Korean, Pidgin, Spanish, Tagalog and Vietnamese; Chuukese and Marshallese need "
-                 "translators.")
+MESSAGES_LINE = message_library.messages_line()       # languages and their review state
 
 
 def all_languages(area: str, path: Path = LANG_CSV) -> list:
@@ -1007,7 +1006,7 @@ def stress_intro(st: dict) -> str:
     import stress_text as stx
     return (f'<div class="note"><b>{escape(stx.LABEL)}.</b> Each test changes one thing in the plan '
             '(a site closes, two hazards strike together, a road is cut, more people come) and counts '
-            f'who is affected, from the plan\'s own data. {escape(st["method"])}</div>'
+            f'who is affected, from the plan\'s own data. {escape(st["method"])} {escape(stx.SITES_NOTE)}</div>'
             f'<p><small>{escape(st["definition_15"])}</small></p>')
 
 
@@ -1290,7 +1289,7 @@ def readiness_html(inp: dict, county: str, hazard: str, sc: dict, sites: list) -
     rows.insert(1, ["May need a public shelter (low – high)",
                     nw(f'{n(sc["shelter_demand_low"])} – {n(sc["shelter_demand_high"])}')])
     st = inp.get("stress") or {}
-    top = stx.top(st.get("findings") or [], county, hazard, 3)
+    top = stx.top(st.get("findings") or [], county, hazard, 3, per_test=1)   # one per test type
     usable = [s["name"] for s in sites if s["status"] == "ok"]
     site_text = (escape(", ".join(usable)) + "." if usable else
                  "No known usable 2026 site for this hazard. The county designates shelters; "

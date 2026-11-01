@@ -32,6 +32,9 @@ function stressHead(r) {
   const S = DATA.stress, m = S.measures[r[1]] || "";
   return r[5] === null ? `${capFirst(m)}: ${S.needs_data}` : `${peopleText(r)} ${m}`;
 }
+/* stress-test results use the 2026 activated sites (scripts/stress_text.py SITES_NOTE) */
+const SITES_NOTE = "Results depend on the 30 sites opened in 2026; county-designated lists would change them.";
+
 /* people (or household) counts under 10 are never shown; facility counts are not people */
 const NOT_PEOPLE = new Set(["19", "22"]);
 const peopleText = (r) => (NOT_PEOPLE.has(r[1]) ? fmt(r[5]) : tokText(r[5]));
@@ -93,7 +96,7 @@ function renderStress() {
     el("h2", { id: "stress" }, `Stress tests – what could break: ${cLabel}`),
     el("p", { class: "note" }, el("strong", null, `${S.label}. `),
       "Each test changes one thing in the plan – a site closes, two hazards strike together, a road is cut, more people come – and counts who is affected, from the plan's own data. ",
-      S.method),
+      S.method, " ", SITES_NOTE),
     el("p", null, `${fmt(S.tested[county])} tests ran for ${cLabel}; ${fmt(all.length)} affect someone or need county data. ${S.not_no_shelter}`),
     el("p", { id: "definition-15" }, el("strong", null, "Definition: "), S.definition_15),
     el("p", null, el("a", { class: "button", href: DATA.meta.annex[county] }, `⬇ ${cLabel} stress-test annex (PDF): every result with its numbers`)),
