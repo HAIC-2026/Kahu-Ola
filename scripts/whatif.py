@@ -103,43 +103,48 @@ def compute(W: dict, key: str, inp: dict) -> dict:
     }
 
 
-def allocate(areas: list, sites: list, inp: dict, plan_rate: float) -> dict:
+def allocate(areas: list, sites: list, inp: dict, plan_rate: float, pre: dict) -> dict:
+    """app/whatif.js allocate(): per-area and per-site figures from the build-time view
+    (area_view.whatif_view); flagged values ("lt10") are never scaled."""
     k = 1 if inp["rate"] == plan_rate else inp["rate"] / plan_rate
+    scale = lambda x: x * k if isinstance(x, (int, float)) and not isinstance(x, bool) else x  # noqa: E731
     usable = {s["id"]: s for s in sites if s["usable"]}
-    load, rows, unassigned = {}, [], 0.0
+    rows = []
     for t in areas:
-        people = t["people"] * k
         cands = sorted((r for r in t.get("a") or [] if r[0] in usable and r[1] is not None
                         and usable[r[0]]["island"] == t["island"]), key=lambda r: (r[1], r[0]))
         best = cands[0] if cands else None
-        if best:
-            load[best[0]] = load.get(best[0], 0) + people
-        else:
-            unassigned += people
-        rows.append({"f": t["f"], "people": people, "site": best[0] if best else None,
+        rows.append({"f": t["f"], "people": scale(t["people"]), "site": best[0] if best else None,
                      "drive": best[1] if best else None})
     cap = inp.get("cap") or {}
     site_rows = []
-    for sid in usable:
-        l = load.get(sid, 0)
-        c = cap.get(sid)
-        site_rows.append({"id": sid, "load": l, "cap": c, "over": None if c is None else max(0, math.ceil(l) - c)})
-    site_rows.sort(key=lambda s: (-s["load"], s["id"]))
-    known = [s for s in site_rows if s["cap"] is not None]
-    return {"areas": rows, "sites": site_rows, "unassigned": unassigned,
+    for sid in pre["order"]:
+        if sid not in usable:
+            continue
+        L = pre["load"].get(str(sid), 0)
+        l, c = scale(L), cap.get(sid)
+        over = None
+        if c is not None and isinstance(l, (int, float)):
+            over = max(0, math.ceil(l) - c)
+        elif c is not None and k <= 1 and c >= 10:
+            over = 0
+        site_rows.append({"id": sid, "load": l, "cap": c, "over": over, "unknown": c is not None and over is None})
+    known = [s for s in site_rows if s["cap"] is not None and not s["unknown"]]
+    return {"areas": rows, "sites": site_rows, "unassigned": scale(pre["unassigned"]), "k": k,
             "over_sites": sum(1 for s in known if s["over"] > 0),
-            "shortfall": sum(s["over"] for s in known) if known else None}
+            "shortfall": sum(s["over"] for s in known) if known else None,
+            "unknown_sites": sum(1 for s in site_rows if s["unknown"])}
 
 
-def areas_for(bundle: dict, county: str, hazard: str) -> tuple[list, list]:
-    """The allocation inputs the app builds from the bundle (same rules as app.js)."""
-    sc = bundle["scenarios"][f"{county}|{hazard}"]
-    areas = [{"f": t["f"], "island": t.get("i", ""), "people": sc["tracts"][t["f"]][1], "a": t.get("a", [])}
-             for t in bundle["tracts"] if t["c"] == county and t["f"] in sc["tracts"]]
+def areas_for(bundle: dict, lazy: dict, county: str, hazard: str) -> tuple[list, list, dict]:
+    """The allocation inputs the app builds (stress.js): areas, sites and the build-time view."""
+    pre = lazy["whatif"]["areas"][f"{county}|{hazard}"]
+    areas = [{"f": t["f"], "island": t.get("i", ""), "people": pre["areas"][t["f"]][0], "a": t.get("a", [])}
+             for t in bundle["tracts"] if t["c"] == county and t["f"] in pre["areas"]]
     sites = [{"id": s["id"], "island": s["island"],
               "usable": s["lon"] is not None and (s["status"].get(hazard) or [""])[0] == "ok"}
              for s in bundle["sites"] if s["county"] == county]
-    return areas, sites
+    return areas, sites, pre
 
 
 if __name__ == "__main__":

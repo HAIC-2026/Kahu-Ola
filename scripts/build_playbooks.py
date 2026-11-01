@@ -324,6 +324,47 @@ def load_json(p: Path):
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else None
 
 
+_AREA = {}
+
+
+def _area(fips: str) -> dict:
+    """{"pop", "moe"} for a Census area (population for the small-area rule; whole-area MOEs)."""
+    if not _AREA:
+        import privacy
+        moe = privacy.load_moe()
+        for f in load_json(PROC / "afn_tracts.geojson")["features"]:
+            p = f["properties"]
+            _AREA[p["tract_fips"]] = {"pop": p.get("population") or 0, "moe": moe.get(p["tract_fips"], {})}
+    return _AREA.get(fips, {"pop": None, "moe": {}})
+
+
+def ac(v, fips: str, field: str | None = None, at_risk=None) -> str:
+    """A per-area count with the suppression rule and, where the source has one, ± the 90%
+    margin of error scaled by the share in the risk area. <span class="ac"> marks it for the
+    privacy test."""
+    import privacy
+    a = _area(fips)
+    pop = a["pop"]
+    try:
+        v = None if v is None or v == "" else float(v)
+    except (TypeError, ValueError):
+        v = None
+    moe = a["moe"].get(field) if field else None
+    if moe is not None and pop:
+        share = (float(at_risk) / pop) if at_risk not in (None, "") else 1.0
+        moe = moe * share
+    return f'<span class="ac">{escape(privacy.with_moe(v, moe, pop))}</span>'
+
+
+def cite_html(fields: list) -> str:
+    """Per-area sources: ACS table and years for each column, the MOE note and the privacy line."""
+    import privacy
+    parts = [f"{COL.get(k, k) if k != 'population' else COL['at_risk']}: {privacy.CITE[k][0]}" for k in fields]
+    return (f'<p class="src">Per-area figures – {escape("; ".join(parts))}. {escape(privacy.MOE_NOTE)} '
+            f'Shelter estimates and need totals are model results with no margin of error. '
+            f'{escape(privacy.PRIVACY_LINE)}</p>')
+
+
 def n(v) -> str:
     try:
         return f"{round(float(v)):,}"
@@ -465,6 +506,7 @@ th, td { border: 1px solid #000; padding: 3pt 5pt; text-align: left; vertical-al
 th { background: #e6e6e6; }
 td.num, th.num { text-align: right; }
 td.num { white-space: nowrap; }
+td.num .ac { white-space: normal; }   /* "96 ± 41" may wrap at the ± so tables keep true size */
 th { font-size: 9.5pt; line-height: 1.2; }
 td:first-child { min-width: 1.3in; }
 td small, .src, .range { font-size: 9pt; color: #333; }
@@ -583,11 +625,14 @@ HURRICANE_SCOPE_NOTE = ("Hurricanes affect the whole county, so these are simply
 
 
 def scope_html(sc: dict, comms: list, hazard: str = "") -> str:
-    rows = [[community_cell(c["label_main"], c["label_sub"]), n(c["at_risk_pop"]),
-             f'{n(c["low"])} – <b>{n(c["central"])}</b> – {n(c["high"])}',
-             n(c["C_lep_at_risk"]), n(c["M_power_dependent_at_risk"]),
-             n(c["I_disability_at_risk"]), n(c["I_age65_at_risk"]),
-             n(c["T_no_vehicle_persons_at_risk"])] for c in comms]
+    rows = [[community_cell(c["label_main"], c["label_sub"]),
+             ac(c["at_risk_pop"], c["tract_fips"], "population", c["at_risk_pop"]),
+             f'{ac(c["low"], c["tract_fips"])} – <b>{ac(c["central"], c["tract_fips"])}</b> – {ac(c["high"], c["tract_fips"])}',
+             ac(c["C_lep_at_risk"], c["tract_fips"], "lep", c["at_risk_pop"]),
+             ac(c["M_power_dependent_at_risk"], c["tract_fips"], "power", c["at_risk_pop"]),
+             ac(c["I_disability_at_risk"], c["tract_fips"], "disability", c["at_risk_pop"]),
+             ac(c["I_age65_at_risk"], c["tract_fips"], "age65", c["at_risk_pop"]),
+             ac(c["T_no_vehicle_persons_at_risk"], c["tract_fips"], "no_car", c["at_risk_pop"])] for c in comms]
     area = FOOTPRINT_TEXT.get(sc.get("footprint_rule", ""), sc.get("footprint_rule", ""))
     return ('<h2>2. Scope: county total vs. one community</h2>'
             '<div class="note"><b>The county total is an upper bound.</b> It counts '
@@ -600,6 +645,7 @@ def scope_html(sc: dict, comms: list, hazard: str = "") -> str:
                      COL["disability"], COL["age65"], COL["no_car"]], rows,
                     num_cols=(1, 2, 3, 4, 5, 6, 7))
             + f'<p class="src">{escape(src_text("people"))}</p>'
+            + cite_html(["population", "lep", "power", "disability", "age65", "no_car"])
             + '<p>To plan for one community, use the first row.</p>')
 
 
@@ -611,13 +657,14 @@ def guide_html(sc: dict, comms: list, hazard: str) -> str:
         example = ('<h3>Example row</h3>'
                    + table([COL["area"], COL["at_risk"], COL["shelter"]],
                            [[community_cell(ex["label_main"], ex["label_sub"]),
-                             n(ex["at_risk_pop"]),
-                             f'{n(ex["low"])} – <b>{n(ex["central"])}</b> – {n(ex["high"])}']],
+                             ac(ex["at_risk_pop"], ex["tract_fips"], "population", ex["at_risk_pop"]),
+                             f'{ac(ex["low"], ex["tract_fips"])} – <b>{ac(ex["central"], ex["tract_fips"])}</b> – {ac(ex["high"], ex["tract_fips"])}']],
                            num_cols=(1, 2)).replace("<tr><td", '<tr class="example"><td', 1)
-                   + f'<p>Read it as: about {n(ex["at_risk_pop"])} people live in the risk area '
+                   + f'<p>Read it as: about {ac(ex["at_risk_pop"], ex["tract_fips"])} people live in the risk area '
                      f'of {escape(ex["label_main"])}{lahaina_note(ex["label_main"]).replace("<br>", " ")}. If this hazard hits, between '
-                     f'{n(ex["low"])} and {n(ex["high"])} of them may need a public shelter; '
-                     f'{n(ex["central"])} is the likely number.</p>')
+                     f'{ac(ex["low"], ex["tract_fips"])} and {ac(ex["high"], ex["tract_fips"])} of them may need a public shelter; '
+                     f'{ac(ex["central"], ex["tract_fips"])} is the likely number. The ± after a number is its 90% '
+                     'margin of error.</p>')
     area = FOOTPRINT_TEXT.get(sc.get("footprint_rule", ""), sc.get("footprint_rule", ""))
     cmist = "".join(f"<li><b>{escape(k)}:</b> {escape(v)}</li>" for k, v in CMIST)
     return (f'<section class="guide page"><h2>How to read this playbook</h2>'
@@ -762,11 +809,12 @@ def reach_html(comm: dict, partners: dict, zero: str = "") -> str:
 
 def more_needs_html(comms: list) -> str:
     rows = [[community_cell(c["label_main"], c["label_sub"])]
-            + [n(c.get(field)) for _k, field, _l in DETAIL_KEYS] for c in comms]
+            + [ac(c.get(field), c["tract_fips"], k, c["at_risk_pop"]) for k, field, _l in DETAIL_KEYS] for c in comms]
     return ('<h3>More needs in the largest communities</h3>'
             + table([COL["area"]] + [COL[k] for k, _f, _l in DETAIL_KEYS], rows,
                     num_cols=(1, 2, 3, 4))
-            + f'<p class="src">{escape(src_text("detail"))}</p>')
+            + f'<p class="src">{escape(src_text("detail"))}</p>'
+            + cite_html([k for k, _f, _l in DETAIL_KEYS]))
 
 
 def needs_html(ms: dict, partners: dict, county: str = "", lines: list | None = None) -> str:
@@ -853,8 +901,12 @@ def outreach_html(ms: dict, langs: list, county: str, comms: list | None = None,
                   comm: dict | None = None, partners: dict | None = None, zero: str = "") -> str:
     rows = [[str(t["rank"]), community_cell(t.get("label_main") or t.get("tract_label", ""),
                                             t.get("label_sub", "")),
-             n(t["at_risk_pop"]), n(t["power_dependent"]), n(t["disability"]),
-             n(t["limited_english"]), n(t["no_vehicle"]), n(t["afn_need_sum"])]
+             ac(t["at_risk_pop"], t["tract_fips"], "population", t["at_risk_pop"]),
+             ac(t["power_dependent"], t["tract_fips"], "power", t["at_risk_pop"]),
+             ac(t["disability"], t["tract_fips"], "disability", t["at_risk_pop"]),
+             ac(t["limited_english"], t["tract_fips"], "lep", t["at_risk_pop"]),
+             ac(t["no_vehicle"], t["tract_fips"], "no_car", t["at_risk_pop"]),
+             ac(t["afn_need_sum"], t["tract_fips"])]
             for t in ms["priority_tracts"]]
     lrows = [[escape(lang_label(l["language"])), n(l["speak_english_less_than_very_well"]),
               "±" + n(l["moe_90"])] for l in langs]
@@ -866,6 +918,7 @@ def outreach_html(ms: dict, langs: list, county: str, comms: list | None = None,
                      COL["lep"], COL["no_car"], COL["needs_total"]], rows,
                     num_cols=(0, 2, 3, 4, 5, 6, 7))
             + f'<p class="src">{escape(src_text("people"))}</p>'
+            + cite_html(["population", "power", "disability", "lep", "no_car"])
             + (more_needs_html(comms) if comms else "")
             + (reach_html(comm, partners or {}, zero) if comm else "")
             + f'<h3>Languages: people age 5 and older who speak English less than "very well" '
@@ -1070,7 +1123,9 @@ def sources_html(inp: dict) -> str:
             + table(["Source", "Fetched", "URL / file"], [[a, b, link(c)] for a, b, c in data],
                     cls="sources-table", cols=("c-src", "c-date", "c-url"), cell_cls={2: "url"})
             + '<p>Privacy: aggregate census-tract and county data only. No individual '
-              'records. Public facility names and addresses only.</p>')
+              'records. Public facility names and addresses only. Counts under 10 are not shown '
+              'so no one can be identified; in a Census area with fewer than 100 residents only the '
+              'population is shown.</p>')
 
 
 def _sources(inp: dict) -> tuple[list, list]:

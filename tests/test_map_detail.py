@@ -126,20 +126,34 @@ class Nearest(unittest.TestCase):
 
 class PanelNumbers(unittest.TestCase):
     def test_area_counts_match_model(self):
+        """The panel cells computed at build time (data/areas.json) match the model's
+        risk-area counts; counts under 10 ship as "lt10", small areas not at all."""
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import area_view
+        areas = json.loads((APP / "data" / "areas.json").read_text(encoding="utf-8"))["s"]
         with open(ROOT / "data" / "processed" / "needs_by_tract.csv", newline="", encoding="utf-8") as fh:
             rows = list(csv.DictReader(fh))
-        fields = dict(zip(BUNDLE["area_fields"], range(1, 20)))
+        fields = {k: i for i, k in enumerate(BUNDLE["area_fields"])}
         model = {"lep": "C_lep_at_risk", "disability": "I_disability_at_risk",
                  "age65": "I_age65_at_risk", "no_car": "T_no_vehicle_persons_at_risk",
                  "hearing": "C_hearing_at_risk", "age65_alone": "S_age65_alone_at_risk"}
+        checked = 0
         for r in rows[::25]:
             t = TRACTS.get(r["tract_fips"])
-            if not t or not t["n"][0]:
+            cells = areas.get(f"{r['county']}|{r['hazard']}", {}).get(r["tract_fips"])
+            if not t or t["pop"] < 100:
+                self.assertIsNone(cells)
                 continue
-            share = float(r["at_risk_pop"]) / t["n"][0]
             for k, col in model.items():
-                self.assertAlmostEqual(t["n"][fields[k]] * share, float(r[col]),
-                                       delta=0.02 * float(r[col]) + 1, msg=(r["tract_fips"], k))
+                c = cells[2][fields[k]]
+                tok = c[0] if isinstance(c, list) else c
+                want = area_view.token(float(r[col]))
+                if isinstance(tok, int) and isinstance(want, int):
+                    self.assertAlmostEqual(tok, want, delta=0.02 * want + 1, msg=(r["tract_fips"], k))
+                elif tok != want:                         # at the threshold the rounding may differ
+                    self.assertLessEqual(abs(float(r[col]) - 9.5), 1.5, (r["tract_fips"], k, tok, want))
+                checked += 1
+        self.assertGreater(checked, 50)
 
 
 class Islands(unittest.TestCase):
@@ -183,7 +197,7 @@ class Overlay(unittest.TestCase):
         self.assertIn('target: "_blank", rel: "noopener noreferrer"', JS)
         self.assertNotRegex(JS, r"https?://(?!www\.w3\.org/2000/svg)")   # URL lives in the data
         self.assertEqual(re.findall(r"fetch\(([^)]*)\)", JS),
-                         ['VERSION_URL, { cache: "no-store" }', "DATA.meta.messages_url", "DATA.meta.lazy", "BUNDLE_URL"])
+                         ['VERSION_URL, { cache: "no-store" }', "DATA.meta.areas_url", "DATA.meta.messages_url", "DATA.meta.lazy", "BUNDLE_URL"])
         # the two lazy files are same-origin paths from the bundle (stress tests, messages)
 
     def test_panel_accessibility_rules(self):

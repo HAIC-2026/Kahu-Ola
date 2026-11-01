@@ -64,31 +64,33 @@
   }
 
   /* allocation of each Census area's people in shelter to its nearest usable 2026 site on the
-     SAME island by drive time. areas: [{f, island, people (at the plan rate), a: [[site id,
-     drive min, ...]]}]; sites: [{id, island, usable}]. cap: {site id: people} (planner). */
-  function allocate(areas, sites, inp, planRate) {
+     SAME island by drive time. Per-area and per-site counts were computed at build time
+     (scripts/area_view.py): pre = {areas: {f: [people, no-car]}, load: {site id: plan-rate
+     load}, order: [site ids, largest load first], unassigned}. A value of 10 or more scales
+     linearly with the rate (k = rate / plan rate); a flagged value ("lt10") is never scaled,
+     and the order of sites never changes with k. cap: {site id: people} (planner). */
+  function allocate(areas, sites, inp, planRate, pre) {
     const k = inp.rate === planRate ? 1 : inp.rate / planRate;
+    const scale = (x) => (typeof x === "number" ? x * k : x);
     const usable = new Map(sites.filter((s) => s.usable).map((s) => [s.id, s]));
-    const load = new Map();
-    const rows = [];
-    let unassigned = 0;
-    for (const t of areas) {
-      const people = t.people * k;
+    const rows = areas.map((t) => {
       const best = (t.a || []).filter((r) => usable.has(r[0]) && r[1] !== null && usable.get(r[0]).island === t.island)
         .sort((x, y) => x[1] - y[1] || x[0] - y[0])[0];
-      if (best) load.set(best[0], (load.get(best[0]) || 0) + people);
-      else unassigned += people;
-      rows.push({ f: t.f, people, site: best ? best[0] : null, drive: best ? best[1] : null });
-    }
-    const siteRows = [...usable.values()].map((s) => {
-      const l = load.get(s.id) || 0, c = inp.cap ? inp.cap[s.id] : undefined;
+      return { f: t.f, people: scale(t.people), site: best ? best[0] : null, drive: best ? best[1] : null };
+    });
+    const siteRows = pre.order.filter((id) => usable.has(id)).map((id) => {
+      const L = id in pre.load ? pre.load[id] : 0, l = scale(L), c = inp.cap ? inp.cap[id] : undefined;
       const has = typeof c === "number" && c >= 0;
-      return { id: s.id, load: l, cap: has ? c : null, over: has ? Math.max(0, ceil(l) - c) : null };
-    }).sort((x, y) => y.load - x.load || x.id - y.id);
-    const known = siteRows.filter((s) => s.cap !== null);
-    return { areas: rows, sites: siteRows, unassigned,
+      let over = null;
+      if (has && typeof l === "number") over = Math.max(0, ceil(l) - c);
+      else if (has && k <= 1 && c >= 10) over = 0;          // fewer than 10 people, at least 10 places
+      return { id, load: l, cap: has ? c : null, over, unknown: has && over === null };
+    });
+    const known = siteRows.filter((s) => s.cap !== null && !s.unknown);
+    return { areas: rows, sites: siteRows, unassigned: scale(pre.unassigned), k,
       over_sites: known.filter((s) => s.over > 0).length,
-      shortfall: known.length ? known.reduce((n, s) => n + s.over, 0) : null };
+      shortfall: known.length ? known.reduce((n, s) => n + s.over, 0) : null,
+      unknown_sites: siteRows.filter((s) => s.unknown).length };
   }
 
   /* inputs <-> URL query (only values that differ from the plan defaults are written) */

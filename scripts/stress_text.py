@@ -111,7 +111,7 @@ EV = {  # evidence key -> plain words
     "centres_in_county": "Childcare centres in the county", "centres_in_zone": "Childcare centres in the zone",
     "children_enrolled": "Children enrolled", "how": "In the zone means", "drive_from": "Drive measured from",
     "facilities": "Facilities", "over_15_min_or_no_site": "Facilities over 15 minutes from a usable site, or none on the island",
-    "residents_or_patients": "Residents or patients", "areas_cut_off": "Census areas cut off", "finding": "Result", "people": "People",
+    "residents_or_patients": "Residents or patients", "rounding": "Rounding", "areas_cut_off": "Census areas cut off", "finding": "Result", "people": "People",
 }
 SKIP = {"note", "upper_bound", "island_level"}
 UNIT = {"water_gal": "gallons of water", "meals": "meals", "toilets": "toilets",
@@ -145,7 +145,19 @@ def num(v) -> str:
     return str(v)
 
 
+PEOPLE_WORDS = ("people", "no_car", "age65", "power_dependent", "hearing", "households", "visitors",
+                "shelter_demand", "if_counted_separately", "more_than_worst", "children", "pit_total")
+
+
+def is_people(key: str) -> bool:
+    """Evidence keys that count people or households (small counts are never shown)."""
+    return any(w in key for w in PEOPLE_WORDS) and "per_pet" not in key and "sites" not in key
+
+
 def value(key: str, v) -> str:
+    if isinstance(v, (int, float)) and not isinstance(v, bool) and is_people(key):
+        from privacy import count_text
+        return count_text(v)
     if v is None:
         return {"not_reached_by": "–", "households_per_pet_friendly_site": "no pet-friendly usable site",
                 "rate_when_sites_run_out": "not reached by 20%"}.get(key, NEEDS_DATA)
@@ -184,6 +196,9 @@ def evidence_lines(f: dict) -> list:
 def headline(f: dict) -> str:
     if f["people_affected"] is None:
         return f"{f['measure'] or 'People affected'}: {NEEDS_DATA}"
+    if f["unit"] == "people" or "households" in f["unit"]:
+        from privacy import count_text
+        return f"{count_text(f['people_affected'])} {f['measure']}"
     return f"{f['people_affected']:,} {f['measure']}"
 
 
@@ -196,8 +211,18 @@ def lower1(label: str) -> str:
     return label if first in PROPER - {"People"} else label[0].lower() + label[1:]
 
 
+def minutes(v) -> str:
+    return f"+{v:,.1f}".rstrip("0").rstrip(".") + " min"
+
+
 def extra(f: dict) -> str:
     """The one or two extra numbers of the one-line summary ("" when none)."""
+    if f["test"] in ("24", "25"):           # road closures: both added times, always
+        e = f["evidence"]
+        cut = e.get("areas_cut_off")
+        return (f"{minutes(e['max_added_min_any_site'])} to any known site; "
+                f"{minutes(e['max_added_min_to_2026_site'])} to a 2026 site"
+                + (f"; cut off from every 2026 site: {', '.join(cut)}" if isinstance(cut, list) and cut else ""))
     return "; ".join(f"{lower1(EV[k])}: {value(k, f['evidence'][k])}" for k in SUMMARY_KEYS.get(f["test"], [])
                      if k in f["evidence"])
 

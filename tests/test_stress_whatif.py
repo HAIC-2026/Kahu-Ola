@@ -147,9 +147,9 @@ class Findings(unittest.TestCase):
             self.assertEqual(BY_ID[f"T23a-walk-{c.lower()}"]["people_affected"], round(over))
         match = json.loads((PROC / "match_plan.json").read_text(encoding="utf-8"))["scenarios"]
         f = BY_ID["T09-hurricane-all"]
-        self.assertEqual(f["people_affected"], sum(s["shelter_demand_central"] for s in match if s["hazard"] == "hurricane"))
-        self.assertEqual(f["evidence"]["cots"], sum(n["quantity"] for s in match if s["hazard"] == "hurricane"
-                                                    for n in s["needs"] if n["need"] == "Cots / sleeping space"))
+        # counties' unrounded demand added, then rounded up once: within one person per county
+        self.assertLessEqual(abs(f["people_affected"] - sum(s["shelter_demand_central"] for s in match if s["hazard"] == "hurricane")), 4)
+        self.assertEqual(f["evidence"]["cots"], f["people_affected"])
         pop = {x["properties"]["tract_fips"]: x["properties"].get("population") or 0 for x in
                json.loads((PROC / "afn_tracts.geojson").read_text(encoding="utf-8"))["features"]}
         for key, s in ROADS["scenarios"].items():
@@ -379,7 +379,7 @@ def run_js(cases: list) -> list:
 const W = require(process.argv[2]); const B = JSON.parse(require('fs').readFileSync(process.argv[3], 'utf8'));
 const cases = JSON.parse(require('fs').readFileSync(0, 'utf8'));
 const out = cases.map((c) => ({ r: W.compute(B.whatif, c.key, c.inp),
-  a: W.allocate(c.areas, c.sites, c.inp, B.whatif.scenarios[c.key].rate),
+  a: W.allocate(c.areas, c.sites, c.inp, B.whatif.scenarios[c.key].rate, c.pre),
   q: W.toQuery(c.inp, W.defaults(B.whatif, c.key)) }));
 out.forEach((o, i) => { const q = o.q; o.back = W.fromQuery((k) => (k in q ? q[k] : null), W.defaults(B.whatif, cases[i].key), B.whatif.limits); });
 process.stdout.write(JSON.stringify(out));"""
@@ -428,31 +428,38 @@ class WhatIf(unittest.TestCase):
         for i in range(50):
             key = keys[i % len(keys)] if i < 20 else rng.choice(keys)
             c, h = key.split("|")
-            areas, sites = whatif.areas_for(BUNDLE, c, h)
-            cases.append({"key": key, "inp": random_inputs(rng, key, sites), "areas": areas, "sites": sites})
+            areas, sites, pre = whatif.areas_for(BUNDLE, LAZY, c, h)
+            cases.append({"key": key, "inp": random_inputs(rng, key, sites), "areas": areas, "sites": sites, "pre": pre})
         js = run_js(cases)
         for c, j in zip(cases, js):
             inp = {**c["inp"], "cap": {int(k): v for k, v in c["inp"]["cap"].items()}}
             py = whatif.compute(W, c["key"], inp)
             self.assertEqual(json.loads(json.dumps(py)), j["r"], (c["key"], c["inp"]))
-            pa = whatif.allocate(c["areas"], c["sites"], inp, W["scenarios"][c["key"]]["rate"])
+            pa = whatif.allocate(c["areas"], c["sites"], inp, W["scenarios"][c["key"]]["rate"], c["pre"])
             self.assertEqual([(x["f"], x["site"]) for x in pa["areas"]], [(x["f"], x["site"]) for x in j["a"]["areas"]])
             for x, y in zip(pa["areas"], j["a"]["areas"]):
-                self.assertAlmostEqual(x["people"], y["people"], places=9)
+                if isinstance(x["people"], float):
+                    self.assertAlmostEqual(x["people"], y["people"], places=9)
+                else:
+                    self.assertEqual(x["people"], y["people"])            # "lt10" / None: never scaled
             self.assertEqual([(s["id"], s["cap"], s["over"]) for s in pa["sites"]],
                              [(s["id"], s["cap"], s["over"]) for s in j["a"]["sites"]], c["key"])
             self.assertEqual((pa["over_sites"], pa["shortfall"]), (j["a"]["over_sites"], j["a"]["shortfall"]))
-            self.assertAlmostEqual(pa["unassigned"], j["a"]["unassigned"], places=6)
+            if isinstance(pa["unassigned"], (int, float)):
+                self.assertAlmostEqual(pa["unassigned"], j["a"]["unassigned"], places=6)
+            else:
+                self.assertEqual(pa["unassigned"], j["a"]["unassigned"])
+            self.assertEqual(pa["unknown_sites"], j["a"]["unknown_sites"])
 
     @unittest.skipUnless(NODE, "Node.js not installed")
     def test_defaults_reproduce_plan_numbers_js(self):
         cases = []
         for key in sorted(W["scenarios"]):
             c, h = key.split("|")
-            areas, sites = whatif.areas_for(BUNDLE, c, h)
+            areas, sites, pre = whatif.areas_for(BUNDLE, LAZY, c, h)
             cases.append({"key": key, "inp": {"rate": W["scenarios"][key]["rate"], "stay": 3, "outage": 0,
                                               "trip": W["defaults"]["people_per_trip"], "support": None, "cap": {}},
-                          "areas": areas, "sites": sites})
+                          "areas": areas, "sites": sites, "pre": pre})
         for c, j in zip(cases, run_js(cases)):
             need = {n[0]: n[1] for n in BUNDLE["scenarios"][c["key"]]["needs"]}
             self.assertEqual(j["r"]["cots"], need["Cots / sleeping space"], c["key"])
@@ -466,8 +473,8 @@ class WhatIf(unittest.TestCase):
         cases = []
         for key in sorted(W["scenarios"])[:10]:
             c, h = key.split("|")
-            areas, sites = whatif.areas_for(BUNDLE, c, h)
-            cases.append({"key": key, "inp": random_inputs(rng, key, sites), "areas": [], "sites": sites})
+            areas, sites, pre = whatif.areas_for(BUNDLE, LAZY, c, h)
+            cases.append({"key": key, "inp": random_inputs(rng, key, sites), "areas": [], "sites": sites, "pre": pre})
         for c, j in zip(cases, run_js(cases)):
             back = j["back"]
             for k in ("rate", "stay", "outage", "trip", "support"):
@@ -478,8 +485,8 @@ class WhatIf(unittest.TestCase):
         sites = {s["id"]: s for s in BUNDLE["sites"]}
         for key in W["scenarios"]:
             c, h = key.split("|")
-            areas, s = whatif.areas_for(BUNDLE, c, h)
-            a = whatif.allocate(areas, s, {"rate": 0.05, "cap": {}}, W["scenarios"][key]["rate"])
+            areas, s, pre = whatif.areas_for(BUNDLE, LAZY, c, h)
+            a = whatif.allocate(areas, s, {"rate": 0.05, "cap": {}}, W["scenarios"][key]["rate"], pre)
             isl = {t["f"]: t["island"] for t in areas}
             for x in a["areas"]:
                 if x["site"] is not None:

@@ -59,6 +59,38 @@ const pct = (v) => {
   const p = Math.round(v * 1000) / 10;
   return Number.isInteger(p) ? `${p}%` : `${p.toFixed(1)}%`;
 };
+/* ---------- small-number suppression ----------
+   Per-area counts are computed at build time (scripts/area_view.py) and arrive as tokens: a
+   number of 10 or more, 0, or "lt10" (shown "fewer than 10"); a Census area with fewer than
+   100 residents ships its population only (every count: "suppressed (small area)"). No count
+   from 1 to 9 is in any file the app loads. A cell is a token or [token, margin of error]. */
+const FEWER_PLAN = "fewer than 10 at plan rates";
+function tokText(t, pop) {
+  const S = DATA.meta.suppress;
+  if (pop !== undefined && pop !== null && pop < S.small_area) return S.small;
+  if (t === null || t === undefined) return "–";
+  if (t === "lt10") return S.fewer;
+  return t.toLocaleString("en-US");
+}
+/* a per-area cell, with ± its 90% margin of error when one was shipped (never for hidden counts) */
+function cellEl(c, pop, withMoe = true) {
+  const [t, m] = Array.isArray(c) ? c : [c, null];
+  return el("span", { class: "ac" }, withMoe && m !== null && m !== undefined ? `${tokText(t, pop)} ± ${m.toLocaleString("en-US")}` : tokText(t, pop));
+}
+const popOf = (f) => { const tr = DATA.tracts.find((t) => t.f === f); return tr ? tr.pop : null; };
+/* a scaled what-if value: numbers 10+ at the plan rate scale linearly; a flagged value
+   ("lt10") is never scaled: "fewer than 10" up to the plan rate, "… at plan rates" above */
+function scaledText(x, pop, k) {
+  if (x === "lt10") return k <= 1 ? DATA.meta.suppress.fewer : FEWER_PLAN;
+  const S = DATA.meta.suppress;
+  if (pop !== undefined && pop !== null && pop < S.small_area) return S.small;
+  if (x === null || x === undefined) return "–";
+  if (x === 0) return "0";
+  if (Math.round(x) < S.min) return S.fewer;
+  return Math.round(x).toLocaleString("en-US");
+}
+/* the per-area source line: ACS table and years per column, the MOE note and the privacy line */
+const citeLine = (fields) => el("p", { class: "src" }, `Per-area figures – ${fields.map((k) => `${k === "population" ? DATA.meta.cols.at_risk : DATA.meta.cols[k]}: ${DATA.meta.cite[k]}`).join("; ")}. ${DATA.meta.moe_note} Shelter estimates and need totals are model results with no margin of error. ${DATA.meta.suppress.line}`);
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 /* keep a date, "140 – 349 – 781" or "Census area 314.05" on one line on phones:
    dates become <time datetime class="nowrap">, the rest <span class="nowrap">; the text is unchanged */
@@ -204,11 +236,12 @@ function renderMap(county, sc, sites, title, hazard) {
     miny = Math.min(miny, r[i + 1]); maxy = Math.max(maxy, r[i + 1]);
   }
   const proj = projection([minx, miny, maxx, maxy], W, H);
-  const afn = Object.fromEntries(Object.entries(sc.tracts).map(([f, v]) => [f, v[2]]));
-  const bounds = quantiles(Object.values(afn));
-  const cls = (v) => bounds.findIndex((b) => v <= b);
+  // map classes, legend bounds and list order were computed at build time (no raw counts here)
+  const inMap = new Map(sc.map.in.map((r) => [r[0], r]));
+  const bounds = sc.map.bounds;
+  const cls = (f) => (inMap.has(f) ? inMap.get(f)[1] : -1);
   const names = needNames(bounds.length);
-  const level = (f) => (f in sc.tracts && afn[f] > 0 ? names[cls(afn[f])] : "Outside the risk area");
+  const level = (f) => (cls(f) >= 0 ? names[cls(f)] : "Outside the risk area");
   const ringPath = (r) => {
     const pts = [];
     for (let i = 0; i < r.length; i += 2) pts.push(proj(r[i], r[i + 1]).join(","));
@@ -227,8 +260,8 @@ function renderMap(county, sc, sites, title, hazard) {
   const paths = {};
   for (const tr of tracts) {
     const d = tr.g.map(ringPath).join(" ");
-    const risk = tr.f in sc.tracts;
-    const fill = risk && afn[tr.f] > 0 ? css(RAMP[cls(afn[tr.f])]) : "#ffffff";
+    const risk = inMap.has(tr.f);
+    const fill = cls(tr.f) >= 0 ? css(RAMP[cls(tr.f)]) : "#ffffff";
     const path = svg("path", risk
       ? { d, fill, stroke: "#000000", "stroke-width": "1.4", "vector-effect": "non-scaling-stroke", class: "area" }
       : { d, fill, stroke: "#9a9a9a", "stroke-width": "0.5", "stroke-dasharray": "2,2", "vector-effect": "non-scaling-stroke", class: "area" });
@@ -327,7 +360,7 @@ function renderMap(county, sc, sites, title, hazard) {
   bounds.forEach((b, i) => {
     const sw = svg("svg", { width: 28, height: 16, "aria-hidden": "true" });
     sw.append(svg("rect", { width: 28, height: 16, fill: css(RAMP[i]), stroke: "#000" }));
-    legend.append(el("li", null, sw, names[i], " ", el("small", null, keep(`(${fmt(lo)}–${fmt(b)} people)`))));
+    legend.append(el("li", null, sw, names[i], " ", el("small", null, "(", cellEl(lo), " to ", cellEl(b), " people)")));
     lo = b;
   });
   const swatch = (attrs, text) => {
@@ -376,11 +409,12 @@ function renderMap(county, sc, sites, title, hazard) {
       ` = ${x.name} (${DATA.meta.site_key_status[x.st] || x.st})`)));
 
   // the same areas as a list: buttons that open the area (keyboard Enter or Space)
-  const risk = tracts.filter((tr) => tr.f in sc.tracts).sort((a, b) => (afn[b.f] || 0) - (afn[a.f] || 0));
+  const byF = new Map(tracts.map((tr) => [tr.f, tr]));
+  const risk = sc.map.in.map((r) => byF.get(r[0])).filter(Boolean);
   const areas = el("details", { class: "areas" },
     el("summary", null, `Census areas on this map in the risk area (${risk.length}) – open one for details`),
     el("ul", null, risk.map((tr) => {
-      const b = el("button", { type: "button", class: "linklike" }, keep(`${tr.l || tr.f}: ${fmt(afn[tr.f])} people with needs (${level(tr.f)})`));
+      const b = el("button", { type: "button", class: "linklike" }, `${tr.l || tr.f}: `, cellEl(inMap.get(tr.f)[2], tr.pop), ` people with needs (${level(tr.f)})`);
       b.addEventListener("click", () => openArea(tr.f, b));
       return el("li", null, b, lahainaNote(tr.l, true));
     })));
@@ -583,21 +617,40 @@ function careTable(county, hazard, cLabel, hLabel) {
 /* ---------- detail panel for one Census area ---------- */
 let OPENER = null;
 
+/* the panel's per-area cells (computed at build time) are their own file, fetched on the first
+   open and pre-cached for offline use */
+let AREAS = null;
+function loadAreas() {
+  AREAS = AREAS || fetch(DATA.meta.areas_url).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+    .then((j) => { DATA.areas = j; }).catch((err) => { AREAS = null; throw err; });
+  return AREAS;
+}
+
 function openArea(f, opener) {
   const tr = MAP.tracts.find((t) => t.f === f);
   const panel = document.getElementById("area-panel");
   if (!tr || !panel) return;
+  if (!DATA.areas) {
+    const view = MAP.root;
+    loadAreas().then(() => { if (MAP.root === view && document.contains(view)) openArea(f, opener); })
+      .catch(() => { panel.replaceChildren(el("p", { role: "alert" }, "The area details could not be loaded.")); panel.hidden = false; });
+    return;
+  }
   OPENER = opener || MAP.paths[f] || null;
   for (const p of Object.values(MAP.paths)) p.classList.remove("selected");
   MAP.paths[f].classList.add("selected");
   zoomTo(areaBox(tr));
 
   const { sc, hazard, county } = MAP, C = DATA.meta.cols;
-  const v = sc.tracts[f], inRisk = Boolean(v);
-  const pop = tr.n[0], share = inRisk && pop ? v[0] / pop : 0;
+  const key = `${county}|${hazard}`;
+  const inRisk = sc.map.in.some((r) => r[0] === f);
+  const pc = inRisk ? (DATA.areas.s[key] || {})[f] : (DATA.areas.w || {})[f];   // undefined: a small area
+  const pop = tr.pop;
   const [main, sub] = (tr.l || f).split(" · ");
   const hz = Object.fromEntries(DATA.hazards)[hazard];
-  const counts = DATA.area_fields.map((k, i) => [C[k], fmt(inRisk ? tr.n[i + 1] * share : tr.n[i + 1])]);
+  const small = pop < DATA.meta.suppress.small_area;
+  const cells = pc ? (inRisk ? pc[2] : pc) : [];
+  const counts = DATA.area_fields.map((k, i) => [C[k], cellEl(cells[i], pop), DATA.meta.cite[k]]);
   const near = nearestSites(tr, MAP.sites);
   const lead = new Set(), support = new Set();
   for (const n of sc.needs) { n[3].split(", ").forEach((x) => x && lead.add(x)); n[4].split(", ").forEach((x) => x && support.add(x)); }
@@ -621,10 +674,13 @@ function openArea(f, opener) {
     el("p", null, el("strong", null, inRisk ? `Inside the ${hz.toLowerCase()} risk area` : `Outside the ${hz.toLowerCase()} risk area`),
       ` · Need level: ${MAP.level(f)}`),
     el("dl", { class: "area-facts" },
-      el("dt", null, inRisk ? C.at_risk : "People living in the area"), el("dd", null, fmt(inRisk ? v[0] : pop)),
-      inRisk ? [el("dt", null, "May need a public shelter (likely)"), el("dd", null, fmt(v[1]))] : null),
+      el("dt", null, "People living in the area"), el("dd", null, fmt(pop)),
+      inRisk ? [el("dt", null, C.at_risk), el("dd", null, cellEl(pc ? pc[0] : null, pop)),
+        el("dt", null, "May need a public shelter (likely)"), el("dd", null, cellEl(pc ? pc[1] : null, pop))] : null),
+    small ? el("p", { class: "note", id: "small-area" }, `Fewer than ${DATA.meta.suppress.small_area} people live in this Census area: only the population is shown. ${DATA.meta.suppress.line}`) : null,
     table(inRisk ? "Access and functional needs (people in the risk area)" : "Access and functional needs (people living in the area)",
-      ["Need", "People"], counts, [1]),
+      ["Need", "People (± 90% margin of error)", "Source"], counts, [1]),
+    el("p", { class: "src" }, `${DATA.meta.moe_note} ${DATA.meta.suppress.line}`),
     el("h4", null, `Nearest sites usable for ${hz.toLowerCase()} on ${tr.i || "this island"}`),
     tr.i === "Niʻihau"
       ? el("p", { class: "note", id: "nearest-none" }, DATA.meta.niihau_note)
@@ -725,8 +781,8 @@ function helpPanel(sc, hazard) {
   if (ex) {
     body.push(el("h3", null, "Example row"),
       table("One row from the “Largest single community” table", [C.area, C.at_risk, C.shelter],
-        [[community(ex.label_main, ex.label_sub), fmt(ex.at_risk_pop), `${fmt(ex.low)} – ${fmt(ex.central)} – ${fmt(ex.high)}`]], [1, 2]),
-      el("p", null, `Read it as: about ${fmt(ex.at_risk_pop)} people live in the risk area of ${ex.label_main}.${isLahaina(ex.label_main) ? ` ${DATA.meta.lahaina_note}` : ""} If this hazard hits, between ${fmt(ex.low)} and ${fmt(ex.high)} of them may need a public shelter; ${fmt(ex.central)} is the likely number.`));
+        [[community(ex.label_main, ex.label_sub), cellEl(ex.at_risk_plain, popOf(ex.tract_fips)), [cellEl(ex.low, popOf(ex.tract_fips)), " – ", cellEl(ex.central, popOf(ex.tract_fips)), " – ", cellEl(ex.high, popOf(ex.tract_fips))]]], [1, 2]),
+      el("p", null, "Read it as: about ", cellEl(ex.at_risk_plain, popOf(ex.tract_fips)), ` people live in the risk area of ${ex.label_main}.${isLahaina(ex.label_main) ? ` ${DATA.meta.lahaina_note}` : ""} If this hazard hits, between `, cellEl(ex.low, popOf(ex.tract_fips)), " and ", cellEl(ex.high, popOf(ex.tract_fips)), " of them may need a public shelter; ", cellEl(ex.central, popOf(ex.tract_fips)), " is the likely number."));
   }
   body.push(
     el("h3", null, "Census area"),
@@ -959,15 +1015,18 @@ function renderPlan() {
       ? [largestTitle, el("br"), el("span", { class: "caption-note" }, DATA.meta.hurricane_scope_note)]
       : largestTitle,
       [C.area, C.at_risk, C.shelter, C.lep, C.power, C.disability, C.age65, C.no_car],
-      sc.largest.map((c) => [community(c.label_main || c.tract_label, c.label_sub), fmt(c.at_risk_pop),
-        `${fmt(c.low)} – ${fmt(c.central)} – ${fmt(c.high)}`,
-        fmt(c.C_lep_at_risk), fmt(c.M_power_dependent_at_risk), fmt(c.I_disability_at_risk), fmt(c.I_age65_at_risk),
-        fmt(c.T_no_vehicle_persons_at_risk)]), [1, 2, 3, 4, 5, 6, 7]),
+      sc.largest.map((c) => [community(c.label_main || c.tract_label, c.label_sub), cellEl(c.at_risk_pop, popOf(c.tract_fips)),
+        [cellEl(c.low, popOf(c.tract_fips)), " – ", cellEl(c.central, popOf(c.tract_fips)), " – ", cellEl(c.high, popOf(c.tract_fips))],
+        cellEl(c.C_lep_at_risk, popOf(c.tract_fips)), cellEl(c.M_power_dependent_at_risk, popOf(c.tract_fips)),
+        cellEl(c.I_disability_at_risk, popOf(c.tract_fips)), cellEl(c.I_age65_at_risk, popOf(c.tract_fips)),
+        cellEl(c.T_no_vehicle_persons_at_risk, popOf(c.tract_fips))]), [1, 2, 3, 4, 5, 6, 7]),
     source("people"),
+    citeLine(["population", "lep", "power", "disability", "age65", "no_car"]),
     table("More needs in the largest communities", [C.area, ...DATA.meta.detail_keys.map(([k]) => C[k])],
       sc.largest.map((c) => [community(c.label_main || c.tract_label, c.label_sub),
-        ...DATA.meta.detail_keys.map(([, field]) => fmt(c[field]))]), [1, 2, 3, 4]),
+        ...DATA.meta.detail_keys.map(([k, field]) => cellEl(c[field], popOf(c.tract_fips)))]), [1, 2, 3, 4]),
     source("detail"),
+    citeLine(DATA.meta.detail_keys.map(([k]) => k)),
 
     el("h2", null, "Map: people with needs and known sites"),
     ...renderMap(county, sc, sites, `${cLabel} ${hLabel}: people with needs by Census area and known shelter sites`, hazard),
@@ -1008,9 +1067,12 @@ function renderPlan() {
     el("h2", null, "Priority outreach and languages"),
     table("Top 10 Census areas by number of people with needs",
       ["#", C.area, C.at_risk, C.power, C.disability, C.lep, C.no_car, C.needs_total],
-      sc.priority_tracts.map((t) => [t.rank, community(t.label_main || t.tract_label, t.label_sub), fmt(t.at_risk_pop), fmt(t.power_dependent), fmt(t.disability),
-        fmt(t.limited_english), fmt(t.no_vehicle), fmt(t.afn_need_sum)]), [0, 2, 3, 4, 5, 6, 7]),
+      sc.priority_tracts.map((t) => [t.rank, community(t.label_main || t.tract_label, t.label_sub), cellEl(t.at_risk_pop, popOf(t.tract_fips)),
+        cellEl(t.power_dependent, popOf(t.tract_fips)), cellEl(t.disability, popOf(t.tract_fips)),
+        cellEl(t.limited_english, popOf(t.tract_fips)), cellEl(t.no_vehicle, popOf(t.tract_fips)),
+        cellEl(t.afn_need_sum, popOf(t.tract_fips))]), [0, 2, 3, 4, 5, 6, 7]),
     source("people"),
+    citeLine(["population", "power", "disability", "lep", "no_car"]),
     el("h3", null, "How to reach residents"),
     table("Channels", ["Channel", "Owner (proposed)", "Support (proposed)"], DATA.reach.channels),
     source("reach"),

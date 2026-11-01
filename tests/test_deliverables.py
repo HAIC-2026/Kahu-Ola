@@ -168,7 +168,7 @@ class AppCode(unittest.TestCase):
         urls = set(re.findall(r"https?://[^\s\"'`)]+", js))
         self.assertEqual(urls, {"http://www.w3.org/2000/svg"})           # SVG namespace only
         self.assertEqual(re.findall(r"fetch\(([^)]*)\)", js),
-                         ['VERSION_URL, { cache: "no-store" }', "DATA.meta.messages_url", "DATA.meta.lazy", "BUNDLE_URL"])
+                         ['VERSION_URL, { cache: "no-store" }', "DATA.meta.areas_url", "DATA.meta.messages_url", "DATA.meta.lazy", "BUNDLE_URL"])
         # the two lazy files are same-origin paths from the bundle (stress tests, messages)
         _b = json.loads((APP / "data" / "bundle.json").read_text(encoding="utf-8"))
         self.assertEqual((_b["meta"]["lazy"], _b["meta"]["messages_url"]), ("data/stress.json", "data/messages.json"))
