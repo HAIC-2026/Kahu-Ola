@@ -531,6 +531,14 @@ ul.legend li { display: flex; align-items: center; gap: 6pt; break-inside: avoid
 .footer { font-size: 9.5pt; border-top: 1px solid #000; padding-top: 3pt; margin-top: 24pt; }
 @media print { .footer { display: none; } }
 .status { white-space: nowrap; font-weight: bold; }
+.nw { white-space: nowrap; }
+.readiness { font-size: 9pt; line-height: 1.2; break-after: page; }
+.readiness h2 { margin-top: 4pt; } .readiness h3 { font-size: 10.5pt; margin: 5pt 0 2pt; }
+.readiness .note { padding: 3pt 6pt; margin: 4pt 0; } .readiness p, .readiness li { margin: 1pt 0; }
+.readiness table { font-size: 9pt; margin: 2pt 0; } .readiness th, .readiness td { padding: 1pt 4pt; }
+.readiness td:first-child { min-width: 0; } .readiness ol.stress { padding-left: 14pt; margin: 2pt 0; }
+.readiness ol.stress li { margin: 0 0 2pt; } .readiness .src { margin: 1pt 0 3pt; }
+.rs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
 @media screen { body { max-width: 8.5in; margin: 0 auto; padding: 0.5in; }
 }
 """
@@ -616,8 +624,8 @@ def summary_html(sc: dict, hazard: str) -> str:
             f'<p class="src">{escape(src_text("summary"))}</p>'
             f'<p>Share of people in the risk area who may need a public shelter: low '
             f'{pct_text(sc["rate_low"])}, likely {pct_text(sc["rate_central"])}, high {pct_text(sc["rate_high"])}. '
-            f'One person can be counted in more than one need. Page 2 explains how to read '
-            f'these numbers.</p>')
+            f'One person can be counted in more than one need. The reading guide after '
+            f'section 2 explains these numbers.</p>')
 
 
 HURRICANE_SCOPE_NOTE = ("Hurricanes affect the whole county, so these are simply the most "
@@ -1025,6 +1033,7 @@ def stress_html(inp: dict, county: str, hazard: str) -> str:
 
 def annex_html(inp: dict, county: str) -> str:
     """<County> stress-test annex: top 10 per hazard with every number, then every result."""
+    import privacy
     import stress_text as stx
     st = inp["stress"]
     F = st["findings"]
@@ -1048,7 +1057,7 @@ def annex_html(inp: dict, county: str) -> str:
 <header>
 <h1>{escape(title)}</h1>
 <p class="asof">Data as of {escape(inp["data_as_of"])}</p>
-<div class="note"><b>{escape(DISCLAIMER)}</b></div>
+<div class="note"><b>{escape(DISCLAIMER)}</b> {escape(privacy.PRIVACY_LINE)}</div>
 </header>
 <main>
 {stress_intro(st)}
@@ -1209,6 +1218,130 @@ def _sources(inp: dict) -> tuple[list, list]:
     return rows, data
 
 
+READINESS_FIELDS = [("population", "at_risk_pop"), ("lep", "C_lep_at_risk"),
+                    ("power", "M_power_dependent_at_risk"), ("disability", "I_disability_at_risk"),
+                    ("age65_alone", "S_age65_alone_at_risk"), ("no_car", "T_no_vehicle_persons_at_risk")]
+MOE_SUM_NOTE = ("± approximate 90% margin of error of the county sum (Census Bureau method: square "
+                "root of the summed squares of each Census area's margin, scaled to the risk area). "
+                "None for power-dependent counts.")
+CHECKLIST_ROLES = [
+    ("County emergency management agency",
+     "Confirm which sites open for this hazard and their capacity.",
+     "Decide which shelters open; announce them.",
+     "Decide when each shelter closes; ask for a plan rerun."),
+    ("Hawaiʻi DHS (State mass care)",
+     "Share this sheet with partners; agree who leads each function.",
+     "Track open shelters and gaps; ask partners for help.",
+     "Coordinate moves to temporary housing and referrals to programs."),
+    ("Red Cross",
+     "Check staff, cots and supplies against the likely demand.",
+     "Run shelters and feeding as agreed with the county.",
+     "Casework and referrals as agreed with the county."),
+    ("211 helpline",
+     "Load shelter, transport and language information.",
+     "Answer calls; refer people to open shelters and transport.",
+     "Refer people to recovery programs and agencies."),
+    ("Faith and cultural groups",
+     "Name trusted messengers for the languages in this playbook.",
+     "Share official messages; check on members who need help.",
+     "Help residents reach recovery services."),
+    ("Interpreters",
+     "Confirm interpreters for the top languages and sign language.",
+     "Interpret at shelters and for official messages.",
+     "Interpret at recovery centers and for applications."),
+    ("Paratransit and accessible transport",
+     "Confirm accessible vehicles and drivers.",
+     "Move people without a car or with mobility needs to shelters.",
+     "Return trips home or to temporary housing."),
+]
+
+
+def nw(text: str) -> str:
+    """Keep a date, a number range, a "Census area …" label or an "N ± M" value on one line."""
+    return f'<span class="nw">{text}</span>'
+
+
+def county_moe(inp: dict, county: str, hazard: str, field: str) -> float | None:
+    """Approximate 90% MOE of a county risk-area sum: root of the summed squares of each Census
+    area's MOE scaled by its share in the risk area (as in fetch_cmist_detail.py). None when
+    the source publishes no MOE."""
+    import math
+    total, seen = 0.0, False
+    for r in tract_rows(inp, county, hazard):
+        a = _area(r["tract_fips"])
+        m, pop = a["moe"].get(field), a["pop"]
+        if m is None or not pop:
+            continue
+        seen = True
+        total += (m * float(r["at_risk_pop"]) / pop) ** 2
+    return math.sqrt(total) if seen else None
+
+
+def readiness_html(inp: dict, county: str, hazard: str, sc: dict, sites: list) -> str:
+    """Page 1: one printed page with the numbers, findings, sites and partner checklist."""
+    import privacy
+    import stress_text as stx
+    rows = []
+    for field, key in READINESS_FIELDS:
+        label = COL["at_risk"] if field == "population" else COL[field]
+        moe = None if field == "power" else county_moe(inp, county, hazard, field)
+        v = n(sc.get(key))
+        rows.append([escape(label), nw(f"{v} ± {round(moe):,}") if moe is not None else v])
+    rows.insert(1, ["May need a public shelter (low – high)",
+                    nw(f'{n(sc["shelter_demand_low"])} – {n(sc["shelter_demand_high"])}')])
+    st = inp.get("stress") or {}
+    top = stx.top(st.get("findings") or [], county, hazard, 3)
+    usable = [s["name"] for s in sites if s["status"] == "ok"]
+    site_text = (escape(", ".join(usable)) + "." if usable else
+                 "No known usable 2026 site for this hazard. The county designates shelters; "
+                 "follow county announcements.")
+    check = table(["Role", "Before", "During", "After"],
+                  [[f"<b>{escape(r)}</b>", escape(b), escape(d), escape(a)] for r, b, d, a in CHECKLIST_ROLES])
+    return (f'<section class="readiness"><h2>Readiness sheet</h2>'
+            f'<p class="asof">{escape(COUNTY_LABEL[county])} · {escape(HAZARD_LABEL[hazard])} · '
+            f'Data as of {nw(escape(inp["data_as_of"]))}</p>'
+            f'<div class="note"><b>{escape(DISCLAIMER)}</b> {escape(privacy.PRIVACY_LINE)}</div>'
+            f'<div class="rs-grid"><div><h3>People in the risk area (county totals)</h3>'
+            + table(["Measure", "People"], rows, num_cols=(1,))
+            + f'<p class="src">{escape(MOE_SUM_NOTE)} Sources and years: section 8.</p></div>'
+            f'<div><h3>Usable 2026 sites for this hazard</h3><p>{site_text}</p>'
+            f'<h3>Top {len(top)} stress-test findings</h3><p class="src">{escape(stx.LABEL)}.</p><ol class="stress">'
+            + "".join(f'<li><b>{escape(f["scenario"])}:</b> {escape(stx.summary(f))}.</li>' for f in top)
+            + '</ol></div></div>'
+            '<h3>Partner checklist</h3>' + check
+            + '<p class="src">Roles are proposals, to be confirmed with each partner. '
+              'Details: sections 5 and 6.</p></section>')
+
+
+AFTER_EVENT = [
+    ("Closing shelters and moving people to temporary housing",
+     "The county decides when each shelter closes. Before a shelter closes, every resident should "
+     "have a next place to stay: home, family or friends, or temporary housing arranged with the "
+     "county, Hawaiʻi DHS, the Red Cross and, after a federal declaration, FEMA. People who use "
+     "power-dependent equipment, people with a disability and people without a car need a confirmed "
+     "place and a ride before they leave."),
+    ("Reconnecting residents to programs",
+     "Partners can help residents reconnect to SNAP and Med-QUEST (Hawaiʻi DHS) and to disaster "
+     "assistance (FEMA and the U.S. Small Business Administration after a federal declaration; "
+     "county and State programs). Program rules can change after a disaster: check current rules "
+     "with the agency. This playbook makes no eligibility claims."),
+    ("Language access in recovery",
+     "Recovery notices, forms and help desks need the same languages as the warnings in section 7. "
+     "Ask for interpreters at recovery centers and for applications, through the Hawaiʻi State "
+     "Office of Language Access and community partners."),
+    ("When to rerun the plan",
+     "Rerun this plan after shelters close, when the county changes its shelter list or capacity, "
+     "when partners change roles, and when new Census or CDC data are released."),
+]
+
+
+def after_html() -> str:
+    """11. After the event: static guidance, no new data."""
+    return ('<section class="page after"><h2>11. After the event</h2>'
+            + "".join(f"<h3>{escape(h)}</h3><p>{escape(b)}</p>" for h, b in AFTER_EVENT)
+            + "</section>")
+
+
 def playbook_html(inp: dict, county: str, hazard: str) -> str:
     """One playbook page; every URL in its text is a clickable link (full URL visible)."""
     return linkify(_playbook_html(inp, county, hazard))
@@ -1229,13 +1362,16 @@ def _playbook_html(inp: dict, county: str, hazard: str) -> str:
 <body>
 <header>
 <h1>{escape(title)}</h1>
+</header>
+<main>
+{readiness_html(inp, county, hazard, sc, sites)}
+<section class="page">
 <p class="asof">Data as of {escape(inp["data_as_of"])}</p>
 <p><b>County:</b> {escape(COUNTY_LABEL[county])} · <b>Hazard:</b> {escape(HAZARD_LABEL[hazard])}</p>
 <div class="note"><b>{escape(DISCLAIMER)}</b></div>
-</header>
-<main>
 {summary_html(sc, hazard)}
 {f'<p class="note lahaina-note">{escape(LAHAINA_SUMMARY)}</p>' if county == "Maui" else ""}
+</section>
 {scope_html(sc, comms, hazard)}
 {guide_html(sc, comms, hazard)}
 {map_html(inp, county, hazard, sites)}
@@ -1249,6 +1385,7 @@ def _playbook_html(inp: dict, county: str, hazard: str) -> str:
 {sources_html(inp)}
 {results_html(inp["results"])}
 {stress_html(inp, county, hazard)}
+{after_html()}
 </main>
 <footer class="footer">Data as of {escape(inp["data_as_of"])} · {escape(DISCLAIMER)}</footer>
 </body></html>

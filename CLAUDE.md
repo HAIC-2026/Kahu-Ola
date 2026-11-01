@@ -75,6 +75,9 @@ Long before treating a data test failure as your own.
 8. **Helper tools stay outside the repo.** Playwright, screenshots and similar go in a temp
    folder outside the repo. Do not commit them and do not add a `package.json`.
 9. **Run the tests** (`python -m unittest discover tests`) before reporting a code change done.
+10. **When changing any displayed text, preserve keep()/nowrap wrappers** on dates, number
+    ranges, 'Census area …' labels and 'N ± M' values (app: `keep()` in `app/app.js`; PDFs:
+    `nw()` and the `nowrap` CSS in `scripts/build_playbooks.py`).
 
 ## Running on Windows
 

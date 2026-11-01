@@ -95,8 +95,7 @@ class Generated(unittest.TestCase):
                 len(re.findall(r"(?<!>)fewer than 10(?! are)", re.sub(r'<span class="ac">[^<]*</span>', "", src)))
             self.assertGreaterEqual(text.count("fewer than 10"), want, pdf.name)
             self.assertNotRegex(text, r"\([1-9] to |to [1-9] people\)", pdf.name)
-            if not pdf.parent.name == "annex":
-                self.assertIn("Per-area counts from 1 to 9 are not shown. All figures are public Census Bureau, CDC and HHS estimates, not personal records", text, pdf.name)
+            self.assertIn(privacy.PRIVACY_LINE, text, pdf.name)              # playbooks and annexes
 
     def test_stress_text_never_shows_small_people_counts(self):
         st = json.loads((ROOT / "data" / "processed" / "stress_tests.json").read_text(encoding="utf-8"))

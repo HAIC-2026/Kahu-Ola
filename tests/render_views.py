@@ -68,7 +68,14 @@ def visible(dom: str, part: str) -> str:
         dom = m.group(0) if m else ""
     dom = re.sub(r"(?s)<(script|style|noscript)[^>]*>.*?</\1>", " ", dom)
     t = html.unescape(re.sub(r"<[^>]+>", " ", dom))
-    return mask(" ".join(t.split()))
+    return mask(normalize(t))
+
+
+def normalize(t: str) -> str:
+    """Collapse whitespace runs and drop a space before punctuation, so that wrapping a
+    word in an element (keep(), nowrap) does not count as a text change."""
+    t = " ".join(t.split())
+    return re.sub(r" (?=[.,;:!?)\]])", "", t)
 
 
 def mask(t: str) -> str:
@@ -123,7 +130,7 @@ def pick_panels(bundle: dict) -> list:
 
 def load_golden() -> dict:
     g = json.loads(gzip.decompress(GOLDEN.read_bytes()).decode("utf-8"))
-    g["texts"] = {k: mask(v) for k, v in g["texts"].items()}
+    g["texts"] = {k: mask(normalize(v)) for k, v in g["texts"].items()}
     return g
 
 
